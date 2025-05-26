@@ -1,0 +1,91 @@
+{
+  "name": "FIELDPORTER Chat Test Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fieldporter-chat-test",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "test-webhook",
+      "name": "Test Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Simple test response with mock AI\nconst body = $input.first().json.body;\n\n// Mock responses for testing\nconst mockResponses = [\n  \"Thank you for your interest in FIELDPORTER's AI strategy services. We specialize in helping enterprises transform their operations through strategic AI implementation. What specific business challenges are you looking to address?\",\n  \"That's a great question about our approach. At FIELDPORTER, we believe in 'building what we recommend' - our own operations are powered by the AI solutions we design for clients. This gives us unique insights into practical implementation. Would you like to discuss your specific use case?\",\n  \"Our AI strategy consulting covers everything from initial assessment to full implementation. We work with enterprise clients to identify high-impact opportunities and develop roadmaps for AI adoption. What's your timeline for exploring AI initiatives?\",\n  \"ROI is always a key consideration. Our clients typically see measurable improvements within 3-6 months of implementation. We'd be happy to discuss specific metrics and case studies relevant to your industry. Would you be interested in scheduling a consultation?\"\n];\n\n// Simple lead scoring\nconst message = (body.message || '').toLowerCase();\nlet leadScore = 1; // Base score\n\nif (message.includes('budget') || message.includes('pricing')) leadScore += 2;\nif (message.includes('timeline') || message.includes('when')) leadScore += 2;\nif (message.includes('consultation') || message.includes('meeting')) leadScore += 5;\nif (message.includes('roi') || message.includes('business')) leadScore += 1;\n\n// Select response based on message content\nlet response = mockResponses[0];\nif (message.includes('approach') || message.includes('how')) {\n  response = mockResponses[1];\n} else if (message.includes('services') || message.includes('what')) {\n  response = mockResponses[2];\n} else if (message.includes('roi') || message.includes('results')) {\n  response = mockResponses[3];\n}\n\nreturn {\n  success: true,\n  response: response,\n  sessionId: body.sessionId || 'test-session',\n  leadScore: Math.min(leadScore, 10),\n  leadQuality: leadScore >= 8 ? 'high' : leadScore >= 5 ? 'medium' : 'low',\n  timestamp: new Date().toISOString(),\n  testMode: true\n};"
+      },
+      "id": "mock-processing",
+      "name": "Mock AI Processing",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "id": "test-response",
+      "name": "Test Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [680, 300]
+    }
+  ],
+  "connections": {
+    "Test Webhook": {
+      "main": [
+        [
+          {
+            "node": "Mock AI Processing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mock AI Processing": {
+      "main": [
+        [
+          {
+            "node": "Test Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1",
+  "id": "fieldporter-chat-test-workflow",
+  "tags": [
+    {
+      "id": "test",
+      "name": "test"
+    }
+  ]
+}
