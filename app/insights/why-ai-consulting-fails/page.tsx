@@ -77,7 +77,7 @@ export default function WhyAIConsultingFailsPage() {
         <p>
           Recent data further accentuates this trend. A 2025 report from S&P Global Market
           Intelligence revealed that{' '}
-          <strong className='text-fieldporter-purple'>
+          <strong className='text-fieldporter-blue'>
             the share of businesses scrapping most of their AI initiatives alarmingly increased to
             42% this year
           </strong>
@@ -137,7 +137,7 @@ export default function WhyAIConsultingFailsPage() {
         <p>
           AI projects initiated without a clear understanding of the problem domain or how the AI
           solution will contribute to overarching business strategy are destined for trouble.{' '}
-          <strong className='text-fieldporter-purple'>
+          <strong className='text-fieldporter-blue'>
             Only 38% of enterprises report having an AI strategy in place
           </strong>
           , underscoring this challenge.
@@ -174,8 +174,8 @@ export default function WhyAIConsultingFailsPage() {
           provide a real-world blueprint for success.
         </p>
 
-        <div className='bg-fieldporter-purple/10 border border-fieldporter-purple/20 rounded-lg p-6 my-8'>
-          <h3 className='text-heading-lg font-semibold text-fieldporter-purple mb-4'>
+        <div className='bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8'>
+          <h3 className='text-heading-lg font-semibold text-fieldporter-blue mb-4'>
             Family Care AI: Key Learnings
           </h3>
           <ul className='space-y-3 text-fieldporter-gray'>
@@ -186,7 +186,7 @@ export default function WhyAIConsultingFailsPage() {
               </span>
             </li>
             <li className='flex items-start space-x-2'>
-              <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-purple flex-shrink-0 mt-2' />
+              <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-blue flex-shrink-0 mt-2' />
               <span>
                 <strong>User experience matters more than AI sophistication</strong>
               </span>
@@ -230,7 +230,7 @@ export default function WhyAIConsultingFailsPage() {
           </div>
 
           <div className='bg-white/5 border border-white/10 rounded-lg p-6'>
-            <h4 className='text-heading-md font-semibold text-fieldporter-purple mb-3'>
+            <h4 className='text-heading-md font-semibold text-fieldporter-blue mb-3'>
               Proven Technical Expertise
             </h4>
             <p className='text-fieldporter-gray text-sm'>
@@ -277,8 +277,8 @@ export default function WhyAIConsultingFailsPage() {
           </ul>
         </div>
 
-        <div className='bg-fieldporter-purple/10 border border-fieldporter-purple/20 rounded-lg p-6 my-8'>
-          <h3 className='text-heading-lg font-semibold text-fieldporter-purple mb-4'>
+        <div className='bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8'>
+          <h3 className='text-heading-lg font-semibold text-fieldporter-blue mb-4'>
             During Selection
           </h3>
           <ul className='space-y-3 text-fieldporter-gray'>
@@ -327,7 +327,7 @@ export default function WhyAIConsultingFailsPage() {
         </p>
 
         {/* CTA */}
-        <div className='bg-gradient-to-r from-fieldporter-blue/20 to-fieldporter-purple/20 border border-fieldporter-blue/30 rounded-lg p-8 my-12 text-center'>
+        <div className='bg-gradient-to-r from-fieldporter-blue/20 to-fieldporter-blue/20 border border-fieldporter-blue/30 rounded-lg p-8 my-12 text-center'>
           <h3 className='text-heading-lg font-semibold text-fieldporter-white mb-4'>
             Ready to De-Risk Your AI Journey?
           </h3>

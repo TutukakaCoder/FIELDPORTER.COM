@@ -5,8 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { ANALYTICS_EVENTS } from '@/config/constants';
-import { ArrowRight, Download, Mail, MessageSquare } from 'lucide-react';
+import { firebaseEnhancedFormsService } from '@/lib/firebase-enhanced-forms';
+import { firebaseNewsletterService } from '@/lib/firebase-newsletter';
+import { ArrowRight, CheckCircle, Download, Loader2, Mail, MessageSquare } from 'lucide-react';
 import { useState } from 'react';
 
 export function SecondaryConversions() {
@@ -29,56 +30,166 @@ export function SecondaryConversions() {
     inquiry: false,
   });
 
+  const [loadingStates, setLoadingStates] = useState({
+    assessment: false,
+    newsletter: false,
+    inquiry: false,
+  });
+
+  const [errors, setErrors] = useState({
+    assessment: null as string | null,
+    newsletter: null as string | null,
+    inquiry: null as string | null,
+  });
+
   const handleAssessmentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Track analytics
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', ANALYTICS_EVENTS.downloadResource, {
-        resource_type: 'ai_readiness_assessment',
-        company: assessmentForm.company,
-      });
+    if (loadingStates.assessment) return;
+
+    // Validate form
+    const validation = firebaseEnhancedFormsService.validateResourceDownload({
+      name: assessmentForm.name,
+      email: assessmentForm.email,
+      company: assessmentForm.company,
+      resourceType: 'ai_readiness_assessment',
+      resourceName: 'AI Readiness Assessment Framework',
+    });
+
+    if (!validation.isValid) {
+      setErrors(prev => ({ ...prev, assessment: validation.errors[0] || null }));
+      return;
     }
 
-    // TODO: Implement actual download and email automation
-    setSubmissionStates(prev => ({ ...prev, assessment: true }));
+    setLoadingStates(prev => ({ ...prev, assessment: true }));
+    setErrors(prev => ({ ...prev, assessment: null }));
 
-    // Reset form
-    setAssessmentForm({ name: '', email: '', company: '' });
+    try {
+      const result = await firebaseEnhancedFormsService.submitResourceDownload(
+        {
+          name: assessmentForm.name,
+          email: assessmentForm.email,
+          company: assessmentForm.company,
+          resourceType: 'ai_readiness_assessment',
+          resourceName: 'AI Readiness Assessment Framework',
+        },
+        'secondary_conversion'
+      );
+
+      if (result.success) {
+        setSubmissionStates(prev => ({ ...prev, assessment: true }));
+        setAssessmentForm({ name: '', email: '', company: '' });
+      } else {
+        setErrors(prev => ({
+          ...prev,
+          assessment: result.error || 'Submission failed. Please try again.',
+        }));
+      }
+    } catch (error) {
+      setErrors(prev => ({
+        ...prev,
+        assessment: 'Network error. Please check your connection and try again.',
+      }));
+    } finally {
+      setLoadingStates(prev => ({ ...prev, assessment: false }));
+    }
   };
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Track analytics
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', ANALYTICS_EVENTS.newsletterSignup, {
-        email: newsletterEmail,
-      });
+    if (loadingStates.newsletter || !newsletterEmail.trim()) return;
+
+    // Validate email
+    const validation = firebaseNewsletterService.validateEmail(newsletterEmail);
+    if (!validation.isValid) {
+      setErrors(prev => ({ ...prev, newsletter: validation.error || 'Invalid email' }));
+      return;
     }
 
-    // TODO: Implement actual newsletter signup
-    setSubmissionStates(prev => ({ ...prev, newsletter: true }));
+    setLoadingStates(prev => ({ ...prev, newsletter: true }));
+    setErrors(prev => ({ ...prev, newsletter: null }));
 
-    // Reset form
-    setNewsletterEmail('');
+    try {
+      const result = await firebaseNewsletterService.subscribeToNewsletter({
+        email: newsletterEmail,
+        source: 'secondary_conversion',
+        metadata: {
+          page_url: typeof window !== 'undefined' ? window.location.href : '',
+          interest: 'AI strategy insights',
+        },
+      });
+
+      if (result.success) {
+        setSubmissionStates(prev => ({ ...prev, newsletter: true }));
+        setNewsletterEmail('');
+      } else {
+        setErrors(prev => ({
+          ...prev,
+          newsletter: result.error || 'Subscription failed. Please try again.',
+        }));
+      }
+    } catch (error) {
+      setErrors(prev => ({
+        ...prev,
+        newsletter: 'Network error. Please check your connection and try again.',
+      }));
+    } finally {
+      setLoadingStates(prev => ({ ...prev, newsletter: false }));
+    }
   };
 
   const handleInquirySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Track analytics
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', ANALYTICS_EVENTS.contactForm, {
-        subject: inquiryForm.subject,
-      });
+    if (loadingStates.inquiry) return;
+
+    // Validate form
+    const validation = firebaseEnhancedFormsService.validateGeneralInquiry({
+      name: inquiryForm.name,
+      email: inquiryForm.email,
+      subject: inquiryForm.subject,
+      message: inquiryForm.message,
+      urgency: 'medium',
+    });
+
+    if (!validation.isValid) {
+      setErrors(prev => ({ ...prev, inquiry: validation.errors[0] || null }));
+      return;
     }
 
-    // TODO: Implement actual inquiry submission
-    setSubmissionStates(prev => ({ ...prev, inquiry: true }));
+    setLoadingStates(prev => ({ ...prev, inquiry: true }));
+    setErrors(prev => ({ ...prev, inquiry: null }));
 
-    // Reset form
-    setInquiryForm({ name: '', email: '', subject: '', message: '' });
+    try {
+      const result = await firebaseEnhancedFormsService.submitGeneralInquiry(
+        {
+          name: inquiryForm.name,
+          email: inquiryForm.email,
+          subject: inquiryForm.subject,
+          message: inquiryForm.message,
+          urgency: 'medium',
+        },
+        'secondary_conversion'
+      );
+
+      if (result.success) {
+        setSubmissionStates(prev => ({ ...prev, inquiry: true }));
+        setInquiryForm({ name: '', email: '', subject: '', message: '' });
+      } else {
+        setErrors(prev => ({
+          ...prev,
+          inquiry: result.error || 'Submission failed. Please try again.',
+        }));
+      }
+    } catch (error) {
+      setErrors(prev => ({
+        ...prev,
+        inquiry: 'Network error. Please check your connection and try again.',
+      }));
+    } finally {
+      setLoadingStates(prev => ({ ...prev, inquiry: false }));
+    }
   };
 
   return (
@@ -111,7 +222,7 @@ export function SecondaryConversions() {
               {submissionStates.assessment ? (
                 <div className='text-center py-8'>
                   <div className='w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4'>
-                    <Download className='h-6 w-6 text-green-500' />
+                    <CheckCircle className='h-6 w-6 text-green-500' />
                   </div>
                   <p className='text-fieldporter-white font-semibold mb-2'>Download Started!</p>
                   <p className='text-fieldporter-gray text-sm'>
@@ -130,7 +241,8 @@ export function SecondaryConversions() {
                       onChange={e => setAssessmentForm(prev => ({ ...prev, name: e.target.value }))}
                       placeholder='Your name'
                       required
-                      className='mt-1'
+                      disabled={loadingStates.assessment}
+                      className='mt-1 bg-white/5 border-white/10 text-fieldporter-white placeholder:text-fieldporter-gray focus:border-fieldporter-blue'
                     />
                   </div>
                   <div>
@@ -146,7 +258,8 @@ export function SecondaryConversions() {
                       }
                       placeholder='your.email@company.com'
                       required
-                      className='mt-1'
+                      disabled={loadingStates.assessment}
+                      className='mt-1 bg-white/5 border-white/10 text-fieldporter-white placeholder:text-fieldporter-gray focus:border-fieldporter-blue'
                     />
                   </div>
                   <div>
@@ -161,15 +274,27 @@ export function SecondaryConversions() {
                       }
                       placeholder='Company name'
                       required
-                      className='mt-1'
+                      disabled={loadingStates.assessment}
+                      className='mt-1 bg-white/5 border-white/10 text-fieldporter-white placeholder:text-fieldporter-gray focus:border-fieldporter-blue'
                     />
                   </div>
+                  {errors.assessment && <p className='text-red-400 text-sm'>{errors.assessment}</p>}
                   <Button
                     type='submit'
+                    disabled={loadingStates.assessment}
                     className='w-full bg-fieldporter-blue hover:bg-fieldporter-blue/90 text-fieldporter-white'
                   >
-                    Download Assessment
-                    <Download className='ml-2 h-4 w-4' />
+                    {loadingStates.assessment ? (
+                      <>
+                        <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        Download Assessment
+                        <Download className='ml-2 h-4 w-4' />
+                      </>
+                    )}
                   </Button>
                   <p className='text-xs text-fieldporter-gray text-center'>
                     Includes automated email sequence with additional AI strategy resources
@@ -182,8 +307,8 @@ export function SecondaryConversions() {
           {/* Newsletter Signup */}
           <Card className='bg-white/5 border-white/10 backdrop-blur-sm'>
             <CardHeader className='text-center'>
-              <div className='w-16 h-16 bg-fieldporter-purple/20 rounded-full flex items-center justify-center mx-auto mb-4'>
-                <Mail className='h-8 w-8 text-fieldporter-purple' />
+              <div className='w-16 h-16 bg-fieldporter-blue/20 rounded-full flex items-center justify-center mx-auto mb-4'>
+                <Mail className='h-8 w-8 text-fieldporter-blue' />
               </div>
               <CardTitle className='text-fieldporter-white'>AI Strategy Insights</CardTitle>
               <CardDescription className='text-fieldporter-gray'>
@@ -194,7 +319,7 @@ export function SecondaryConversions() {
               {submissionStates.newsletter ? (
                 <div className='text-center py-8'>
                   <div className='w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4'>
-                    <Mail className='h-6 w-6 text-green-500' />
+                    <CheckCircle className='h-6 w-6 text-green-500' />
                   </div>
                   <p className='text-fieldporter-white font-semibold mb-2'>
                     Successfully Subscribed!
@@ -216,52 +341,64 @@ export function SecondaryConversions() {
                       onChange={e => setNewsletterEmail(e.target.value)}
                       placeholder='your.email@company.com'
                       required
-                      className='mt-1'
+                      disabled={loadingStates.newsletter}
+                      className='mt-1 bg-white/5 border-white/10 text-fieldporter-white placeholder:text-fieldporter-gray focus:border-fieldporter-blue'
                     />
+                    {errors.newsletter && (
+                      <p className='text-red-400 text-sm mt-2'>{errors.newsletter}</p>
+                    )}
                   </div>
                   <Button
                     type='submit'
-                    className='w-full bg-fieldporter-purple hover:bg-fieldporter-purple/90 text-fieldporter-white'
+                    disabled={loadingStates.newsletter || !newsletterEmail.trim()}
+                    className='w-full bg-fieldporter-blue hover:bg-fieldporter-blue/90 text-fieldporter-white'
                   >
-                    Subscribe to Insights
-                    <ArrowRight className='ml-2 h-4 w-4' />
+                    {loadingStates.newsletter ? (
+                      <>
+                        <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                        Subscribing...
+                      </>
+                    ) : (
+                      <>
+                        Subscribe Now
+                        <ArrowRight className='ml-2 h-4 w-4' />
+                      </>
+                    )}
                   </Button>
-                  <div className='space-y-2 text-xs text-fieldporter-gray'>
-                    <p>✓ Monthly AI strategy insights</p>
-                    <p>✓ Exclusive case studies</p>
-                    <p>✓ Industry trend analysis</p>
-                    <p>✓ Unsubscribe anytime</p>
-                  </div>
+                  <p className='text-xs text-fieldporter-gray text-center'>
+                    No spam, unsubscribe anytime. Weekly insights on AI strategy and implementation.
+                  </p>
                 </form>
               )}
             </CardContent>
           </Card>
 
-          {/* General Inquiry Form */}
+          {/* General Inquiry */}
           <Card className='bg-white/5 border-white/10 backdrop-blur-sm'>
             <CardHeader className='text-center'>
-              <div className='w-16 h-16 bg-fieldporter-gray/20 rounded-full flex items-center justify-center mx-auto mb-4'>
-                <MessageSquare className='h-8 w-8 text-fieldporter-gray' />
+              <div className='w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4'>
+                <MessageSquare className='h-8 w-8 text-green-500' />
               </div>
-              <CardTitle className='text-fieldporter-white'>General Inquiry</CardTitle>
+              <CardTitle className='text-fieldporter-white'>Quick Question?</CardTitle>
               <CardDescription className='text-fieldporter-gray'>
-                Partnership opportunities, speaking requests, media inquiries, or other questions
+                Have a specific question about AI implementation or strategy? Send us a quick
+                message.
               </CardDescription>
             </CardHeader>
             <CardContent>
               {submissionStates.inquiry ? (
                 <div className='text-center py-8'>
                   <div className='w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4'>
-                    <MessageSquare className='h-6 w-6 text-green-500' />
+                    <CheckCircle className='h-6 w-6 text-green-500' />
                   </div>
                   <p className='text-fieldporter-white font-semibold mb-2'>Message Sent!</p>
                   <p className='text-fieldporter-gray text-sm'>
-                    We&apos;ll respond to your inquiry within 48 hours.
+                    We&apos;ll respond to your inquiry within 24 hours.
                   </p>
                 </div>
               ) : (
                 <form onSubmit={handleInquirySubmit} className='space-y-4'>
-                  <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                  <div className='grid grid-cols-1 gap-4'>
                     <div>
                       <Label htmlFor='inquiry-name' className='text-fieldporter-white'>
                         Name *
@@ -272,7 +409,8 @@ export function SecondaryConversions() {
                         onChange={e => setInquiryForm(prev => ({ ...prev, name: e.target.value }))}
                         placeholder='Your name'
                         required
-                        className='mt-1'
+                        disabled={loadingStates.inquiry}
+                        className='mt-1 bg-white/5 border-white/10 text-fieldporter-white placeholder:text-fieldporter-gray focus:border-fieldporter-blue'
                       />
                     </div>
                     <div>
@@ -286,7 +424,8 @@ export function SecondaryConversions() {
                         onChange={e => setInquiryForm(prev => ({ ...prev, email: e.target.value }))}
                         placeholder='your.email@company.com'
                         required
-                        className='mt-1'
+                        disabled={loadingStates.inquiry}
+                        className='mt-1 bg-white/5 border-white/10 text-fieldporter-white placeholder:text-fieldporter-gray focus:border-fieldporter-blue'
                       />
                     </div>
                   </div>
@@ -298,9 +437,10 @@ export function SecondaryConversions() {
                       id='inquiry-subject'
                       value={inquiryForm.subject}
                       onChange={e => setInquiryForm(prev => ({ ...prev, subject: e.target.value }))}
-                      placeholder='Partnership opportunity'
+                      placeholder='Brief subject line'
                       required
-                      className='mt-1'
+                      disabled={loadingStates.inquiry}
+                      className='mt-1 bg-white/5 border-white/10 text-fieldporter-white placeholder:text-fieldporter-gray focus:border-fieldporter-blue'
                     />
                   </div>
                   <div>
@@ -311,18 +451,30 @@ export function SecondaryConversions() {
                       id='inquiry-message'
                       value={inquiryForm.message}
                       onChange={e => setInquiryForm(prev => ({ ...prev, message: e.target.value }))}
-                      placeholder='Tell us about your inquiry...'
+                      placeholder='Your question or message...'
+                      rows={3}
                       required
-                      rows={4}
-                      className='mt-1'
+                      disabled={loadingStates.inquiry}
+                      className='mt-1 bg-white/5 border-white/10 text-fieldporter-white placeholder:text-fieldporter-gray focus:border-fieldporter-blue resize-none'
                     />
                   </div>
+                  {errors.inquiry && <p className='text-red-400 text-sm'>{errors.inquiry}</p>}
                   <Button
                     type='submit'
-                    className='w-full bg-fieldporter-gray hover:bg-fieldporter-gray/90 text-fieldporter-white'
+                    disabled={loadingStates.inquiry}
+                    className='w-full bg-green-600 hover:bg-green-600/90 text-fieldporter-white'
                   >
-                    Send Message
-                    <ArrowRight className='ml-2 h-4 w-4' />
+                    {loadingStates.inquiry ? (
+                      <>
+                        <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        Send Message
+                        <MessageSquare className='ml-2 h-4 w-4' />
+                      </>
+                    )}
                   </Button>
                 </form>
               )}

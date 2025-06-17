@@ -2,37 +2,50 @@
 
 import { Button } from '@/components/ui/button';
 import { GlassCard } from '@/components/ui/card';
+import { firebaseNewsletterService } from '@/lib/firebase-newsletter';
 import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle, Mail } from 'lucide-react';
+import { ArrowRight, CheckCircle, Loader2, Mail } from 'lucide-react';
 import { useState } from 'react';
 
 export function NewsletterSignup() {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || isSubmitting) return;
+    if (!email.trim() || isSubmitting) return;
+
+    // Validate email
+    const validation = firebaseNewsletterService.validateEmail(email);
+    if (!validation.isValid) {
+      setError(validation.error || 'Invalid email');
+      return;
+    }
 
     setIsSubmitting(true);
+    setError(null);
 
     try {
-      // Simulate API call - replace with actual newsletter signup
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const result = await firebaseNewsletterService.subscribeToNewsletter({
+        email: email,
+        source: 'insights',
+        metadata: {
+          page_url: typeof window !== 'undefined' ? window.location.href : '',
+          interest: 'AI strategy insights',
+        },
+      });
 
-      // Track newsletter signup
-      if (typeof window !== 'undefined' && window.gtag) {
-        window.gtag('event', 'newsletter_signup', {
-          email_domain: email.split('@')[1],
-        });
+      if (result.success) {
+        setIsSubscribed(true);
+        setEmail('');
+      } else {
+        setError(result.error || 'Subscription failed. Please try again.');
       }
-
-      setIsSubscribed(true);
-      setEmail('');
     } catch (error) {
-      // console.error('Newsletter signup error:', error);
+      setError('Network error. Please check your connection and try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -47,11 +60,11 @@ export function NewsletterSignup() {
 
   if (isSubscribed) {
     return (
-      <section id='newsletter-signup' className='py-20 lg:py-28 relative'>
+      <section id='newsletter-signup' className='section-spacing-lg relative'>
         {/* Background */}
         <div className='absolute inset-0 bg-gradient-to-b from-bg-fieldporter-primary to-bg-fieldporter-secondary' />
 
-        <div className='relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='relative z-10 content-container-sm'>
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -105,26 +118,26 @@ export function NewsletterSignup() {
   }
 
   return (
-    <section id='newsletter-signup' className='py-20 lg:py-28 relative'>
+    <section id='newsletter-signup' className='section-spacing-lg relative'>
       {/* Background */}
       <div className='absolute inset-0 bg-gradient-to-b from-bg-fieldporter-primary to-bg-fieldporter-secondary' />
 
-      <div className='relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
+      <div className='relative z-10 content-container-sm'>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <GlassCard className='p-8 md:p-12'>
-            <div className='text-center space-y-8'>
+          <GlassCard className='card-spacing-lg'>
+            <div className='text-center component-spacing'>
               {/* Icon */}
-              <div className='w-16 h-16 rounded-2xl bg-gradient-to-br from-fieldporter-blue to-fieldporter-purple p-4 mx-auto'>
-                <Mail className='w-full h-full text-fieldporter-white' />
+              <div className='w-16 h-16 rounded-2xl bg-fieldporter-blue/20 border border-fieldporter-blue/30 p-4 mx-auto'>
+                <Mail className='w-8 h-8 text-fieldporter-blue' />
               </div>
 
               {/* Header */}
-              <div className='space-y-4'>
+              <div className='text-spacing'>
                 <h3 className='text-heading-xl font-semibold text-fieldporter-white'>
                   Stay Ahead with AI Insights
                 </h3>
@@ -161,18 +174,23 @@ export function NewsletterSignup() {
                       onChange={e => setEmail(e.target.value)}
                       placeholder='Enter your email address'
                       required
-                      className='w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-fieldporter-white placeholder-fieldporter-gray focus:outline-none focus:ring-2 focus:ring-fieldporter-blue focus:border-transparent transition-all duration-200'
+                      disabled={isSubmitting}
+                      className='w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-fieldporter-white placeholder-fieldporter-gray focus:outline-none focus:ring-2 focus:ring-fieldporter-blue focus:border-transparent transition-all duration-200 disabled:opacity-50'
                     />
+                    {error && <p className='text-red-400 text-sm mt-2 text-left'>{error}</p>}
                   </div>
                   <Button
                     type='submit'
                     variant='primary'
                     size='lg'
-                    disabled={isSubmitting || !email}
+                    disabled={isSubmitting || !email.trim()}
                     className='group whitespace-nowrap'
                   >
                     {isSubmitting ? (
-                      'Subscribing...'
+                      <>
+                        <Loader2 className='mr-2 h-5 w-5 animate-spin' />
+                        Subscribing...
+                      </>
                     ) : (
                       <>
                         Subscribe

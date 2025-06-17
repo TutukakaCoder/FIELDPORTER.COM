@@ -7,18 +7,16 @@
 
 export const BRAND = {
   name: 'FIELDPORTER',
-  tagline: 'Premium AI Strategy Consultancy',
-  description: 'Enterprise AI transformation through strategic consulting excellence',
+  tagline: 'Strategic Research & Business Development',
+  description: 'AI-powered strategic research and rapid prototyping for ambitious founders',
   domain: 'fieldporter.com',
   email: 'freddy@fieldporter.com',
-  phone: '+1 (555) 123-4567', // Update with actual number
 } as const;
 
 export const BRAND_COLORS = {
   primary: {
     black: '#000000',
     blue: '#0969DA',
-    purple: '#7C3AED',
     white: '#FFFFFF',
     gray: '#6B7280',
   },
@@ -121,67 +119,32 @@ export const DEEPSEEK_CONFIG = {
 // ============================================================================
 
 export const MAIN_NAVIGATION = [
-  {
-    label: 'Services',
-    href: '/services',
-    description: 'AI strategy and implementation services',
-    children: [
-      { label: 'AI Strategy', href: '/services/ai-strategy' },
-      { label: 'Business Automation', href: '/services/automation' },
-      { label: 'VC Portfolio Optimization', href: '/services/vc-consulting' },
-    ],
-  },
-  {
-    label: 'Industries',
-    href: '/industries',
-    description: 'Sector-specific AI solutions',
-    children: [
-      { label: 'Financial Services', href: '/industries/financial-services' },
-      { label: 'Healthcare', href: '/industries/healthcare' },
-      { label: 'Manufacturing', href: '/industries/manufacturing' },
-      { label: 'Technology', href: '/industries/technology' },
-    ],
-  },
-  {
-    label: 'Insights',
-    href: '/insights',
-    description: 'AI strategy insights and thought leadership',
-  },
-  {
-    label: 'About',
-    href: '/about',
-    description: 'Our team and approach',
-  },
-  {
-    label: 'Contact',
-    href: '/contact',
-    description: 'Get in touch for consultation',
-  },
+  { label: 'About', href: '/about' },
+  { label: 'Services', href: '/services' },
+  { label: 'Portfolio', href: '/portfolio' },
+  { label: 'Insights', href: '/insights' },
+  { label: 'Contact', href: '/contact' },
 ] as const;
 
 export const FOOTER_LINKS = {
   services: [
-    { label: 'AI Strategy', href: '/services/ai-strategy' },
-    { label: 'Business Automation', href: '/services/automation' },
-    { label: 'VC Portfolio Optimization', href: '/services/vc-consulting' },
+    { label: 'Strategic Research Intelligence', href: '/services#strategic-research' },
+    { label: 'Rapid Development & Integration', href: '/services#rapid-development' },
+    { label: 'Workflow Optimization', href: '/services#workflow-optimization' },
+    { label: 'AI Training & Education', href: '/services#ai-training' },
   ],
   company: [
     { label: 'About', href: '/about' },
-    { label: 'Team', href: '/about/team' },
-    { label: 'Careers', href: '/careers' },
+    { label: 'Portfolio', href: '/portfolio' },
     { label: 'Contact', href: '/contact' },
   ],
   resources: [
     { label: 'Insights', href: '/insights' },
     { label: 'Case Studies', href: '/case-studies' },
-    { label: 'Whitepapers', href: '/resources/whitepapers' },
-    { label: 'Webinars', href: '/resources/webinars' },
   ],
   legal: [
-    { label: 'Privacy Policy', href: '/privacy' },
-    { label: 'Terms of Service', href: '/terms' },
-    { label: 'Cookie Policy', href: '/cookies' },
-    { label: 'Data Protection', href: '/data-protection' },
+    { label: 'Privacy Policy', href: '/privacy-policy' },
+    { label: 'Terms of Service', href: '/terms-of-service' },
   ],
 } as const;
 

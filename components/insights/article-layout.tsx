@@ -24,18 +24,16 @@ interface ArticleLayoutProps {
 }
 
 export function ArticleLayout({ article, children }: ArticleLayoutProps) {
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'AI Strategy':
+  const getCategoryStyle = (category: string) => {
+    switch (category.toLowerCase()) {
+      case 'ai strategy':
         return 'bg-fieldporter-blue/20 text-fieldporter-blue border-fieldporter-blue/30';
-      case 'Business Automation':
-        return 'bg-fieldporter-purple/20 text-fieldporter-purple border-fieldporter-purple/30';
-      case 'VC Insights':
-        return 'bg-green-500/20 text-green-400 border-green-500/30';
-      case 'Implementation':
-        return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
+      case 'automation':
+        return 'bg-green-500/20 text-green-500 border-green-500/30';
+      case 'implementation':
+        return 'bg-fieldporter-blue/20 text-fieldporter-blue border-fieldporter-blue/30';
       default:
-        return 'bg-fieldporter-gray/20 text-fieldporter-gray border-fieldporter-gray/30';
+        return 'bg-fieldporter-blue/20 text-fieldporter-blue border-fieldporter-blue/30';
     }
   };
 
@@ -90,7 +88,7 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
                 {/* Category & Featured Badge */}
                 <div className='flex items-center justify-between flex-wrap gap-4'>
                   <span
-                    className={`px-3 py-1 text-sm font-medium rounded-full border ${getCategoryColor(article.category)}`}
+                    className={`px-3 py-1 text-sm font-medium rounded-full border ${getCategoryStyle(article.category)}`}
                   >
                     {article.category}
                   </span>

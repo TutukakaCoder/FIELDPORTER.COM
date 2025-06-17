@@ -1,162 +1,116 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
-import { ArrowRight, Building2, Lightbulb, Target, Users } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { animations } from '@/lib/animations';
+import { motion, useInView } from 'framer-motion';
+import { ArrowRight, Code } from 'lucide-react';
 import Link from 'next/link';
+import { useRef } from 'react';
 
 export function AboutHero() {
-  const stats = [
-    { value: '2023', label: 'Founded' },
-    { value: '3+', label: 'Business Verticals' },
-    { value: '100%', label: 'AI-Focused' },
-    { value: 'Global', label: 'Operations' },
-  ];
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-10%' });
 
   return (
-    <section className='relative py-20 lg:py-28 overflow-hidden'>
-      {/* Background */}
-      <div className='absolute inset-0 bg-gradient-to-br from-black via-black to-fieldporter-blue/10' />
-
-      {/* Grid Pattern */}
-      <div className='absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]' />
-
-      <div className='relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center'>
+    <section ref={ref} className='relative section-spacing bg-black pt-24 md:pt-32 lg:pt-20'>
+      <div className='relative z-10 content-container'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center'>
           {/* Content */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-            className='space-y-8'
+            variants={animations.premiumStaggerContainer}
+            initial='initial'
+            animate={isInView ? 'animate' : 'initial'}
+            className='component-spacing'
           >
             {/* Icon */}
-            <div className='w-20 h-20 rounded-2xl bg-gradient-to-br from-fieldporter-blue to-fieldporter-purple p-5'>
-              <Building2 className='w-full h-full text-fieldporter-white' />
-            </div>
+            <motion.div
+              variants={animations.premiumFadeInUp}
+              className='w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl bg-fieldporter-blue/20 border border-fieldporter-blue/30 p-2 sm:p-3 md:p-4'
+            >
+              <Code className='w-full h-full text-fieldporter-blue' />
+            </motion.div>
 
-            {/* Title */}
-            <div className='space-y-4'>
-              <h1 className='text-display-sm md:text-display-md font-bold text-fieldporter-white leading-tight'>
-                We Build What We Recommend
+            {/* Title with mobile-optimized typography */}
+            <motion.div variants={animations.premiumFadeInUp} className='text-spacing'>
+              <h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-fieldporter-white leading-tight tracking-[-0.02em]'>
+                About Freddy
               </h1>
-              <p className='text-heading-lg text-fieldporter-blue font-semibold'>
-                AI Consultancy Through Business Building
+              <p className='text-lg sm:text-xl md:text-2xl text-fieldporter-blue font-semibold mt-4'>
+                Building AI systems while helping others implement them
               </p>
-            </div>
+            </motion.div>
 
             {/* Description */}
-            <p className='text-body-lg text-fieldporter-gray leading-relaxed max-w-xl'>
-              FIELDPORTER isn&apos;t just another consulting firm. We&apos;re operators who build
-              AI-powered businesses while providing strategic guidance to enterprises. This hands-on
-              approach gives our recommendations the credibility that only comes from real-world
-              execution.
-            </p>
+            <motion.p
+              variants={animations.premiumFadeInUp}
+              className='text-base sm:text-lg md:text-xl text-fieldporter-gray leading-relaxed max-w-xl'
+            >
+              After working in tennis, automotive sales, and startups, we realized we&apos;re good
+              at building systems that work. When Claude API and n8n became available, we started
+              building our own projects to test what works.
+            </motion.p>
 
-            {/* Mission Statement */}
-            <div className='p-6 rounded-xl glass-dark border border-white/10'>
-              <h3 className='text-heading-md font-semibold text-fieldporter-white mb-3'>
-                Our Mission
-              </h3>
-              <p className='text-body-md text-fieldporter-gray leading-relaxed'>
-                To bridge the gap between AI strategy and execution by building successful
-                AI-powered businesses while sharing proven methodologies with enterprise clients.
-              </p>
-            </div>
-
-            {/* CTA */}
-            <div className='flex flex-col sm:flex-row gap-4'>
-              <Button variant='primary' size='enterprise' className='group' asChild>
+            {/* Enhanced CTAs with mobile optimization */}
+            <motion.div
+              variants={animations.premiumFadeInUp}
+              className='flex flex-col sm:flex-row gap-4'
+            >
+              <Button
+                variant='fieldporter-blue'
+                size='enterprise'
+                enableAnimations={true}
+                className='min-h-[48px] w-full sm:w-auto'
+                asChild
+              >
                 <Link href='/contact'>
-                  Work With Us
-                  <ArrowRight className='ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform' />
+                  <span>Discuss Your Project</span>
+                  <ArrowRight className='ml-2 h-4 w-4' />
                 </Link>
               </Button>
 
-              <Button variant='fieldporter-secondary' size='enterprise' className='group' asChild>
+              <Button
+                variant='fieldporter-glass'
+                size='enterprise'
+                enableAnimations={true}
+                className='min-h-[48px] w-full sm:w-auto'
+                asChild
+              >
                 <Link href='/services'>
-                  Our Services
-                  <ArrowRight className='ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform' />
+                  <span>View Services</span>
+                  <ArrowRight className='ml-2 h-4 w-4' />
                 </Link>
               </Button>
-            </div>
+            </motion.div>
           </motion.div>
 
-          {/* Stats & Values */}
+          {/* Enhanced Stats with mobile optimization */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
-            className='space-y-8'
+            variants={animations.premiumStaggerContainer}
+            initial='initial'
+            animate={isInView ? 'animate' : 'initial'}
+            className='component-spacing'
           >
-            {/* Stats Grid */}
-            <div className='grid grid-cols-2 gap-6'>
-              {stats.map((stat, index) => (
-                <motion.div
+            <div className='grid grid-cols-1 gap-4 sm:gap-6'>
+              {[
+                { label: 'Self-Dev Platform', subtitle: '8+ Months Revenue', delay: 0.1 },
+                { label: 'Family Care', subtitle: 'Claude API Testing', delay: 0.2 },
+                { label: 'AI Workflows', subtitle: 'Daily Business Use', delay: 0.3 },
+              ].map((stat, index) => (
+                <Card
                   key={stat.label}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-                  className='p-6 rounded-xl glass-dark border border-white/10 text-center'
+                  enableAnimations={true}
+                  animationDelay={stat.delay}
+                  className='glass-premium rounded-xl p-4 sm:p-6 text-center hover:glass-hover transition-all duration-300'
                 >
-                  <div className='text-display-xs font-bold text-fieldporter-blue mb-2'>
-                    {stat.value}
+                  <div className='text-xl sm:text-2xl md:text-3xl font-bold text-fieldporter-blue mb-2'>
+                    {stat.label}
                   </div>
-                  <div className='text-body-sm text-fieldporter-gray'>{stat.label}</div>
-                </motion.div>
+                  <div className='text-xs sm:text-sm text-fieldporter-gray font-medium'>
+                    {stat.subtitle}
+                  </div>
+                </Card>
               ))}
-            </div>
-
-            {/* Core Values */}
-            <div className='space-y-4'>
-              <h3 className='text-heading-lg font-semibold text-fieldporter-white'>Our Approach</h3>
-
-              <div className='space-y-4'>
-                <div className='flex items-start space-x-4 p-4 rounded-lg glass-dark border border-white/10'>
-                  <div className='w-10 h-10 rounded-lg bg-fieldporter-blue/20 p-2 flex-shrink-0'>
-                    <Target className='w-full h-full text-fieldporter-blue' />
-                  </div>
-                  <div>
-                    <h4 className='text-heading-sm font-semibold text-fieldporter-white mb-1'>
-                      Practical Strategy
-                    </h4>
-                    <p className='text-body-sm text-fieldporter-gray'>
-                      We develop AI strategies based on real implementation experience, not
-                      theoretical frameworks.
-                    </p>
-                  </div>
-                </div>
-
-                <div className='flex items-start space-x-4 p-4 rounded-lg glass-dark border border-white/10'>
-                  <div className='w-10 h-10 rounded-lg bg-fieldporter-purple/20 p-2 flex-shrink-0'>
-                    <Lightbulb className='w-full h-full text-fieldporter-purple' />
-                  </div>
-                  <div>
-                    <h4 className='text-heading-sm font-semibold text-fieldporter-white mb-1'>
-                      Innovation Through Building
-                    </h4>
-                    <p className='text-body-sm text-fieldporter-gray'>
-                      Our subsidiary companies serve as testing grounds for the strategies we
-                      recommend.
-                    </p>
-                  </div>
-                </div>
-
-                <div className='flex items-start space-x-4 p-4 rounded-lg glass-dark border border-white/10'>
-                  <div className='w-10 h-10 rounded-lg bg-green-500/20 p-2 flex-shrink-0'>
-                    <Users className='w-full h-full text-green-500' />
-                  </div>
-                  <div>
-                    <h4 className='text-heading-sm font-semibold text-fieldporter-white mb-1'>
-                      Collaborative Partnership
-                    </h4>
-                    <p className='text-body-sm text-fieldporter-gray'>
-                      We work alongside your teams, not above them, ensuring knowledge transfer and
-                      capability building.
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
           </motion.div>
         </div>

@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { ANALYTICS_EVENTS } from '@/config/constants';
+import { firebaseEnhancedFormsService } from '@/lib/firebase-enhanced-forms';
 import { ArrowLeft, ArrowRight, Calendar, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
 
@@ -135,7 +136,6 @@ export function ConsultationForm() {
     if (!validateStep(currentStep)) return;
 
     setIsSubmitting(true);
-
     try {
       // Track analytics event
       if (typeof window !== 'undefined' && window.gtag) {
@@ -147,12 +147,32 @@ export function ConsultationForm() {
         });
       }
 
-      // TODO: Implement actual form submission to API
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
+      // Submit consultation booking to Firebase
+      await firebaseEnhancedFormsService.submitConsultationBooking({
+        fullName: formData.fullName,
+        email: formData.email,
+        companyName: formData.companyName,
+        jobTitle: formData.jobTitle,
+        phone: formData.phone,
+        companySize: formData.companySize,
+        industry: formData.industry,
+        businessChallenge: formData.businessChallenge,
+        aiStatus: formData.aiStatus,
+        successVision: formData.successVision,
+        serviceInterests: formData.serviceInterests,
+        timeline: formData.timeline,
+        budgetRange: formData.budgetRange,
+        techComfort: formData.techComfort,
+        objectives: formData.objectives,
+        consultationFormat: formData.consultationFormat,
+        availability: formData.availability,
+        stakeholders: formData.stakeholders,
+        preparationMaterials: formData.preparationMaterials,
+      });
 
       setIsSubmitted(true);
     } catch (error) {
-      // console.error('Form submission error:', error);
+      console.error('Form submission error:', error);
     } finally {
       setIsSubmitting(false);
     }

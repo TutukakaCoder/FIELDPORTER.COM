@@ -49,7 +49,6 @@ const config: Config = {
         fieldporter: {
           black: '#000000',
           blue: '#0969DA',
-          purple: '#7C3AED',
           white: '#FFFFFF',
           gray: '#6B7280',
         },
@@ -69,7 +68,6 @@ const config: Config = {
           white: 'rgba(255, 255, 255, 0.1)',
           black: 'rgba(0, 0, 0, 0.1)',
           blue: 'rgba(9, 105, 218, 0.1)',
-          purple: 'rgba(124, 58, 237, 0.1)',
         },
       },
 
@@ -81,10 +79,13 @@ const config: Config = {
 
       // Font Weight Mapping
       fontWeight: {
+        ultralight: '100',
+        light: '300',
         normal: '400',
         medium: '500',
         semibold: '600',
         bold: '700',
+        extrabold: '800',
       },
 
       // Typography Scale
@@ -163,6 +164,8 @@ const config: Config = {
         'scale-out': 'scaleOut 200ms ease-in',
         float: 'float 6s ease-in-out infinite',
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'animation-delay-1000': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite 1s',
+        'animation-delay-2000': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite 2s',
       },
 
       keyframes: {

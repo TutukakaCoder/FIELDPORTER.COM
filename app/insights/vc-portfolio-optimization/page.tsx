@@ -155,7 +155,7 @@ export default function VCPortfolioOptimizationPage() {
           </div>
 
           <div className='bg-white/5 border border-white/10 rounded-lg p-6'>
-            <h4 className='text-heading-md font-semibold text-fieldporter-purple mb-3'>
+            <h4 className='text-heading-md font-semibold text-fieldporter-blue mb-3'>
               2. Data-Intensive Process Evaluation
             </h4>
             <p className='text-fieldporter-gray text-sm mb-3'>
@@ -217,7 +217,7 @@ export default function VCPortfolioOptimizationPage() {
           </div>
 
           <div className='bg-white/5 border border-white/10 rounded-lg p-6'>
-            <h4 className='text-heading-md font-semibold text-fieldporter-purple mb-3'>
+            <h4 className='text-heading-md font-semibold text-fieldporter-blue mb-3'>
               6. Repeatable Use Case Identification
             </h4>
             <p className='text-fieldporter-gray text-sm mb-3'>
@@ -341,8 +341,8 @@ export default function VCPortfolioOptimizationPage() {
             </p>
           </div>
 
-          <div className='bg-fieldporter-purple/10 border border-fieldporter-purple/20 rounded-lg p-6'>
-            <h4 className='text-heading-md font-semibold text-fieldporter-purple mb-3'>
+          <div className='bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6'>
+            <h4 className='text-heading-md font-semibold text-fieldporter-blue mb-3'>
               Personalization at Scale
             </h4>
             <p className='text-fieldporter-gray text-sm'>
@@ -417,7 +417,7 @@ export default function VCPortfolioOptimizationPage() {
             <p className='text-fieldporter-gray text-xs'>YoY, MoM tracking of top-line expansion</p>
           </div>
           <div className='bg-white/5 border border-white/10 rounded-lg p-4'>
-            <h5 className='text-heading-sm font-semibold text-fieldporter-purple mb-2'>
+            <h5 className='text-heading-sm font-semibold text-fieldporter-blue mb-2'>
               Gross & Net Margins
             </h5>
             <p className='text-fieldporter-gray text-xs'>
@@ -451,7 +451,7 @@ export default function VCPortfolioOptimizationPage() {
         </h3>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-6'>
           <div className='bg-white/5 border border-white/10 rounded-lg p-4'>
-            <h5 className='text-heading-sm font-semibold text-fieldporter-purple mb-2'>
+            <h5 className='text-heading-sm font-semibold text-fieldporter-blue mb-2'>
               Cycle Time Reduction
             </h5>
             <p className='text-fieldporter-gray text-xs'>
@@ -481,7 +481,7 @@ export default function VCPortfolioOptimizationPage() {
             <p className='text-fieldporter-gray text-xs'>Overall productivity measurement</p>
           </div>
           <div className='bg-white/5 border border-white/10 rounded-lg p-4'>
-            <h5 className='text-heading-sm font-semibold text-fieldporter-purple mb-2'>
+            <h5 className='text-heading-sm font-semibold text-fieldporter-blue mb-2'>
               Customer Churn Rate
             </h5>
             <p className='text-fieldporter-gray text-xs'>Retention and satisfaction indicator</p>
@@ -517,7 +517,7 @@ export default function VCPortfolioOptimizationPage() {
             </p>
           </div>
           <div className='bg-white/5 border border-white/10 rounded-lg p-4'>
-            <h5 className='text-heading-sm font-semibold text-fieldporter-purple mb-2'>
+            <h5 className='text-heading-sm font-semibold text-fieldporter-blue mb-2'>
               Time to Value (TTV)
             </h5>
             <p className='text-fieldporter-gray text-xs'>
@@ -620,34 +620,34 @@ export default function VCPortfolioOptimizationPage() {
             </ul>
           </div>
 
-          <div className='bg-fieldporter-purple/10 border border-fieldporter-purple/20 rounded-lg p-6'>
-            <h3 className='text-heading-lg font-semibold text-fieldporter-purple mb-4'>
+          <div className='bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6'>
+            <h3 className='text-heading-lg font-semibold text-fieldporter-blue mb-4'>
               For Portfolio Company Operators
             </h3>
             <ul className='space-y-3 text-fieldporter-gray text-sm'>
               <li className='flex items-start space-x-2'>
-                <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-purple flex-shrink-0 mt-2' />
+                <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-blue flex-shrink-0 mt-2' />
                 <span>
                   <strong>Build Strong Business Cases:</strong> Develop clear ROI projections and
                   alignment with strategic goals for automation initiatives.
                 </span>
               </li>
               <li className='flex items-start space-x-2'>
-                <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-purple flex-shrink-0 mt-2' />
+                <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-blue flex-shrink-0 mt-2' />
                 <span>
                   <strong>Start with Pilot Projects:</strong> Test solutions on smaller scales
                   before committing to large-scale implementations.
                 </span>
               </li>
               <li className='flex items-start space-x-2'>
-                <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-purple flex-shrink-0 mt-2' />
+                <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-blue flex-shrink-0 mt-2' />
                 <span>
                   <strong>Focus on Change Management:</strong> Invest in upskilling employees and
                   managing the transition to automated systems.
                 </span>
               </li>
               <li className='flex items-start space-x-2'>
-                <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-purple flex-shrink-0 mt-2' />
+                <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-blue flex-shrink-0 mt-2' />
                 <span>
                   <strong>Leverage VC Resources:</strong> Actively utilize the VC's network,
                   expertise, and shared resources for operational enhancement.

@@ -5,18 +5,12 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "created_at",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "conversations",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "cleanup_date",
+          "fieldPath": "status",
           "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "last_active",
+          "order": "DESCENDING"
         }
       ]
     },
@@ -27,19 +21,9 @@
         {
           "fieldPath": "lead_score",
           "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "conversations",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "consultation_requested",
-          "order": "ASCENDING"
         },
         {
-          "fieldPath": "created_at",
+          "fieldPath": "last_active",
           "order": "DESCENDING"
         }
       ]

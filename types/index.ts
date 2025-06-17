@@ -215,7 +215,6 @@ export interface BrandColors {
   primary: {
     black: string;
     blue: string;
-    purple: string;
     white: string;
     gray: string;
   };
@@ -235,4 +234,11 @@ export interface TypographyScale {
   h4: string;
   body: string;
   caption: string;
+}
+
+export interface ColorPalette {
+  black: string;
+  blue: string;
+  white: string;
+  gray: string;
 }

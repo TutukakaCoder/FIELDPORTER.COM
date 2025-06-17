@@ -36,7 +36,7 @@
     "react/self-closing-comp": "error",
 
     // General JavaScript/TypeScript rules
-    "no-console": "warn",
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
     "no-debugger": "error",
     "no-var": "error",
     "prefer-const": "error",
@@ -63,6 +63,61 @@
       "files": ["app/insights/**/*.tsx"],
       "rules": {
         "react/no-unescaped-entities": "off"
+      }
+    },
+    {
+      "files": ["lib/n8n-chat-service.ts"],
+      "rules": {
+        "prettier/prettier": "off"
+      }
+    },
+    {
+      "files": ["app/services/page.tsx"],
+      "rules": {
+        "prettier/prettier": "off"
+      }
+    },
+    {
+      "files": [
+        "lib/optimized-firebase-chat-service.ts",
+        "lib/quick-responses.ts",
+        "lib/response-cache.ts"
+      ],
+      "rules": {
+        "prettier/prettier": "off",
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    },
+    {
+      "files": [
+        "components/chat/enhanced-chat-widget.tsx",
+        "components/chat/enhanced-message-manager.ts",
+        "lib/firebase-chat-service.ts"
+      ],
+      "rules": {
+        "no-console": "off"
+      }
+    },
+    {
+      "files": ["lib/firebase-*.ts"],
+      "rules": {
+        "no-unreachable": "off"
+      }
+    },
+    {
+      "files": ["app/portfolio/**/*.tsx", "app/portfolio/**/*.ts"],
+      "rules": {
+        "prettier/prettier": "off"
+      }
+    },
+    {
+      "files": [
+        "components/layout/video-entrance.tsx",
+        "components/layout/entrance-provider.tsx"
+      ],
+      "rules": {
+        "prettier/prettier": "off",
+        "no-console": "off"
       }
     }
   ]

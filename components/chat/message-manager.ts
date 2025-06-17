@@ -1,23 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-export interface Message {
-  id: string;
-  content: string;
-  role: 'user' | 'assistant';
-  timestamp: Date;
-  status?: 'sending' | 'sent' | 'failed';
-}
+import { OptimizedFirebaseChatService } from '@/lib/optimized-firebase-chat-service';
+import type { ConversationData, Message } from '@/types/chat';
 
-export interface ConversationData {
-  messages: Message[];
-  userEmail?: string | undefined;
-  lastActivity: Date;
-  sessionId: string;
+interface MessageValidation {
+  isValid: boolean;
+  error?: string;
 }
 
 const STORAGE_KEY = 'fieldporter-chat-conversation';
-const MAX_MESSAGE_LENGTH = 1000;
+const SESSION_KEY = 'fieldporter-chat-session';
+const MAX_USER_MESSAGE_LENGTH = 1000;
+const MAX_AI_MESSAGE_LENGTH = 4000;
 const STORAGE_EXPIRY_HOURS = 24;
 
 export class MessageManager {
@@ -25,61 +20,217 @@ export class MessageManager {
   private userEmail?: string | undefined;
   private sessionId: string;
   private lastActivity: Date;
+  private firebaseService: OptimizedFirebaseChatService;
+  private isFirebaseEnabled: boolean = false;
+  private leadScore: number = 1;
+  private serviceInterest: string[] = [];
+  private consultationRequested: boolean = false;
 
   constructor() {
-    this.sessionId = this.generateSessionId();
+    this.sessionId = this.getOrCreateSessionId();
     this.lastActivity = new Date();
-    this.loadFromStorage();
+    this.clearPreviousSession();
+    this.firebaseService = new OptimizedFirebaseChatService(this.sessionId);
+    this.initializeManager();
   }
 
-  // Generate unique session ID
+  private async initializeManager(): Promise<void> {
+    try {
+      this.loadFromStorage();
+      await this.initializeFirebase();
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error initializing message manager:', error);
+      }
+      this.isFirebaseEnabled = false;
+    }
+  }
+
+  private async initializeFirebase(): Promise<void> {
+    try {
+      const messages = await this.firebaseService.getConversationHistory(this.sessionId);
+      if (messages.length > 0) {
+        if (this.messages.length === 0 || messages.length > this.messages.length) {
+          this.messages = messages;
+          this.saveToStorage();
+        }
+        this.isFirebaseEnabled = true;
+      } else {
+        await this.firebaseService.createConversation(this.sessionId);
+        this.isFirebaseEnabled = true;
+      }
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Firebase initialization failed, using localStorage only:', error);
+      }
+      this.isFirebaseEnabled = false;
+    }
+  }
+
+  private getOrCreateSessionId(): string {
+    try {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        const existingSessionId = sessionStorage.getItem(SESSION_KEY);
+        if (existingSessionId) {
+          const stored = sessionStorage.getItem(STORAGE_KEY);
+          if (stored) {
+            const data: ConversationData = JSON.parse(stored);
+            const expiryTime = new Date(data.lastActivity);
+            expiryTime.setHours(expiryTime.getHours() + STORAGE_EXPIRY_HOURS);
+
+            if (new Date() <= expiryTime) {
+              return existingSessionId;
+            } else {
+              sessionStorage.removeItem(STORAGE_KEY);
+              sessionStorage.removeItem(SESSION_KEY);
+            }
+          }
+        }
+      }
+
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const persistentSessionId = localStorage.getItem('fieldporter-session-id');
+        const persistentTimestamp = localStorage.getItem('fieldporter-session-timestamp');
+
+        if (persistentSessionId && persistentTimestamp) {
+          const sessionAge = Date.now() - parseInt(persistentTimestamp);
+          const twentyFourHours = 24 * 60 * 60 * 1000;
+
+          if (sessionAge < twentyFourHours) {
+            if (window.sessionStorage) {
+              sessionStorage.setItem(SESSION_KEY, persistentSessionId);
+            }
+            return persistentSessionId;
+          } else {
+            localStorage.removeItem('fieldporter-session-id');
+            localStorage.removeItem('fieldporter-session-timestamp');
+          }
+        }
+      }
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error checking existing session:', error);
+      }
+    }
+
+    return this.generateSessionId();
+  }
+
   private generateSessionId(): string {
-    return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    try {
+      if (typeof window !== 'undefined') {
+        if (window.sessionStorage) {
+          sessionStorage.setItem(SESSION_KEY, newSessionId);
+        }
+        if (window.localStorage) {
+          localStorage.setItem('fieldporter-session-id', newSessionId);
+          localStorage.setItem('fieldporter-session-timestamp', Date.now().toString());
+        }
+      }
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error storing new session ID:', error);
+      }
+    }
+
+    return newSessionId;
   }
 
-  // Validate message content
-  private validateMessage(content: string): { isValid: boolean; error?: string } {
-    if (!content || content.trim().length === 0) {
+  private containsScriptContent(content: string): boolean {
+    const scriptPatterns = [
+      /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+      /javascript:/gi,
+      /on\w+\s*=/gi,
+      /eval\s*\(/gi,
+      /document\.(write|writeln|createElement)/gi,
+    ];
+
+    return scriptPatterns.some(pattern => pattern.test(content));
+  }
+
+  private async addMessageToFirebase(message: Message): Promise<void> {
+    try {
+      await this.firebaseService.saveMessage(this.sessionId, message);
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error adding message to Firebase:', error);
+      }
+    }
+  }
+
+  private validateMessage(content: string, type: 'user' | 'assistant'): MessageValidation {
+    if (!content.trim()) {
       return { isValid: false, error: 'Message cannot be empty' };
     }
 
-    if (content.length > MAX_MESSAGE_LENGTH) {
-      return { isValid: false, error: `Message too long (max ${MAX_MESSAGE_LENGTH} characters)` };
+    const maxLength = type === 'user' ? MAX_USER_MESSAGE_LENGTH : MAX_AI_MESSAGE_LENGTH;
+    if (content.length > maxLength) {
+      if (type === 'user') {
+        return {
+          isValid: false,
+          error: `Message too long (${content.length}/${maxLength} characters)`,
+        };
+      }
     }
 
-    // Basic sanitization check
-    const sanitized = content.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
-    if (sanitized !== content) {
+    if (this.containsScriptContent(content)) {
       return { isValid: false, error: 'Invalid content detected' };
     }
 
     return { isValid: true };
   }
 
-  // Add message with validation
-  addMessage(content: string, role: 'user' | 'assistant'): Message | null {
-    const validation = this.validateMessage(content);
-    if (!validation.isValid) {
-      console.error('Message validation failed:', validation.error);
-      return null;
+  async addMessage(content: string, type: 'user' | 'assistant', email?: string): Promise<Message> {
+    try {
+      if (type === 'assistant' && content.length > MAX_AI_MESSAGE_LENGTH) {
+        content = content.substring(0, MAX_AI_MESSAGE_LENGTH) + '...';
+      }
+
+      if (type === 'user' && content.length > MAX_USER_MESSAGE_LENGTH) {
+        throw new Error(
+          `Message too long (${content.length}/${MAX_USER_MESSAGE_LENGTH} characters)`
+        );
+      }
+
+      const validation = this.validateMessage(content, type);
+      if (!validation.isValid) {
+        throw new Error(validation.error || 'Message validation failed');
+      }
+
+      const message: Message = {
+        id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        content: content.trim(),
+        role: type,
+        timestamp: new Date(),
+        status: type === 'user' ? 'sending' : 'sent',
+      };
+
+      this.messages.push(message);
+      this.lastActivity = new Date();
+
+      this.saveToStorage();
+
+      if (this.isFirebaseEnabled) {
+        try {
+          await this.addMessageToFirebase(message);
+          message.status = 'sent';
+        } catch (error) {
+          message.status = 'failed';
+          if (process.env.NODE_ENV === 'development') {
+            console.error('Firebase save failed:', error);
+          }
+        }
+      }
+
+      return message;
+    } catch (error) {
+      console.error('Error in addMessage:', error);
+      throw error;
     }
-
-    const message: Message = {
-      id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      content: content.trim(),
-      role,
-      timestamp: new Date(),
-      status: role === 'user' ? 'sending' : 'sent',
-    };
-
-    this.messages.push(message);
-    this.lastActivity = new Date();
-    this.saveToStorage();
-
-    return message;
   }
 
-  // Update message status
   updateMessageStatus(messageId: string, status: 'sending' | 'sent' | 'failed'): void {
     const message = this.messages.find(m => m.id === messageId);
     if (message) {
@@ -88,39 +239,86 @@ export class MessageManager {
     }
   }
 
-  // Get all messages
   getMessages(): Message[] {
     return [...this.messages];
   }
 
-  // Set user email
-  setUserEmail(email: string): void {
+  async setUserEmail(email: string): Promise<void> {
     if (this.isValidEmail(email)) {
       this.userEmail = email;
       this.saveToStorage();
+
+      if (this.isFirebaseEnabled) {
+        try {
+          await this.firebaseService.setUserEmail(this.sessionId, email);
+          this.leadScore = await this.firebaseService.calculateLeadScore(this.sessionId);
+        } catch (error) {
+          if (process.env.NODE_ENV === 'development') {
+            console.error('Error updating email in Firebase:', error);
+          }
+        }
+      }
     }
   }
 
-  // Get user email
   getUserEmail(): string | undefined {
     return this.userEmail;
   }
 
-  // Email validation
+  async markConsultationRequested(): Promise<void> {
+    this.consultationRequested = true;
+    this.saveToStorage();
+
+    if (this.isFirebaseEnabled) {
+      try {
+        await this.firebaseService.updateConversationMetadata(this.sessionId, {
+          consultation_requested: true,
+        });
+        this.leadScore = await this.firebaseService.calculateLeadScore(this.sessionId);
+      } catch (error) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error marking consultation in Firebase:', error);
+        }
+      }
+    }
+  }
+
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }
 
-  // Clear conversation
   clearConversation(): void {
     this.messages = [];
     this.userEmail = undefined;
     this.lastActivity = new Date();
+    this.leadScore = 1;
+    this.serviceInterest = [];
+    this.consultationRequested = false;
+
+    // Clear storage and generate new session
+    try {
+      if (typeof window !== 'undefined') {
+        if (window.sessionStorage) {
+          sessionStorage.removeItem(STORAGE_KEY);
+          sessionStorage.removeItem(SESSION_KEY);
+        }
+        if (window.localStorage) {
+          localStorage.removeItem('fieldporter-session-id');
+          localStorage.removeItem('fieldporter-session-timestamp');
+        }
+      }
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error clearing storage:', error);
+      }
+    }
+
+    // Generate new session ID for fresh start
+    this.sessionId = this.generateSessionId();
     this.saveToStorage();
   }
 
-  // Get conversation summary for analytics
   getConversationSummary() {
     return {
       messageCount: this.messages.length,
@@ -129,10 +327,13 @@ export class MessageManager {
       hasEmail: !!this.userEmail,
       sessionDuration: Date.now() - new Date(this.sessionId.split('_')[1] || '0').getTime(),
       lastActivity: this.lastActivity,
+      leadScore: this.leadScore,
+      serviceInterest: this.serviceInterest,
+      consultationRequested: this.consultationRequested,
+      isFirebaseEnabled: this.isFirebaseEnabled,
     };
   }
 
-  // Save to localStorage with error handling
   private saveToStorage(): void {
     try {
       const data: ConversationData = {
@@ -140,132 +341,166 @@ export class MessageManager {
         userEmail: this.userEmail,
         lastActivity: this.lastActivity,
         sessionId: this.sessionId,
+        leadScore: this.leadScore,
+        serviceInterest: this.serviceInterest,
+        consultationRequested: this.consultationRequested,
       };
 
-      const serialized = JSON.stringify(data);
+      if (typeof window !== 'undefined') {
+        // Save to sessionStorage for current session
+        if (window.sessionStorage) {
+          sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+          sessionStorage.setItem(SESSION_KEY, this.sessionId);
+        }
 
-      // Check if localStorage is available and has space
-      if (typeof window !== 'undefined' && window.localStorage) {
-        try {
-          localStorage.setItem(STORAGE_KEY, serialized);
-        } catch (e: any) {
-          if (e.name === 'QuotaExceededError') {
-            // Clear old data and try again
-            this.clearOldStorageData();
-            try {
-              localStorage.setItem(STORAGE_KEY, serialized);
-            } catch (retryError) {
-              console.warn('Failed to save conversation after cleanup:', retryError);
-            }
-          } else {
-            console.warn('Failed to save conversation to localStorage:', e);
-          }
+        // Update localStorage timestamp to extend session persistence
+        if (window.localStorage) {
+          localStorage.setItem('fieldporter-session-id', this.sessionId);
+          localStorage.setItem('fieldporter-session-timestamp', Date.now().toString());
         }
       }
     } catch (error) {
-      console.warn('Error saving conversation:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error saving conversation:', error);
+      }
     }
   }
 
-  // Load from localStorage with error handling
   private loadFromStorage(): void {
     try {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        const stored = sessionStorage.getItem(STORAGE_KEY);
+        const storedSessionId = sessionStorage.getItem(SESSION_KEY);
+
+        if (stored && storedSessionId === this.sessionId) {
           const data: ConversationData = JSON.parse(stored);
 
-          // Check if data is expired
+          // Check if session has expired
           const expiryTime = new Date(data.lastActivity);
           expiryTime.setHours(expiryTime.getHours() + STORAGE_EXPIRY_HOURS);
 
           if (new Date() > expiryTime) {
-            // Data expired, clear it
-            localStorage.removeItem(STORAGE_KEY);
+            // Session expired, clean up
+            sessionStorage.removeItem(STORAGE_KEY);
+            sessionStorage.removeItem(SESSION_KEY);
+            if (window.localStorage) {
+              localStorage.removeItem('fieldporter-session-id');
+              localStorage.removeItem('fieldporter-session-timestamp');
+            }
             return;
           }
 
-          // Restore data
-          this.messages = data.messages.map(msg => ({
-            ...msg,
-            timestamp: new Date(msg.timestamp),
-          }));
-          this.userEmail = data.userEmail;
-          this.lastActivity = new Date(data.lastActivity);
-          this.sessionId = data.sessionId || this.sessionId;
-        }
-      }
-    } catch (error) {
-      console.warn('Error loading conversation from localStorage:', error);
-      // Clear corrupted data
-      if (typeof window !== 'undefined' && window.localStorage) {
-        localStorage.removeItem(STORAGE_KEY);
-      }
-    }
-  }
+          // Load conversation data
+          if (data.sessionId === this.sessionId) {
+            this.messages = data.messages.map(msg => ({
+              ...msg,
+              timestamp: new Date(msg.timestamp),
+            }));
+            this.userEmail = data.userEmail;
+            this.lastActivity = new Date(data.lastActivity);
+            this.leadScore = data.leadScore || 1;
+            this.serviceInterest = data.serviceInterest || [];
+            this.consultationRequested = data.consultationRequested || false;
 
-  // Clear old storage data
-  private clearOldStorageData(): void {
-    try {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        // Remove old chat data
-        localStorage.removeItem(STORAGE_KEY);
-
-        // Could also clear other old data if needed
-        const keysToCheck = [];
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (key && key.startsWith('fieldporter-chat-')) {
-            keysToCheck.push(key);
-          }
-        }
-
-        keysToCheck.forEach(key => {
-          try {
-            const data = localStorage.getItem(key);
-            if (data) {
-              const parsed = JSON.parse(data);
-              if (parsed.lastActivity) {
-                const lastActivity = new Date(parsed.lastActivity);
-                const expiryTime = new Date(lastActivity);
-                expiryTime.setHours(expiryTime.getHours() + STORAGE_EXPIRY_HOURS);
-
-                if (new Date() > expiryTime) {
-                  localStorage.removeItem(key);
-                }
-              }
+            if (process.env.NODE_ENV === 'development') {
+              // Development logging removed for production compliance
             }
-          } catch (e) {
-            // Remove corrupted data
-            localStorage.removeItem(key);
           }
-        });
+        } else if (stored && !storedSessionId) {
+          // Clean up orphaned data
+          sessionStorage.removeItem(STORAGE_KEY);
+        }
       }
     } catch (error) {
-      console.warn('Error clearing old storage data:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error loading conversation from sessionStorage:', error);
+      }
+      // Clean up corrupted data
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        sessionStorage.removeItem(STORAGE_KEY);
+        sessionStorage.removeItem(SESSION_KEY);
+      }
     }
   }
 
-  // Check if conversation should show email prompt
-  shouldShowEmailPrompt(): boolean {
-    const userMessageCount = this.messages.filter(m => m.role === 'user').length;
-    return userMessageCount >= 3 && !this.userEmail;
+  private clearPreviousSession(): void {
+    // Clear any old localStorage data
+    try {
+      if (typeof window !== 'undefined') {
+        if (window.localStorage) {
+          const keysToRemove: string[] = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith('fieldporter-chat-')) {
+              keysToRemove.push(key);
+            }
+          }
+          keysToRemove.forEach(key => localStorage.removeItem(key));
+        }
+      }
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error clearing old storage data:', error);
+      }
+    }
   }
 
-  // Get retry-able failed messages
+  shouldShowEmailPrompt(): boolean {
+    return !this.userEmail && this.messages.filter(m => m.role === 'user').length >= 3;
+  }
+
   getFailedMessages(): Message[] {
     return this.messages.filter(m => m.status === 'failed');
   }
 
-  // Retry failed message
   retryMessage(messageId: string): Message | null {
     const message = this.messages.find(m => m.id === messageId);
     if (message && message.status === 'failed') {
       message.status = 'sending';
-      message.timestamp = new Date();
       this.saveToStorage();
       return message;
     }
     return null;
+  }
+
+  getCurrentLeadScore(): number {
+    return this.leadScore;
+  }
+
+  getCurrentServiceInterests(): string[] {
+    return [...this.serviceInterest];
+  }
+
+  isConsultationRequested(): boolean {
+    return this.consultationRequested;
+  }
+
+  isFirebaseConnected(): boolean {
+    return this.isFirebaseEnabled && this.firebaseService.isOnlineStatus();
+  }
+
+  getSessionId(): string {
+    return this.sessionId;
+  }
+
+  async getPerformanceMetrics(): Promise<{
+    queryTime?: number;
+    estimatedCostReduction?: number;
+    operationCount?: number;
+  }> {
+    try {
+      const metrics = await this.firebaseService.getPerformanceMetrics(this.sessionId);
+      return {
+        queryTime: metrics.queryTime,
+        estimatedCostReduction: metrics.estimatedCostReduction,
+        operationCount: metrics.operationCount,
+      };
+    } catch (error) {
+      console.error('Failed to get performance metrics:', error);
+      return {
+        queryTime: 0,
+        estimatedCostReduction: 0,
+      };
+    }
   }
 }

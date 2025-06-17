@@ -25,6 +25,8 @@ const SelectTrigger = React.forwardRef<
       'focus:border-fieldporter-blue focus:ring-fieldporter-blue/20',
       'hover:border-fieldporter-gray/50 transition-all duration-200 ease-out',
       'backdrop-blur-sm font-inter',
+      // Mobile optimizations
+      'min-h-[44px] touch-manipulation text-base sm:text-sm',
       className
     )}
     {...props}
@@ -43,7 +45,10 @@ const SelectScrollUpButton = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.ScrollUpButton
     ref={ref}
-    className={cn('flex cursor-default items-center justify-center py-1', className)}
+    className={cn(
+      'flex cursor-default items-center justify-center py-2 min-h-[44px] touch-manipulation',
+      className
+    )}
     {...props}
   >
     <ChevronUp className='h-4 w-4' />
@@ -57,7 +62,10 @@ const SelectScrollDownButton = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.ScrollDownButton
     ref={ref}
-    className={cn('flex cursor-default items-center justify-center py-1', className)}
+    className={cn(
+      'flex cursor-default items-center justify-center py-2 min-h-[44px] touch-manipulation',
+      className
+    )}
     {...props}
   >
     <ChevronDown className='h-4 w-4' />
@@ -107,7 +115,7 @@ const SelectLabel = React.forwardRef<
   <SelectPrimitive.Label
     ref={ref}
     className={cn(
-      'py-1.5 pl-8 pr-2 text-sm font-semibold',
+      'py-2 pl-8 pr-2 text-sm font-semibold min-h-[44px] flex items-center',
       'text-fieldporter-gray font-inter',
       className
     )}
@@ -123,11 +131,13 @@ const SelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'relative flex w-full cursor-default select-none items-center rounded-sm py-3 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       // FIELDPORTER Premium Styling
       'text-fieldporter-white font-inter',
       'focus:bg-fieldporter-blue/20 focus:text-fieldporter-white',
       'hover:bg-fieldporter-gray/10 transition-colors duration-150',
+      // Mobile optimizations
+      'min-h-[44px] touch-manipulation text-base sm:text-sm',
       className
     )}
     {...props}

@@ -1,227 +1,184 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { GlassCard } from '@/components/ui/card';
 import { motion } from 'framer-motion';
-import { ArrowRight, Clock, TrendingUp } from 'lucide-react';
-
-interface ResultMetric {
-  icon: React.ReactNode;
-  value: string;
-  label: string;
-  description: string;
-}
-
-interface CaseStudy {
-  company: string;
-  industry: string;
-  challenge: string;
-  solution: string;
-  results: string[];
-  timeline: string;
-}
+import { Brain, Target, TrendingUp, Zap } from 'lucide-react';
 
 interface ResultsSectionProps {
   title: string;
   subtitle: string;
-  metrics: ResultMetric[];
-  caseStudy: CaseStudy;
-  expectations: {
-    title: string;
-    items: {
-      phase: string;
-      outcome: string;
-      timeline: string;
-    }[];
-  };
+  results: Array<{
+    metric: string;
+    description: string;
+    industry: string;
+  }>;
 }
 
-export function ResultsSection({
-  title,
-  subtitle,
-  metrics,
-  caseStudy,
-  expectations,
-}: ResultsSectionProps) {
-  return (
-    <section className='py-20 lg:py-28 relative'>
-      {/* Background */}
-      <div className='absolute inset-0 bg-gradient-to-b from-black to-bg-fieldporter-secondary' />
+export function ResultsSection({ title, subtitle, results }: ResultsSectionProps) {
+  // Extract key metrics and create more visual data
+  const getProjectData = (result: ResultsSectionProps['results'][0], index: number) => {
+    const icons = [Brain, Zap, Target, TrendingUp];
+    const Icon = icons[index] || Brain;
 
-      <div className='relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+    // Extract key numbers/metrics from description
+    let primaryMetric = '';
+    let secondaryMetric = '';
+    let timeframe = '';
+
+    if (result.description.includes('6+ months')) {
+      primaryMetric = '6+ months';
+      secondaryMetric = 'Revenue';
+      timeframe = 'Ongoing';
+    } else if (result.description.includes('One week')) {
+      primaryMetric = '1 week';
+      secondaryMetric = 'Research';
+      timeframe = 'Delivery';
+    } else if (result.description.includes('70%')) {
+      primaryMetric = '70%';
+      secondaryMetric = 'Efficiency';
+      timeframe = 'Improvement';
+    } else if (result.description.includes('283%')) {
+      primaryMetric = '283%';
+      secondaryMetric = 'Accuracy';
+      timeframe = 'Boost';
+    } else {
+      primaryMetric = '100%';
+      secondaryMetric = 'Success';
+      timeframe = 'Delivered';
+    }
+
+    // Create shorter, punchier descriptions
+    let shortDescription = '';
+    if (result.metric.includes('Self Development')) {
+      shortDescription = 'Complex React/Firebase platform generating consistent revenue';
+    } else if (result.metric.includes('Market Entry')) {
+      shortDescription = 'US expansion strategy with POS integration analysis';
+    } else if (result.metric.includes('Email Classification')) {
+      shortDescription = 'AI-powered email automation with workflow platforms';
+    } else if (result.metric.includes('News Digest')) {
+      shortDescription = 'DeepSeek API integration for automated market insights';
+    } else {
+      shortDescription = result.description.substring(0, 60) + '...';
+    }
+
+    return {
+      ...result,
+      Icon,
+      primaryMetric,
+      secondaryMetric,
+      timeframe,
+      shortDescription,
+    };
+  };
+
+  return (
+    <section className='py-16 lg:py-24 relative'>
+      {/* Background */}
+      <div className='absolute inset-0 bg-gradient-to-b from-bg-fieldporter-secondary to-bg-fieldporter-tertiary' />
+
+      <div className='relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className='text-center space-y-6 mb-16'
+          className='text-center space-y-4 mb-16'
         >
-          <h2 className='text-display-sm md:text-display-md font-bold text-fieldporter-white'>
-            {title}
-          </h2>
-          <p className='text-body-lg text-fieldporter-gray max-w-3xl mx-auto leading-relaxed'>
+          <h2 className='text-3xl md:text-4xl font-bold text-fieldporter-white'>{title}</h2>
+          <p className='text-lg text-fieldporter-gray max-w-3xl mx-auto leading-relaxed'>
             {subtitle}
           </p>
         </motion.div>
 
-        {/* Metrics Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          viewport={{ once: true }}
-          className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20'
-        >
-          {metrics.map((metric, index) => (
-            <motion.div
-              key={metric.label}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <GlassCard className='p-6 text-center h-full hover:scale-105 transition-all duration-300'>
-                <div className='w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-fieldporter-blue to-fieldporter-purple p-3'>
-                  {metric.icon}
-                </div>
-                <div className='text-display-xs font-bold text-fieldporter-blue mb-2'>
-                  {metric.value}
-                </div>
-                <div className='text-heading-sm font-semibold text-fieldporter-white mb-2'>
-                  {metric.label}
-                </div>
-                <div className='text-body-sm text-fieldporter-gray'>{metric.description}</div>
-              </GlassCard>
-            </motion.div>
-          ))}
-        </motion.div>
+        {/* Results Grid */}
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8'>
+          {results.map((result, index) => {
+            const projectData = getProjectData(result, index);
+            const { Icon } = projectData;
 
-        {/* Case Study */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          viewport={{ once: true }}
-          className='mb-20'
-        >
-          <GlassCard className='p-8 lg:p-12'>
-            <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
-              {/* Case Study Content */}
-              <div className='space-y-6'>
-                <div className='space-y-2'>
-                  <div className='text-body-sm text-fieldporter-blue font-semibold uppercase tracking-wide'>
-                    Client Success Story
-                  </div>
-                  <h3 className='text-heading-lg font-bold text-fieldporter-white'>
-                    {caseStudy.company}
-                  </h3>
-                  <div className='text-body-md text-fieldporter-gray'>
-                    {caseStudy.industry} • {caseStudy.timeline}
-                  </div>
-                </div>
-
-                <div className='space-y-4'>
-                  <div>
-                    <h4 className='text-heading-sm font-semibold text-fieldporter-white mb-2'>
-                      Challenge
-                    </h4>
-                    <p className='text-body-md text-fieldporter-gray leading-relaxed'>
-                      {caseStudy.challenge}
-                    </p>
-                  </div>
-
-                  <div>
-                    <h4 className='text-heading-sm font-semibold text-fieldporter-white mb-2'>
-                      Our Solution
-                    </h4>
-                    <p className='text-body-md text-fieldporter-gray leading-relaxed'>
-                      {caseStudy.solution}
-                    </p>
-                  </div>
-                </div>
-
-                <Button
-                  variant='fieldporter-ghost'
-                  className='group'
-                  onClick={() => {
-                    // TODO: Implement case study download
-                    window.open('/case-studies', '_blank');
-                  }}
-                >
-                  Download Full Case Study
-                  <ArrowRight className='ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform' />
-                </Button>
-              </div>
-
-              {/* Results */}
-              <div className='space-y-6'>
-                <h4 className='text-heading-sm font-semibold text-fieldporter-white'>
-                  Quantified Results
-                </h4>
-
-                <div className='space-y-4'>
-                  {caseStudy.results.map((result, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: 20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-                      viewport={{ once: true }}
-                      className='flex items-start gap-3 p-4 rounded-lg bg-gradient-to-r from-fieldporter-blue/10 to-fieldporter-purple/10 border border-fieldporter-blue/20'
-                    >
-                      <TrendingUp className='w-5 h-5 text-fieldporter-blue mt-0.5 flex-shrink-0' />
-                      <span className='text-body-md text-fieldporter-white font-medium'>
-                        {result}
-                      </span>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </GlassCard>
-        </motion.div>
-
-        {/* Expectations Timeline */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <div className='text-center mb-12'>
-            <h3 className='text-heading-lg font-bold text-fieldporter-white mb-4'>
-              {expectations.title}
-            </h3>
-            <p className='text-body-md text-fieldporter-gray max-w-2xl mx-auto'>
-              Realistic timelines and outcomes you can expect from our engagement
-            </p>
-          </div>
-
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-            {expectations.items.map((item, index) => (
+            return (
               <motion.div
-                key={item.phase}
-                initial={{ opacity: 0, y: 20 }}
+                key={result.metric}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.7 + index * 0.1 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <GlassCard className='p-6 h-full text-center'>
-                  <div className='w-8 h-8 mx-auto mb-4 rounded-lg bg-gradient-to-br from-fieldporter-blue to-fieldporter-purple flex items-center justify-center text-fieldporter-white font-bold text-sm'>
-                    {index + 1}
-                  </div>
-                  <h4 className='text-heading-sm font-semibold text-fieldporter-white mb-2'>
-                    {item.phase}
-                  </h4>
-                  <p className='text-body-sm text-fieldporter-gray mb-3'>{item.outcome}</p>
-                  <div className='inline-flex items-center gap-1 px-3 py-1 rounded-full bg-fieldporter-blue/20 text-fieldporter-blue text-xs font-medium'>
-                    <Clock className='w-3 h-3' />
-                    {item.timeline}
+                <GlassCard className='p-6 lg:p-8 h-full hover:scale-[1.02] transition-all duration-300 group'>
+                  <div className='flex items-start space-x-4'>
+                    {/* Icon and Metrics */}
+                    <div className='flex-shrink-0'>
+                      <div className='w-16 h-16 rounded-xl bg-fieldporter-blue/20 border border-fieldporter-blue/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300'>
+                        <Icon className='w-8 h-8 text-fieldporter-blue' />
+                      </div>
+
+                      {/* Primary Metric */}
+                      <div className='text-center'>
+                        <div className='text-2xl font-bold text-fieldporter-blue'>
+                          {projectData.primaryMetric}
+                        </div>
+                        <div className='text-xs text-fieldporter-gray font-medium'>
+                          {projectData.secondaryMetric}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className='flex-1 min-w-0'>
+                      {/* Project Title */}
+                      <h3 className='text-xl font-semibold text-fieldporter-white mb-2 leading-tight'>
+                        {result.metric}
+                      </h3>
+
+                      {/* Short Description */}
+                      <p className='text-fieldporter-gray text-sm leading-relaxed mb-4'>
+                        {projectData.shortDescription}
+                      </p>
+
+                      {/* Industry Tag and Timeframe */}
+                      <div className='flex items-center justify-between'>
+                        <div className='inline-flex items-center px-3 py-1 rounded-full bg-fieldporter-blue/20 border border-fieldporter-blue/30'>
+                          <span className='text-xs font-medium text-fieldporter-blue'>
+                            {result.industry}
+                          </span>
+                        </div>
+
+                        <div className='text-xs text-fieldporter-gray font-medium'>
+                          {projectData.timeframe}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </GlassCard>
               </motion.div>
-            ))}
+            );
+          })}
+        </div>
+
+        {/* Bottom Stats Row */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: true }}
+          className='mt-16 grid grid-cols-2 md:grid-cols-4 gap-8'
+        >
+          <div className='text-center'>
+            <div className='text-3xl font-bold text-fieldporter-blue mb-2'>4</div>
+            <div className='text-sm text-fieldporter-gray'>Projects Delivered</div>
+          </div>
+          <div className='text-center'>
+            <div className='text-3xl font-bold text-fieldporter-blue mb-2'>90%</div>
+            <div className='text-sm text-fieldporter-gray'>Faster Research</div>
+          </div>
+          <div className='text-center'>
+            <div className='text-3xl font-bold text-fieldporter-blue mb-2'>1-4 weeks</div>
+            <div className='text-sm text-fieldporter-gray'>Typical Timeline</div>
+          </div>
+          <div className='text-center'>
+            <div className='text-3xl font-bold text-fieldporter-blue mb-2'>100%</div>
+            <div className='text-sm text-fieldporter-gray'>Client Satisfaction</div>
           </div>
         </motion.div>
       </div>

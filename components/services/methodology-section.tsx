@@ -4,124 +4,110 @@ import { GlassCard } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import { CheckCircle } from 'lucide-react';
 
-interface MethodologyStep {
-  phase: string;
-  title: string;
-  description: string;
-  deliverables: string[];
-  timeline: string;
-}
-
 interface MethodologySectionProps {
   title: string;
   subtitle: string;
-  steps: MethodologyStep[];
+  phases: Array<{
+    phase: string;
+    title: string;
+    description: string;
+    deliverables: string[];
+    timeline: string;
+    timelineStyle?: string;
+  }>;
 }
 
-export function MethodologySection({ title, subtitle, steps }: MethodologySectionProps) {
-  return (
-    <section className='py-20 lg:py-28 relative'>
-      {/* Background */}
-      <div className='absolute inset-0 bg-gradient-to-b from-bg-fieldporter-secondary to-bg-fieldporter-tertiary' />
+export function MethodologySection({ title, subtitle, phases }: MethodologySectionProps) {
+  const getTimelineBadgeStyle = (timelineStyle?: string, timeline?: string) => {
+    if (timelineStyle === 'research' || timeline?.includes('week')) {
+      return 'bg-fieldporter-blue/20 border-fieldporter-blue/30 text-fieldporter-blue';
+    }
+    if (timelineStyle === 'prototype' || timeline?.includes('week')) {
+      return 'bg-fieldporter-purple/20 border-fieldporter-purple/30 text-fieldporter-purple';
+    }
+    if (timelineStyle === 'advisory' || timeline?.toLowerCase().includes('ongoing')) {
+      return 'bg-green-500/20 border-green-500/30 text-green-400';
+    }
+    return 'bg-fieldporter-gray/20 border-fieldporter-gray/30 text-fieldporter-gray';
+  };
 
-      <div className='relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+  return (
+    <section className='py-16 lg:py-24 relative'>
+      {/* Background */}
+      <div className='absolute inset-0 bg-gradient-to-b from-bg-fieldporter-primary to-bg-fieldporter-secondary' />
+
+      <div className='relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className='text-center space-y-6 mb-16'
+          className='text-center space-y-4 mb-16'
         >
-          <h2 className='text-display-sm md:text-display-md font-bold text-fieldporter-white'>
-            {title}
-          </h2>
-          <p className='text-body-lg text-fieldporter-gray max-w-3xl mx-auto leading-relaxed'>
+          <h2 className='text-3xl md:text-4xl font-bold text-fieldporter-white'>{title}</h2>
+          <p className='text-lg text-fieldporter-gray max-w-3xl mx-auto leading-relaxed'>
             {subtitle}
           </p>
         </motion.div>
 
-        {/* Methodology Steps */}
-        <div className='space-y-8'>
-          {steps.map((step, index) => (
+        {/* Phases Grid */}
+        <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8'>
+          {phases.map((phase, index) => (
             <motion.div
-              key={step.phase}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              key={phase.phase}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
+              className='lg:col-span-1'
             >
-              <GlassCard className='p-8 hover:scale-[1.01] transition-all duration-300'>
-                <div className='grid grid-cols-1 lg:grid-cols-3 gap-8 items-start'>
-                  {/* Phase Info */}
-                  <div className='space-y-4'>
-                    <div className='flex items-center gap-4'>
-                      <div className='w-12 h-12 rounded-xl bg-gradient-to-br from-fieldporter-blue to-fieldporter-purple flex items-center justify-center text-fieldporter-white font-bold text-lg'>
-                        {index + 1}
-                      </div>
-                      <div>
-                        <div className='text-body-sm text-fieldporter-blue font-semibold uppercase tracking-wide'>
-                          {step.phase}
-                        </div>
-                        <div className='text-body-sm text-fieldporter-gray'>{step.timeline}</div>
-                      </div>
+              <GlassCard className='p-6 lg:p-8 h-full hover:scale-[1.02] transition-all duration-300'>
+                <div className='space-y-6'>
+                  {/* Header with Phase Number and Timeline */}
+                  <div className='flex items-center justify-between'>
+                    <div className='w-12 h-12 rounded-xl bg-fieldporter-blue/20 border border-fieldporter-blue/30 flex items-center justify-center'>
+                      <span className='text-lg font-bold text-fieldporter-white'>
+                        {phase.phase}
+                      </span>
                     </div>
 
-                    <h3 className='text-heading-lg font-semibold text-fieldporter-white'>
-                      {step.title}
-                    </h3>
-
-                    <p className='text-body-md text-fieldporter-gray leading-relaxed'>
-                      {step.description}
-                    </p>
+                    {/* Enhanced Timeline Badge */}
+                    <div
+                      className={`px-3 py-1.5 rounded-lg border backdrop-blur-md font-medium text-sm ${getTimelineBadgeStyle(phase.timelineStyle, phase.timeline)}`}
+                    >
+                      {phase.timeline}
+                    </div>
                   </div>
 
-                  {/* Deliverables */}
-                  <div className='lg:col-span-2 space-y-4'>
-                    <h4 className='text-heading-sm font-semibold text-fieldporter-white'>
-                      Key Deliverables
-                    </h4>
+                  {/* Service Title */}
+                  <h3 className='text-xl md:text-2xl font-semibold text-fieldporter-white leading-tight'>
+                    {phase.title}
+                  </h3>
 
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-                      {step.deliverables.map((deliverable, deliverableIndex) => (
-                        <motion.div
+                  {/* Description */}
+                  <p className='text-fieldporter-gray leading-relaxed'>{phase.description}</p>
+
+                  {/* Deliverables */}
+                  <div className='space-y-3'>
+                    <h4 className='text-fieldporter-white font-semibold'>Key Deliverables:</h4>
+                    <ul className='space-y-2'>
+                      {phase.deliverables.map((deliverable, deliverableIndex) => (
+                        <li
                           key={deliverableIndex}
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          transition={{
-                            duration: 0.3,
-                            delay: index * 0.1 + deliverableIndex * 0.05,
-                          }}
-                          viewport={{ once: true }}
-                          className='flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/10'
+                          className='flex items-center space-x-3 text-sm text-fieldporter-gray'
                         >
-                          <CheckCircle className='w-5 h-5 text-fieldporter-blue mt-0.5 flex-shrink-0' />
-                          <span className='text-body-sm text-fieldporter-gray'>{deliverable}</span>
-                        </motion.div>
+                          <CheckCircle className='w-4 h-4 text-fieldporter-blue flex-shrink-0' />
+                          <span>{deliverable}</span>
+                        </li>
                       ))}
-                    </div>
+                    </ul>
                   </div>
                 </div>
               </GlassCard>
             </motion.div>
           ))}
         </div>
-
-        {/* Process Flow Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          viewport={{ once: true }}
-          className='mt-16 text-center'
-        >
-          <div className='inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-fieldporter-blue/20 to-fieldporter-purple/20 border border-fieldporter-blue/30'>
-            <div className='w-2 h-2 rounded-full bg-fieldporter-blue animate-pulse' />
-            <span className='text-body-sm text-fieldporter-white font-medium'>
-              Continuous optimization and refinement throughout all phases
-            </span>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

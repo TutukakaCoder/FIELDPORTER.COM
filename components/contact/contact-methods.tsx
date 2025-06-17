@@ -1,182 +1,157 @@
 'use client';
 
 import { Card, CardContent } from '@/components/ui/card';
-import { Clock, ExternalLink, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
+import { Clock, ExternalLink, Linkedin, Mail, MapPin } from 'lucide-react';
 
 export function ContactMethods() {
   return (
-    <section className='py-24 bg-bg-fieldporter-primary'>
-      <div className='container mx-auto px-4'>
+    <section className='py-16 lg:py-24 bg-bg-fieldporter-primary'>
+      <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='text-center mb-16'>
-          <h2 className='text-4xl font-bold text-fieldporter-white mb-4'>
-            Direct Contact Information
+          <h2 className='text-3xl md:text-4xl font-bold text-fieldporter-white mb-4'>
+            Alternative Contact Methods
           </h2>
-          <p className='text-fieldporter-gray text-lg max-w-3xl mx-auto'>
-            Prefer direct communication? Reach out through any of these channels with guaranteed
-            response times for enterprise inquiries.
+          <p className='text-lg text-fieldporter-gray max-w-2xl mx-auto leading-relaxed'>
+            Prefer different communication channels? Here are additional ways to connect directly.
           </p>
         </div>
 
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16'>
           {/* Email Contact */}
-          <Card className='bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300'>
+          <Card className='bg-white/5 border-white/10 backdrop-blur-md hover:bg-white/10 transition-all duration-300 group'>
             <CardContent className='p-8 text-center'>
-              <div className='w-16 h-16 bg-fieldporter-blue/20 rounded-full flex items-center justify-center mx-auto mb-6'>
+              <div className='w-16 h-16 bg-fieldporter-blue/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform'>
                 <Mail className='h-8 w-8 text-fieldporter-blue' />
               </div>
-              <h3 className='text-fieldporter-white font-semibold text-lg mb-2'>Email</h3>
-              <p className='text-fieldporter-gray text-sm mb-4'>
-                Direct email for consultation requests and business inquiries
+              <h3 className='text-fieldporter-white font-semibold text-lg mb-2'>Direct Email</h3>
+              <p className='text-fieldporter-gray text-sm mb-4 leading-relaxed'>
+                Personal email for all business inquiries and project discussions
               </p>
               <a
-                href='mailto:consulting@fieldporter.com'
+                href='mailto:freddy@fieldporter.com'
                 className='text-fieldporter-blue hover:text-fieldporter-blue/80 font-medium transition-colors'
               >
-                consulting@fieldporter.com
+                freddy@fieldporter.com
               </a>
               <div className='mt-4 pt-4 border-t border-white/10'>
                 <div className='flex items-center justify-center text-xs text-fieldporter-gray'>
                   <Clock className='h-3 w-3 mr-1' />
-                  24-hour response
+                  Response within 24 hours
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Phone Contact */}
-          <Card className='bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300'>
-            <CardContent className='p-8 text-center'>
-              <div className='w-16 h-16 bg-fieldporter-purple/20 rounded-full flex items-center justify-center mx-auto mb-6'>
-                <Phone className='h-8 w-8 text-fieldporter-purple' />
-              </div>
-              <h3 className='text-fieldporter-white font-semibold text-lg mb-2'>Phone</h3>
-              <p className='text-fieldporter-gray text-sm mb-4'>
-                Direct line for urgent consultation requests
-              </p>
-              <a
-                href='tel:+1-555-FIELDPORTER'
-                className='text-fieldporter-blue hover:text-fieldporter-blue/80 font-medium transition-colors'
-              >
-                +1 (555) FIELDPORTER
-              </a>
-              <div className='mt-4 pt-4 border-t border-white/10'>
-                <div className='text-xs text-fieldporter-gray'>Business Hours: 9 AM - 6 PM EST</div>
               </div>
             </CardContent>
           </Card>
 
           {/* LinkedIn */}
-          <Card className='bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300'>
+          <Card className='bg-white/5 border-white/10 backdrop-blur-md hover:bg-white/10 transition-all duration-300 group'>
             <CardContent className='p-8 text-center'>
-              <div className='w-16 h-16 bg-fieldporter-blue/20 rounded-full flex items-center justify-center mx-auto mb-6'>
+              <div className='w-16 h-16 bg-fieldporter-blue/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform'>
                 <Linkedin className='h-8 w-8 text-fieldporter-blue' />
               </div>
               <h3 className='text-fieldporter-white font-semibold text-lg mb-2'>LinkedIn</h3>
-              <p className='text-fieldporter-gray text-sm mb-4'>
-                Connect with our team for professional networking
+              <p className='text-fieldporter-gray text-sm mb-4 leading-relaxed'>
+                Connect for professional networking and industry insights
               </p>
               <a
-                href='https://linkedin.com/company/fieldporter'
+                href='https://www.linkedin.com/in/freddyjhopkins/'
                 target='_blank'
                 rel='noopener noreferrer'
                 className='text-fieldporter-blue hover:text-fieldporter-blue/80 font-medium transition-colors inline-flex items-center'
               >
-                Company Profile
+                Professional Profile
                 <ExternalLink className='h-3 w-3 ml-1' />
               </a>
               <div className='mt-4 pt-4 border-t border-white/10'>
-                <div className='text-xs text-fieldporter-gray'>
-                  Professional networking & updates
-                </div>
+                <div className='text-xs text-fieldporter-gray'>Professional updates & insights</div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Office Location */}
-          <Card className='bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300'>
+          {/* Location */}
+          <Card className='bg-white/5 border-white/10 backdrop-blur-md hover:bg-white/10 transition-all duration-300 group sm:col-span-2 lg:col-span-1'>
             <CardContent className='p-8 text-center'>
-              <div className='w-16 h-16 bg-fieldporter-gray/20 rounded-full flex items-center justify-center mx-auto mb-6'>
+              <div className='w-16 h-16 bg-fieldporter-gray/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform'>
                 <MapPin className='h-8 w-8 text-fieldporter-gray' />
               </div>
-              <h3 className='text-fieldporter-white font-semibold text-lg mb-2'>Office</h3>
-              <p className='text-fieldporter-gray text-sm mb-4'>
-                Headquarters for in-person meetings
+              <h3 className='text-fieldporter-white font-semibold text-lg mb-2'>Location</h3>
+              <p className='text-fieldporter-gray text-sm mb-4 leading-relaxed'>
+                Based in Auckland, New Zealand with global client reach
               </p>
               <div className='text-fieldporter-blue font-medium'>
-                <div>New York, NY</div>
-                <div className='text-sm text-fieldporter-gray mt-1'>Financial District</div>
+                <div>Auckland, New Zealand</div>
+                <div className='text-sm text-fieldporter-gray mt-1'>NZDT Timezone</div>
               </div>
               <div className='mt-4 pt-4 border-t border-white/10'>
-                <div className='text-xs text-fieldporter-gray'>By appointment only</div>
+                <div className='text-xs text-fieldporter-gray'>Video calls worldwide</div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Response Time Commitments */}
-        <div className='mt-16 max-w-4xl mx-auto'>
-          <Card className='bg-white/5 border-white/10 backdrop-blur-sm'>
-            <CardContent className='p-8'>
-              <h3 className='text-2xl font-bold text-fieldporter-white text-center mb-8'>
-                Our Response Commitments
-              </h3>
-              <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
-                <div className='text-center'>
-                  <div className='w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4'>
-                    <Clock className='h-6 w-6 text-green-500' />
-                  </div>
-                  <h4 className='text-fieldporter-white font-semibold mb-2'>
-                    Consultation Requests
-                  </h4>
-                  <p className='text-fieldporter-gray text-sm'>
-                    24-hour response with consultation scheduling options
-                  </p>
+        {/* Communication Preferences */}
+        <Card className='bg-white/5 border-white/10 backdrop-blur-md mb-12'>
+          <CardContent className='p-8'>
+            <h3 className='text-2xl font-bold text-fieldporter-white text-center mb-8'>
+              Communication Preferences
+            </h3>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+              <div className='text-center'>
+                <div className='w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4'>
+                  <Mail className='h-6 w-6 text-green-500' />
                 </div>
-                <div className='text-center'>
-                  <div className='w-12 h-12 bg-fieldporter-blue/20 rounded-full flex items-center justify-center mx-auto mb-4'>
-                    <Mail className='h-6 w-6 text-fieldporter-blue' />
-                  </div>
-                  <h4 className='text-fieldporter-white font-semibold mb-2'>General Inquiries</h4>
-                  <p className='text-fieldporter-gray text-sm'>
-                    48-hour response for partnerships and general questions
-                  </p>
-                </div>
-                <div className='text-center'>
-                  <div className='w-12 h-12 bg-fieldporter-purple/20 rounded-full flex items-center justify-center mx-auto mb-4'>
-                    <Phone className='h-6 w-6 text-fieldporter-purple' />
-                  </div>
-                  <h4 className='text-fieldporter-white font-semibold mb-2'>Urgent Matters</h4>
-                  <p className='text-fieldporter-gray text-sm'>
-                    Same-day response for existing clients and urgent requests
-                  </p>
-                </div>
+                <h4 className='text-fieldporter-white font-semibold mb-2'>Email First</h4>
+                <p className='text-fieldporter-gray text-sm leading-relaxed'>
+                  We prefer email for initial contact to understand your challenge thoughtfully
+                </p>
               </div>
-            </CardContent>
-          </Card>
-        </div>
+              <div className='text-center'>
+                <div className='w-12 h-12 bg-fieldporter-blue/20 rounded-full flex items-center justify-center mx-auto mb-4'>
+                  <Clock className='h-6 w-6 text-fieldporter-blue' />
+                </div>
+                <h4 className='text-fieldporter-white font-semibold mb-2'>Video Calls</h4>
+                <p className='text-fieldporter-gray text-sm leading-relaxed'>
+                  30-minute video calls for qualified opportunities to discuss fit and approach
+                </p>
+              </div>
+              <div className='text-center'>
+                <div className='w-12 h-12 bg-fieldporter-blue/20 rounded-full flex items-center justify-center mx-auto mb-4'>
+                  <Linkedin className='h-6 w-6 text-fieldporter-blue' />
+                </div>
+                <h4 className='text-fieldporter-white font-semibold mb-2'>Professional Network</h4>
+                <p className='text-fieldporter-gray text-sm leading-relaxed'>
+                  LinkedIn for ongoing professional relationship and industry insights
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Security & Privacy Notice */}
-        <div className='mt-12 text-center'>
-          <div className='max-w-3xl mx-auto'>
+        {/* Working Hours & Availability */}
+        <div className='text-center'>
+          <div className='max-w-4xl mx-auto'>
             <div className='flex items-center justify-center mb-4'>
               <div className='w-8 h-8 bg-fieldporter-blue/20 rounded-full flex items-center justify-center mr-3'>
-                <Mail className='h-4 w-4 text-fieldporter-blue' />
+                <Clock className='h-4 w-4 text-fieldporter-blue' />
               </div>
-              <h4 className='text-fieldporter-white font-semibold'>
-                Enterprise Security & Privacy
-              </h4>
+              <h4 className='text-fieldporter-white font-semibold'>Working Hours & Availability</h4>
             </div>
-            <p className='text-fieldporter-gray text-sm leading-relaxed'>
-              All communications are handled with enterprise-grade security. We maintain SOC 2
-              compliance and follow strict data protection protocols. Your information is never
-              shared with third parties and is used solely for consultation scheduling and follow-up
-              communications.
+            <p className='text-fieldporter-gray text-sm leading-relaxed mb-6 max-w-2xl mx-auto'>
+              Based in Auckland, New Zealand (NZDT) but work with clients globally. Flexible video
+              call scheduling across time zones.
             </p>
-            <div className='flex items-center justify-center mt-4 space-x-6 text-xs text-fieldporter-gray'>
-              <span>✓ SOC 2 Compliant</span>
-              <span>✓ GDPR Compliant</span>
-              <span>✓ Enterprise Security</span>
-              <span>✓ Confidential Communications</span>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto'>
+              <div className='bg-white/5 border-white/10 rounded-lg p-4'>
+                <p className='text-fieldporter-white font-medium mb-2'>Email Response</p>
+                <p className='text-fieldporter-gray text-sm'>
+                  Usually within 24 hours, often faster during NZ business hours
+                </p>
+              </div>
+              <div className='bg-white/5 border-white/10 rounded-lg p-4'>
+                <p className='text-fieldporter-white font-medium mb-2'>Video Calls</p>
+                <p className='text-fieldporter-gray text-sm'>
+                  Flexible scheduling across time zones, typically 30-60 minutes
+                </p>
+              </div>
             </div>
           </div>
         </div>

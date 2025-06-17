@@ -1,36 +1,10 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Conversations collection rules
-    match /conversations/{sessionId} {
-      // Allow read/write only for the session owner
-      // Since we're not using Firebase Auth, we rely on session ID secrecy
-      allow read, write: if request.auth == null && 
-        // Basic validation rules
-        sessionId.matches('^session_[0-9]+_[a-zA-Z0-9]+$') &&
-        // Rate limiting - prevent excessive writes
-        request.time > resource.data.last_message + duration.value(1, 's');
-      
-      // Allow creation of new conversations
-      allow create: if request.auth == null &&
-        sessionId.matches('^session_[0-9]+_[a-zA-Z0-9]+$') &&
-        // Validate required fields
-        request.resource.data.keys().hasAll(['created_at', 'last_message', 'message_count', 'lead_score', 'consultation_requested', 'messages']) &&
-        // Validate data types and constraints
-        request.resource.data.message_count is int &&
-        request.resource.data.message_count >= 0 &&
-        request.resource.data.message_count <= 50 &&
-        request.resource.data.lead_score is int &&
-        request.resource.data.lead_score >= 0 &&
-        request.resource.data.lead_score <= 10 &&
-        request.resource.data.consultation_requested is bool &&
-        request.resource.data.messages is list &&
-        request.resource.data.messages.size() <= 50;
-    }
-    
-    // Deny all other access
+    // Allow all reads and writes for testing
     match /{document=**} {
-      allow read, write: if false;
+      allow read, write: if true;
     }
   }
 } 

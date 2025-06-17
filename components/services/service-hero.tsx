@@ -1,125 +1,115 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
-import { ArrowRight, Calendar } from 'lucide-react';
+import { animations } from '@/lib/animations';
+import { motion, useInView } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import { useRef } from 'react';
 
 interface ServiceHeroProps {
   title: string;
   subtitle: string;
   description: string;
-  problemStatement: string;
-  icon: React.ReactNode;
-  stats?: {
-    label: string;
+  stats: Array<{
     value: string;
-  }[];
+    label: string;
+  }>;
+  ctaText: string;
+  ctaHref: string;
 }
 
 export function ServiceHero({
   title,
   subtitle,
   description,
-  problemStatement,
-  icon,
   stats,
+  ctaText,
+  ctaHref,
 }: ServiceHeroProps) {
-  return (
-    <section className='relative py-20 lg:py-28 overflow-hidden'>
-      {/* Background */}
-      <div className='absolute inset-0 bg-gradient-to-br from-black via-black to-fieldporter-blue/10' />
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-10%' });
 
-      {/* Grid Pattern */}
+  return (
+    <section
+      ref={ref}
+      className='relative section-spacing overflow-hidden bg-black pt-24 md:pt-32 lg:pt-20'
+    >
+      {/* Sophisticated Background */}
+      <div className='absolute inset-0 bg-black' />
+      <motion.div
+        variants={animations.parallaxBackground}
+        animate={isInView ? 'animate' : 'initial'}
+        className='absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,102,255,0.08),transparent_60%)]'
+      />
+
+      {/* Enhanced Grid Pattern */}
       <div className='absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]' />
 
-      <div className='relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center'>
+      <div className='relative z-10 content-container'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center'>
           {/* Content */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-            className='space-y-8'
+            variants={animations.premiumStaggerContainer}
+            initial='initial'
+            animate={isInView ? 'animate' : 'initial'}
+            className='component-spacing'
           >
-            {/* Icon */}
-            <div className='w-20 h-20 rounded-2xl bg-gradient-to-br from-fieldporter-blue to-fieldporter-purple p-5'>
-              {icon}
-            </div>
-
-            {/* Title */}
-            <div className='space-y-4'>
-              <h1 className='text-display-sm md:text-display-md font-bold text-fieldporter-white leading-tight'>
+            {/* Title with mobile-optimized typography */}
+            <motion.div variants={animations.premiumFadeInUp} className='text-spacing'>
+              <h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-fieldporter-white leading-tight tracking-[-0.02em]'>
                 {title}
               </h1>
-              <p className='text-heading-lg text-fieldporter-blue font-semibold'>{subtitle}</p>
-            </div>
+              <p className='text-lg sm:text-xl md:text-2xl text-fieldporter-blue font-semibold mt-4'>
+                {subtitle}
+              </p>
+            </motion.div>
 
             {/* Description */}
-            <p className='text-body-lg text-fieldporter-gray leading-relaxed max-w-xl'>
+            <motion.p
+              variants={animations.premiumFadeInUp}
+              className='text-base sm:text-lg md:text-xl text-fieldporter-gray leading-relaxed'
+            >
               {description}
-            </p>
+            </motion.p>
 
-            {/* Problem Statement */}
-            <div className='p-6 rounded-xl bg-gradient-to-r from-fieldporter-purple/10 to-fieldporter-blue/10 border border-fieldporter-blue/20'>
-              <p className='text-body-md text-fieldporter-white font-medium leading-relaxed'>
-                &ldquo;{problemStatement}&rdquo;
-              </p>
-            </div>
-
-            {/* CTAs */}
-            <div className='flex flex-col sm:flex-row gap-4'>
+            {/* Enhanced CTA with mobile optimization */}
+            <motion.div variants={animations.premiumFadeInUp}>
               <Button
-                variant='primary'
+                variant='fieldporter-blue'
                 size='enterprise'
-                className='group'
+                enableAnimations={true}
+                className='group min-h-[48px] w-full sm:w-auto'
                 onClick={() => {
-                  // TODO: Implement consultation booking
-                  window.location.href = '/contact';
+                  window.location.href = ctaHref;
                 }}
               >
-                <Calendar className='mr-2 h-5 w-5' />
-                Schedule Consultation
-                <ArrowRight className='ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform' />
+                {ctaText}
+                <ArrowRight className='ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform' />
               </Button>
-
-              <Button
-                variant='fieldporter-ghost'
-                size='enterprise'
-                onClick={() => {
-                  // TODO: Implement case study download
-                  window.open('/case-studies', '_blank');
-                }}
-              >
-                Download Case Study
-              </Button>
-            </div>
+            </motion.div>
           </motion.div>
 
-          {/* Stats/Visual */}
+          {/* Enhanced Stats with mobile optimization */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
-            className='relative'
+            variants={animations.premiumStaggerContainer}
+            initial='initial'
+            animate={isInView ? 'animate' : 'initial'}
+            className='grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4 sm:gap-6'
           >
-            {stats && (
-              <div className='grid grid-cols-2 gap-6'>
-                {stats.map((stat, index) => (
-                  <motion.div
-                    key={stat.label}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-                    className='text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10'
-                  >
-                    <div className='text-display-xs font-bold text-fieldporter-blue mb-2'>
-                      {stat.value}
-                    </div>
-                    <div className='text-body-sm text-fieldporter-gray'>{stat.label}</div>
-                  </motion.div>
-                ))}
-              </div>
-            )}
+            {stats.map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                variants={animations.premiumFadeInUp}
+                className='text-center lg:text-left p-4 sm:p-6 rounded-2xl glass-premium hover:glass-hover transition-all duration-300 group'
+              >
+                <div className='text-2xl sm:text-3xl md:text-4xl font-bold text-fieldporter-white mb-2 group-hover:scale-105 transition-transform duration-300'>
+                  {stat.value}
+                </div>
+                <div className='text-sm sm:text-base text-fieldporter-gray font-medium'>
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </div>

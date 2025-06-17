@@ -40,6 +40,27 @@ const nextConfig = {
     ];
   },
 
+  // SEO redirects for consolidated services
+  async redirects() {
+    return [
+      {
+        source: '/services/ai-strategy',
+        destination: '/services#strategic-research',
+        permanent: true,
+      },
+      {
+        source: '/services/automation',
+        destination: '/services#workflow-optimization',
+        permanent: true,
+      },
+      {
+        source: '/services/vc-consulting',
+        destination: '/services#strategic-research',
+        permanent: true,
+      },
+    ];
+  },
+
   // Performance optimizations
   compress: true,
   poweredByHeader: false,

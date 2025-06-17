@@ -1,106 +1,235 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { GlassCard } from '@/components/ui/card';
-import { ArrowRight, Calendar, CheckCircle } from 'lucide-react';
+import { trackCTA } from '@/lib/firebase-analytics';
+import { easeInOut, motion, useInView, useScroll, useSpring, useTransform } from 'framer-motion';
+import { ArrowRight, MessageSquare } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+
+// Premium aurora background component
+function PremiumAuroraBackground() {
+  return (
+    <div className='absolute inset-0 overflow-hidden'>
+      {/* Continuous gradient from credibility section */}
+      <div className='absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black' />
+
+      {/* Final aurora blobs for smooth conclusion */}
+      <motion.div
+        className='absolute top-1/4 left-1/3 w-[800px] h-[800px] rounded-full opacity-12 blur-[140px]'
+        style={{
+          background: 'linear-gradient(45deg, rgba(59, 130, 246, 0.3), rgba(168, 85, 247, 0.2))',
+        }}
+        animate={{
+          x: [0, 150, -100, 0],
+          y: [0, -200, 100, 0],
+          scale: [1, 1.1, 0.9, 1],
+        }}
+        transition={{
+          duration: 35,
+          repeat: Infinity,
+          ease: 'linear',
+        }}
+      />
+
+      <motion.div
+        className='absolute bottom-1/4 right-1/3 w-[600px] h-[600px] rounded-full opacity-8 blur-[120px]'
+        style={{
+          background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(249, 115, 22, 0.3))',
+        }}
+        animate={{
+          x: [0, -120, 80, 0],
+          y: [0, 150, -100, 0],
+          scale: [1, 0.8, 1.2, 1],
+        }}
+        transition={{
+          duration: 40,
+          repeat: Infinity,
+          ease: 'linear',
+          delay: 15,
+        }}
+      />
+    </div>
+  );
+}
+
+// Interactive spotlight effect
+function InteractiveSpotlight() {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  return (
+    <div
+      className='fixed inset-0 pointer-events-none z-5'
+      style={{
+        background: `radial-gradient(600px at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.06), transparent 50%)`,
+      }}
+    />
+  );
+}
 
 export function CTASection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-20%' });
+
+  // Add vertical fade animations like hero section
+  const { scrollY } = useScroll();
+  const contentY = useTransform(scrollY, [0, 800], [0, -100]);
+  const opacity = useTransform(scrollY, [300, 700, 1100], [1, 0.9, 0.7]);
+  const springContentY = useSpring(contentY, { damping: 30, stiffness: 100 });
+  const springOpacity = useSpring(opacity, { damping: 30, stiffness: 100 });
+
+  const handleContactCTA = () => {
+    trackCTA('contact', 'Get Started', {
+      location: 'cta_section',
+      button_position: 'primary_cta',
+    });
+    window.location.href = '/contact';
+  };
+
+  const handlePortfolioCTA = () => {
+    trackCTA('service_interest', 'View Work', {
+      location: 'cta_section',
+      button_position: 'secondary_cta',
+    });
+    window.location.href = '/portfolio';
+  };
+
   return (
-    <section className='py-20 lg:py-28 relative'>
-      {/* Background */}
-      <div className='absolute inset-0 bg-gradient-to-b from-bg-fieldporter-primary to-bg-fieldporter-secondary' />
+    <section ref={ref} className='relative py-24 lg:py-32 overflow-hidden'>
+      <motion.div
+        style={{ y: springContentY, opacity: springOpacity }}
+        className='relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center'
+      >
+        {/* Enhanced Section Content */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 1.0, ease: easeInOut }}
+          className='space-y-10 lg:space-y-12'
+        >
+          {/* Headline */}
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className='text-3xl sm:text-4xl lg:text-5xl font-light text-white leading-tight tracking-[-0.02em]'
+          >
+            Let&apos;s{' '}
+            <span className='font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent'>
+              Explore Your Options
+            </span>
+          </motion.h2>
 
-      <div className='relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
-        <GlassCard className='p-8 md:p-12 text-center'>
-          <div className='space-y-8'>
-            <div className='space-y-4'>
-              <h2 className='text-display-sm md:text-display-md font-bold text-fieldporter-white'>
-                Stop Talking About AI.
-                <span className='bg-gradient-to-r from-fieldporter-blue to-fieldporter-purple bg-clip-text text-transparent'>
-                  {' '}
-                  Start Building It.
-                </span>
-              </h2>
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className='text-lg lg:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed font-light'
+          >
+            Discuss your specific challenge and create a practical plan with clear timelines and
+            realistic outcomes.
+          </motion.p>
 
-              <p className='text-body-lg text-fieldporter-gray max-w-3xl mx-auto leading-relaxed'>
-                Get a strategic AI consultation from operators who&apos;ve built profitable AI
-                businesses. We&apos;ll assess your opportunities, identify quick wins, and create an
-                actionable roadmap for measurable ROI within 6 months.
-              </p>
-            </div>
-
-            {/* Value Props */}
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-6 py-6'>
-              <div className='flex items-center justify-center gap-3 text-fieldporter-gray'>
-                <CheckCircle className='w-5 h-5 text-green-500 flex-shrink-0' />
-                <span className='text-body-sm'>No sales pitch, just strategy</span>
-              </div>
-              <div className='flex items-center justify-center gap-3 text-fieldporter-gray'>
-                <CheckCircle className='w-5 h-5 text-green-500 flex-shrink-0' />
-                <span className='text-body-sm'>Direct access to principals</span>
-              </div>
-              <div className='flex items-center justify-center gap-3 text-fieldporter-gray'>
-                <CheckCircle className='w-5 h-5 text-green-500 flex-shrink-0' />
-                <span className='text-body-sm'>Proven implementation methods</span>
-              </div>
-            </div>
-
-            <div className='flex flex-col sm:flex-row gap-4 justify-center items-center'>
-              <Button
-                variant='primary'
-                size='enterprise-lg'
-                className='group min-w-[320px]'
-                onClick={() => {
-                  window.location.href = '/contact';
-                }}
+          {/* Premium CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className='flex flex-col sm:flex-row gap-6 sm:gap-8 justify-center items-center'
+          >
+            {/* Primary CTA - Premium Glass Button */}
+            <motion.div
+              whileHover={{ y: -2, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.2, ease: 'easeInOut' }}
+            >
+              <button
+                onClick={handleContactCTA}
+                className='
+                  group relative px-8 py-4 rounded-2xl backdrop-blur-xl border border-white/20 transition-all duration-300
+                  bg-white/10 hover:bg-white/15 hover:border-blue-400/40
+                  hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]
+                  will-change-transform font-medium text-white
+                  min-w-[220px] text-center
+                '
               >
-                <Calendar className='mr-2 h-5 w-5' />
-                Schedule Your AI Strategy Session
-                <ArrowRight className='ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform' />
-              </Button>
+                {/* Enhanced glassmorphism layers */}
+                <div className='absolute inset-0 bg-white/[0.02] backdrop-blur-xl rounded-2xl' />
+                <div className='absolute inset-0 rounded-2xl border border-white/5' />
 
-              <Button
-                variant='fieldporter-secondary'
-                size='enterprise-lg'
-                className='group min-w-[320px]'
-                onClick={() => {
-                  window.location.href = '/services';
-                }}
+                {/* Premium glow effect */}
+                <div className='absolute -inset-1 rounded-2xl bg-blue-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-400' />
+
+                <div className='relative z-10 flex items-center justify-center space-x-3'>
+                  <MessageSquare className='w-5 h-5' />
+                  <span className='text-base lg:text-lg'>Start Your Journey</span>
+                  <motion.div
+                    whileHover={{ x: 4 }}
+                    transition={{ duration: 0.2, ease: 'easeInOut' }}
+                  >
+                    <ArrowRight className='w-5 h-5' />
+                  </motion.div>
+                </div>
+              </button>
+            </motion.div>
+
+            {/* Secondary CTA - Premium Glass Button */}
+            <motion.div
+              whileHover={{ y: -2, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.2, ease: 'easeInOut' }}
+            >
+              <button
+                onClick={handlePortfolioCTA}
+                className='
+                  group relative px-8 py-4 rounded-2xl backdrop-blur-xl border border-white/20 transition-all duration-300
+                  bg-white/5 hover:bg-white/10 hover:border-purple-400/40
+                  hover:shadow-[0_0_30px_rgba(168,85,247,0.4)]
+                  will-change-transform font-medium text-white
+                  min-w-[220px] text-center
+                '
               >
-                See Our Portfolio & Results
-                <ArrowRight className='ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform' />
-              </Button>
-            </div>
+                {/* Enhanced glassmorphism layers */}
+                <div className='absolute inset-0 bg-white/[0.02] backdrop-blur-xl rounded-2xl' />
+                <div className='absolute inset-0 rounded-2xl border border-white/5' />
 
-            <div className='pt-6 border-t border-fieldporter-gray/20 space-y-3'>
-              <p className='text-body-md text-fieldporter-white font-medium'>
-                What You&apos;ll Get in Your Consultation:
-              </p>
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 text-body-sm text-fieldporter-gray'>
-                <div className='flex items-start gap-2'>
-                  <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-blue mt-2 flex-shrink-0' />
-                  <span>AI readiness assessment for your specific industry</span>
+                {/* Premium glow effect */}
+                <div className='absolute -inset-1 rounded-2xl bg-purple-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-400' />
+
+                <div className='relative z-10 flex items-center justify-center space-x-3'>
+                  <span className='text-base lg:text-lg'>View Our Work</span>
+                  <motion.div
+                    whileHover={{ x: 4 }}
+                    transition={{ duration: 0.2, ease: 'easeInOut' }}
+                  >
+                    <ArrowRight className='w-5 h-5' />
+                  </motion.div>
                 </div>
-                <div className='flex items-start gap-2'>
-                  <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-blue mt-2 flex-shrink-0' />
-                  <span>Identification of 3-5 high-impact automation opportunities</span>
-                </div>
-                <div className='flex items-start gap-2'>
-                  <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-blue mt-2 flex-shrink-0' />
-                  <span>ROI projections based on our operational experience</span>
-                </div>
-                <div className='flex items-start gap-2'>
-                  <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-blue mt-2 flex-shrink-0' />
-                  <span>Actionable next steps with timeline and resource requirements</span>
-                </div>
-              </div>
-              <p className='text-body-sm text-fieldporter-gray/80 pt-2'>
-                Complimentary 45-minute session • No commitment required • Immediate value delivered
-              </p>
-            </div>
-          </div>
-        </GlassCard>
-      </div>
+              </button>
+            </motion.div>
+          </motion.div>
+
+          {/* Bottom Note */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className='text-sm text-gray-400 max-w-lg mx-auto leading-relaxed'
+          >
+            No sales pitches. Just an honest conversation about whether we can help solve your
+            specific challenge.
+          </motion.p>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

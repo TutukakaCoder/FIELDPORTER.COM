@@ -14,7 +14,7 @@ const labelVariants = cva(
         fieldporter: 'text-fieldporter-white font-inter font-medium',
         'fieldporter-muted': 'text-fieldporter-gray font-inter',
         'fieldporter-accent': 'text-fieldporter-blue font-inter font-medium',
-        'fieldporter-purple': 'text-fieldporter-purple font-inter font-medium',
+        'fieldporter-blue': 'text-fieldporter-blue font-inter font-medium',
       },
       size: {
         default: 'text-sm',

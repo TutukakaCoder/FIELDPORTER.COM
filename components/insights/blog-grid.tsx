@@ -63,7 +63,7 @@ export function BlogGrid() {
       case 'AI Strategy':
         return 'bg-fieldporter-blue/20 text-fieldporter-blue border-fieldporter-blue/30';
       case 'Business Automation':
-        return 'bg-fieldporter-purple/20 text-fieldporter-purple border-fieldporter-purple/30';
+        return 'bg-fieldporter-blue/20 text-fieldporter-blue border-fieldporter-blue/30';
       case 'VC Insights':
         return 'bg-green-500/20 text-green-400 border-green-500/30';
       case 'Implementation':
@@ -89,10 +89,7 @@ export function BlogGrid() {
         >
           <h2 className='text-display-sm md:text-display-md font-bold text-fieldporter-white'>
             Latest
-            <span className='bg-gradient-to-r from-fieldporter-blue to-fieldporter-purple bg-clip-text text-transparent'>
-              {' '}
-              Insights
-            </span>
+            <span className='text-fieldporter-blue'> Insights</span>
           </h2>
           <p className='text-body-lg text-fieldporter-gray max-w-3xl mx-auto leading-relaxed'>
             Practical insights from building AI companies and implementing strategies across diverse
