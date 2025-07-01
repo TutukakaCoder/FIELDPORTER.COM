@@ -11,6 +11,6 @@ export {
   Skeleton,
   TextLoadingSkeleton,
 } from "./loading-skeleton";
-export { NewsletterSlideout } from "./newsletter-slideout";
+
 export { PageWrapper } from "./page-wrapper";
 export { VideoEntrance } from "./video-entrance";

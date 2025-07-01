@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { firebaseNewsletterService } from "@/lib/firebase-newsletter";
 import {
   motion,
   useInView,
@@ -104,34 +103,39 @@ function PremiumNewsletterSignup() {
 
     if (!email.trim() || isSubmitting) return;
 
-    // Validate email
-    const validation = firebaseNewsletterService.validateEmail(email);
-    if (!validation.isValid) {
-      setError(validation.error || "Invalid email");
-      return;
-    }
-
     setIsSubmitting(true);
     setError(null);
 
     try {
-      const result = await firebaseNewsletterService.subscribeToNewsletter({
-        email: email,
-        source: "insights_coming_soon",
-        metadata: {
-          page_url: typeof window !== "undefined" ? window.location.href : "",
-          interest: "AI strategy insights early access",
-          trigger_type: "coming_soon_signup",
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          email: email.trim(),
+          source: "insights_coming_soon",
+        }),
       });
 
-      if (result.success) {
+      const result = await response.json();
+
+      if (response.ok) {
         setIsSubscribed(true);
         setEmail("");
+
+        // Track conversion for analytics
+        if (typeof window !== "undefined" && (window as any).gtag) {
+          (window as any).gtag("event", "newsletter_signup", {
+            source: "insights_coming_soon",
+            lead_score: result.leadScore,
+          });
+        }
       } else {
         setError(result.error || "Subscription failed. Please try again.");
       }
     } catch (error) {
+      console.error("Newsletter signup error:", error);
       setError("Network error. Please check your connection and try again.");
     } finally {
       setIsSubmitting(false);

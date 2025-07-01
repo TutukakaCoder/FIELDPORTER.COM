@@ -633,6 +633,20 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
     }
   }, [isOpen]);
 
+  // Listen for open chat widget events from other components
+  useEffect(() => {
+    const handleOpenChat = () => {
+      setIsOpen(true);
+    };
+
+    // Listen for custom event from hero button
+    window.addEventListener("open-chat-widget", handleOpenChat);
+
+    return () => {
+      window.removeEventListener("open-chat-widget", handleOpenChat);
+    };
+  }, []);
+
   // Cleanup effect to flush pending Firebase operations
   useEffect(() => {
     return () => {
@@ -1018,6 +1032,7 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
           <DialogTrigger asChild>
             <Button
               data-chat-trigger="true"
+              data-chat-toggle="true"
               variant="primary"
               size="icon"
               className={cn(

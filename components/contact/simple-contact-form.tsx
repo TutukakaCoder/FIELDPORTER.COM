@@ -1,6 +1,7 @@
 "use client";
 
-import { ContactFormData, firebaseFormsService } from "@/lib/firebase-forms";
+import { Button } from "@/components/ui/button";
+import { ContactFormData } from "@/lib/firebase-forms";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Activity,
@@ -9,6 +10,7 @@ import {
   ChevronDown,
   Clock,
   Lightbulb,
+  Loader2,
   MessageSquare,
   Target,
   User,
@@ -112,8 +114,8 @@ export function SimpleContactForm() {
     setErrors([]);
 
     try {
-      // Prepare form data for Firebase
-      const submissionData: ContactFormData = {
+      // Prepare form data for the new API
+      const submissionData = {
         name: formData.name,
         email: formData.email,
         company: formData.company || "",
@@ -121,19 +123,36 @@ export function SimpleContactForm() {
         challengeDescription: formData.challengeDescription,
         timeline: formData.additionalContext.timeline || "Flexible",
         budgetRange: formData.budgetRange || "Let's discuss",
+        additionalContext: formData.additionalContext,
       };
 
-      const result =
-        await firebaseFormsService.submitContactForm(submissionData);
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(submissionData),
+      });
 
-      if (result.success) {
+      const result = await response.json();
+
+      if (response.ok) {
         setIsSubmitted(true);
+
+        // Track conversion for analytics
+        if (typeof window !== "undefined" && (window as any).gtag) {
+          (window as any).gtag("event", "contact_form_submission", {
+            lead_score: result.leadScore,
+            project_type: formData.whatBringsYouHere,
+          });
+        }
       } else {
         setErrors([
           result.error || "An unexpected error occurred. Please try again.",
         ]);
       }
     } catch (error) {
+      console.error("Contact form error:", error);
       setErrors(["Network error. Please check your connection and try again."]);
     } finally {
       setIsSubmitting(false);
@@ -301,13 +320,16 @@ export function SimpleContactForm() {
           className="max-w-2xl mx-auto"
         >
           {/* Header */}
-          <motion.div variants={itemVariants} className="text-center mb-12">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
-              Let's Talk About Your AI Project
+          <motion.div
+            variants={itemVariants}
+            className="text-center mb-12 lg:mb-16"
+          >
+            <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 leading-tight tracking-tight">
+              Strategic AI Implementation
             </h1>
-            <p className="text-xl text-gray-300 leading-relaxed">
-              Whether you have a specific automation in mind or want to explore
-              possibilities, we'll help you find the right approach.
+            <p className="text-lg md:text-xl lg:text-2xl text-gray-300 leading-relaxed max-w-3xl mx-auto">
+              Partner with operators who build AI companies. From strategic
+              research to rapid prototyping — we deliver what matters.
             </p>
           </motion.div>
 
@@ -343,7 +365,7 @@ export function SimpleContactForm() {
                   Your Information
                 </h3>
 
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
                       Your name <span className="text-red-400">*</span>
@@ -353,7 +375,7 @@ export function SimpleContactForm() {
                       value={formData.name}
                       onChange={(e) => updateFormData("name", e.target.value)}
                       placeholder="Full name"
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
+                      className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[48px] touch-manipulation"
                       required
                     />
                   </div>
@@ -367,7 +389,7 @@ export function SimpleContactForm() {
                       value={formData.email}
                       onChange={(e) => updateFormData("email", e.target.value)}
                       placeholder="your@email.com"
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
+                      className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[48px] touch-manipulation"
                       required
                     />
                   </div>
@@ -383,7 +405,7 @@ export function SimpleContactForm() {
                     value={formData.company}
                     onChange={(e) => updateFormData("company", e.target.value)}
                     placeholder="Company or personal project"
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
+                    className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[48px] touch-manipulation"
                   />
                 </div>
               </div>
@@ -409,7 +431,7 @@ export function SimpleContactForm() {
                         // Reset challenge description when switching options
                         updateFormData("challengeDescription", "");
                       }}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 appearance-none"
+                      className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 appearance-none min-h-[48px] touch-manipulation"
                       required
                     >
                       <option value="" className="bg-gray-900 text-gray-300">
@@ -451,7 +473,7 @@ export function SimpleContactForm() {
                         }
                         placeholder={currentFieldConfig.placeholder}
                         rows={4}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 resize-none"
+                        className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 resize-none min-h-[120px] touch-manipulation"
                         required
                       />
                       <p className="text-sm text-gray-400 mt-2">
@@ -490,7 +512,7 @@ export function SimpleContactForm() {
                       transition={{ duration: 0.3 }}
                       className="space-y-6"
                     >
-                      <div className="grid md:grid-cols-3 gap-6">
+                      <div className="grid md:grid-cols-3 gap-4 md:gap-6">
                         <div>
                           <label className="block text-sm font-medium text-gray-300 mb-2">
                             Timeline
@@ -505,7 +527,7 @@ export function SimpleContactForm() {
                               )
                             }
                             placeholder="When are you looking to start?"
-                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
+                            className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[48px] touch-manipulation"
                           />
                         </div>
 
@@ -523,7 +545,7 @@ export function SimpleContactForm() {
                               )
                             }
                             placeholder="Any AI tools you are already using?"
-                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
+                            className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[48px] touch-manipulation"
                           />
                         </div>
 
@@ -541,7 +563,7 @@ export function SimpleContactForm() {
                               )
                             }
                             placeholder="Just you or a larger team?"
-                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
+                            className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[48px] touch-manipulation"
                           />
                         </div>
                       </div>
@@ -552,20 +574,25 @@ export function SimpleContactForm() {
 
               {/* Submit Button */}
               <div className="pt-6">
-                <button
+                <Button
                   type="submit"
                   disabled={!isFormValid || isSubmitting}
-                  className="w-full px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 group"
+                  variant="primary"
+                  size="enterprise"
+                  className="w-full group"
                 >
                   {isSubmitting ? (
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Submitting...
+                    </>
                   ) : (
                     <>
                       Start the Conversation
-                      <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" />
+                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" />
                     </>
                   )}
-                </button>
+                </Button>
               </div>
             </div>
           </motion.form>

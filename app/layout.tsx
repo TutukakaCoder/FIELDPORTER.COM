@@ -4,7 +4,6 @@ import {
   EntranceProvider,
   Footer,
   Header,
-  NewsletterSlideout,
 } from "@/components/layout";
 import { PageTransition } from "@/components/ui/page-transition";
 import { Metadata, Viewport } from "next";
@@ -65,7 +64,6 @@ export default function RootLayout({
           <PageTransition>{children}</PageTransition>
           <Footer />
           <BackToTop />
-          <NewsletterSlideout />
           <EnhancedChatWidget />
         </EntranceProvider>
 

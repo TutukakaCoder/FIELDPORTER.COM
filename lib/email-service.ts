@@ -11,6 +11,12 @@ interface LeadEmailData {
   qualification: string;
 }
 
+interface NotificationEmailData {
+  subject: string;
+  type: "chat" | "contact" | "newsletter" | "resource";
+  data: any;
+}
+
 class EmailService {
   private resend: Resend | null = null;
   private isEnabled = false;
@@ -27,25 +33,32 @@ class EmailService {
     }
   }
 
-  async sendLeadNotification(
-    leadData: LeadEmailData,
-  ): Promise<{ success: boolean; error?: string }> {
+  async sendNotificationEmail({
+    subject,
+    type,
+    data,
+  }: NotificationEmailData): Promise<{
+    success: boolean;
+    error?: string;
+    id?: string;
+  }> {
     if (!this.isEnabled || !this.resend) {
       console.log(
         "📧 Email service not configured - using fallback notification",
       );
-      return this.sendFallbackNotification(leadData);
+      return this.sendFallbackNotification({ subject, type, data });
     }
 
     try {
-      const emailContent = this.generateEmailContent(leadData);
+      const html = this.generateEmailHtml(type, data);
+      const text = this.generateTextContent(type, data);
 
       const result = await this.resend.emails.send({
-        from: "FIELDPORTER Bot <notifications@fieldporter.com>",
-        to: ["freddy@fieldporter.com"], // Professional FIELDPORTER email
-        subject: `🔥 QUALIFIED LEAD: ${leadData.qualification} (Score: ${leadData.leadScore})${leadData.userEmail ? ` - ${leadData.userEmail}` : ""}`,
-        html: emailContent,
-        text: this.generateTextContent(leadData),
+        from: "FIELDPORTER <onboarding@resend.dev>",
+        to: ["freddy@fieldporter.com"],
+        subject,
+        html,
+        text,
       });
 
       if (result.error) {
@@ -54,89 +67,244 @@ class EmailService {
       }
 
       console.log("✅ Email sent successfully:", result.data?.id);
-      return { success: true };
+      return {
+        success: true,
+        ...(result.data?.id && { id: result.data.id }),
+      };
     } catch (error) {
       console.error("❌ Email service error:", error);
-      return this.sendFallbackNotification(leadData);
+      return this.sendFallbackNotification({ subject, type, data });
     }
   }
 
-  private generateEmailContent(leadData: LeadEmailData): string {
-    const contactInfo =
-      leadData.userEmail || leadData.userPhone || "Not provided";
-    const urgencyColor =
-      leadData.leadScore >= 15
-        ? "#dc2626"
-        : leadData.leadScore >= 10
-          ? "#ea580c"
-          : "#059669";
+  async sendLeadNotification(
+    leadData: LeadEmailData,
+  ): Promise<{ success: boolean; error?: string }> {
+    return this.sendNotificationEmail({
+      subject: `🔥 QUALIFIED LEAD: ${leadData.qualification} (Score: ${leadData.leadScore})${leadData.userEmail ? ` - ${leadData.userEmail}` : ""}`,
+      type: "chat",
+      data: leadData,
+    });
+  }
+
+  private generateEmailHtml(type: string, data: any): string {
+    const baseStyles = `
+      font-family: Inter, Arial, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+    `;
+
+    const headerHtml = `
+      <div style="background: linear-gradient(135deg, #0969da 0%, #0051a7 100%); padding: 40px 32px; text-align: center;">
+        <h1 style="color: white; font-size: 24px; margin: 0; font-weight: 600;">FIELDPORTER Notification</h1>
+      </div>
+    `;
+
+    let bodyHtml = "";
+
+    switch (type) {
+      case "contact":
+        const urgencyColor =
+          data.leadScore >= 7
+            ? "#dc2626"
+            : data.leadScore >= 5
+              ? "#ea580c"
+              : "#059669";
+        bodyHtml = `
+          <div style="padding: 32px;">
+            <h2 style="color: #1a1a1a; margin-bottom: 24px; font-size: 22px;">🎯 New Contact Form Submission</h2>
+            <div style="background: #f8f9fa; border-radius: 8px; padding: 20px; margin-bottom: 24px; border-left: 4px solid ${urgencyColor};">
+              <p style="margin: 0 0 8px 0; font-weight: 600;"><strong>Lead Score:</strong> <span style="color: ${urgencyColor}; font-size: 18px;">${data.leadScore}/10</span></p>
+              <p style="margin: 0; color: #666;"><strong>Status:</strong> ${data.leadScore >= 7 ? "🔥 Hot Lead" : data.leadScore >= 5 ? "📊 Qualified Lead" : "👀 New Inquiry"}</p>
+            </div>
+            <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; margin-bottom: 24px;">
+              <h3 style="margin: 0 0 16px 0; color: #1e293b; font-size: 18px;">Contact Details</h3>
+              <p style="margin: 8px 0;"><strong>Name:</strong> ${data.name}</p>
+              <p style="margin: 8px 0;"><strong>Email:</strong> <a href="mailto:${data.email}" style="color: #0969da; text-decoration: none;">${data.email}</a></p>
+              <p style="margin: 8px 0;"><strong>Company:</strong> ${data.company || "Not provided"}</p>
+              <p style="margin: 8px 0;"><strong>Service Interest:</strong> ${data.projectType || "General inquiry"}</p>
+              <p style="margin: 8px 0;"><strong>Timeline:</strong> ${data.timeline || "Not specified"}</p>
+            </div>
+            <div style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+              <h3 style="margin: 0 0 12px 0; color: #1e293b; font-size: 16px;">Message:</h3>
+              <div style="background: white; padding: 16px; border-radius: 6px; border-left: 3px solid #0969da;">
+                ${data.challengeDescription || data.message}
+              </div>
+            </div>
+            ${
+              data.leadScoreDetails
+                ? `
+            <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+              <h3 style="margin: 0 0 12px 0; color: #92400e; font-size: 16px;">Lead Score Breakdown:</h3>
+              <ul style="margin: 0; padding-left: 20px; color: #92400e;">
+                ${data.leadScoreDetails.map((detail: string) => `<li style="margin-bottom: 4px;">${detail}</li>`).join("")}
+              </ul>
+            </div>
+            `
+                : ""
+            }
+            <div style="text-align: center; margin-top: 32px;">
+              <a href="https://console.firebase.google.com/project/fieldporter-website/firestore/data/~2Fcontact_submissions~2F${data.id}" 
+                 style="display: inline-block; background: #0969da; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                🔍 View in Firebase
+              </a>
+            </div>
+          </div>
+        `;
+        break;
+
+      case "newsletter":
+        bodyHtml = `
+          <div style="padding: 32px;">
+            <h2 style="color: #1a1a1a; margin-bottom: 24px; font-size: 22px;">📧 New Newsletter Signup</h2>
+            <div style="background: #ecfdf5; border: 1px solid #10b981; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+              <p style="margin: 0 0 8px 0;"><strong>Email:</strong> <a href="mailto:${data.email}" style="color: #065f46;">${data.email}</a></p>
+              <p style="margin: 0 0 8px 0;"><strong>Source:</strong> ${data.source}</p>
+              <p style="margin: 0 0 8px 0;"><strong>Lead Score:</strong> <span style="color: #065f46; font-weight: 600;">${data.leadScore}/10</span></p>
+              <p style="margin: 0; color: #065f46; font-size: 14px;">
+                ${data.leadScore >= 6 ? "🎯 High-intent business email" : "📊 Standard newsletter signup"}
+              </p>
+            </div>
+            <div style="text-align: center; margin-top: 24px;">
+              <a href="https://console.firebase.google.com/project/fieldporter-website/firestore/data/~2Fnewsletter_subscriptions~2F${data.id}" 
+                 style="display: inline-block; background: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                🔍 View in Firebase
+              </a>
+            </div>
+          </div>
+        `;
+        break;
+
+      case "chat":
+        // Keep existing chat email format
+        const chatUrgencyColor =
+          data.leadScore >= 15
+            ? "#dc2626"
+            : data.leadScore >= 10
+              ? "#ea580c"
+              : "#059669";
+        bodyHtml = `
+          <div style="padding: 32px;">
+            <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white; padding: 30px; border-radius: 12px; margin-bottom: 30px;">
+              <h1 style="margin: 0; font-size: 28px; font-weight: bold;">🔥 QUALIFIED LEAD DETECTED</h1>
+              <p style="margin: 10px 0 0 0; font-size: 18px; opacity: 0.9;">Lead Score: <span style="color: ${chatUrgencyColor}; font-size: 24px; font-weight: bold;">${data.leadScore}/20</span></p>
+            </div>
+
+            <div style="background: #f8fafc; padding: 25px; border-radius: 8px; margin-bottom: 25px;">
+              <h2 style="margin: 0 0 15px 0; color: #1e293b;">💬 Conversation Details</h2>
+              <p><strong>Session ID:</strong> ${data.sessionId}</p>
+              <p><strong>Timestamp:</strong> ${new Date(data.timestamp).toLocaleString()}</p>
+              <p><strong>Qualification Level:</strong> <span style="color: ${chatUrgencyColor}; font-weight: bold;">${data.qualification}</span></p>
+            </div>
+
+            ${
+              data.userEmail || data.userPhone
+                ? `
+            <div style="background: #ecfdf5; border: 2px solid #10b981; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+              <h3 style="margin: 0 0 10px 0; color: #065f46;">📧 Contact Information Provided</h3>
+              ${data.userEmail ? `<p><strong>Email:</strong> <a href="mailto:${data.userEmail}" style="color: #0969da;">${data.userEmail}</a></p>` : ""}
+              ${data.userPhone ? `<p><strong>Phone:</strong> <a href="tel:${data.userPhone}" style="color: #0969da;">${data.userPhone}</a></p>` : ""}
+            </div>
+            `
+                : ""
+            }
+
+            <div style="background: #fff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+              <h3 style="margin: 0 0 15px 0; color: #1e293b;">💭 Latest Message</h3>
+              <blockquote style="margin: 0; padding: 15px; background: #f1f5f9; border-left: 4px solid #0969da; font-style: italic;">
+                "${data.userMessage}"
+              </blockquote>
+            </div>
+
+            <div style="background: #fef3c7; border: 1px solid #f59e0b; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+              <h3 style="margin: 0 0 15px 0; color: #92400e;">🎯 Qualification Signals</h3>
+              <ul style="margin: 0; padding-left: 20px;">
+                ${data.qualificationSignals.map((signal: string) => `<li style="margin-bottom: 5px;">${signal}</li>`).join("")}
+              </ul>
+            </div>
+
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="https://console.firebase.google.com/project/fieldporter-website/firestore/data/~2Fchat_sessions~2F${data.sessionId}" 
+                 style="background: #0969da; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+                🔍 View Full Conversation
+              </a>
+            </div>
+          </div>
+        `;
+        break;
+
+      default:
+        bodyHtml = `<div style="padding: 32px;">Invalid notification type: ${type}</div>`;
+    }
 
     return `
       <!DOCTYPE html>
       <html>
-      <head>
-        <meta charset="utf-8">
-        <title>FIELDPORTER Lead Notification</title>
-      </head>
-      <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-        
-        <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white; padding: 30px; border-radius: 12px; margin-bottom: 30px;">
-          <h1 style="margin: 0; font-size: 28px; font-weight: bold;">🔥 QUALIFIED LEAD DETECTED</h1>
-          <p style="margin: 10px 0 0 0; font-size: 18px; opacity: 0.9;">Lead Score: <span style="color: ${urgencyColor}; font-size: 24px; font-weight: bold;">${leadData.leadScore}/20</span></p>
-        </div>
-
-        <div style="background: #f8fafc; padding: 25px; border-radius: 8px; margin-bottom: 25px;">
-          <h2 style="margin: 0 0 15px 0; color: #1e293b;">💬 Conversation Details</h2>
-          <p><strong>Session ID:</strong> ${leadData.sessionId}</p>
-          <p><strong>Timestamp:</strong> ${new Date(leadData.timestamp).toLocaleString()}</p>
-          <p><strong>Qualification Level:</strong> <span style="color: ${urgencyColor}; font-weight: bold;">${leadData.qualification}</span></p>
-        </div>
-
-        ${
-          leadData.userEmail || leadData.userPhone
-            ? `
-        <div style="background: #ecfdf5; border: 2px solid #10b981; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
-          <h3 style="margin: 0 0 10px 0; color: #065f46;">📧 Contact Information Provided</h3>
-          ${leadData.userEmail ? `<p><strong>Email:</strong> <a href="mailto:${leadData.userEmail}" style="color: #0969da;">${leadData.userEmail}</a></p>` : ""}
-          ${leadData.userPhone ? `<p><strong>Phone:</strong> <a href="tel:${leadData.userPhone}" style="color: #0969da;">${leadData.userPhone}</a></p>` : ""}
-        </div>
-        `
-            : ""
-        }
-
-        <div style="background: #fff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
-          <h3 style="margin: 0 0 15px 0; color: #1e293b;">💭 Latest Message</h3>
-          <blockquote style="margin: 0; padding: 15px; background: #f1f5f9; border-left: 4px solid #0969da; font-style: italic;">
-            "${leadData.userMessage}"
-          </blockquote>
-        </div>
-
-        <div style="background: #fef3c7; border: 1px solid #f59e0b; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
-          <h3 style="margin: 0 0 15px 0; color: #92400e;">🎯 Qualification Signals</h3>
-          <ul style="margin: 0; padding-left: 20px;">
-            ${leadData.qualificationSignals.map((signal) => `<li style="margin-bottom: 5px;">${signal}</li>`).join("")}
-          </ul>
-        </div>
-
-        <div style="text-align: center; margin: 30px 0;">
-          <a href="https://console.firebase.google.com/project/fieldporter-website/firestore/data/~2Fchat_sessions~2F${leadData.sessionId}" 
-             style="background: #0969da; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
-            🔍 View Full Conversation
-          </a>
-        </div>
-
-        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; text-align: center; margin-top: 30px;">
-          <p style="margin: 0; color: #64748b; font-size: 14px;">
-            This notification was automatically generated by the FIELDPORTER AI Lead Qualification System
-          </p>
-        </div>
-
-      </body>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>FIELDPORTER Notification</title>
+        </head>
+        <body style="margin: 0; padding: 0; background: #f3f4f6; font-family: Inter, Arial, sans-serif;">
+          <div style="${baseStyles}">
+            ${headerHtml}
+            ${bodyHtml}
+            <div style="background: #f8fafc; padding: 20px; border-radius: 8px; text-align: center; margin-top: 30px;">
+              <p style="margin: 0; color: #64748b; font-size: 14px;">
+                This notification was automatically generated by the FIELDPORTER Lead Qualification System
+              </p>
+            </div>
+          </div>
+        </body>
       </html>
     `;
   }
 
-  private generateTextContent(leadData: LeadEmailData): string {
+  private generateTextContent(type: string, data: any): string {
+    switch (type) {
+      case "contact":
+        return `
+FIELDPORTER - New Contact Form Submission
+
+Lead Score: ${data.leadScore}/10
+Status: ${data.leadScore >= 7 ? "Hot Lead" : data.leadScore >= 5 ? "Qualified Lead" : "New Inquiry"}
+
+Contact Details:
+- Name: ${data.name}
+- Email: ${data.email}
+- Company: ${data.company || "Not provided"}
+- Service Interest: ${data.projectType || "General inquiry"}
+- Timeline: ${data.timeline || "Not specified"}
+
+Message:
+"${data.challengeDescription || data.message}"
+
+View in Firebase: https://console.firebase.google.com/project/fieldporter-website/firestore/data/~2Fcontact_submissions~2F${data.id}
+        `;
+
+      case "newsletter":
+        return `
+FIELDPORTER - New Newsletter Signup
+
+Email: ${data.email}
+Source: ${data.source}
+Lead Score: ${data.leadScore}/10
+
+View in Firebase: https://console.firebase.google.com/project/fieldporter-website/firestore/data/~2Fnewsletter_subscriptions~2F${data.id}
+        `;
+
+      case "chat":
+        return this.generateTextContentForChat(data);
+
+      default:
+        return `FIELDPORTER Notification - ${type}`;
+    }
+  }
+
+  private generateTextContentForChat(leadData: LeadEmailData): string {
     return `
 🔥 QUALIFIED LEAD DETECTED
 
@@ -159,7 +327,7 @@ View full conversation: https://console.firebase.google.com/project/fieldporter-
   }
 
   private async sendFallbackNotification(
-    leadData: LeadEmailData,
+    notificationData: NotificationEmailData,
   ): Promise<{ success: boolean; error?: string }> {
     try {
       // Try webhook if configured
@@ -169,8 +337,8 @@ View full conversation: https://console.firebase.google.com/project/fieldporter-
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            type: "qualified_lead",
-            data: leadData,
+            type: `${notificationData.type}_notification`,
+            data: notificationData.data,
           }),
         });
 
@@ -184,17 +352,10 @@ View full conversation: https://console.firebase.google.com/project/fieldporter-
       console.log(`
 🚨 FALLBACK NOTIFICATION - EMAIL SERVICE UNAVAILABLE 🚨
 
-QUALIFIED LEAD DETECTED:
-├── Lead Score: ${leadData.leadScore}/20
-├── Qualification: ${leadData.qualification}
-├── Contact: ${leadData.userEmail || leadData.userPhone || "Not provided"}
-├── Session: ${leadData.sessionId}
-└── Timestamp: ${new Date(leadData.timestamp).toLocaleString()}
+NOTIFICATION TYPE: ${notificationData.type.toUpperCase()}
+SUBJECT: ${notificationData.subject}
 
-MESSAGE: "${leadData.userMessage}"
-
-QUALIFICATION SIGNALS:
-${leadData.qualificationSignals.map((signal) => `├── ${signal}`).join("\n")}
+DATA: ${JSON.stringify(notificationData.data, null, 2)}
 
 🔧 TO ENABLE EMAIL NOTIFICATIONS:
 1. Get Resend API key: https://resend.com/api-keys

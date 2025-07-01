@@ -317,22 +317,53 @@ function ServiceCard3D({
 
 // Animated call-to-action button
 function AnimatedCTA() {
+  const handleChatClick = () => {
+    // Method 1: Look for chat widget toggle button
+    const chatToggle = document.querySelector(
+      "[data-chat-toggle]",
+    ) as HTMLElement;
+    if (chatToggle) {
+      chatToggle.click();
+      return;
+    }
+
+    // Method 2: Look for chat widget trigger
+    const chatTrigger = document.querySelector(
+      "[data-chat-trigger]",
+    ) as HTMLElement;
+    if (chatTrigger) {
+      chatTrigger.click();
+      return;
+    }
+
+    // Method 3: Dispatch custom event for chat widget
+    window.dispatchEvent(
+      new CustomEvent("open-chat-widget", {
+        bubbles: true,
+        detail: { source: "hero-cta" },
+      }),
+    );
+
+    // Method 4: Try to find chat widget by class or id
+    const chatWidget = document.querySelector(
+      '.chat-widget, #chat-widget, [data-testid="chat-widget"]',
+    ) as HTMLElement;
+    if (chatWidget) {
+      chatWidget.style.display = "block";
+      chatWidget.classList.add("open");
+    }
+  };
+
   return (
     <motion.button
-      className="group relative px-8 py-4 overflow-hidden rounded-2xl border border-white/10 backdrop-blur-sm"
+      className="group relative px-8 py-4 overflow-hidden rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-colors duration-300"
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      onClick={() => {
-        // Target the dialog trigger specifically
-        const chatButton = document.querySelector("[data-chat-trigger]");
-        if (chatButton) {
-          (chatButton as HTMLElement).click();
-        }
-      }}
+      onClick={handleChatClick}
     >
       {/* Subtle premium background animation */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-fieldporter-blue/20 via-indigo-500/30 to-fieldporter-blue/20"
+        className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-indigo-500/30 to-blue-600/20"
         animate={{
           backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
         }}
@@ -352,7 +383,7 @@ function AnimatedCTA() {
       {/* Button content */}
       <span className="relative z-10 flex items-center gap-2 text-white font-medium">
         <MessageSquare className="w-5 h-5" />
-        <span>Chat with our AI</span>
+        <span>Chat with our Agent</span>
         <motion.span
           animate={{ x: [0, 2, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
