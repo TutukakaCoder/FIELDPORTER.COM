@@ -1,438 +1,575 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { EnterpriseInput } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { ContactFormData, firebaseFormsService } from "@/lib/firebase-forms";
+import { AnimatePresence, motion } from "framer-motion";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { ContactFormData, firebaseFormsService } from '@/lib/firebase-forms';
-import { ArrowRight, CheckCircle, Copy, Mail } from 'lucide-react';
-import { useState } from 'react';
+  Activity,
+  ArrowRight,
+  CheckCircle,
+  ChevronDown,
+  Clock,
+  Lightbulb,
+  MessageSquare,
+  Target,
+  User,
+} from "lucide-react";
+import React, { useState } from "react";
+
+// Enhanced form data interface
+interface EnhancedContactFormData extends ContactFormData {
+  whatBringsYouHere: string;
+  additionalContext: {
+    timeline: string;
+    currentTools: string;
+    teamSize: string;
+  };
+}
+
+const WHAT_BRINGS_YOU_OPTIONS = [
+  "I know what I want to automate",
+  "I need help identifying opportunities",
+  "Just exploring AI possibilities",
+];
+
+const FIELD_CONFIGS = {
+  "I know what I want to automate": {
+    label: "Project details",
+    placeholder:
+      "Describe your automation idea, workflow challenges, or AI integration needs...",
+    helperText: "The more specific, the better we can help",
+  },
+  "I need help identifying opportunities": {
+    label: "Current situation",
+    placeholder:
+      "Tell us about your work, daily tasks, or processes that take too much time...",
+    helperText:
+      "We'll analyze your workflow and suggest automation opportunities",
+  },
+  "Just exploring AI possibilities": {
+    label: "Areas of interest",
+    placeholder:
+      "What aspects of AI interest you? Research, automation, development, or something else?",
+    helperText: "Let's start a conversation about what's possible",
+  },
+};
 
 export function SimpleContactForm() {
-  const [formData, setFormData] = useState<ContactFormData>({
-    name: '',
-    email: '',
-    company: '',
-    projectType: '',
-    challengeDescription: '',
-    timeline: '',
-    budgetRange: '',
+  const [formData, setFormData] = useState<EnhancedContactFormData>({
+    name: "",
+    email: "",
+    company: "",
+    projectType: "",
+    challengeDescription: "",
+    timeline: "",
+    budgetRange: "",
+    whatBringsYouHere: "",
+    additionalContext: {
+      timeline: "",
+      currentTools: "",
+      teamSize: "",
+    },
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
-  const [characterCount, setCharacterCount] = useState(0);
-  const [emailCopied, setEmailCopied] = useState(false);
+  const [showAdditionalContext, setShowAdditionalContext] = useState(false);
 
-  // Enhanced validation states for premium animations
-  const [fieldValidation, setFieldValidation] = useState<{
-    [key: string]: 'initial' | 'success' | 'error';
-  }>({
-    name: 'initial',
-    email: 'initial',
-    company: 'initial',
-    challengeDescription: 'initial',
-  });
-
-  // Form validation
+  // Form validation - simplified, no character minimums
   const isFormValid =
     formData.name.trim().length > 0 &&
     formData.email.trim().length > 0 &&
-    formData.email.includes('@') &&
-    formData.challengeDescription.trim().length >= 20;
+    formData.email.includes("@") &&
+    formData.whatBringsYouHere.length > 0 &&
+    formData.challengeDescription.trim().length > 0;
 
-  const updateFormData = (field: keyof ContactFormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-
-    // Update validation states for premium animations
-    if (field === 'name') {
-      setFieldValidation(prev => ({
+  const updateFormData = (field: string, value: string) => {
+    if (field.includes(".")) {
+      const [parent, child] = field.split(".");
+      if (parent === "additionalContext") {
+        setFormData((prev) => ({
+          ...prev,
+          additionalContext: {
+            ...prev.additionalContext,
+            [child as keyof typeof prev.additionalContext]: value,
+          },
+        }));
+      }
+    } else {
+      setFormData((prev) => ({
         ...prev,
-        name: value.trim().length > 0 ? 'success' : 'initial',
+        [field as keyof EnhancedContactFormData]: value,
       }));
-    } else if (field === 'email') {
-      setFieldValidation(prev => ({
-        ...prev,
-        email: value.includes('@') && value.trim().length > 0 ? 'success' : 'initial',
-      }));
-    } else if (field === 'company') {
-      setFieldValidation(prev => ({
-        ...prev,
-        company: value.trim().length > 0 ? 'success' : 'initial',
-      }));
-    } else if (field === 'challengeDescription') {
-      setCharacterCount(value.length);
-      setFieldValidation(prev => ({
-        ...prev,
-        challengeDescription: value.trim().length >= 20 ? 'success' : 'initial',
-      }));
-    }
-
-    if (errors.length > 0) {
-      setErrors([]);
-    }
-  };
-
-  const copyEmailToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText('freddy@fieldporter.com');
-      setEmailCopied(true);
-      setTimeout(() => setEmailCopied(false), 2000);
-    } catch (error) {
-      const textArea = document.createElement('textarea');
-      textArea.value = 'freddy@fieldporter.com';
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-      setEmailCopied(true);
-      setTimeout(() => setEmailCopied(false), 2000);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const validation = firebaseFormsService.validateFormData(formData);
-    if (!validation.isValid) {
-      setErrors(validation.errors);
-      // Set error states for premium validation animations
-      setFieldValidation(prev => ({
-        ...prev,
-        name: formData.name.trim().length === 0 ? 'error' : prev['name'] || 'initial',
-        email:
-          !formData.email.includes('@') || formData.email.trim().length === 0
-            ? 'error'
-            : prev['email'] || 'initial',
-        challengeDescription:
-          formData.challengeDescription.trim().length < 20
-            ? 'error'
-            : prev['challengeDescription'] || 'initial',
-      }));
-      return;
-    }
+    if (!isFormValid || isSubmitting) return;
 
     setIsSubmitting(true);
     setErrors([]);
 
     try {
-      const result = await firebaseFormsService.submitContactForm(formData);
+      // Prepare form data for Firebase
+      const submissionData: ContactFormData = {
+        name: formData.name,
+        email: formData.email,
+        company: formData.company || "",
+        projectType: formData.whatBringsYouHere || "AI Project Inquiry",
+        challengeDescription: formData.challengeDescription,
+        timeline: formData.additionalContext.timeline || "Flexible",
+        budgetRange: formData.budgetRange || "Let's discuss",
+      };
+
+      const result =
+        await firebaseFormsService.submitContactForm(submissionData);
 
       if (result.success) {
         setIsSubmitted(true);
       } else {
-        setErrors([result.error || 'An unexpected error occurred. Please try again.']);
+        setErrors([
+          result.error || "An unexpected error occurred. Please try again.",
+        ]);
       }
     } catch (error) {
-      setErrors(['Network error. Please check your connection and try again.']);
+      setErrors(["Network error. Please check your connection and try again."]);
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const currentFieldConfig = formData.whatBringsYouHere
+    ? FIELD_CONFIGS[formData.whatBringsYouHere as keyof typeof FIELD_CONFIGS]
+    : null;
+
+  const getFieldIcon = (option: string) => {
+    switch (option) {
+      case "I know what I want to automate":
+        return <Target className="h-4 w-4 text-blue-400" />;
+      case "I need help identifying opportunities":
+        return <Activity className="h-4 w-4 text-blue-400" />;
+      case "Just exploring AI possibilities":
+        return <Lightbulb className="h-4 w-4 text-blue-400" />;
+      default:
+        return null;
+    }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+      },
+    },
+  };
+
   if (isSubmitted) {
     return (
-      <section id='contact-form' className='py-16 lg:py-24 bg-bg-fieldporter-secondary'>
-        <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='max-w-2xl mx-auto text-center'>
-            <Card className='bg-white/5 border-white/10 backdrop-blur-md' enableAnimations={true}>
-              <CardContent className='p-8 md:p-12'>
-                <CheckCircle className='h-16 w-16 text-green-500 mx-auto mb-6' />
-                <h2 className='text-2xl md:text-3xl font-bold text-fieldporter-white mb-4'>
-                  Message Received
-                </h2>
-                <p className='text-lg text-fieldporter-gray mb-6 leading-relaxed'>
-                  Thanks for reaching out! We&apos;ve received your message and will respond within
-                  24 hours with an honest assessment of how we can help. If we&apos;re a good fit,
-                  we&apos;ll suggest a brief video call to discuss your challenge in detail.
-                </p>
-                <div className='bg-white/5 border-white/10 rounded-lg p-4 mb-6'>
-                  <p className='text-fieldporter-blue font-semibold text-sm mb-2'>
-                    What happens next:
-                  </p>
-                  <ul className='text-fieldporter-gray text-sm space-y-1 text-left'>
-                    <li>• Personal response from us within 24 hours</li>
-                    <li>• Honest assessment of project fit and approach</li>
-                    <li>• Brief video call if there&apos;s alignment</li>
-                    <li>• Clear project scope and timeline if we proceed</li>
-                  </ul>
+      <section
+        id="contact-form"
+        className="relative py-32 md:py-40 lg:py-48 overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-black" />
+
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-3xl mx-auto text-center"
+          >
+            <div className="relative bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 hover:bg-white/[0.04] transition-all duration-300">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <CheckCircle className="h-16 w-16 text-emerald-400 mx-auto mb-6" />
+              </motion.div>
+
+              <h2 className="text-2xl md:text-3xl font-semibold text-white mb-6 leading-tight">
+                Thanks for Reaching Out!
+              </h2>
+
+              <p className="text-lg text-gray-300 mb-8 leading-relaxed">
+                We've received your message and are already thinking about how
+                we can help. Here's what happens next:
+              </p>
+
+              <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-6 mb-8">
+                <div className="grid md:grid-cols-3 gap-6 text-left">
+                  <div className="flex flex-col items-center text-center">
+                    <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center mb-4">
+                      <Clock className="h-6 w-6 text-blue-400" />
+                    </div>
+                    <h3 className="text-white font-semibold mb-2">
+                      Within 24 hours
+                    </h3>
+                    <p className="text-gray-400 text-sm">
+                      We'll analyze your needs and identify specific
+                      opportunities
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col items-center text-center">
+                    <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mb-4">
+                      <MessageSquare className="h-6 w-6 text-green-400" />
+                    </div>
+                    <h3 className="text-white font-semibold mb-2">
+                      Personalized response
+                    </h3>
+                    <p className="text-gray-400 text-sm">
+                      You'll receive tailored recommendations based on your
+                      situation
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col items-center text-center">
+                    <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mb-4">
+                      <ArrowRight className="h-6 w-6 text-purple-400" />
+                    </div>
+                    <h3 className="text-white font-semibold mb-2">
+                      Next steps
+                    </h3>
+                    <p className="text-gray-400 text-sm">
+                      We'll suggest a focused call, resources, or automation
+                      roadmap
+                    </p>
+                  </div>
                 </div>
-                <p className='text-fieldporter-gray text-sm'>
-                  Check your email for confirmation. Urgent? Email{' '}
-                  <span className='text-fieldporter-blue font-medium'>freddy@fieldporter.com</span>
-                </p>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+
+              <p className="text-blue-400 text-base">
+                <strong>In the meantime:</strong> Feel free to explore our{" "}
+                <a
+                  href="/portfolio"
+                  className="underline hover:text-blue-300 transition-colors"
+                >
+                  case studies
+                </a>{" "}
+                or check out our{" "}
+                <a
+                  href="/insights"
+                  className="underline hover:text-blue-300 transition-colors"
+                >
+                  latest insights
+                </a>{" "}
+                on AI automation.
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
     );
   }
 
   return (
-    <section id='contact-form' className='py-16 lg:py-24 bg-bg-fieldporter-secondary'>
-      <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
-        <div className='text-center mb-12'>
-          <h2 className='text-3xl md:text-4xl font-bold text-fieldporter-white mb-4'>
-            Tell Me About Your Challenge
-          </h2>
-          <p className='text-lg text-fieldporter-gray max-w-2xl mx-auto leading-relaxed'>
-            The more specific you can be, the better we can assess how to help.
-          </p>
-        </div>
+    <section
+      id="contact-form"
+      className="relative py-32 md:py-40 lg:py-48 overflow-hidden"
+    >
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-black" />
 
-        <div className='grid grid-cols-1 lg:grid-cols-3 gap-12'>
-          <div className='lg:col-span-2'>
-            <Card className='bg-white/5 border-white/10 backdrop-blur-md' enableAnimations={true}>
-              <CardHeader className='p-6 md:p-8'>
-                <CardTitle className='text-xl md:text-2xl text-fieldporter-white'>
-                  Contact Information
-                </CardTitle>
-                <CardDescription className='text-fieldporter-gray'>
-                  Let&apos;s start with the basics so we can respond personally
-                </CardDescription>
-              </CardHeader>
-              <CardContent className='p-6 md:p-8 pt-0'>
-                <form onSubmit={handleSubmit} className='space-y-6'>
-                  {errors.length > 0 && (
-                    <div className='bg-red-500/10 border border-red-500/20 rounded-lg p-4'>
-                      <ul className='text-red-400 text-sm space-y-1'>
-                        {errors.map((error, index) => (
-                          <li key={index}>• {error}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+      {/* Subtle background elements */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+      </div>
 
-                  <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
-                    <div className='space-y-2'>
-                      <Label htmlFor='name' className='text-fieldporter-white font-medium'>
-                        Name <span className='text-red-400'>*</span>
-                      </Label>
-                      <EnterpriseInput
-                        id='name'
-                        type='text'
-                        value={formData.name}
-                        onChange={e => updateFormData('name', e.target.value)}
-                        placeholder='Your full name'
-                        enableAnimations={true}
-                        validationState={fieldValidation['name'] || 'initial'}
-                        required
-                      />
-                    </div>
-                    <div className='space-y-2'>
-                      <Label htmlFor='email' className='text-fieldporter-white font-medium'>
-                        Email <span className='text-red-400'>*</span>
-                      </Label>
-                      <EnterpriseInput
-                        id='email'
-                        type='email'
-                        value={formData.email}
-                        onChange={e => updateFormData('email', e.target.value)}
-                        placeholder='your.email@company.com'
-                        enableAnimations={true}
-                        validationState={fieldValidation['email'] || 'initial'}
-                        required
-                      />
-                    </div>
-                  </div>
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="max-w-2xl mx-auto"
+        >
+          {/* Header */}
+          <motion.div variants={itemVariants} className="text-center mb-12">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
+              Let's Talk About Your AI Project
+            </h1>
+            <p className="text-xl text-gray-300 leading-relaxed">
+              Whether you have a specific automation in mind or want to explore
+              possibilities, we'll help you find the right approach.
+            </p>
+          </motion.div>
 
-                  <div className='space-y-2'>
-                    <Label htmlFor='company' className='text-fieldporter-white font-medium'>
-                      Company <span className='text-fieldporter-gray text-sm'>(optional)</span>
-                    </Label>
-                    <EnterpriseInput
-                      id='company'
-                      type='text'
-                      value={formData.company}
-                      onChange={e => updateFormData('company', e.target.value)}
-                      placeholder='Your company name'
-                      enableAnimations={true}
-                      validationState={fieldValidation['company'] || 'initial'}
-                    />
-                  </div>
+          {/* Contact Form */}
+          <motion.form
+            variants={itemVariants}
+            onSubmit={handleSubmit}
+            className="relative bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 hover:bg-white/[0.04] transition-all duration-300"
+          >
+            {/* Error Messages */}
+            <AnimatePresence>
+              {errors.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl"
+                >
+                  <ul className="text-red-400 text-sm space-y-1">
+                    {errors.map((error, index) => (
+                      <li key={index}>{error}</li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-                  <div className='space-y-2'>
-                    <Label htmlFor='projectType' className='text-fieldporter-white font-medium'>
-                      Project Type <span className='text-red-400'>*</span>
-                    </Label>
-                    <Select
-                      value={formData.projectType || ''}
-                      onValueChange={value => updateFormData('projectType', value)}
-                    >
-                      <SelectTrigger className='bg-white/5 border-white/10 text-fieldporter-white focus:border-fieldporter-blue min-h-[48px] text-base'>
-                        <SelectValue placeholder='Select project type' />
-                      </SelectTrigger>
-                      <SelectContent className='bg-fieldporter-black border-white/10'>
-                        <SelectItem value='Strategic Research Intelligence'>
-                          Strategic Research Intelligence
-                        </SelectItem>
-                        <SelectItem value='Rapid Development & Integration'>
-                          Rapid Development & Integration
-                        </SelectItem>
-                        <SelectItem value='Process Efficiency & Workflow Optimization'>
-                          Process Efficiency & Workflow Optimization
-                        </SelectItem>
-                        <SelectItem value='AI Training & Implementation Education'>
-                          AI Training & Implementation Education
-                        </SelectItem>
-                        <SelectItem value="Not Sure - Let's Discuss">
-                          Not Sure - Let&apos;s Discuss
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+            <div className="space-y-8">
+              {/* Your Information Section */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+                  <User className="h-5 w-5 text-blue-400" />
+                  Your Information
+                </h3>
 
-                  <div className='space-y-2'>
-                    <Label htmlFor='challenge' className='text-fieldporter-white font-medium'>
-                      Describe Your Challenge <span className='text-red-400'>*</span>
-                    </Label>
-                    <Textarea
-                      id='challenge'
-                      value={formData.challengeDescription}
-                      onChange={e => updateFormData('challengeDescription', e.target.value)}
-                      placeholder="What are you trying to build, understand, or improve? Include any specific outcomes you're hoping to achieve."
-                      rows={4}
-                      className='bg-white/5 border-white/10 text-fieldporter-white placeholder:text-fieldporter-gray focus:border-fieldporter-blue resize-none text-base'
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Your name <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) => updateFormData("name", e.target.value)}
+                      placeholder="Full name"
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
                       required
                     />
-                    <div className='flex justify-between text-sm'>
-                      <span className='text-fieldporter-gray'>
-                        {characterCount < 20
-                          ? 'Please provide more detail (minimum 20 characters)'
-                          : 'Good level of detail'}
-                      </span>
-                      <span
-                        className={`${characterCount < 20 ? 'text-red-400' : 'text-fieldporter-gray'}`}
-                      >
-                        {characterCount} characters
-                      </span>
-                    </div>
                   </div>
 
-                  <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
-                    <div className='space-y-2'>
-                      <Label htmlFor='timeline' className='text-fieldporter-white font-medium'>
-                        Timeline <span className='text-red-400'>*</span>
-                      </Label>
-                      <Select
-                        value={formData.timeline || ''}
-                        onValueChange={value => updateFormData('timeline', value)}
-                      >
-                        <SelectTrigger className='bg-white/5 border-white/10 text-fieldporter-white focus:border-fieldporter-blue min-h-[48px] text-base'>
-                          <SelectValue placeholder='Select timeline' />
-                        </SelectTrigger>
-                        <SelectContent className='bg-fieldporter-black border-white/10'>
-                          <SelectItem value='Urgent (days)'>Urgent (within days)</SelectItem>
-                          <SelectItem value='Short-term (weeks)'>Short-term (weeks)</SelectItem>
-                          <SelectItem value='Medium-term (months)'>Medium-term (months)</SelectItem>
-                          <SelectItem value='Flexible'>Flexible</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className='space-y-2'>
-                      <Label htmlFor='budget' className='text-fieldporter-white font-medium'>
-                        Budget Range{' '}
-                        <span className='text-fieldporter-gray text-sm'>(optional)</span>
-                      </Label>
-                      <Select
-                        value={formData.budgetRange || ''}
-                        onValueChange={value => updateFormData('budgetRange', value)}
-                      >
-                        <SelectTrigger className='bg-white/5 border-white/10 text-fieldporter-white focus:border-fieldporter-blue min-h-[48px] text-base'>
-                          <SelectValue placeholder='Select budget range' />
-                        </SelectTrigger>
-                        <SelectContent className='bg-fieldporter-black border-white/10'>
-                          <SelectItem value='Under $3K'>Under $3K</SelectItem>
-                          <SelectItem value='$3K-$8K'>$3K-$8K</SelectItem>
-                          <SelectItem value='Above $8K'>Above $8K</SelectItem>
-                          <SelectItem value="Let's discuss">Let&apos;s discuss</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Email address <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => updateFormData("email", e.target.value)}
+                      placeholder="your@email.com"
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
+                      required
+                    />
                   </div>
+                </div>
 
-                  <Button
-                    type='submit'
-                    variant='fieldporter-blue'
-                    size='enterprise'
-                    disabled={!isFormValid || isSubmitting}
-                    enableAnimations={true}
-                    isLoading={isSubmitting}
-                    className='w-full'
-                  >
-                    {isSubmitting ? (
-                      'Sending Message...'
-                    ) : (
-                      <>
-                        <span>Send Message</span>
-                        <ArrowRight className='w-5 h-5 ml-2' />
-                      </>
-                    )}
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
+                <div className="mt-6">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Organization{" "}
+                    <span className="text-gray-500">(optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.company}
+                    onChange={(e) => updateFormData("company", e.target.value)}
+                    placeholder="Company or personal project"
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
+                  />
+                </div>
+              </div>
 
-          {/* Contact Options Sidebar */}
-          <div className='space-y-6'>
-            <Card className='bg-white/5 border-white/10 backdrop-blur-md' enableAnimations={true}>
-              <CardHeader className='p-6'>
-                <CardTitle className='text-lg text-fieldporter-white'>Quick Contact</CardTitle>
-              </CardHeader>
-              <CardContent className='p-6 pt-0 space-y-4'>
-                <div className='flex items-center space-x-3'>
-                  <Mail className='h-5 w-5 text-fieldporter-blue flex-shrink-0' />
-                  <div className='flex-1'>
-                    <p className='text-fieldporter-white text-sm font-medium'>Direct Email</p>
-                    <button
-                      onClick={copyEmailToClipboard}
-                      className='text-fieldporter-blue hover:text-fieldporter-blue/80 text-sm flex items-center group transition-colors'
+              {/* Tell Us More Section */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5 text-blue-400" />
+                  Tell Us More
+                </h3>
+
+                {/* What brings you here dropdown */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    What brings you here?{" "}
+                    <span className="text-red-400">*</span>
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={formData.whatBringsYouHere}
+                      onChange={(e) => {
+                        updateFormData("whatBringsYouHere", e.target.value);
+                        // Reset challenge description when switching options
+                        updateFormData("challengeDescription", "");
+                      }}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 appearance-none"
+                      required
                     >
-                      freddy@fieldporter.com
-                      <Copy className='h-3 w-3 ml-1 group-hover:scale-110 transition-transform' />
-                      {emailCopied && <span className='text-green-400 text-xs ml-2'>Copied!</span>}
-                    </button>
+                      <option value="" className="bg-gray-900 text-gray-300">
+                        Choose what describes you best...
+                      </option>
+                      {WHAT_BRINGS_YOU_OPTIONS.map((option) => (
+                        <option
+                          key={option}
+                          value={option}
+                          className="bg-gray-900 text-white"
+                        >
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
                   </div>
                 </div>
-                <div className='text-xs text-fieldporter-gray pt-2 border-t border-white/10'>
-                  Response within 24 hours
-                </div>
-              </CardContent>
-            </Card>
 
-            <Card className='bg-white/5 border-white/10 backdrop-blur-md' enableAnimations={true}>
-              <CardContent className='p-6'>
-                <h3 className='text-fieldporter-white font-semibold mb-3'>What to Expect</h3>
-                <ul className='space-y-2 text-sm text-fieldporter-gray'>
-                  <li className='flex items-start space-x-2'>
-                    <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-blue mt-2 flex-shrink-0' />
-                    <span>Personal response from Frederick</span>
-                  </li>
-                  <li className='flex items-start space-x-2'>
-                    <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-blue mt-2 flex-shrink-0' />
-                    <span>Honest assessment of fit</span>
-                  </li>
-                  <li className='flex items-start space-x-2'>
-                    <div className='w-1.5 h-1.5 rounded-full bg-fieldporter-blue mt-2 flex-shrink-0' />
-                    <span>Clear next steps if aligned</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+                {/* Dynamic field based on selection */}
+                <AnimatePresence mode="wait">
+                  {currentFieldConfig && (
+                    <motion.div
+                      key={formData.whatBringsYouHere}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                        {getFieldIcon(formData.whatBringsYouHere)}
+                        {currentFieldConfig.label}{" "}
+                        <span className="text-red-400">*</span>
+                      </label>
+                      <textarea
+                        value={formData.challengeDescription}
+                        onChange={(e) =>
+                          updateFormData("challengeDescription", e.target.value)
+                        }
+                        placeholder={currentFieldConfig.placeholder}
+                        rows={4}
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 resize-none"
+                        required
+                      />
+                      <p className="text-sm text-gray-400 mt-2">
+                        {currentFieldConfig.helperText}
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Additional Context (Expandable) */}
+              <div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowAdditionalContext(!showAdditionalContext)
+                  }
+                  className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors duration-200 mb-4"
+                >
+                  <motion.div
+                    animate={{ rotate: showAdditionalContext ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </motion.div>
+                  Additional Context{" "}
+                  <span className="text-gray-500">(optional)</span>
+                </button>
+
+                <AnimatePresence>
+                  {showAdditionalContext && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="space-y-6"
+                    >
+                      <div className="grid md:grid-cols-3 gap-6">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">
+                            Timeline
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.additionalContext.timeline}
+                            onChange={(e) =>
+                              updateFormData(
+                                "additionalContext.timeline",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="When are you looking to start?"
+                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">
+                            Current tools
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.additionalContext.currentTools}
+                            onChange={(e) =>
+                              updateFormData(
+                                "additionalContext.currentTools",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="Any AI tools you are already using?"
+                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">
+                            Team size
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.additionalContext.teamSize}
+                            onChange={(e) =>
+                              updateFormData(
+                                "additionalContext.teamSize",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="Just you or a larger team?"
+                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
+                          />
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Submit Button */}
+              <div className="pt-6">
+                <button
+                  type="submit"
+                  disabled={!isFormValid || isSubmitting}
+                  className="w-full px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 group"
+                >
+                  {isSubmitting ? (
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
+                  ) : (
+                    <>
+                      Start the Conversation
+                      <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" />
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </motion.form>
+        </motion.div>
       </div>
     </section>
   );

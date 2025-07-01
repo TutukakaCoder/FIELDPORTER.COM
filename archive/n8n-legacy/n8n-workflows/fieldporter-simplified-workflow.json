@@ -1,0 +1,346 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "mode": "webhook",
+        "options": {
+          "allowedOrigins": "https://fieldporter.com,http://localhost:3001,http://localhost:3000",
+          "responseMode": "responseNode"
+        }
+      },
+      "id": "chat-trigger-fieldporter",
+      "name": "Chat Trigger",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [-940, 700],
+      "webhookId": "fieldporter-chat-webhook",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.chatInput }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "check-input",
+      "name": "Check Input",
+      "type": "n8n-nodes-base.if",
+      "position": [-720, 700],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"output\": \"Hi! I'm FIELDPORTER's AI assistant. What specific AI challenge is your organization facing?\"\n}",
+        "options": {}
+      },
+      "id": "initial-response",
+      "name": "Initial Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [-420, 820],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput }}",
+        "options": {
+          "systemMessage": "You are PORTER, FIELDPORTER's AI assistant. We help businesses integrate AI tools that actually work. We're builders who happen to consult - we test every AI tool and strategy in our own projects before recommending them.\n\nCRITICAL CONSTRAINTS:\n- You CANNOT send calendar invites, schedule meetings, or book appointments\n- You CANNOT access external systems or send emails directly\n- For booking requests, direct to contact page at fieldporter.com/contact\n\nRESPONSE RULES:\n- 2-3 sentences maximum\n- Professional but conversational tone\n- No special characters or formatting\n- Ask questions to understand their challenge\n- Guide qualified prospects toward consultation\n- Never mention specific client names or confidential projects\n- Avoid repetitive questions - build on previous conversation\n- Provide specific, authentic responses based on context\n\nCONVERSATION GOAL: Understand their challenge and assess if we can help. Be natural and authentic.\n\nWHEN USER PROVIDES CONTACT INFO OR WANTS TO BE CONTACTED:\nAcknowledge their interest warmly and let them know Frederick will personally review their needs and reach out within 24 hours. Direct them to share details via fieldporter.com/contact for fastest response."
+        }
+      },
+      "id": "ai-agent",
+      "name": "FIELDPORTER AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [-100, 680],
+      "typeVersion": 1.6
+    },
+    {
+      "parameters": {
+        "model": "deepseek-chat",
+        "options": {
+          "temperature": 0.3,
+          "maxTokens": 150
+        }
+      },
+      "id": "deepseek-model",
+      "name": "DeepSeek Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "position": [-200, 860],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.sessionId || 'default_session' }}",
+        "contextWindowLength": 10
+      },
+      "id": "conversation-memory",
+      "name": "Conversation Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [-100, 980],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "name": "Send_lead_notification",
+        "description": "Call this tool when the customer provides contact information, wants to be contacted, or shows high interest in FIELDPORTER services. This will send an email notification to our team.",
+        "workflowId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "fieldporter-lead-notification",
+          "cachedResultName": "Lead Notification Workflow"
+        },
+        "fields": {
+          "values": [
+            {
+              "name": "route",
+              "stringValue": "lead"
+            }
+          ]
+        },
+        "specifyInputSchema": true,
+        "jsonSchemaExample": "{\n\t\"email\": \"customer's email\",\n    \"message\": \"customer's message\",\n    \"sessionId\": \"conversation session id\",\n    \"leadScore\": \"calculated lead score\",\n    \"contactInfo\": \"any contact details provided\"\n}"
+      },
+      "id": "send-lead-tool",
+      "name": "Send Lead Notification",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [60, 1180],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process input and detect lead qualification\nconst inputData = $input.all()[0].json;\n\n// Extract conversation data\nconst userMessage = inputData.chatInput || '';\nconst sessionId = inputData.sessionId || `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;\nconst messageCount = inputData.messageCount || 1;\n\n// Lead qualification keywords\nconst qualificationKeywords = {\n  'ai strategy': 3, 'enterprise': 2, 'transformation': 2, 'automation': 2,\n  'consulting': 2, 'roi': 3, 'budget': 3, 'timeline': 2, 'urgent': 2,\n  'scale': 2, 'implementation': 2, 'portfolio': 2, 'vc': 3,\n  'construction': 2, 'research': 2, 'workflow': 2, 'development': 2,\n  'ai integration': 3, 'strategic research': 3, 'rapid prototyping': 2\n};\n\n// Calculate lead score\nlet leadScore = 1;\nconst lowerMessage = userMessage.toLowerCase();\nfor (const [keyword, score] of Object.entries(qualificationKeywords)) {\n  if (lowerMessage.includes(keyword)) {\n    leadScore += score;\n  }\n}\n\n// Detect contact information\nconst emailRegex = /\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b/gi;\nconst phoneRegex = /\\b(?:\\+?1[-.]?)?\\(?([0-9]{3})\\)?[-.]?([0-9]{3})[-.]?([0-9]{4})\\b/g;\n\nconst detectedEmail = userMessage.match(emailRegex)?.[0];\nconst detectedPhone = userMessage.match(phoneRegex)?.[0];\nconst hasContactInfo = !!(detectedEmail || detectedPhone);\n\n// Check if asking for contact\nconst wantsContact = lowerMessage.includes('contact') || \n                   lowerMessage.includes('reach out') || \n                   lowerMessage.includes('get in touch') ||\n                   lowerMessage.includes('speak to someone') ||\n                   lowerMessage.includes('talk to someone') ||\n                   lowerMessage.includes('call me') ||\n                   lowerMessage.includes('email me');\n\n// Boost score for contact info\nif (hasContactInfo) {\n  leadScore += 3;\n}\n\n// Determine if we should send notification\nconst shouldNotify = leadScore >= 7 || hasContactInfo || wantsContact;\n\nreturn {\n  ...inputData,\n  sessionId: sessionId,\n  messageCount: messageCount,\n  leadScore: leadScore,\n  hasContactInfo: hasContactInfo,\n  wantsContact: wantsContact,\n  shouldNotify: shouldNotify,\n  userEmail: detectedEmail,\n  userPhone: detectedPhone,\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "process-input",
+      "name": "Process Input & Qualify Lead",
+      "type": "n8n-nodes-base.code",
+      "position": [-320, 100],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format AI response and prepare notification data\nconst data = $input.all()[0].json;\n\n// Extract AI response\nlet responseText = '';\nif (data.output) {\n  responseText = data.output;\n} else if (data.text) {\n  responseText = data.text;\n} else {\n  responseText = \"I'd love to learn about your AI challenges. What specific area is your organization looking to optimize with AI?\";\n}\n\n// Clean response\nresponseText = responseText.trim()\n  .replace(/[\\*\\#\\`\\[\\]\\(\\)]/g, '')\n  .replace(/\\n\\n+/g, ' ')\n  .replace(/\\s+/g, ' ')\n  .trim();\n\n// Ensure minimum quality\nif (!responseText || responseText.length < 20) {\n  responseText = \"Thanks for your question! This sounds like something our team should discuss with you directly. What's the best way to connect about your AI strategy needs?\";\n}\n\n// Prepare final response\nconst formattedResponse = {\n  response: responseText,\n  sessionId: data.sessionId,\n  messageCount: data.messageCount,\n  shouldNotify: data.shouldNotify,\n  userEmail: data.userEmail || null,\n  userPhone: data.userPhone || null,\n  chatInput: data.chatInput || '',\n  leadScore: data.leadScore,\n  metadata: {\n    timestamp: new Date().toISOString(),\n    agent: 'fieldporter_simplified',\n    leadScore: data.leadScore,\n    emailCollected: !!data.userEmail,\n    phoneCollected: !!data.userPhone,\n    contactRequested: data.wantsContact || false\n  }\n};\n\nreturn formattedResponse;"
+      },
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.code",
+      "position": [120, 680],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.shouldNotify }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "check-notification",
+      "name": "Check if Need Notification",
+      "type": "n8n-nodes-base.if",
+      "position": [340, 800],
+      "typeVersion": 2.1
+    },
+    {
+      "parameters": {
+        "toRecipients": "freddy@fieldporter.com",
+        "subject": "=🔥 FIELDPORTER Lead: Score {{ $json.leadScore }}/10{{ $json.userEmail ? ' - ' + $json.userEmail : '' }}",
+        "bodyContent": "=<h2>🔥 New Lead from AI Chat</h2>\n<div style=\"background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;\">\n<p><strong>Lead Score:</strong> <span style=\"color: #d73a49; font-size: 18px;\">{{ $json.leadScore }}/10</span></p>\n<p><strong>Session ID:</strong> {{ $json.sessionId }}</p>\n{{ $json.userEmail ? '<p><strong>📧 Email:</strong> <a href=\"mailto:' + $json.userEmail + '\">' + $json.userEmail + '</a></p>' : '' }}\n{{ $json.userPhone ? '<p><strong>📞 Phone:</strong> ' + $json.userPhone + '</p>' : '' }}\n</div>\n\n<h3>💬 Latest Interaction</h3>\n<div style=\"background: #e3f2fd; padding: 15px; border-radius: 8px; margin: 10px 0;\">\n<p><strong>User Message:</strong> {{ $json.chatInput }}</p>\n</div>\n<div style=\"background: #f3e5f5; padding: 15px; border-radius: 8px; margin: 10px 0;\">\n<p><strong>AI Response:</strong> {{ $json.response }}</p>\n</div>\n\n<h3>📊 Lead Intelligence</h3>\n<div style=\"background: #e8f5e8; padding: 15px; border-radius: 8px; margin: 10px 0;\">\n<ul style=\"margin: 0; padding-left: 20px;\">\n<li>Contact Info Provided: <strong>{{ $json.metadata.emailCollected || $json.metadata.phoneCollected ? 'Yes ✅' : 'No ❌' }}</strong></li>\n<li>Contact Requested: <strong>{{ $json.metadata.contactRequested ? 'Yes ✅' : 'No ❌' }}</strong></li>\n<li>Message Count: <strong>{{ $json.messageCount }}</strong></li>\n<li>Timestamp: <strong>{{ $json.metadata.timestamp }}</strong></li>\n</ul>\n</div>",
+        "additionalFields": {
+          "importance": "High",
+          "bodyContentType": "html"
+        }
+      },
+      "id": "send-email",
+      "name": "Send Email Notification",
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "position": [560, 800],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ response: $json.response, sessionId: $json.sessionId, messageCount: $json.messageCount, metadata: $json.metadata }) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "id": "respond-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [560, 680],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Chat Trigger": {
+      "main": [
+        [
+          {
+            "node": "Check Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Input": {
+      "main": [
+        [
+          {
+            "node": "Process Input & Qualify Lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Initial Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Input & Qualify Lead": {
+      "main": [
+        [
+          {
+            "node": "FIELDPORTER AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FIELDPORTER AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "FIELDPORTER AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conversation Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "FIELDPORTER AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Lead Notification": {
+      "ai_tool": [
+        [
+          {
+            "node": "FIELDPORTER AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Response": {
+      "main": [
+        [
+          {
+            "node": "Check if Need Notification",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if Need Notification": {
+      "main": [
+        [
+          {
+            "node": "Send Email Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email Notification": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "fieldporter-simplified-workflow"
+  }
+}

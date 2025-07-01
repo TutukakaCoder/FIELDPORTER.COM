@@ -1,55 +1,50 @@
-import {
-  ContactHero,
-  ContactMethods,
-  SimpleContactForm,
-  WorkingStyleSection,
-} from '@/components/contact';
-import { PageWrapper } from '@/components/layout';
-import { Metadata } from 'next';
+import { ContactMethods } from "@/components/contact";
+import { SimpleContactForm } from "@/components/contact/simple-contact-form";
+import { PageWrapper } from "@/components/layout";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Strategic Research & Development Services | FIELDPORTER',
+  title: "Let's Talk About Your AI Project | FIELDPORTER",
   description:
-    'Strategic research intelligence, rapid development, workflow optimization, and AI training for businesses ready to implement solutions.',
+    "Whether you have a specific automation in mind or want to explore possibilities, we'll help you find the right approach.",
   keywords: [
-    'strategic research intelligence',
-    'rapid development',
-    'workflow optimization',
-    'AI training',
-    'business automation',
-    'AI consulting',
+    "AI project consultation",
+    "automation opportunities",
+    "AI possibilities",
+    "workflow optimization",
+    "AI training",
+    "business automation",
+    "AI consulting",
   ],
   openGraph: {
-    title: 'Strategic Research & Development Services | FIELDPORTER',
+    title: "Let's Talk About Your AI Project | FIELDPORTER",
     description:
-      'Strategic research intelligence, rapid development, workflow optimization, and AI training for businesses ready to implement solutions.',
-    type: 'website',
-    url: 'https://fieldporter.com/contact',
-    siteName: 'FIELDPORTER',
+      "Whether you have a specific automation in mind or want to explore possibilities, we'll help you find the right approach.",
+    type: "website",
+    url: "https://fieldporter.com/contact",
+    siteName: "FIELDPORTER",
     images: [
       {
-        url: '/og-image.jpg',
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: 'Strategic Research & Development Services - FIELDPORTER',
+        alt: "Let's Talk About Your AI Project - FIELDPORTER",
       },
     ],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Strategic Research & Development Services | FIELDPORTER',
+    card: "summary_large_image",
+    title: "Let's Talk About Your AI Project | FIELDPORTER",
     description:
-      'Strategic research intelligence, rapid development, workflow optimization, and AI training for businesses ready to implement solutions.',
-    images: ['/og-image.jpg'],
+      "Whether you have a specific automation in mind or want to explore possibilities, we'll help you find the right approach.",
+    images: ["/og-image.jpg"],
   },
 };
 
 export default function ContactPage() {
   return (
     <PageWrapper>
-      <ContactHero />
       <SimpleContactForm />
-      <WorkingStyleSection />
       <ContactMethods />
     </PageWrapper>
   );

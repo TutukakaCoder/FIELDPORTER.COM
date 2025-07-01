@@ -4,7 +4,7 @@
  * with performance optimization and accessibility support
  */
 
-'use client';
+"use client";
 
 import {
   animations,
@@ -14,10 +14,10 @@ import {
   mobileOptimizedAnimation,
   optimizedAnimation,
   TIMING,
-} from '@/lib/animations';
-import { cn } from '@/lib/utils';
-import { motion, MotionProps } from 'framer-motion';
-import React from 'react';
+} from "@/lib/animations";
+import { cn } from "@/lib/utils";
+import { motion, MotionProps } from "framer-motion";
+import React from "react";
 
 // ============================================================================
 // TYPES AND INTERFACES
@@ -28,14 +28,14 @@ interface AnimatedWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
 
   // Animation type selection
   animation?:
-    | 'fadeIn'
-    | 'slideUp'
-    | 'slideDown'
-    | 'scaleIn'
-    | 'scrollReveal'
-    | 'staggeredReveal'
-    | 'heroText'
-    | 'none';
+    | "fadeIn"
+    | "slideUp"
+    | "slideDown"
+    | "scaleIn"
+    | "scrollReveal"
+    | "staggeredReveal"
+    | "heroText"
+    | "none";
 
   // Interaction animations
   hover?: boolean;
@@ -67,16 +67,16 @@ interface AnimatedWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
 export const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({
   children,
   className,
-  animation = 'fadeIn',
+  animation = "fadeIn",
   hover = false,
   hoverScale = 1.02,
   threshold = 0.1,
-  margin = '0px 0px -100px 0px',
+  margin = "0px 0px -100px 0px",
   staggerDelay = TIMING.stagger.normal,
   optimized = true,
   mobileOptimized = true,
   motionProps = {},
-  as = 'div',
+  as = "div",
   delay = 0,
   ...props
 }) => {
@@ -89,7 +89,7 @@ export const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({
 
     // Select base animation
     switch (animation) {
-      case 'fadeIn':
+      case "fadeIn":
         baseProps = {
           initial: { opacity: 0 },
           animate: {
@@ -102,7 +102,7 @@ export const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({
         };
         break;
 
-      case 'slideUp':
+      case "slideUp":
         baseProps = {
           initial: { opacity: 0, y: 30 },
           animate: {
@@ -116,7 +116,7 @@ export const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({
         };
         break;
 
-      case 'slideDown':
+      case "slideDown":
         baseProps = {
           initial: { opacity: 0, y: -30 },
           animate: {
@@ -130,7 +130,7 @@ export const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({
         };
         break;
 
-      case 'scaleIn':
+      case "scaleIn":
         baseProps = {
           initial: { opacity: 0, scale: 0.95 },
           animate: {
@@ -144,23 +144,23 @@ export const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({
         };
         break;
 
-      case 'scrollReveal':
+      case "scrollReveal":
         baseProps = createViewportAnimation(threshold, margin);
         break;
 
-      case 'staggeredReveal':
+      case "staggeredReveal":
         baseProps = createStaggeredViewportAnimation(staggerDelay);
         break;
 
-      case 'heroText':
+      case "heroText":
         baseProps = {
           variants: animations.heroTextReveal,
-          initial: 'hidden',
-          animate: 'visible',
+          initial: "hidden",
+          animate: "visible",
         };
         break;
 
-      case 'none':
+      case "none":
         baseProps = {};
         break;
 
@@ -200,7 +200,6 @@ export const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({
   // RENDER
   // ============================================================================
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const MotionComponent = motion[as as keyof typeof motion] as any;
   const animationProps = getAnimationProps();
 
@@ -222,7 +221,10 @@ export const AnimatedPageContainer: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className }) => (
-  <AnimatedWrapper animation='staggeredReveal' className={cn('space-y-8', className)}>
+  <AnimatedWrapper
+    animation="staggeredReveal"
+    className={cn("space-y-8", className)}
+  >
     {children}
   </AnimatedWrapper>
 );
@@ -234,7 +236,7 @@ export const AnimatedHeroText: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className }) => (
-  <AnimatedWrapper animation='heroText' className={cn('space-y-4', className)}>
+  <AnimatedWrapper animation="heroText" className={cn("space-y-4", className)}>
     {children}
   </AnimatedWrapper>
 );
@@ -253,12 +255,12 @@ export const AnimatedCard: React.FC<{
     <Component
       href={href}
       className={cn(
-        'block rounded-lg border bg-card text-card-foreground shadow-sm transition-all',
-        className
+        "block rounded-lg border bg-card text-card-foreground shadow-sm transition-all",
+        className,
       )}
       variants={animations.cardHover}
-      initial='initial'
-      whileHover='hover'
+      initial="initial"
+      whileHover="hover"
       whileTap={{ scale: 0.98 }}
     >
       {children}
@@ -272,42 +274,50 @@ export const AnimatedCard: React.FC<{
 export const AnimatedButton: React.FC<{
   children: React.ReactNode;
   className?: string;
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
-  size?: 'default' | 'sm' | 'lg' | 'icon';
+  variant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
+  size?: "default" | "sm" | "lg" | "icon";
   onClick?: () => void;
   disabled?: boolean;
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
 }> = ({
   children,
   className,
-  variant = 'default',
-  size = 'default',
+  variant = "default",
+  size = "default",
   onClick,
   disabled = false,
-  type = 'button',
+  type = "button",
 }) => {
   const baseClasses = cn(
-    'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-    'disabled:pointer-events-none disabled:opacity-50',
+    "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+    "disabled:pointer-events-none disabled:opacity-50",
     {
       // Variants
-      'bg-primary text-primary-foreground hover:bg-primary/90': variant === 'default',
-      'bg-destructive text-destructive-foreground hover:bg-destructive/90':
-        variant === 'destructive',
-      'border border-input bg-background hover:bg-accent hover:text-accent-foreground':
-        variant === 'outline',
-      'bg-secondary text-secondary-foreground hover:bg-secondary/80': variant === 'secondary',
-      'hover:bg-accent hover:text-accent-foreground': variant === 'ghost',
-      'text-primary underline-offset-4 hover:underline': variant === 'link',
+      "bg-primary text-primary-foreground hover:bg-primary/90":
+        variant === "default",
+      "bg-destructive text-destructive-foreground hover:bg-destructive/90":
+        variant === "destructive",
+      "border border-input bg-background hover:bg-accent hover:text-accent-foreground":
+        variant === "outline",
+      "bg-secondary text-secondary-foreground hover:bg-secondary/80":
+        variant === "secondary",
+      "hover:bg-accent hover:text-accent-foreground": variant === "ghost",
+      "text-primary underline-offset-4 hover:underline": variant === "link",
 
       // Sizes
-      'h-10 px-4 py-2': size === 'default',
-      'h-9 rounded-md px-3': size === 'sm',
-      'h-11 rounded-md px-8': size === 'lg',
-      'h-10 w-10': size === 'icon',
+      "h-10 px-4 py-2": size === "default",
+      "h-9 rounded-md px-3": size === "sm",
+      "h-11 rounded-md px-8": size === "lg",
+      "h-10 w-10": size === "icon",
     },
-    className
+    className,
   );
 
   return (
@@ -317,8 +327,8 @@ export const AnimatedButton: React.FC<{
       onClick={onClick}
       disabled={disabled}
       variants={animations.buttonHover}
-      initial='initial'
-      {...(!disabled && { whileHover: 'hover', whileTap: 'tap' })}
+      initial="initial"
+      {...(!disabled && { whileHover: "hover", whileTap: "tap" })}
     >
       {children}
     </motion.button>
@@ -334,10 +344,10 @@ export const AnimatedSection: React.FC<{
   id?: string;
 }> = ({ children, className, id }) => (
   <AnimatedWrapper
-    as='section'
+    as="section"
     id={id}
-    animation='scrollReveal'
-    className={cn('py-16 md:py-24', className)}
+    animation="scrollReveal"
+    className={cn("py-16 md:py-24", className)}
   >
     {children}
   </AnimatedWrapper>
@@ -352,16 +362,16 @@ export const AnimatedGrid: React.FC<{
   cols?: 1 | 2 | 3 | 4;
 }> = ({ children, className, cols = 3 }) => (
   <AnimatedWrapper
-    animation='staggeredReveal'
+    animation="staggeredReveal"
     className={cn(
-      'grid gap-6',
+      "grid gap-6",
       {
-        'grid-cols-1': cols === 1,
-        'grid-cols-1 md:grid-cols-2': cols === 2,
-        'grid-cols-1 md:grid-cols-2 lg:grid-cols-3': cols === 3,
-        'grid-cols-1 md:grid-cols-2 lg:grid-cols-4': cols === 4,
+        "grid-cols-1": cols === 1,
+        "grid-cols-1 md:grid-cols-2": cols === 2,
+        "grid-cols-1 md:grid-cols-2 lg:grid-cols-3": cols === 3,
+        "grid-cols-1 md:grid-cols-2 lg:grid-cols-4": cols === 4,
       },
-      className
+      className,
     )}
   >
     {children}

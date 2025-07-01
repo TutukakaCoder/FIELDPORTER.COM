@@ -5,7 +5,7 @@ import type {
   FirestoreMessage,
   Message,
   OptimizedFirestoreConversation,
-} from '@/types/chat';
+} from "@/types/chat";
 import {
   Timestamp,
   arrayUnion,
@@ -17,18 +17,19 @@ import {
   limit,
   orderBy,
   query,
+  serverTimestamp,
   setDoc,
   updateDoc,
   where,
-} from 'firebase/firestore';
-import { db } from './firebase';
+} from "firebase/firestore";
+import { db } from "./firebase";
 
-const CONVERSATIONS_COLLECTION = 'conversations_v2';
+const CONVERSATIONS_COLLECTION = "conversations_v2";
 const RETRY_ATTEMPTS = 3;
 const RETRY_DELAY_BASE = 1000;
 
 const LEAD_SCORE_KEYWORDS = {
-  'ai strategy': 3,
+  "ai strategy": 3,
   enterprise: 2,
   automation: 2,
   consulting: 2,
@@ -38,11 +39,54 @@ const LEAD_SCORE_KEYWORDS = {
   urgent: 2,
 };
 
+interface OptimizedChatSession {
+  sessionId: string;
+  userId?: string;
+  email?: string;
+  phone?: string;
+  leadScore: number;
+  totalMessages: number;
+  messages: Array<{
+    id: string;
+    role: "user" | "assistant" | "system";
+    content: string;
+    timestamp: Timestamp;
+    leadScore?: number;
+    metadata?: Record<string, any>;
+  }>;
+  analytics: {
+    firstMessageAt: Timestamp;
+    lastActiveAt: Timestamp;
+    responseTimeMs: number[];
+    deviceType: "mobile" | "desktop";
+    conversationSource: string;
+    emailCollected: boolean;
+    phoneCollected: boolean;
+    notificationSent: boolean;
+    conversionEvents: string[];
+  };
+  qualification: {
+    currentScore: number;
+    maxScore: number;
+    signals: string[];
+    qualification:
+      | "unqualified"
+      | "browsing"
+      | "interested"
+      | "qualified"
+      | "hot";
+    lastUpdated: Timestamp;
+  };
+}
+
 export class OptimizedFirebaseChatService {
   private conversationId: string | null = null;
   private isOnline: boolean = true;
   private retryQueue: Array<() => Promise<unknown>> = [];
-  private conversationCache: Map<string, OptimizedFirestoreConversation> = new Map();
+  private conversationCache: Map<string, OptimizedFirestoreConversation> =
+    new Map();
+  private readonly COLLECTION_NAME = "chat_sessions";
+  private readonly MAX_MESSAGES_PER_SESSION = 50;
 
   constructor(sessionId: string) {
     this.conversationId = sessionId;
@@ -50,12 +94,12 @@ export class OptimizedFirebaseChatService {
   }
 
   private setupConnectionMonitoring(): void {
-    if (typeof window !== 'undefined') {
-      window.addEventListener('online', () => {
+    if (typeof window !== "undefined") {
+      window.addEventListener("online", () => {
         this.isOnline = true;
         this.processRetryQueue();
       });
-      window.addEventListener('offline', () => {
+      window.addEventListener("offline", () => {
         this.isOnline = false;
       });
     }
@@ -68,8 +112,8 @@ export class OptimizedFirebaseChatService {
         try {
           await operation();
         } catch (error) {
-          if (process.env.NODE_ENV === 'development') {
-            console.error('Error processing retry queue:', error);
+          if (process.env.NODE_ENV === "development") {
+            console.error("Error processing retry queue:", error);
           }
         }
       }
@@ -79,7 +123,7 @@ export class OptimizedFirebaseChatService {
   private async withRetry<T>(
     operation: () => Promise<T>,
     operationName: string,
-    sessionId?: string
+    sessionId?: string,
   ): Promise<T> {
     let lastError: Error | null = null;
 
@@ -88,13 +132,13 @@ export class OptimizedFirebaseChatService {
         return await operation();
       } catch (error) {
         lastError = error as Error;
-        if (process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === "development") {
           console.error(`${operationName} attempt ${attempt} failed:`, error);
         }
 
         if (attempt < RETRY_ATTEMPTS) {
           const delay = RETRY_DELAY_BASE * Math.pow(2, attempt - 1);
-          await new Promise(resolve => setTimeout(resolve, delay));
+          await new Promise((resolve) => setTimeout(resolve, delay));
         }
       }
     }
@@ -104,8 +148,8 @@ export class OptimizedFirebaseChatService {
     }
 
     const firebaseError: FirebaseError = {
-      code: (lastError as any)?.code || 'unknown',
-      message: lastError?.message || 'Unknown error',
+      code: (lastError as any)?.code || "unknown",
+      message: lastError?.message || "Unknown error",
       timestamp: new Date(),
       operation: operationName,
       sessionId,
@@ -130,7 +174,7 @@ export class OptimizedFirebaseChatService {
             lead_score: 1,
             service_interest: [],
             consultation_requested: false,
-            status: 'active',
+            status: "active",
           },
           analytics: {
             user_message_count: 0,
@@ -145,8 +189,8 @@ export class OptimizedFirebaseChatService {
         this.conversationCache.set(sessionId, conversationData);
         this.conversationId = sessionId;
       },
-      'createConversation',
-      sessionId
+      "createConversation",
+      sessionId,
     );
   }
 
@@ -157,7 +201,9 @@ export class OptimizedFirebaseChatService {
 
         const conversationSnap = await getDoc(conversationRef);
         if (!conversationSnap.exists()) {
-          await this.createConversation(sessionId);
+          throw new Error(
+            "Conversation does not exist. Create conversation before saving messages.",
+          );
         }
 
         const firestoreMessage: FirestoreMessage = {
@@ -172,7 +218,7 @@ export class OptimizedFirebaseChatService {
         await updateDoc(conversationRef, {
           messages: arrayUnion(firestoreMessage),
           last_active: now,
-          'metadata.messages_count': increment(1),
+          "metadata.messages_count": increment(1),
           [`analytics.${message.role}_message_count`]: increment(1),
         });
 
@@ -181,15 +227,15 @@ export class OptimizedFirebaseChatService {
           cachedConversation.messages.push(firestoreMessage);
           cachedConversation.metadata.messages_count++;
           cachedConversation.last_active = now;
-          if (message.role === 'user') {
+          if (message.role === "user") {
             cachedConversation.analytics.user_message_count++;
-          } else if (message.role === 'assistant') {
+          } else if (message.role === "assistant") {
             cachedConversation.analytics.assistant_message_count++;
           }
         }
       },
-      'saveMessage',
-      sessionId
+      "saveMessage",
+      sessionId,
     );
   }
 
@@ -198,7 +244,9 @@ export class OptimizedFirebaseChatService {
       async () => {
         const cachedConversation = this.conversationCache.get(sessionId);
         if (cachedConversation && cachedConversation.messages.length > 0) {
-          return this.convertFirestoreMessagesToMessages(cachedConversation.messages);
+          return this.convertFirestoreMessagesToMessages(
+            cachedConversation.messages,
+          );
         }
 
         const conversationRef = doc(db, CONVERSATIONS_COLLECTION, sessionId);
@@ -213,12 +261,14 @@ export class OptimizedFirebaseChatService {
 
         return this.convertFirestoreMessagesToMessages(data.messages || []);
       },
-      'getConversationHistory',
-      sessionId
+      "getConversationHistory",
+      sessionId,
     );
   }
 
-  private convertFirestoreMessagesToMessages(firestoreMessages: FirestoreMessage[]): Message[] {
+  private convertFirestoreMessagesToMessages(
+    firestoreMessages: FirestoreMessage[],
+  ): Message[] {
     return firestoreMessages
       .sort((a, b) => a.timestamp.toMillis() - b.timestamp.toMillis())
       .map((data, index) => ({
@@ -226,14 +276,14 @@ export class OptimizedFirebaseChatService {
         content: data.content,
         role: data.role,
         timestamp: data.timestamp.toDate(),
-        status: 'sent' as const,
+        status: "sent" as const,
         message_id: data.message_id,
       }));
   }
 
   async updateConversationMetadata(
     sessionId: string,
-    metadata: Partial<OptimizedFirestoreConversation['metadata']>
+    metadata: Partial<OptimizedFirestoreConversation["metadata"]>,
   ): Promise<void> {
     await this.withRetry(
       async () => {
@@ -255,8 +305,8 @@ export class OptimizedFirebaseChatService {
           cachedConversation.last_active = Timestamp.now();
         }
       },
-      'updateConversationMetadata',
-      sessionId
+      "updateConversationMetadata",
+      sessionId,
     );
   }
 
@@ -273,7 +323,8 @@ export class OptimizedFirebaseChatService {
             return 1;
           }
 
-          conversation = conversationSnap.data() as OptimizedFirestoreConversation;
+          conversation =
+            conversationSnap.data() as OptimizedFirestoreConversation;
           this.conversationCache.set(sessionId, conversation);
         }
 
@@ -287,8 +338,8 @@ export class OptimizedFirebaseChatService {
 
         if (conversation.metadata.consultation_requested) score += 5;
 
-        conversation.messages.forEach(message => {
-          if (message.role === 'user') {
+        conversation.messages.forEach((message) => {
+          if (message.role === "user") {
             const content = message.content.toLowerCase();
             Object.entries(LEAD_SCORE_KEYWORDS).forEach(([keyword, points]) => {
               if (content.includes(keyword)) {
@@ -300,12 +351,14 @@ export class OptimizedFirebaseChatService {
 
         const finalScore = Math.min(Math.round(score), 10);
 
-        await this.updateConversationMetadata(sessionId, { lead_score: finalScore });
+        await this.updateConversationMetadata(sessionId, {
+          lead_score: finalScore,
+        });
 
         return finalScore;
       },
-      'calculateLeadScore',
-      sessionId
+      "calculateLeadScore",
+      sessionId,
     );
   }
 
@@ -319,8 +372,8 @@ export class OptimizedFirebaseChatService {
           lead_score: Math.min(currentScore + 3, 10),
         });
       },
-      'setUserEmail',
-      sessionId
+      "setUserEmail",
+      sessionId,
     );
   }
 
@@ -329,15 +382,16 @@ export class OptimizedFirebaseChatService {
       const conversationsRef = collection(db, CONVERSATIONS_COLLECTION);
       const activeQuery = query(
         conversationsRef,
-        where('metadata.status', 'in', ['active', 'qualified']),
-        orderBy('last_active', 'desc'),
-        limit(50)
+        where("metadata.status", "in", ["active", "qualified"]),
+        orderBy("last_active", "desc"),
+        limit(50),
       );
 
       const snapshot = await getDocs(activeQuery);
-      return snapshot.docs.map(doc => {
+      return snapshot.docs.map((doc) => {
         const data = doc.data() as OptimizedFirestoreConversation;
-        const sessionDuration = data.last_active.toMillis() - data.created_at.toMillis();
+        const sessionDuration =
+          data.last_active.toMillis() - data.created_at.toMillis();
 
         return {
           sessionId: doc.id,
@@ -352,7 +406,7 @@ export class OptimizedFirebaseChatService {
           session_duration_minutes: Math.round(sessionDuration / (1000 * 60)),
         };
       });
-    }, 'getActiveConversations');
+    }, "getActiveConversations");
   }
 
   async getDailyStats(): Promise<ChatAnalytics> {
@@ -362,28 +416,48 @@ export class OptimizedFirebaseChatService {
       const todayTimestamp = Timestamp.fromDate(today);
 
       const conversationsRef = collection(db, CONVERSATIONS_COLLECTION);
-      const todayQuery = query(conversationsRef, where('created_at', '>=', todayTimestamp));
+      const todayQuery = query(
+        conversationsRef,
+        where("created_at", ">=", todayTimestamp),
+      );
 
       const snapshot = await getDocs(todayQuery);
-      const conversations = snapshot.docs.map(doc => doc.data() as OptimizedFirestoreConversation);
+      const conversations = snapshot.docs.map(
+        (doc) => doc.data() as OptimizedFirestoreConversation,
+      );
 
       const totalConversations = conversations.length;
-      const activeConversations = conversations.filter(c => c.metadata.status === 'active').length;
-      const conversationsWithEmail = conversations.filter(c => c.metadata.email).length;
+      const activeConversations = conversations.filter(
+        (c) => c.metadata.status === "active",
+      ).length;
+      const conversationsWithEmail = conversations.filter(
+        (c) => c.metadata.email,
+      ).length;
       const consultationRequests = conversations.filter(
-        c => c.metadata.consultation_requested
+        (c) => c.metadata.consultation_requested,
       ).length;
 
-      const totalMessages = conversations.reduce((sum, c) => sum + c.metadata.messages_count, 0);
-      const averageMessages = totalConversations > 0 ? totalMessages / totalConversations : 0;
+      const totalMessages = conversations.reduce(
+        (sum, c) => sum + c.metadata.messages_count,
+        0,
+      );
+      const averageMessages =
+        totalConversations > 0 ? totalMessages / totalConversations : 0;
 
-      const totalLeadScore = conversations.reduce((sum, c) => sum + c.metadata.lead_score, 0);
-      const averageLeadScore = totalConversations > 0 ? totalLeadScore / totalConversations : 0;
+      const totalLeadScore = conversations.reduce(
+        (sum, c) => sum + c.metadata.lead_score,
+        0,
+      );
+      const averageLeadScore =
+        totalConversations > 0 ? totalLeadScore / totalConversations : 0;
 
       const serviceInterestMap = new Map<string, number>();
-      conversations.forEach(c => {
-        c.metadata.service_interest.forEach(service => {
-          serviceInterestMap.set(service, (serviceInterestMap.get(service) || 0) + 1);
+      conversations.forEach((c) => {
+        c.metadata.service_interest.forEach((service) => {
+          serviceInterestMap.set(
+            service,
+            (serviceInterestMap.get(service) || 0) + 1,
+          );
         });
       });
 
@@ -396,19 +470,23 @@ export class OptimizedFirebaseChatService {
         total_conversations: totalConversations,
         active_conversations: activeConversations,
         email_capture_rate:
-          totalConversations > 0 ? (conversationsWithEmail / totalConversations) * 100 : 0,
+          totalConversations > 0
+            ? (conversationsWithEmail / totalConversations) * 100
+            : 0,
         consultation_requests: consultationRequests,
-        average_messages_per_conversation: Math.round(averageMessages * 10) / 10,
+        average_messages_per_conversation:
+          Math.round(averageMessages * 10) / 10,
         average_lead_score: Math.round(averageLeadScore * 10) / 10,
         top_service_interests: topServiceInterests,
         conversion_funnel: {
           visitors: totalConversations,
-          engaged: conversations.filter(c => c.metadata.messages_count > 3).length,
+          engaged: conversations.filter((c) => c.metadata.messages_count > 3)
+            .length,
           qualified: conversationsWithEmail,
           consultation_requested: consultationRequests,
         },
       };
-    }, 'getDailyStats');
+    }, "getDailyStats");
   }
 
   async getPerformanceMetrics(sessionId: string): Promise<{
@@ -454,6 +532,196 @@ export class OptimizedFirebaseChatService {
     return {
       size: this.conversationCache.size,
       keys: Array.from(this.conversationCache.keys()),
+    };
+  }
+
+  async createOrUpdateSession(
+    sessionId: string,
+    message: Message,
+    leadScore: number = 1,
+    metadata: Record<string, any> = {},
+  ): Promise<void> {
+    try {
+      const sessionRef = doc(db, this.COLLECTION_NAME, sessionId);
+      const sessionSnap = await getDoc(sessionRef);
+
+      const messageData: {
+        id: string;
+        role: "user" | "assistant" | "system";
+        content: string;
+        timestamp: Timestamp;
+        leadScore?: number;
+        metadata?: Record<string, any>;
+      } = {
+        id: message.id,
+        role: message.role,
+        content: message.content,
+        timestamp: Timestamp.now(),
+        ...(message.role === "user" ? { leadScore } : {}),
+        ...(message.role === "user" ? { metadata } : {}),
+      };
+
+      if (!sessionSnap.exists()) {
+        // Create new session
+        const newSession: OptimizedChatSession = {
+          sessionId,
+          email: metadata["email"] || undefined,
+          phone: metadata["phone"] || undefined,
+          leadScore,
+          totalMessages: 1,
+          messages: [messageData],
+          analytics: {
+            firstMessageAt: Timestamp.now(),
+            lastActiveAt: Timestamp.now(),
+            responseTimeMs: [],
+            deviceType: metadata["deviceType"] || "desktop",
+            conversationSource: metadata["source"] || "chat_widget",
+            emailCollected: !!metadata["email"],
+            phoneCollected: !!metadata["phone"],
+            notificationSent: false,
+            conversionEvents: [],
+          },
+          qualification: {
+            currentScore: leadScore,
+            maxScore: leadScore,
+            signals: metadata["qualificationSignals"] || [],
+            qualification: this.getQualificationLevel(leadScore),
+            lastUpdated: Timestamp.now(),
+          },
+        };
+
+        await setDoc(sessionRef, newSession);
+      } else {
+        // Update existing session
+        const updateData: any = {
+          totalMessages: increment(1),
+          messages: arrayUnion(messageData),
+          "analytics.lastActiveAt": serverTimestamp(),
+          "qualification.lastUpdated": serverTimestamp(),
+        };
+
+        // Update lead score if higher
+        const sessionData = sessionSnap.data();
+        if (
+          sessionData &&
+          leadScore > (sessionData["qualification"]?.["currentScore"] || 0)
+        ) {
+          updateData.leadScore = leadScore;
+          updateData["qualification.currentScore"] = leadScore;
+          updateData["qualification.maxScore"] = Math.max(
+            leadScore,
+            sessionData["qualification"]?.["maxScore"] || 0,
+          );
+          updateData["qualification.qualification"] =
+            this.getQualificationLevel(leadScore);
+        }
+
+        // Update contact info if provided
+        if (sessionData && metadata["email"] && !sessionData["email"]) {
+          updateData.email = metadata["email"];
+          updateData["analytics.emailCollected"] = true;
+        }
+
+        if (sessionData && metadata["phone"] && !sessionData["phone"]) {
+          updateData.phone = metadata["phone"];
+          updateData["analytics.phoneCollected"] = true;
+        }
+
+        // Add response time if provided
+        if (metadata["responseTime"]) {
+          updateData["analytics.responseTimeMs"] = arrayUnion(
+            metadata["responseTime"],
+          );
+        }
+
+        // Track qualification signals
+        if (sessionData && metadata["qualificationSignals"]?.length > 0) {
+          const existingSignals =
+            sessionData["qualification"]?.["signals"] || [];
+          const newSignals = [
+            ...existingSignals,
+            ...metadata["qualificationSignals"],
+          ];
+          updateData["qualification.signals"] = [...new Set(newSignals)]; // Remove duplicates
+        }
+
+        await updateDoc(sessionRef, updateData);
+      }
+    } catch (error) {
+      console.error("Failed to save chat session:", error);
+      // Don't throw - chat should continue even if Firebase fails
+    }
+  }
+
+  async getSession(sessionId: string): Promise<OptimizedChatSession | null> {
+    try {
+      const sessionRef = doc(db, this.COLLECTION_NAME, sessionId);
+      const sessionSnap = await getDoc(sessionRef);
+
+      if (sessionSnap.exists()) {
+        return sessionSnap.data() as OptimizedChatSession;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Failed to get chat session:", error);
+      return null;
+    }
+  }
+
+  async markNotificationSent(sessionId: string): Promise<void> {
+    try {
+      const sessionRef = doc(db, this.COLLECTION_NAME, sessionId);
+      await updateDoc(sessionRef, {
+        "analytics.notificationSent": true,
+        "analytics.conversionEvents": arrayUnion("notification_sent"),
+      });
+    } catch (error) {
+      console.error("Failed to mark notification sent:", error);
+    }
+  }
+
+  async trackConversionEvent(
+    sessionId: string,
+    eventType: string,
+  ): Promise<void> {
+    try {
+      const sessionRef = doc(db, this.COLLECTION_NAME, sessionId);
+      await updateDoc(sessionRef, {
+        "analytics.conversionEvents": arrayUnion(eventType),
+        "analytics.lastActiveAt": serverTimestamp(),
+      });
+    } catch (error) {
+      console.error("Failed to track conversion event:", error);
+    }
+  }
+
+  private getQualificationLevel(
+    score: number,
+  ): OptimizedChatSession["qualification"]["qualification"] {
+    if (score >= 15) return "hot";
+    if (score >= 10) return "qualified";
+    if (score >= 7) return "interested";
+    if (score >= 3) return "browsing";
+    return "unqualified";
+  }
+
+  // Analytics methods
+  async getSessionAnalytics(): Promise<{
+    totalSessions: number;
+    activeSessions: number;
+    emailCaptureRate: number;
+    qualificationRate: number;
+    averageLeadScore: number;
+  }> {
+    // This would typically use Firebase Functions or server-side aggregation
+    // For now, return placeholder data
+    return {
+      totalSessions: 0,
+      activeSessions: 0,
+      emailCaptureRate: 0,
+      qualificationRate: 0,
+      averageLeadScore: 0,
     };
   }
 }

@@ -61,6 +61,7 @@
     "dist",
     "build",
     "coverage",
+    "archive",
     "**/*.test.ts",
     "**/*.test.tsx",
     "**/*.spec.ts",

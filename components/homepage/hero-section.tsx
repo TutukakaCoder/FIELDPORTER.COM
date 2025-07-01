@@ -1,314 +1,395 @@
-'use client';
+"use client";
 
-import { motion, useInView, useScroll, useSpring, useTransform, Variants } from 'framer-motion';
-import { Brain, Code2, Search, Zap } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { motion, useInView, Variants } from "framer-motion";
+import {
+  ArrowRight,
+  MessageSquare,
+  Search,
+  Sparkles,
+  Workflow,
+  Zap,
+} from "lucide-react";
+import { useRef } from "react";
 
-// Service pillar data with enhanced premium styling and navigation
+// Enhanced service pillar data with more human, conversational descriptions
 const servicePillars = [
   {
     icon: Search,
-    title: 'Strategic Research',
-    description: 'Get market insights in hours, not days',
-    gradient: 'from-emerald-600/30 to-teal-600/30',
-    border: 'border-emerald-400/40',
-    iconColor: 'text-emerald-300',
-    glowColor: 'bg-emerald-500/20',
-    hoverGlow: 'shadow-[0_0_30px_rgba(16,185,129,0.6)]',
-    textGlow: 'drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]',
-    href: '/services#strategic-research',
-  },
-  {
-    icon: Code2,
-    title: 'Rapid Development',
-    description: 'Build AI solutions for your specific needs',
-    gradient: 'from-orange-600/30 to-red-600/30',
-    border: 'border-orange-400/40',
-    iconColor: 'text-orange-300',
-    glowColor: 'bg-orange-500/20',
-    hoverGlow: 'shadow-[0_0_30px_rgba(249,115,22,0.6)]',
-    textGlow: 'drop-shadow-[0_0_8px_rgba(249,115,22,0.3)]',
-    href: '/services#rapid-development',
+    title: "Smart Research",
+    description: "Get answers that others miss",
+    iconColor: "text-emerald-400",
+    gradientFrom: "emerald-500",
+    gradientTo: "teal-500",
+    hoverGlow: "shadow-[0_0_25px_rgba(16,185,129,0.12)]",
+    hoverBorder: "hover:border-emerald-500/25",
+    cardBorder: "border-emerald-500/15",
+    href: "/services#strategic-research",
+    cardClass:
+      "bg-gradient-to-br from-emerald-500/5 to-teal-500/5 border-emerald-500/15",
+    iconBg: "bg-emerald-500/10",
   },
   {
     icon: Zap,
-    title: 'Workflow Optimization',
-    description: 'Make repetitive tasks run themselves',
-    gradient: 'from-purple-600/30 to-pink-600/30',
-    border: 'border-purple-400/40',
-    iconColor: 'text-purple-300',
-    glowColor: 'bg-purple-500/20',
-    hoverGlow: 'shadow-[0_0_30px_rgba(168,85,247,0.6)]',
-    textGlow: 'drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]',
-    href: '/services#workflow-optimization',
+    title: "Rapid AI Builds",
+    description: "Working prototypes in days",
+    iconColor: "text-blue-400",
+    gradientFrom: "blue-500",
+    gradientTo: "indigo-500",
+    hoverGlow: "shadow-[0_0_25px_rgba(59,130,246,0.12)]",
+    hoverBorder: "hover:border-blue-500/25",
+    cardBorder: "border-blue-500/15",
+    href: "/services#rapid-development",
+    cardClass:
+      "bg-gradient-to-br from-blue-500/5 to-indigo-500/5 border-blue-500/15",
+    iconBg: "bg-blue-500/10",
   },
   {
-    icon: Brain,
-    title: 'AI Training',
-    description: 'Learn which tools are right for you',
-    gradient: 'from-blue-600/30 to-cyan-600/30',
-    border: 'border-blue-400/40',
-    iconColor: 'text-blue-300',
-    glowColor: 'bg-blue-500/20',
-    hoverGlow: 'shadow-[0_0_30px_rgba(59,130,246,0.6)]',
-    textGlow: 'drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]',
-    href: '/services#ai-training',
+    icon: Workflow,
+    title: "Workflow Magic",
+    description: "Automate the repetitive stuff",
+    iconColor: "text-purple-400",
+    gradientFrom: "purple-500",
+    gradientTo: "violet-500",
+    hoverGlow: "shadow-[0_0_25px_rgba(168,85,247,0.12)]",
+    hoverBorder: "hover:border-purple-500/25",
+    cardBorder: "border-purple-500/15",
+    href: "/services#workflow-optimization",
+    cardClass:
+      "bg-gradient-to-br from-purple-500/5 to-violet-500/5 border-purple-500/15",
+    iconBg: "bg-purple-500/10",
+  },
+  {
+    icon: Sparkles,
+    title: "AI Strategy",
+    description: "Pick tools that actually work",
+    iconColor: "text-orange-400",
+    gradientFrom: "orange-500",
+    gradientTo: "amber-500",
+    hoverGlow: "shadow-[0_0_25px_rgba(249,115,22,0.12)]",
+    hoverBorder: "hover:border-orange-500/25",
+    cardBorder: "border-orange-500/15",
+    href: "/services#ai-training",
+    cardClass:
+      "bg-gradient-to-br from-orange-500/5 to-amber-500/5 border-orange-500/15",
+    iconBg: "bg-orange-500/10",
   },
 ];
 
-// Premium aurora background with dramatic effects
-function PremiumAuroraBackground() {
-  return (
-    <div className='absolute inset-0 overflow-hidden'>
-      {/* Sophisticated gradient base */}
-      <div className='absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black' />
+// Floating orb component for depth and movement
+const FloatingOrb = ({
+  className,
+  delay = 0,
+}: {
+  className: string;
+  delay?: number;
+}) => (
+  <motion.div
+    className={`absolute w-32 h-32 rounded-full ${className}`}
+    animate={{
+      y: [0, -30, 0],
+      x: [0, 20, 0],
+    }}
+    transition={{
+      duration: 6 + delay,
+      repeat: Infinity,
+      ease: "easeInOut",
+    }}
+  >
+    <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-400/10 to-purple-400/10 blur-xl" />
+  </motion.div>
+);
 
-      {/* Large dramatic aurora blobs */}
+// Interactive background pattern
+function BackgroundPattern() {
+  return (
+    <div className="absolute inset-0 overflow-hidden opacity-30">
+      <svg className="absolute w-full h-full">
+        <defs>
+          <pattern
+            id="grid"
+            width="40"
+            height="40"
+            patternUnits="userSpaceOnUse"
+          >
+            <path
+              d="M 40 0 L 0 0 0 40"
+              fill="none"
+              stroke="rgba(255,255,255,0.03)"
+              strokeWidth="1"
+            />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)" />
+      </svg>
+
+      {/* Animated gradient overlay */}
       <motion.div
-        className='absolute -top-1/2 -left-1/2 w-[800px] h-[800px] rounded-full opacity-30 blur-[120px]'
-        style={{
-          background: 'linear-gradient(45deg, rgba(59, 130, 246, 0.4), rgba(168, 85, 247, 0.3))',
-        }}
+        className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5"
         animate={{
-          x: [0, 200, -100, 0],
-          y: [0, -150, 100, 0],
-          scale: [1, 1.2, 0.8, 1],
-          rotate: [0, 180, 360],
+          backgroundPosition: ["0% 0%", "100% 100%"],
         }}
         transition={{
           duration: 20,
           repeat: Infinity,
-          ease: 'linear',
+          repeatType: "reverse",
         }}
+        style={{ backgroundSize: "200% 200%" }}
       />
-
-      <motion.div
-        className='absolute -top-1/3 -right-1/3 w-[600px] h-[600px] rounded-full opacity-25 blur-[100px]'
-        style={{
-          background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(6, 182, 212, 0.4))',
-        }}
-        animate={{
-          x: [0, -150, 120, 0],
-          y: [0, 100, -80, 0],
-          scale: [1, 0.9, 1.1, 1],
-          rotate: [0, -90, -180, -360],
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: 'linear',
-          delay: 5,
-        }}
-      />
-
-      {/* Interactive spotlight */}
-      <InteractiveSpotlight />
     </div>
   );
 }
 
-// Enhanced interactive spotlight
-function InteractiveSpotlight() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
+// Premium aurora background with enhanced sophistication and performance optimization
+function PremiumAuroraBackground() {
   return (
-    <div
-      className='fixed inset-0 pointer-events-none z-5'
-      style={{
-        background: `radial-gradient(600px at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.15), transparent 50%)`,
-      }}
-    />
+    <div className="absolute inset-0 overflow-hidden">
+      {/* Sophisticated gradient base */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black" />
+
+      {/* Enhanced grain texture overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.015]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat",
+        }}
+      />
+
+      {/* Large dramatic aurora blobs with hardware acceleration */}
+      <motion.div
+        className="absolute -top-1/2 -left-1/2 w-[600px] h-[600px] rounded-full opacity-20 blur-[100px]"
+        style={{
+          background:
+            "linear-gradient(45deg, rgba(16, 185, 129, 0.3), rgba(59, 130, 246, 0.2))",
+          willChange: "transform",
+          backfaceVisibility: "hidden",
+          transform: "translateZ(0)",
+        }}
+        animate={{
+          x: [0, 150, -100, 0],
+          y: [0, -100, 80, 0],
+          scale: [1, 1.1, 0.9, 1],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "linear",
+          type: "tween",
+        }}
+      />
+
+      <motion.div
+        className="absolute -top-1/3 -right-1/3 w-[500px] h-[500px] rounded-full opacity-15 blur-[80px]"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(249, 115, 22, 0.2))",
+          willChange: "transform",
+          backfaceVisibility: "hidden",
+          transform: "translateZ(0)",
+        }}
+        animate={{
+          x: [0, -120, 100, 0],
+          y: [0, 80, -60, 0],
+          scale: [1, 0.9, 1.1, 1],
+        }}
+        transition={{
+          duration: 25,
+          repeat: Infinity,
+          ease: "linear",
+          delay: 5,
+          type: "tween",
+        }}
+      />
+    </div>
   );
 }
 
-// Premium service card with enhanced animations
-function PremiumServiceCard({
+// Premium 3D Service Card with sequential flip-in animation
+function ServiceCard3D({
   service,
   index,
 }: {
   service: (typeof servicePillars)[0];
   index: number;
 }) {
-  const [isHovering, setIsHovering] = useState(false);
-  const Icon = service.icon;
-
   const handleClick = () => {
     window.location.href = service.href;
   };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30, scale: 0.9 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{
-        type: 'spring',
-        damping: 20,
-        stiffness: 100,
-        delay: index * 0.15 + 0.4,
+      className="group cursor-pointer h-full"
+      initial={{
+        opacity: 0,
+        rotateY: -90,
+        z: -100,
+        scale: 0.8,
       }}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
+      animate={{
+        opacity: 1,
+        rotateY: 0,
+        z: 0,
+        scale: 1,
+      }}
+      transition={{
+        delay: index * 0.15, // Stagger each card
+        duration: 0.8,
+        ease: [0.23, 1, 0.32, 1], // Premium easing
+      }}
+      style={{
+        transformPerspective: 1000,
+        transformStyle: "preserve-3d",
+      }}
       onClick={handleClick}
-      className={`
-        relative group p-6 rounded-2xl backdrop-blur-2xl border cursor-pointer
-        ${service.border}
-        bg-gradient-to-br ${service.gradient}
-        hover:bg-white/5 transition-all duration-500 ease-out
-        ${isHovering ? service.hoverGlow : ''}
-        will-change-transform
-        flex-1 min-w-0
-      `}
     >
-      {/* Enhanced glassmorphism layers */}
-      <div className='absolute inset-0 bg-white/[0.02] backdrop-blur-2xl rounded-2xl' />
-      <div className='absolute inset-0 rounded-2xl border border-white/10' />
-
-      {/* Premium glow effect */}
-      {isHovering && (
-        <motion.div
-          className={`absolute -inset-1 rounded-2xl ${service.glowColor} blur-2xl`}
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1.1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-        />
-      )}
-
-      {/* Content with premium spacing */}
-      <div className='relative z-10 text-center space-y-4'>
-        <motion.div
-          className='flex justify-center'
-          whileHover={{
-            scale: 1.25,
-            y: -4,
-            rotate: [0, -5, 5, 0],
-          }}
-          transition={{
-            type: 'spring',
-            damping: 12,
-            stiffness: 200,
-            rotate: { duration: 0.6 },
-          }}
-        >
-          <div
-            className={`
-            p-3 rounded-xl ${service.glowColor} ${service.border} backdrop-blur-lg
-            ${isHovering ? service.textGlow : ''}
-            transition-all duration-300
-          `}
-          >
-            <Icon className={`w-7 h-7 ${service.iconColor}`} />
-          </div>
-        </motion.div>
-
-        <div className='space-y-3'>
-          <motion.h3
-            className={`
-              text-lg font-bold text-white leading-tight
-              group-hover:text-blue-100 transition-all duration-300
-              ${isHovering ? 'drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]' : ''}
-            `}
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: 'spring', damping: 15, stiffness: 300 }}
-          >
-            {service.title}
-          </motion.h3>
-
-          <motion.p
-            className={`
-              text-gray-300 text-sm leading-relaxed font-medium
-              group-hover:text-gray-200 transition-all duration-300
-              ${isHovering ? service.textGlow : ''}
-            `}
-          >
-            {service.description}
-          </motion.p>
-        </div>
-      </div>
-
-      {/* Subtle shine effect */}
       <motion.div
-        className='absolute inset-0 rounded-2xl'
-        style={{
-          background:
-            'linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)',
-          opacity: 0,
-        }}
+        className={`
+          relative h-full p-8 rounded-2xl backdrop-blur-xl border
+          ${service.cardClass} hover:bg-white/[0.03] ${service.hoverBorder}
+          transition-all duration-400 ease-out
+          hover:shadow-xl ${service.hoverGlow}
+          will-change-transform
+        `}
         whileHover={{
-          opacity: [0, 0.3, 0],
-          x: [-100, 100],
+          y: -8,
+          rotateY: 5,
+          rotateX: -5,
+          transition: { duration: 0.3 },
         }}
-        transition={{ duration: 0.8, ease: 'easeInOut' }}
-      />
+        style={{ transformStyle: "preserve-3d" }}
+      >
+        {/* Enhanced glassmorphism layers */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.06] to-transparent rounded-2xl opacity-40" />
+        <div
+          className={`absolute inset-0 rounded-2xl border ${service.cardBorder} opacity-30`}
+        />
+
+        <div
+          className="relative z-10 h-full flex flex-col text-center"
+          style={{ transform: "translateZ(20px)" }}
+        >
+          {/* Enhanced icon with 3D depth */}
+          <motion.div
+            className={`
+              mx-auto p-4 rounded-xl ${service.iconBg} border border-white/15 backdrop-blur-lg 
+              transition-all duration-300 group-hover:bg-white/12 mb-6
+            `}
+            whileHover={{
+              rotate: [0, -8, 8, -8, 0],
+              scale: 1.05,
+              transition: { duration: 0.5 },
+            }}
+            style={{ transform: "translateZ(10px)" }}
+          >
+            <service.icon className={`w-8 h-8 ${service.iconColor}`} />
+          </motion.div>
+
+          {/* Enhanced content */}
+          <div className="flex-1 space-y-4 flex flex-col justify-center">
+            <h3
+              className={`
+                text-xl font-medium text-white leading-tight 
+                group-hover:${service.iconColor} transition-colors duration-300
+                tracking-[-0.01em]
+              `}
+            >
+              {service.title}
+            </h3>
+            <p className="text-lg text-gray-300 leading-relaxed group-hover:text-white transition-colors duration-300 max-w-xs mx-auto">
+              {service.description}
+            </p>
+          </div>
+
+          {/* Enhanced hover indicator */}
+          <motion.div
+            className="opacity-0 group-hover:opacity-60 transition-all duration-300 mt-4"
+            whileHover={{ x: 3 }}
+          >
+            <div className="flex items-center justify-center">
+              <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-white transition-colors" />
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
     </motion.div>
+  );
+}
+
+// Animated call-to-action button
+function AnimatedCTA() {
+  return (
+    <motion.button
+      className="group relative px-8 py-4 overflow-hidden rounded-2xl border border-white/10 backdrop-blur-sm"
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      onClick={() => {
+        // Target the dialog trigger specifically
+        const chatButton = document.querySelector("[data-chat-trigger]");
+        if (chatButton) {
+          (chatButton as HTMLElement).click();
+        }
+      }}
+    >
+      {/* Subtle premium background animation */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-r from-fieldporter-blue/20 via-indigo-500/30 to-fieldporter-blue/20"
+        animate={{
+          backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+        style={{
+          backgroundSize: "200% 200%",
+        }}
+      />
+
+      {/* Premium glassmorphism overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-white/[0.05] to-white/[0.02] rounded-2xl" />
+
+      {/* Button content */}
+      <span className="relative z-10 flex items-center gap-2 text-white font-medium">
+        <MessageSquare className="w-5 h-5" />
+        <span>Chat with our AI</span>
+        <motion.span
+          animate={{ x: [0, 2, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
+          →
+        </motion.span>
+      </span>
+    </motion.button>
   );
 }
 
 export function HeroSection() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-10%' });
+  const isInView = useInView(ref, { once: true, margin: "-10%" });
 
-  const { scrollY } = useScroll();
+  const textReveal: Variants = {
+    hidden: { opacity: 0, y: 25, filter: "blur(3px)" },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: {
+        type: "spring",
+        damping: 25,
+        stiffness: 100,
+        duration: 0.7,
+      },
+    },
+  };
 
-  // Premium scroll parallax effects
-  const contentY = useTransform(scrollY, [0, 800], [0, -200]);
-  const backgroundY = useTransform(scrollY, [0, 800], [0, 400]);
-  const opacity = useTransform(scrollY, [0, 400, 800], [1, 0.8, 0]);
-
-  const springContentY = useSpring(contentY, { damping: 30, stiffness: 100 });
-  const springOpacity = useSpring(opacity, { damping: 30, stiffness: 100 });
-
-  // Premium headline animation
-  const headline = ['Learn AI.', 'Automate work.', 'Save time.'];
-
-  const containerVariants: Variants = {
+  const staggerContainer: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const headlineVariants: Variants = {
-    hidden: {
-      opacity: 0,
-      y: 40,
-      scale: 0.9,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        type: 'spring',
-        damping: 20,
-        stiffness: 80,
-      },
-    },
-  };
-
-  const subheadingVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: 'spring',
-        damping: 20,
-        stiffness: 100,
-        delay: 0.3,
+        staggerChildren: 0.12,
+        delayChildren: 0.15,
       },
     },
   };
@@ -316,210 +397,97 @@ export function HeroSection() {
   return (
     <section
       ref={ref}
-      data-cursor-zone='hero'
-      className='relative h-screen overflow-hidden pt-16 md:pt-20'
+      className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden py-28 md:py-32 lg:py-40"
     >
-      {/* Premium animated background */}
-      <motion.div style={{ y: backgroundY }} className='absolute inset-0'>
-        <PremiumAuroraBackground />
-      </motion.div>
+      <PremiumAuroraBackground />
+      <BackgroundPattern />
 
-      {/* Perfectly centered main content */}
-      <motion.div
-        style={{ y: springContentY, opacity: springOpacity }}
-        className='relative z-10 w-full h-full flex items-center justify-center px-4 sm:px-6 lg:px-8'
-      >
-        <div className='w-full max-w-7xl mx-auto'>
+      {/* Floating orbs for depth */}
+      <FloatingOrb className="top-20 left-10 hidden lg:block" delay={0} />
+      <FloatingOrb className="bottom-20 right-20 hidden lg:block" delay={2} />
+      <FloatingOrb className="top-40 right-40 hidden xl:block" delay={4} />
+
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          className="space-y-16 md:space-y-20 lg:space-y-24"
+        >
+          {/* Enhanced main headline with personality */}
           <motion.div
-            variants={containerVariants}
-            initial='hidden'
-            animate={isInView ? 'visible' : 'hidden'}
-            className='text-center space-y-12'
+            variants={textReveal}
+            className="space-y-8 md:space-y-10 text-center"
           >
-            {/* Hero headline section - positioned higher */}
-            <div className='space-y-8 -mt-8 md:-mt-12'>
-              <div className='space-y-2'>
-                {headline.map((word, index) => (
-                  <motion.div key={word} variants={headlineVariants} className='block'>
-                    <h1
-                      className={`
-                        text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl 
-                        font-bold leading-[0.9] tracking-tight
-                        ${index === 2 ? 'premium-text-accent' : 'premium-text-gradient'}
-                        drop-shadow-2xl
-                      `}
-                    >
-                      {word}
-                    </h1>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Enhanced subheading */}
-              <motion.div variants={subheadingVariants} className='max-w-4xl mx-auto'>
-                <p className='text-lg sm:text-xl lg:text-2xl text-gray-200 leading-relaxed font-light drop-shadow-lg'>
-                  We help businesses and individuals master{' '}
-                  <span className='text-blue-300 font-medium drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]'>
-                    AI tools & Agents
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-light leading-[1.1] tracking-tight">
+              <motion.span
+                className="block text-white/90"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+              >
+                Build Your Own
+              </motion.span>
+              <motion.span
+                className="block mt-2"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <span className="relative">
+                  <span className="relative z-10 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
+                    AI Advantage
                   </span>
-                </p>
-              </motion.div>
+                  {/* Animated underline */}
+                  <motion.span
+                    className="absolute bottom-0 left-0 h-[3px] bg-gradient-to-r from-blue-400 to-purple-400"
+                    initial={{ width: 0 }}
+                    animate={{ width: "100%" }}
+                    transition={{ delay: 0.5, duration: 0.8 }}
+                  />
+                </span>
+              </motion.span>
+            </h1>
+
+            {/* Refined value proposition */}
+            <div className="space-y-3">
+              <p className="text-xl sm:text-2xl text-gray-300 leading-relaxed max-w-4xl mx-auto font-light">
+                Learn the tools. Master the workflows.{" "}
+                <motion.span
+                  className="bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent font-normal"
+                  animate={{
+                    backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  style={{
+                    backgroundSize: "200% 200%",
+                  }}
+                >
+                  Modernise your operations
+                </motion.span>
+                .
+              </p>
             </div>
-
-            {/* Premium service cards */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, type: 'spring', damping: 20, stiffness: 80 }}
-              className='max-w-6xl mx-auto'
-            >
-              {/* Desktop: 4 columns, Mobile: 2x2 grid */}
-              <div className='hidden md:grid md:grid-cols-4 gap-6 lg:gap-8'>
-                {servicePillars.map((service, index) => (
-                  <PremiumServiceCard key={service.title} service={service} index={index} />
-                ))}
-              </div>
-
-              {/* Mobile: 2x2 grid with better spacing */}
-              <div className='grid grid-cols-2 gap-4 md:hidden'>
-                {servicePillars.map((service, index) => (
-                  <PremiumServiceCard key={service.title} service={service} index={index} />
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Enhanced trust indicator */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2, type: 'spring', damping: 25, stiffness: 100 }}
-              className='flex items-center justify-center space-x-6 text-gray-400'
-            >
-              <div className='flex space-x-1'>
-                {[...Array(3)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className='w-1.5 h-1.5 bg-blue-400/60 rounded-full'
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
-                  />
-                ))}
-              </div>
-              <span className='text-sm font-semibold tracking-wider text-blue-200/80 drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]'>
-                Real projects. Real results.
-              </span>
-              <div className='flex space-x-1'>
-                {[...Array(3)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className='w-1.5 h-1.5 bg-blue-400/60 rounded-full'
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 + 1 }}
-                  />
-                ))}
-              </div>
-            </motion.div>
           </motion.div>
-        </div>
-      </motion.div>
 
-      {/* Enhanced premium CSS */}
-      <style jsx>{`
-        .premium-text-gradient {
-          background: linear-gradient(
-            135deg,
-            #ffffff 0%,
-            #f1f5f9 15%,
-            #e2e8f0 30%,
-            #cbd5e1 50%,
-            #94a3b8 70%,
-            #64748b 85%,
-            #475569 100%
-          );
-          background-size: 400% 400%;
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          animation: premiumShift 10s ease-in-out infinite;
-          filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.4));
-        }
+          {/* Premium 3D Service Cards Grid */}
+          <motion.div variants={textReveal} className="relative">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 max-w-7xl mx-auto">
+              {servicePillars.map((service, index) => (
+                <ServiceCard3D key={index} service={service} index={index} />
+              ))}
+            </div>
+          </motion.div>
 
-        .premium-text-accent {
-          background: linear-gradient(
-            135deg,
-            #06b6d4 0%,
-            #0ea5e9 15%,
-            #3b82f6 30%,
-            #6366f1 50%,
-            #8b5cf6 70%,
-            #a855f7 85%,
-            #d946ef 100%
-          );
-          background-size: 400% 400%;
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          animation: premiumAccent 8s ease-in-out infinite;
-          filter: drop-shadow(0 0 50px rgba(59, 130, 246, 0.6));
-        }
-
-        @keyframes premiumShift {
-          0%,
-          100% {
-            background-position: 0% 50%;
-          }
-          33% {
-            background-position: 100% 50%;
-          }
-          66% {
-            background-position: 50% 100%;
-          }
-        }
-
-        @keyframes premiumAccent {
-          0%,
-          100% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-        }
-
-        /* Enhanced glassmorphism */
-        .backdrop-blur-2xl {
-          backdrop-filter: blur(24px) saturate(180%) brightness(110%);
-          -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(110%);
-        }
-
-        /* Hardware acceleration */
-        .will-change-transform {
-          will-change: transform;
-        }
-
-        /* Mobile optimizations */
-        @media (max-width: 768px) {
-          .premium-text-gradient {
-            filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.3));
-          }
-          .premium-text-accent {
-            filter: drop-shadow(0 0 35px rgba(59, 130, 246, 0.4));
-          }
-          .backdrop-blur-2xl {
-            backdrop-filter: blur(16px) saturate(160%);
-            -webkit-backdrop-filter: blur(16px) saturate(160%);
-          }
-        }
-
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-          * {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-          }
-        }
-      `}</style>
+          {/* Enhanced animated CTA */}
+          <motion.div variants={textReveal} className="text-center pt-8">
+            <AnimatedCTA />
+          </motion.div>
+        </motion.div>
+      </div>
     </section>
   );
 }

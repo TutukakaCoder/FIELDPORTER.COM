@@ -1,431 +1,524 @@
-import { PageWrapper } from '@/components/layout';
-import { ContactSection } from '@/components/services/contact-section';
-import { FAQSection } from '@/components/services/faq-section';
-import { MethodologySection } from '@/components/services/methodology-section';
-import { ResultsSection } from '@/components/services/results-section';
-import { ServiceHero } from '@/components/services/service-hero';
-import { BookOpen, Building2, CheckCircle, Code, TrendingUp } from 'lucide-react';
-import { Metadata } from 'next';
+"use client";
 
-export const metadata: Metadata = {
-  title: 'Services | Strategic Research & Development | FIELDPORTER',
-  description:
-    'Strategic research intelligence, rapid development, workflow optimization, and AI training. Direct solutions with clear timelines and transparent pricing.',
-  keywords: [
-    'strategic research intelligence',
-    'rapid development',
-    'workflow optimization',
-    'AI training',
-    'Frederick Hopkins',
-    'business automation',
-    'AI consulting',
-  ],
-  openGraph: {
-    title: 'Four Things We Do | FIELDPORTER',
-    description:
-      'Strategic research intelligence, rapid development, workflow optimization, and AI training with transparent pricing.',
-    type: 'website',
-    url: 'https://fieldporter.com/services',
-    siteName: 'FIELDPORTER',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'FIELDPORTER Services - Frederick Hopkins',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Four Things We Do | FIELDPORTER',
-    description:
-      'Strategic research intelligence, rapid development, workflow optimization, and AI training with transparent pricing.',
-    images: ['/og-image.jpg'],
-  },
-};
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ArrowLeft,
+  ArrowRight,
+  BookOpen,
+  Building2,
+  CheckCircle,
+  ChevronDown,
+  Code,
+  TrendingUp,
+} from "lucide-react";
+import React, { useEffect, useState } from "react";
+
+import { PageWrapper } from "@/components/layout";
+import {
+  FAQSection,
+  type FAQSectionProps,
+} from "@/components/services/faq-section";
+import { MethodologySection } from "@/components/services/methodology-section";
+import { ServiceHero } from "@/components/services/service-hero";
 
 const heroData = {
-  title: 'Four Things We Do',
-  subtitle: 'Direct solutions for businesses that want working AI systems, not consulting theory.',
+  title: "Strategic Research & AI Implementation",
+  subtitle: "Practical AI guidance for small and medium businesses",
   description:
-    'We combine systematic research methodology with hands-on development. Building agents, knowledge bases and preparing business professionals with the necessary skills to compete.',
-  stats: [], // Remove stats cards
-  ctaText: 'Schedule Strategy Discussion',
-  ctaHref: '/contact',
+    "We combine systematic research methodology with hands-on development. Building agents, knowledge bases and preparing business professionals with the modern tools to compete.",
+  stats: [],
+  ctaText: "Schedule Strategy Discussion",
+  ctaHref: "/contact",
 };
 
 const services = [
   {
-    id: 'strategic-research',
-    phase: '01',
+    id: "strategic-research",
+    phase: "01",
     icon: TrendingUp,
-    title: 'Strategic Research Intelligence',
-    duration: '3-5 days',
+    title: "Strategic Research Intelligence",
     description:
-      'Complex market analysis delivered in days, not weeks. Deep research methodology scanning thousands of sources with AI agents across multiple databases.',
+      "Complex market analysis delivered in days. Deep research methodology scanning thousands of sources with AI agents across the web.",
     detailedExplanation:
-      'Traditional market research takes 4-6 weeks because analysts work sequentially through limited sources. My systematic methodology processes thousands of sources simultaneously while maintaining accuracy through validation phases. When researching market entry opportunities, I analyze regulatory landscapes, distribution partnerships, customer behavior patterns, technology requirements, and competitive positioning - all simultaneously across multiple information sources. Recent clothing brand expansion research delivered complete US market entry strategy in 1 week versus typical consultant timelines.',
+      "Traditional market research takes an enormous amount of time because analysts work sequentially through sources. Our AI-powered approach processes thousands of sources simultaneously while maintaining accuracy through validation phases.",
     outcomes: [
-      'Comprehensive analysis in 3-5 days versus traditional 4-6 weeks',
-      'Multi-source data validation across thousands of sources',
-      'Strategic insights enabling faster decision-making',
-      'Complete market intelligence and competitive analysis',
+      "Comprehensive analysis in 3-5 days versus traditional 4-6 weeks",
+      "Multi-source data validation across thousands of sources",
+      "Strategic insights enabling faster decision-making",
+      "Complete market intelligence and competitive analysis",
     ],
     proof:
-      'What You Get: Comprehensive market intelligence, competitive analysis, strategic frameworks that inform business decisions.',
-    investment: '$3,000-$8,000 depending on research scope and market complexity.',
-    timeline: '3-5 days',
-    timelineStyle: 'prototype',
-  },
-  {
-    id: 'rapid-development',
-    phase: '02',
-    icon: Code,
-    title: 'Rapid Development & Integration',
-    duration: '1-2 weeks',
-    description:
-      'From concept to working system in 1-2 weeks. Rapid prototyping to validate concepts, full-stack development for small-scale applications, and API integration.',
-    detailedExplanation:
-      'I build working prototypes that prove concepts and provide clear technical roadmaps. My development process has a broad foundation (React, Typescript, Mongo/Firebase), then integrates whatever AI tools make sense for your specific challenge - Claude for natural language processing, various APIs for data connections, automation tools for workflow management (n8n). The Self-Development Platform running for 8+ months demonstrates production-grade capability. For clients, rapid validation with complete handoff documentation typically creates more value than lengthy development partnerships.',
-    outcomes: [
-      'Functional applications ready for immediate deployment and testing',
-      'API endpoints for existing system integration and data flow',
-      'Complete technical documentation and handoff materials',
-      'Production-ready features with proven React, Firebase/Mongo, TypeScript stack',
-    ],
-    proof:
-      'What You Get: Working applications, API integrations, technical documentation that enables your team to build confidently.',
-    investment: '$2,000-$8,000 depending on complexity and integration requirements.',
-    timeline: '1-2 weeks',
-    timelineStyle: 'training',
-  },
-  {
-    id: 'workflow-optimization',
-    phase: '03',
-    icon: Building2,
-    title: 'Process Efficiency & Workflow Optimization',
-    duration: '2-4 weeks',
-    description:
-      'Transform manual workflows into automated systems. Recent client reduced weekly administrative time from 15 hours to 4 hours through workflow optimization.',
-    detailedExplanation:
-      'Most businesses lose enormous time on manual tasks that software should handle. I identify these bottlenecks and build automation solutions using whatever combination of tools creates the best results. This is about finding the repetitive tasks eating up 5-15 hours weekly and creating reliable automation that handles them consistently. Lead qualification processes, research compilation workflows, data processing sequences, customer communication automation - these represent perfect automation targets with immediate measurable impact.',
-    outcomes: [
-      'Business workflow analysis and automation implementation',
-      'Lead generation and outreach system optimization',
-      'Administrative task elimination with measurable time savings',
-      'Marketing process streamlining with training and handoff',
-    ],
-    proof:
-      'What You Get: Automated workflows, measurable efficiency gains, team training so you can maintain and improve systems independently.',
-    investment: '$2,500-$6,000 depending on workflow complexity and automation scope.',
-    timeline: '2-4 weeks',
-    timelineStyle: 'research',
-  },
-  {
-    id: 'ai-training',
-    phase: '04',
-    icon: BookOpen,
-    title: 'AI Training & Implementation Education',
-    duration: 'Custom sessions',
-    description:
-      'Become an AI power user in your specific industry. Project knowledge systems, prompt engineering for consistent results, AI tool selection, and workflow integration.',
-    detailedExplanation:
-      "Most AI training teaches generic techniques that don't translate to business value. I teach the specific approaches I use daily in revenue-generating businesses - how to set up project knowledge systems so AI understands your context, prompt engineering techniques that get consistent results, tool selection for different use cases. The goal is making you genuinely capable with AI tools rather than creating ongoing service dependency.",
-    outcomes: [
-      'Custom AI knowledge bases for your business contexts and requirements',
-      'Industry-specific prompt development for consistent, reliable results',
-      'AI tool selection and optimization for your workflows',
-      'Sustainable skill development reducing long-term dependency',
-    ],
-    proof:
-      'What You Get: Practical AI skills, custom knowledge systems, sustainable capabilities you can develop independently.',
+      "What You Get: Comprehensive market insights, competitive analysis, and clear business recommendations that inform million-dollar decisions.",
     investment:
-      '$75-$150 per hour for individual training sessions, flexible project-based pricing for team workshops.',
-    timeline: 'Custom sessions',
-    timelineStyle: 'portfolio',
+      "$500-$3,000 depending on research scope and market complexity.",
+    timeline: "3-5 days",
+    timelineStyle: "research",
+    borderColor: "border-emerald-500/15",
+    hoverBorderColor: "hover:border-emerald-500/25",
+    iconColor: "text-emerald-400",
+  },
+  {
+    id: "rapid-development",
+    phase: "02",
+    icon: Code,
+    title: "Rapid Development & Integration",
+    description:
+      "From concept to working system in 1-2 weeks. Rapid prototyping & MVPs to validate concepts, full-stack development for small-scale applications, and API integration.",
+    detailedExplanation:
+      "We build working prototypes that prove concepts and provide clear technical roadmaps. Our development process uses React, TypeScript, and Firebase/MongoDB, then integrates AI tools for your specific challenge.",
+    outcomes: [
+      "Functional applications ready for immediate deployment and testing",
+      "API endpoints for existing system integration and data flow",
+      "Complete technical documentation and handoff materials",
+      "Production-ready features with proven React, Firebase/Mongo, TypeScript stack",
+    ],
+    proof:
+      "What You Get: Working applications, API integrations, technical documentation that enables your team to build confidently.",
+    investment:
+      "$3,000-$8,000 depending on complexity and integration requirements.",
+    timeline: "1-2 weeks",
+    timelineStyle: "training",
+    borderColor: "border-blue-500/15",
+    hoverBorderColor: "hover:border-blue-500/25",
+    iconColor: "text-blue-400",
+  },
+  {
+    id: "workflow-optimization",
+    phase: "03",
+    icon: Building2,
+    title: "Process Efficiency & Workflow Optimization",
+    description:
+      "Transform manual workflows into automated systems. Recent client reduced weekly administrative time from 15 hours to 4 hours through workflow optimization.",
+    detailedExplanation:
+      "Most businesses lose enormous time on manual tasks that software should handle. We identify these bottlenecks and build automation solutions using whatever combination of tools creates the best results.",
+    outcomes: [
+      "Business workflow analysis and automation implementation",
+      "Lead generation and outreach system optimization",
+      "Administrative task elimination with measurable time savings",
+      "Marketing process streamlining with training and handoff",
+    ],
+    proof:
+      "What You Get: Automated workflows, measurable efficiency gains, team training so you can maintain and improve systems independently.",
+    investment:
+      "$2,000-$5,000 depending on workflow complexity and automation scope.",
+    timeline: "2-4 weeks",
+    timelineStyle: "prototype",
+    borderColor: "border-purple-500/15",
+    hoverBorderColor: "hover:border-purple-500/25",
+    iconColor: "text-purple-400",
+  },
+  {
+    id: "ai-training",
+    phase: "04",
+    icon: BookOpen,
+    title: "AI Training & Implementation Education",
+    description:
+      "Become an AI power user in your specific industry. Project knowledge systems, prompt engineering for consistent results, AI tool selection, and workflow integration.",
+    detailedExplanation:
+      "Most AI training teaches generic techniques that don't translate to business value. We teach the specific approaches we use daily in revenue-generating businesses.",
+    outcomes: [
+      "Custom AI knowledge bases for your business contexts and requirements",
+      "Industry-specific prompt development for consistent, reliable results",
+      "AI tool selection and optimization for your workflows",
+      "Sustainable skill development reducing long-term dependency",
+    ],
+    proof:
+      "What You Get: Practical AI skills, custom knowledge systems, sustainable capabilities you can develop independently.",
+    investment:
+      "$75-$150 per hour for individual training sessions, flexible project-based pricing for team workshops.",
+    timeline: "Custom sessions",
+    timelineStyle: "portfolio",
+    borderColor: "border-orange-500/15",
+    hoverBorderColor: "hover:border-orange-500/25",
+    iconColor: "text-orange-400",
   },
 ];
 
 const methodologyData = {
-  title: 'How Strategic Research Intelligence Works',
+  title: "How Strategic Research Intelligence Works",
   subtitle:
     "Here's an example of our research process for the Strategic Research Intelligence service:",
   phases: [
     {
-      phase: '01',
-      title: 'Foundation',
+      phase: "01",
+      title: "Foundation",
       description:
-        'Gather all your business context - pitch decks, processes, investment memorandums, competitive landscape, strategic objectives. This creates comprehensive project knowledge that makes AI analysis specific to your situation.',
+        "Gather all your business context - pitch decks, processes, investment memorandums, competitive landscape, strategic objectives.",
       deliverables: [
-        'Complete business context mapping and documentation',
-        'Strategic objectives analysis and priority framework',
-        'Competitive landscape assessment and positioning analysis',
-        'Investment memorandums and pitch deck strategic review',
-        'Project knowledge base creation for AI-specific context',
+        "Complete business context mapping and documentation",
+        "Strategic objectives analysis and priority framework",
+        "Competitive landscape assessment and positioning analysis",
+        "Investment memorandums and pitch deck strategic review",
+        "Project knowledge base creation for AI-specific context",
       ],
-      timeline: 'Foundation Phase',
-      timelineStyle: 'research',
+      timeline: "Foundation Phase",
+      timelineStyle: "research",
     },
     {
-      phase: '02',
-      title: 'Deep Research',
+      phase: "02",
+      title: "Deep Research",
       description:
-        'Using Claude for contextual understanding, Gemini for deep analysis, DeepSeek for cost-effective bulk processing, plus specialized research tools, systematically scan thousands of sources based on your specific objectives.',
+        "Using Claude for contextual understanding, Gemini for deep analysis, DeepSeek for cost-effective bulk processing.",
       deliverables: [
-        'Claude integration for contextual understanding and analysis',
-        'Gemini deployment for comprehensive deep research processing',
-        'DeepSeek utilization for cost-effective bulk data processing',
-        'Specialized research tools and database integration',
-        'Parallel source processing across thousands of information sources',
+        "Claude integration for contextual understanding and analysis",
+        "Gemini deployment for comprehensive deep research processing",
+        "DeepSeek utilization for cost-effective bulk data processing",
+        "Specialized research tools and database integration",
+        "Parallel source processing across thousands of information sources",
       ],
-      timeline: 'Research Phase',
-      timelineStyle: 'prototype',
+      timeline: "Research Phase",
+      timelineStyle: "prototype",
     },
     {
-      phase: '03',
-      title: 'Validation & Filtering',
+      phase: "03",
+      title: "Validation & Filtering",
       description:
-        "Raw AI research produces massive information volumes - often 70+ documents with 30+ pages each. Systematically filter this down to useful intelligence, removing everything that doesn't directly inform your strategic decisions.",
+        "Raw AI research produces massive information volumes. Systematically filter this down to useful intelligence.",
       deliverables: [
-        'Systematic information filtering and relevance assessment',
-        'Strategic decision framework application to research data',
-        'Intelligence extraction from bulk research volumes',
-        'Jargon elimination and clarity-focused content refinement',
-        'Decision-relevant insight prioritization and organization',
+        "Systematic information filtering and relevance assessment",
+        "Strategic decision framework application to research data",
+        "Intelligence extraction from bulk research volumes",
+        "Jargon elimination and clarity-focused content refinement",
+        "Decision-relevant insight prioritization and organization",
       ],
-      timeline: 'Validation Phase',
-      timelineStyle: 'advisory',
+      timeline: "Validation Phase",
+      timelineStyle: "advisory",
     },
     {
-      phase: '04',
-      title: 'Cross-Model Validation',
+      phase: "04",
+      title: "Cross-Model Validation",
       description:
-        'Run refined information through different AI models to catch inconsistencies and verify source quality. Academic research gets weighted appropriately versus social media discussions.',
+        "Run refined information through different AI models to catch inconsistencies and verify source quality.",
       deliverables: [
-        'Cross-model validation for accuracy and consistency verification',
-        'Source quality assessment and credibility weighting',
-        'Academic research versus social media content differentiation',
-        'Hallucination prevention through systematic verification processes',
-        'Reliability framework application for business decision support',
+        "Cross-model validation for accuracy and consistency verification",
+        "Source quality assessment and credibility weighting",
+        "Academic research versus social media content differentiation",
+        "Hallucination prevention through systematic verification processes",
+        "Reliability framework application for business decision support",
       ],
-      timeline: 'Validation Phase',
-      timelineStyle: 'research',
+      timeline: "Validation Phase",
+      timelineStyle: "research",
     },
     {
-      phase: '05',
-      title: 'Strategic Documentation',
+      phase: "05",
+      title: "Strategic Documentation",
       description:
-        'Convert validated research into usable business documentation - strategic frameworks, competitive analysis, implementation roadmaps that inform decisions.',
+        "Convert validated research into usable business documentation - strategic frameworks, competitive analysis, implementation roadmaps.",
       deliverables: [
-        'Strategic frameworks and decision-making tools',
-        'Competitive analysis with positioning insights',
-        'Implementation roadmaps with clear next steps',
-        'Business documentation designed for operational use',
-        'Complete handoff materials and ongoing support guidance',
+        "Strategic frameworks and decision-making tools",
+        "Competitive analysis with positioning insights",
+        "Implementation roadmaps with clear next steps",
+        "Business documentation designed for operational use",
+        "Complete handoff materials and ongoing support guidance",
       ],
-      timeline: 'Delivery Phase',
-      timelineStyle: 'advisory',
+      timeline: "Delivery Phase",
+      timelineStyle: "advisory",
     },
   ],
 };
 
-const resultsData = {
-  title: 'Proven Through Projects',
-  subtitle: 'Systems demonstrating methodology and technical capability',
-  results: [
-    {
-      metric: 'Self-Development Platform',
-      description:
-        '8+ months consistent revenue generation demonstrates technical sophistication and business operations capability. Complex React/Firebase architecture handles global timezone coordination, subscription billing, real-time data synchronization.',
-      industry: 'SaaS Operations',
-    },
-    {
-      metric: 'Strategic Research Automation',
-      description:
-        'Clothing brand US expansion research delivered comprehensive market intelligence including regulatory analysis, distribution partnerships, competitive positioning in 1 week using systematic methodology versus traditional 4-6 week consultant timelines.',
-      industry: 'Market Research',
-    },
-    {
-      metric: 'Business Process Automation',
-      description:
-        'Investment research firm automation reduced weekly market data compilation from 15 hours to 2 hours while improving coverage and consistency. Lead qualification systems eliminated 70% of manual screening time.',
-      industry: 'Process Optimization',
-    },
-    {
-      metric: 'AI Integration Systems',
-      description:
-        'Family Care Platform prototype demonstrates natural language processing for family coordination. News analysis system provides investment intelligence through cost-optimized AI processing.',
-      industry: 'AI Integration',
-    },
-  ],
-};
-
-const faqData = {
-  title: 'Common Questions',
-  subtitle: 'Honest answers about methodology, capability, and practical implementation',
+const faqData: FAQSectionProps = {
+  title: "Common Questions",
+  subtitle:
+    "Understanding how we work with small and medium businesses on AI implementation.",
   faqs: [
     {
-      question: 'How do you deliver research so much faster without sacrificing quality?',
+      question:
+        "Do you build complete production systems or just AI prototypes?",
       answer:
-        'The systematic 5-phase methodology processes thousands of sources simultaneously rather than sequentially, while validation steps prevent the accuracy problems typical with fast AI research. You get comprehensive insights quickly because the research approach is fundamentally different.',
+        "We specialize in AI feature prototyping and integration roadmaps. Our sweet spot is proving AI concepts work for your specific use case in 1-3 weeks, then providing clear documentation for your team to implement. Think of us as your AI R&D department.",
     },
     {
-      question: 'Do you build complete production systems or just prototypes?',
+      question: "How quickly can you prototype and deliver AI functionality?",
       answer:
-        'For clients, I focus on working prototypes with complete technical documentation that proves concepts and provides clear implementation roadmaps. My Self-Development Platform shows production-grade capability, but most clients get better value from validated prototypes their teams can build from.',
+        "Most AI prototypes are delivered within 1-3 weeks. Week 1: We understand your process. Week 2: AI agents are trained and tested. Week 3: Working prototype with integration documentation. Faster than hiring, more focused than consultants.",
     },
     {
-      question: 'How do you choose which AI tools for different projects?',
+      question: "What happens after you deliver the AI prototype?",
       answer:
-        'I use whatever combination delivers optimal results - Claude for contextual understanding, Gemini for deep research, DeepSeek for cost-effective bulk processing, specialized APIs for data integration, automation tools for workflow management. The approach is results-focused.',
+        "You get: 1) Working prototype code, 2) Integration documentation, 3) Training for your team, 4) 30-day support for questions. Most clients either implement themselves or use our integration roadmap with their existing developers.",
     },
     {
-      question: "What if you're building businesses that compete with client projects?",
+      question:
+        "How do you help us integrate AI into our existing application?",
       answer:
-        "I'm transparent about portfolio projects. Current focus includes self-development and family coordination software. If potential conflicts exist with your project, I'll identify them upfront. Usually operational experience provides valuable insights rather than competition.",
+        "We create working prototypes with clear API documentation. Your developers get commented code, integration guides, and implementation roadmaps. We show exactly how to connect AI features to your existing systems.",
     },
     {
-      question: 'How do you structure pricing for different types of projects?',
+      question: "What if we need ongoing development beyond the AI features?",
       answer:
-        'Research projects typically range $3,000-$8,000, development prototypes $2,000-$8,000, process automation $2,500-$6,000, AI training $75-$150 hourly or project-based for teams. Investment depends on scope and complexity. I provide detailed estimates after understanding your specific requirements.',
+        "We focus on AI innovation, not long-term development. After delivering prototypes and training, most clients either implement themselves or work with their existing dev teams. We are happy to recommend trusted partners for ongoing development.",
     },
     {
-      question: 'What happens if AI tools change or systems break after implementation?',
+      question:
+        "How do you choose which AI tools and approaches for our project?",
       answer:
-        "I build systems using proven tools with fallback options and provide documentation that enables your team to maintain and adapt implementations. For automation projects, I include training so you're not dependent on me for ongoing operations.",
+        "We match tools to your specific needs. Claude for complex reasoning, GPT-4 for general tasks, DeepSeek for cost efficiency, open-source models for privacy. No vendor lock-in - we recommend what works best for you.",
     },
   ],
 };
 
 const getTimelineBadgeStyle = (timelineStyle?: string) => {
-  if (timelineStyle === 'training') {
-    return 'bg-green-500/20 border-green-500/30 text-green-400';
+  switch (timelineStyle) {
+    case "training":
+      return "bg-green-500/20 border-green-500/30 text-green-400";
+    case "prototype":
+      return "bg-purple-500/20 border-purple-500/30 text-purple-400";
+    case "research":
+      return "bg-emerald-500/20 border-emerald-500/30 text-emerald-400";
+    case "portfolio":
+      return "bg-orange-500/20 border-orange-500/30 text-orange-400";
+    case "advisory":
+      return "bg-blue-500/20 border-blue-500/30 text-blue-400";
+    default:
+      return "bg-gray-500/20 border-gray-500/30 text-gray-400";
   }
-  if (timelineStyle === 'prototype') {
-    return 'bg-fieldporter-purple/20 border-fieldporter-purple/30 text-fieldporter-purple';
-  }
-  if (timelineStyle === 'research') {
-    return 'bg-fieldporter-blue/20 border-fieldporter-blue/30 text-fieldporter-blue';
-  }
-  if (timelineStyle === 'portfolio') {
-    return 'bg-orange-500/20 border-orange-500/30 text-orange-400';
-  }
-  return 'bg-fieldporter-gray/20 border-fieldporter-gray/30 text-fieldporter-gray';
 };
 
-export default function ServicesPage() {
+function InteractiveServiceShowcase() {
+  const [activeService, setActiveService] = useState(0);
+
+  // Handle URL hash navigation
+  useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (hash) {
+      const serviceIndex = services.findIndex((service) => service.id === hash);
+      if (serviceIndex !== -1) {
+        setActiveService(serviceIndex);
+        // Scroll to the service section
+        setTimeout(() => {
+          const element = document.getElementById("services-showcase");
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        }, 100);
+      }
+    }
+  }, []);
+
+  // Ensure activeService is within bounds
+  const safeIndex = Math.max(0, Math.min(activeService, services.length - 1));
+  const currentService = services[safeIndex];
+
+  if (!currentService) {
+    return null; // Safety check
+  }
+
   return (
-    <PageWrapper>
-      <ServiceHero {...heroData} />
+    <section
+      id="services-showcase"
+      className="relative py-20 md:py-32 lg:py-40 overflow-hidden"
+    >
+      {/* Add invisible anchor elements for each service */}
+      {services.map((service) => (
+        <div key={service.id} id={service.id} className="absolute -top-20" />
+      ))}
 
-      {/* Four Core Services Section - Lead with Services */}
-      <section className='relative py-16 md:py-20 lg:py-24 overflow-hidden'>
-        <div className='absolute inset-0 bg-gradient-to-b from-fieldporter-black to-fieldporter-black/95' />
-        <div className='relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='text-center mb-12 md:mb-16 lg:mb-20'>
-            <h2 className='text-2xl sm:text-3xl lg:text-4xl font-light text-white mb-4 md:mb-6 lg:mb-8 leading-tight tracking-[-0.02em]'>
-              Four Things We <span className='font-semibold text-fieldporter-blue'>Do</span>
-            </h2>
-            <p className='text-base lg:text-lg text-gray-400 max-w-3xl mx-auto leading-relaxed font-light'>
-              Systematic methodology applied to specific business challenges with clear outcomes.
-            </p>
-          </div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-black" />
 
-          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16 lg:mb-20'>
-            {services.map((service, index) => (
-              <div key={service.id} id={service.id}>
-                <div className='p-4 md:p-6 lg:p-8 h-full transition-all duration-300 hover:bg-white/10 rounded-xl backdrop-blur-md bg-white/10 border border-white/20'>
-                  <div className='space-y-4 md:space-y-6'>
-                    {/* Header */}
-                    <div className='flex items-center justify-between flex-wrap gap-2'>
-                      <div className='flex items-center space-x-3'>
-                        <div className='w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-xl bg-fieldporter-blue/20 border border-fieldporter-blue/30 flex items-center justify-center'>
-                          <span className='text-xs md:text-sm lg:text-lg font-bold text-white'>
-                            {service.phase}
-                          </span>
-                        </div>
-                        <service.icon className='w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-fieldporter-blue' />
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-20 md:mb-32 lg:mb-40">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6 md:mb-8 lg:mb-12 leading-tight tracking-[-0.02em]">
+            Four Things We{" "}
+            <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+              Do
+            </span>
+          </h2>
+          <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed font-light">
+            AI-powered solutions applied to specific business challenges with
+            clear outcomes.
+          </p>
+        </div>
+
+        <div className="flex justify-center gap-2 md:gap-3 lg:gap-6 mb-16 md:mb-20 lg:mb-32 flex-wrap px-4">
+          {services.map((service, index) => {
+            const ServiceIcon = service.icon;
+            return (
+              <button
+                key={service.id}
+                onClick={() => setActiveService(index)}
+                className={`
+                  px-3 md:px-4 lg:px-8 py-2 md:py-3 lg:py-4 rounded-xl md:rounded-2xl transition-all duration-500 backdrop-blur-xl border font-medium text-xs md:text-sm lg:text-lg hover:scale-105 transform will-change-transform touch-manipulation
+                  ${
+                    activeService === index
+                      ? "bg-blue-500/20 border-blue-500/40 text-white shadow-[0_0_30px_rgba(59,130,246,0.3)]"
+                      : "bg-white/[0.01] border-white/10 text-gray-400 hover:text-white hover:bg-white/[0.02]"
+                  }
+                `}
+              >
+                <span className="flex items-center gap-1 md:gap-2 lg:gap-3">
+                  <ServiceIcon
+                    className={`w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 ${activeService === index ? service.iconColor : "text-gray-500"}`}
+                  />
+                  <span className="hidden lg:inline">{service.title}</span>
+                  <span className="hidden sm:inline lg:hidden">
+                    {service.title.split(" ").slice(0, 2).join(" ")}
+                  </span>
+                  <span className="sm:hidden">
+                    {service.title.split(" ")[0]}
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeService}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className="relative"
+          >
+            <div className="grid lg:grid-cols-2 gap-8 md:gap-16 lg:gap-24 xl:gap-32 items-start lg:items-center">
+              <div className="space-y-8 md:space-y-12">
+                <div className="flex items-center gap-3 md:gap-4">
+                  <div
+                    className={`w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-white/5 border ${currentService.borderColor} flex items-center justify-center backdrop-blur-sm`}
+                  >
+                    <span className="text-lg md:text-2xl font-bold text-white">
+                      {currentService.phase}
+                    </span>
+                  </div>
+                  {React.createElement(currentService.icon, {
+                    className: `w-6 h-6 md:w-8 md:h-8 ${currentService.iconColor}`,
+                  })}
+                </div>
+
+                <div className="space-y-6 md:space-y-8">
+                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-white leading-tight">
+                    {currentService.title}
+                  </h3>
+
+                  <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
+                    {currentService.description}
+                  </p>
+
+                  <details className="group mt-6 md:mt-8">
+                    <summary className="flex items-center justify-between cursor-pointer text-white font-medium text-base md:text-lg hover:text-blue-400 transition-colors duration-200 list-none touch-manipulation">
+                      <span>How This Works</span>
+                      <ChevronDown className="w-5 h-5 md:w-6 md:h-6 transition-transform duration-300 group-open:rotate-180" />
+                    </summary>
+                    <div className="mt-4 md:mt-6 space-y-4 md:space-y-6">
+                      <p className="text-base md:text-lg text-gray-400 leading-relaxed">
+                        {currentService.detailedExplanation}
+                      </p>
+
+                      <div className="space-y-3 md:space-y-4">
+                        <h4 className="text-white font-semibold text-lg md:text-xl">
+                          Key Outcomes:
+                        </h4>
+                        <ul className="space-y-2 md:space-y-3">
+                          {currentService.outcomes.map((outcome, index) => (
+                            <li
+                              key={index}
+                              className="flex items-start space-x-3 md:space-x-4 text-base md:text-lg text-gray-100"
+                            >
+                              <CheckCircle
+                                className={`w-5 h-5 md:w-6 md:h-6 ${currentService.iconColor} flex-shrink-0 mt-0.5 md:mt-1`}
+                              />
+                              <span>{outcome}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
-                      <div
-                        className={`px-2 py-1 md:px-3 md:py-1.5 rounded-lg border backdrop-blur-md font-medium text-xs md:text-sm ${getTimelineBadgeStyle(service.timelineStyle)}`}
+                    </div>
+                  </details>
+
+                  <div className="pt-6 md:pt-8 border-t border-white/10">
+                    <div className="space-y-2 md:space-y-3">
+                      <p className="text-base md:text-lg text-gray-400">
+                        Investment:
+                      </p>
+                      <p
+                        className={`text-xl md:text-2xl font-medium ${currentService.iconColor} hover:drop-shadow-[0_0_12px_rgba(96,165,250,0.5)] transition-all duration-300`}
                       >
-                        {service.timeline}
-                      </div>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className='text-lg md:text-xl lg:text-2xl font-semibold text-white leading-tight'>
-                      {service.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className='text-sm md:text-base text-gray-300 leading-relaxed'>
-                      {service.description}
-                    </p>
-
-                    {/* How This Works */}
-                    <div className='space-y-3 md:space-y-4'>
-                      <h4 className='text-white font-semibold text-sm md:text-base'>
-                        How This Works:
-                      </h4>
-                      <p className='text-xs md:text-sm text-gray-400 leading-relaxed'>
-                        {service.detailedExplanation}
-                      </p>
-                    </div>
-
-                    {/* Outcomes */}
-                    <div className='space-y-3'>
-                      <h4 className='text-white font-semibold text-sm md:text-base'>
-                        Key Outcomes:
-                      </h4>
-                      <ul className='space-y-2'>
-                        {service.outcomes.map((outcome, outcomeIndex) => (
-                          <li
-                            key={outcomeIndex}
-                            className='flex items-start space-x-3 text-xs md:text-sm text-gray-300'
-                          >
-                            <CheckCircle className='w-3 h-3 md:w-4 md:h-4 text-fieldporter-blue flex-shrink-0 mt-0.5' />
-                            <span>{outcome}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Proof & Investment */}
-                    <div className='space-y-3 md:space-y-4 pt-3 md:pt-4 border-t border-white/10'>
-                      <p className='text-xs md:text-sm text-gray-400 italic leading-relaxed'>
-                        &ldquo;{service.proof}&rdquo;
-                      </p>
-                      <p className='text-xs md:text-sm font-medium text-fieldporter-blue'>
-                        Investment: {service.investment}
+                        {currentService.investment}
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Research Methodology Section - Supporting Detail */}
-      <section className='relative py-16 md:py-20 lg:py-24 overflow-hidden'>
-        <div className='absolute inset-0 bg-gradient-to-b from-fieldporter-black/95 to-fieldporter-black' />
-        <div className='relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
+              <div className="relative order-first lg:order-last">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/5 rounded-3xl blur-xl opacity-60" />
+
+                <div
+                  className={`
+                  relative bg-white/[0.02] backdrop-blur-xl border ${currentService.borderColor} 
+                  rounded-3xl p-8 md:p-12 lg:p-16 xl:p-20 transition-all duration-700
+                  hover:bg-white/[0.04] ${currentService.hoverBorderColor}
+                  shadow-[0_20px_40px_rgba(0,0,0,0.3)]
+                `}
+                >
+                  <div
+                    className={`inline-flex px-4 md:px-6 py-2 md:py-3 rounded-xl border backdrop-blur-md font-medium text-sm md:text-lg mb-6 md:mb-8 ${getTimelineBadgeStyle(currentService.timelineStyle)}`}
+                  >
+                    {currentService.timeline}
+                  </div>
+
+                  <div
+                    className={`w-16 h-16 md:w-24 md:h-24 rounded-2xl bg-white/5 border ${currentService.borderColor} flex items-center justify-center mb-6 md:mb-8 backdrop-blur-sm`}
+                  >
+                    {React.createElement(currentService.icon, {
+                      className: `w-8 h-8 md:w-12 md:h-12 ${currentService.iconColor}`,
+                    })}
+                  </div>
+
+                  <blockquote className="text-lg md:text-xl text-gray-300 italic leading-relaxed border-l-4 border-blue-500/30 pl-4 md:pl-6">
+                    &ldquo;{currentService.proof}&rdquo;
+                  </blockquote>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-center gap-4 md:gap-6 mt-16">
+              <button
+                onClick={() =>
+                  setActiveService(
+                    activeService > 0 ? activeService - 1 : services.length - 1,
+                  )
+                }
+                className="p-3 md:p-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl touch-manipulation"
+              >
+                <ArrowLeft className="w-5 h-5 md:w-6 md:h-6 text-white" />
+              </button>
+              <button
+                onClick={() =>
+                  setActiveService(
+                    activeService < services.length - 1 ? activeService + 1 : 0,
+                  )
+                }
+                className="p-3 md:p-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl touch-manipulation"
+              >
+                <ArrowRight className="w-5 h-5 md:w-6 md:h-6 text-white" />
+              </button>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </section>
+  );
+}
+
+export default function ServicesPage() {
+  return (
+    <PageWrapper>
+      <ServiceHero {...heroData} />
+      <InteractiveServiceShowcase />
+
+      <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-950 to-black" />
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <MethodologySection {...methodologyData} />
         </div>
       </section>
 
-      <ResultsSection {...resultsData} />
-      <FAQSection {...faqData} />
-
-      <ContactSection
-        title='Ready to Discuss Your Challenge?'
-        description="Let's talk about what you're trying to accomplish. I'll explain honestly whether my research methodology, development approach, or training can help your situation, what the process would look like, and what you'd receive for your investment."
-        ctaText='Schedule Strategy Discussion'
-        ctaHref='/contact'
-      />
+      <div className="py-24 md:py-32 lg:py-40">
+        <FAQSection {...faqData} />
+      </div>
     </PageWrapper>
   );
 }

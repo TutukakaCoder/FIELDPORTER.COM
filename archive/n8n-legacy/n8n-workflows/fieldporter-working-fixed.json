@@ -1,0 +1,248 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fieldporter-chat",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "https://fieldporter.com,http://localhost:3001,http://localhost:3000"
+        }
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [520, -220],
+      "webhookId": "fieldporter-chat-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Input processing with better error handling\nconst inputData = $input.all()[0].json;\n\n// Extract conversation data\nconst body = inputData.body || inputData;\nconst userMessage = body.message || body.chatInput || '';\nconst sessionId = body.sessionId || `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;\nconst messageCount = body.messageCount || 1;\nconst conversationHistory = body.conversationHistory || [];\n\n// Health check\nif (userMessage === 'health_check') {\n  return {\n    response: 'FIELDPORTER AI Agent is running optimally',\n    sessionId: 'health_check_session',\n    messageCount: 1,\n    isHealthCheck: true\n  };\n}\n\n// Message validation\nif (!userMessage || typeof userMessage !== 'string' || userMessage.trim().length === 0) {\n  return {\n    response: \"Hi! I'm FIELDPORTER's AI assistant. What specific AI challenge is your organization facing?\",\n    sessionId: sessionId,\n    messageCount: 1,\n    isEmpty: true\n  };\n}\n\n// Contact detection\nconst emailRegex = /\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b/gi;\nconst detectedEmail = userMessage.match(emailRegex)?.[0];\nconst hasContactInfo = !!detectedEmail;\n\n// Lead scoring\nconst qualificationKeywords = {\n  'ai strategy': 3, 'enterprise': 2, 'transformation': 2, 'automation': 2,\n  'consulting': 2, 'roi': 3, 'budget': 3, 'timeline': 2, 'urgent': 2,\n  'scale': 2, 'implementation': 2, 'portfolio': 2, 'vc': 3,\n  'construction': 2, 'research': 2, 'workflow': 2, 'development': 2\n};\n\nlet leadScore = 1;\nconst lowerMessage = userMessage.toLowerCase();\nfor (const [keyword, score] of Object.entries(qualificationKeywords)) {\n  if (lowerMessage.includes(keyword)) {\n    leadScore += score;\n  }\n}\n\nif (hasContactInfo) leadScore += 3;\n\n// Check for contact request\nconst wantsContact = lowerMessage.includes('contact') || \n                   lowerMessage.includes('reach out') || \n                   lowerMessage.includes('get in touch');\n\nreturn {\n  chatInput: userMessage.trim(),\n  sessionId: sessionId,\n  messageCount: messageCount,\n  userEmail: detectedEmail,\n  hasContactInfo: hasContactInfo,\n  wantsContact: wantsContact,\n  leadScore: leadScore,\n  timestamp: new Date().toISOString(),\n  conversationHistory: conversationHistory\n};"
+      },
+      "id": "process-input",
+      "name": "Process Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [740, -220]
+    },
+    {
+      "parameters": {
+        "model": "deepseek-chat",
+        "options": {
+          "temperature": 0.3,
+          "maxTokens": 150,
+          "frequencyPenalty": 0.1,
+          "presencePenalty": 0.1
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are PORTER, FIELDPORTER's AI assistant. We help businesses integrate AI tools that actually work. We're builders who happen to consult - we test every AI tool and strategy in our own projects before recommending them.\n\nCRITICAL CONSTRAINTS:\n- You CANNOT send calendar invites, schedule meetings, or book appointments\n- You CANNOT access external systems or send emails directly\n- For booking requests, direct to contact page at fieldporter.com/contact\n\nRESPONSE RULES:\n- 2-3 sentences maximum\n- Professional but conversational tone\n- No special characters or formatting\n- Ask questions to understand their challenge\n- Guide qualified prospects toward consultation\n- Never mention specific client names or confidential projects\n- Provide specific, authentic responses based on context\n\nSERVICES WE OFFER:\n- Strategic Research Intelligence ($10K-$50K): Deep market analysis and competitive intelligence\n- Rapid Development & Prototyping ($15K-$100K): MVP development and technical validation\n- Workflow Automation ($5K-$25K): Process optimization and AI integration\n- AI Training & Implementation ($2K-$10K/month): Team training and ongoing support\n\nCONVERSATION GOAL: Understand their challenge and assess if we can help. Be natural and authentic.\n\nWHEN USER PROVIDES CONTACT INFO OR WANTS TO BE CONTACTED:\nAcknowledge their interest warmly and let them know Frederick will personally review their needs and reach out within 24 hours. Direct them to share details via fieldporter.com/contact for fastest response.",
+              "role": "system"
+            },
+            {
+              "content": "={{ $json.chatInput }}",
+              "role": "user"
+            }
+          ]
+        }
+      },
+      "id": "deepseek-chat",
+      "name": "DeepSeek Chat",
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [960, -220],
+      "credentials": {
+        "deepSeekApi": {
+          "id": "WQs8dzH5ndbRE6bJ",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format response for chat interface\nconst inputData = $input.all()[0].json;\nconst aiData = $input.all()[1]?.json || {};\n\n// Handle special cases first\nif (inputData.isHealthCheck) {\n  return inputData;\n}\n\nif (inputData.isEmpty) {\n  return {\n    response: inputData.response,\n    sessionId: inputData.sessionId,\n    messageCount: inputData.messageCount,\n    metadata: {\n      timestamp: new Date().toISOString(),\n      agent: 'fieldporter_working',\n      leadScore: 1\n    }\n  };\n}\n\n// Extract AI response\nlet responseText = '';\nif (aiData.message && aiData.message.content) {\n  responseText = aiData.message.content;\n} else if (aiData.content) {\n  responseText = aiData.content;\n} else if (aiData.text) {\n  responseText = aiData.text;\n} else {\n  responseText = \"I'd love to learn about your AI challenges. What specific area is your organization looking to optimize?\";\n}\n\n// Clean response\nresponseText = responseText.trim()\n  .replace(/[\\*\\#\\`\\[\\]\\(\\)]/g, '')\n  .replace(/\\n\\n+/g, ' ')\n  .replace(/\\s+/g, ' ')\n  .trim();\n\n// Confidentiality check\nconst confidentialTerms = ['papps mastery', 'voycap', 'harpers', 'sir the label', 'steve papps'];\nconst lowerResponse = responseText.toLowerCase();\n\nfor (const term of confidentialTerms) {\n  if (lowerResponse.includes(term)) {\n    responseText = \"I'd be happy to discuss how FIELDPORTER can help with your strategic challenges. What specific business problem are you looking to solve?\";\n    break;\n  }\n}\n\n// Ensure quality\nif (!responseText || responseText.length < 20) {\n  responseText = \"Thanks for your question! This sounds like something our team should discuss with you directly. What's the best way to connect about your AI strategy needs?\";\n}\n\n// Length control\nif (responseText.length > 400) {\n  const truncated = responseText.substring(0, 380);\n  const lastSentence = truncated.lastIndexOf('.');\n  if (lastSentence > 200) {\n    responseText = truncated.substring(0, lastSentence + 1);\n  } else {\n    responseText = truncated + '...';\n  }\n}\n\nconst shouldNotify = inputData.leadScore >= 7 || inputData.hasContactInfo || inputData.wantsContact;\n\nreturn {\n  response: responseText,\n  sessionId: inputData.sessionId,\n  messageCount: inputData.messageCount + 1,\n  shouldNotify: shouldNotify,\n  userEmail: inputData.userEmail,\n  chatInput: inputData.chatInput,\n  leadScore: inputData.leadScore,\n  metadata: {\n    timestamp: new Date().toISOString(),\n    agent: 'fieldporter_working',\n    leadScore: inputData.leadScore,\n    emailCollected: !!inputData.userEmail,\n    contactRequested: inputData.wantsContact\n  }\n};"
+      },
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1180, -220]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.shouldNotify }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "check-notify",
+      "name": "Check Notification",
+      "type": "n8n-nodes-base.if",
+      "position": [1400, -100],
+      "typeVersion": 2.1
+    },
+    {
+      "parameters": {
+        "toRecipients": "freddy@fieldporter.com",
+        "subject": "=🔥 FIELDPORTER Lead: Score {{ $json.leadScore }}/10{{ $json.userEmail ? ' - ' + $json.userEmail : '' }}",
+        "bodyContent": "=<h2>🔥 New Lead from AI Chat</h2>\n<div style=\"background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;\">\n<p><strong>Lead Score:</strong> <span style=\"color: #d73a49; font-size: 18px;\">{{ $json.leadScore }}/10</span></p>\n<p><strong>Session ID:</strong> {{ $json.sessionId }}</p>\n{{ $json.userEmail ? '<p><strong>📧 Email:</strong> <a href=\"mailto:' + $json.userEmail + '\">' + $json.userEmail + '</a></p>' : '' }}\n</div>\n\n<h3>💬 Latest Interaction</h3>\n<div style=\"background: #e3f2fd; padding: 15px; border-radius: 8px; margin: 10px 0;\">\n<p><strong>User Message:</strong> {{ $json.chatInput }}</p>\n</div>\n<div style=\"background: #f3e5f5; padding: 15px; border-radius: 8px; margin: 10px 0;\">\n<p><strong>AI Response:</strong> {{ $json.response }}</p>\n</div>\n\n<h3>📊 Lead Intelligence</h3>\n<div style=\"background: #e8f5e8; padding: 15px; border-radius: 8px; margin: 10px 0;\">\n<ul style=\"margin: 0; padding-left: 20px;\">\n<li>Contact Info: <strong>{{ $json.metadata.emailCollected ? 'Yes ✅' : 'No ❌' }}</strong></li>\n<li>Contact Requested: <strong>{{ $json.metadata.contactRequested ? 'Yes ✅' : 'No ❌' }}</strong></li>\n<li>Timestamp: <strong>{{ $json.metadata.timestamp }}</strong></li>\n</ul>\n</div>",
+        "additionalFields": {
+          "importance": "High",
+          "bodyContentType": "html"
+        }
+      },
+      "id": "send-notification",
+      "name": "Send Notification",
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "position": [1620, -100],
+      "typeVersion": 2,
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "2f8oS1wGi2iGEAB4",
+          "name": "Microsoft Outlook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Save conversation to Firebase Realtime Database\nconst data = $json;\n\ntry {\n  const firebaseUrl = `https://fieldporter-website-default-rtdb.firebaseio.com/conversations/${data.sessionId}.json`;\n  \n  const conversationData = {\n    last_active: new Date().toISOString(),\n    messages_count: data.messageCount,\n    lead_score: data.leadScore,\n    status: data.leadScore > 5 ? 'qualified' : 'active',\n    agent_version: 'working_fixed',\n    latest_message: data.chatInput,\n    latest_response: data.response,\n    email_collected: !!data.userEmail,\n    notification_sent: data.shouldNotify\n  };\n  \n  const response = await fetch(firebaseUrl, {\n    method: 'PUT',\n    headers: { 'Content-Type': 'application/json' },\n    body: JSON.stringify(conversationData)\n  });\n  \n  return {\n    ...data,\n    conversationSaved: response.ok\n  };\n} catch (error) {\n  return {\n    ...data,\n    conversationSaved: false\n  };\n}"
+      },
+      "id": "save-conversation",
+      "name": "Save Conversation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1400, -220]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ response: $json.response, sessionId: $json.sessionId, messageCount: $json.messageCount, metadata: $json.metadata }) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "id": "respond-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1620, -220]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Process Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Input": {
+      "main": [
+        [
+          {
+            "node": "DeepSeek Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Format Response": {
+      "main": [
+        [
+          {
+            "node": "Check Notification",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Save Conversation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Notification": {
+      "main": [
+        [
+          {
+            "node": "Send Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Notification": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Conversation": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fieldporter-working-fixed"
+  }
+}

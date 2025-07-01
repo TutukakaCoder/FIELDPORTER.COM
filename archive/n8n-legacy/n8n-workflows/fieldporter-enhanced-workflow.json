@@ -1,0 +1,417 @@
+{
+  "name": "FIELDPORTER AI Chat Enhanced v2 - Fixed",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fieldporter-chat",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "https://fieldporter.com,http://localhost:3001,http://localhost:3000"
+        }
+      },
+      "id": "8f433d31-ee2f-497a-98ff-a7951c852b0b",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [-540, 100],
+      "webhookId": "fieldporter-chat-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Enhanced input processing with contact detection\nconst inputData = $input.all()[0].json;\n\n// Extract and validate conversation data\nconst body = inputData.body || inputData;\nconst userMessage = body.message || body.chatInput || '';\nconst sessionId = body.sessionId || `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;\nconst userEmail = body.userEmail || null;\nconst messageCount = body.messageCount || 1;\nconst conversationHistory = body.conversationHistory || [];\n\n// Handle health checks\nif (userMessage === 'health_check') {\n  return {\n    response: 'FIELDPORTER AI Agent is running optimally',\n    sessionId: 'health_check_session',\n    messageCount: 1,\n    metadata: {\n      status: 'healthy',\n      timestamp: new Date().toISOString(),\n      agent: 'fieldporter_enhanced'\n    }\n  };\n}\n\n// Enhanced message validation\nif (!userMessage || typeof userMessage !== 'string' || userMessage.trim().length === 0) {\n  return {\n    response: \"Thanks for reaching out! I'm FIELDPORTER's AI assistant. What specific AI challenge is your organization facing?\",\n    sessionId: sessionId,\n    messageCount: 1,\n    metadata: {\n      error: false,\n      fallback: true,\n      timestamp: new Date().toISOString(),\n      agent: 'fieldporter_enhanced'\n    }\n  };\n}\n\n// ENHANCED: Contact detection\nconst emailRegex = /\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b/gi;\nconst phoneRegex = /\\b(?:\\+?1[-.]?)?\\(?([0-9]{3})\\)?[-.]?([0-9]{3})[-.]?([0-9]{4})\\b/g;\n\nconst detectedEmail = userMessage.match(emailRegex)?.[0] || userEmail;\nconst detectedPhone = userMessage.match(phoneRegex)?.[0];\nconst hasContactInfo = !!(detectedEmail || detectedPhone);\n\n// Prepare conversation context (last 3 exchanges for efficiency)\nlet conversationContext = '';\nif (conversationHistory && conversationHistory.length > 0) {\n  conversationContext = conversationHistory\n    .slice(-6) // Last 6 messages (3 exchanges)\n    .map(msg => `${msg.role === 'user' ? 'User' : 'FIELDPORTER'}: ${msg.content}`)\n    .join('\\n');\n}\n\n// Enhanced lead qualification scoring based on your keywords\nconst qualificationKeywords = {\n  'ai strategy': 3, 'enterprise': 2, 'transformation': 2, 'automation': 2,\n  'consulting': 2, 'roi': 3, 'budget': 3, 'timeline': 2, 'urgent': 2,\n  'scale': 2, 'implementation': 2, 'portfolio': 2, 'vc': 3,\n  'construction': 2, 'research': 2, 'workflow': 2, 'development': 2,\n  'ai integration': 3, 'strategic research': 3, 'rapid prototyping': 2\n};\n\nlet leadScore = 1;\nconst lowerMessage = userMessage.toLowerCase();\nfor (const [keyword, score] of Object.entries(qualificationKeywords)) {\n  if (lowerMessage.includes(keyword)) {\n    leadScore += score;\n  }\n}\n\n// Boost score for contact information\nif (hasContactInfo) {\n  leadScore += 3;\n}\n\n// Check if asking for contact\nconst wantsContact = lowerMessage.includes('contact') || \n                   lowerMessage.includes('reach out') || \n                   lowerMessage.includes('get in touch') ||\n                   lowerMessage.includes('speak to someone') ||\n                   lowerMessage.includes('talk to someone') ||\n                   lowerMessage.includes('call me') ||\n                   lowerMessage.includes('email me');\n\n// Format for AI processing\nconst result = {\n  chatInput: userMessage.trim(),\n  sessionId: sessionId,\n  userEmail: detectedEmail,\n  userPhone: detectedPhone,\n  hasContactInfo: hasContactInfo,\n  wantsContact: wantsContact,\n  messageCount: messageCount,\n  conversationContext: conversationContext,\n  leadScore: leadScore,\n  timestamp: new Date().toISOString()\n};\n\nreturn result;"
+      },
+      "id": "bb9efd57-b40f-48a5-a231-a64d69364503",
+      "name": "Process Input & Detect Contact",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-320, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pass through input data if knowledge base query fails\nconst inputData = $input.all()[0].json;\n\n// Create empty knowledge context\nconst knowledgeContext = '';\n\n// Pass through all input data\nreturn {\n  ...inputData,\n  knowledgeContext: knowledgeContext\n};"
+      },
+      "id": "627742d0-95bb-4be6-ace4-998bc3dd6b44",
+      "name": "Knowledge Fallback",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-100, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://firestore.googleapis.com/v1/projects/fieldporter-website/databases/(default)/documents/ai_knowledge_base",
+        "options": {
+          "queryParameters": {
+            "maskFieldPaths": "category,title,content,keywords,priority,active"
+          }
+        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleFirebaseCloudFirestoreOAuth2Api"
+      },
+      "id": "9c24fe10-2854-49d0-8462-2a109dc9473a",
+      "name": "Get Knowledge Base",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-100, 220],
+      "credentials": {
+        "googleFirebaseCloudFirestoreOAuth2Api": {
+          "id": "WQs8dzH5ndbRE6bJ",
+          "name": "Firebase - FIELDPORTER"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare knowledge context for AI\nconst inputData = $input.all()[0].json;\nconst knowledgeResponse = $input.all()[1]?.json || {};\n\n// Format knowledge base content from Firestore REST API response\nlet knowledgeContext = '';\nif (knowledgeResponse.documents && Array.isArray(knowledgeResponse.documents)) {\n  const knowledge = knowledgeResponse.documents\n    .filter(doc => doc.fields && doc.fields.active && doc.fields.active.booleanValue === true)\n    .map(doc => {\n      const fields = doc.fields;\n      const category = fields.category?.stringValue || 'general';\n      const title = fields.title?.stringValue || 'Information';\n      const content = fields.content?.stringValue || '';\n      return `[${category}] ${title}: ${content}`;\n    })\n    .join('\\n\\n');\n  \n  if (knowledge) {\n    knowledgeContext = `\\n\\nCOMPANY KNOWLEDGE:\\n${knowledge}`;\n  }\n}\n\n// Pass through all input data with knowledge\nreturn {\n  ...inputData,\n  knowledgeContext: knowledgeContext\n};"
+      },
+      "id": "1a1785e8-caba-4027-a38c-c88065de76d6",
+      "name": "Prepare Knowledge Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [120, 100]
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are PORTER, Frederick's AI assistant at FIELDPORTER. We help businesses integrate AI tools that actually work. We're builders who happen to consult - we test every AI tool and strategy in our own projects before recommending them.\n\nCRITICAL CONSTRAINTS:\n- You CANNOT send calendar invites, schedule meetings, or book appointments\n- You CANNOT access external systems or send emails directly\n- For booking requests, direct to contact page at fieldporter.com/contact\n\nRESPONSE RULES:\n- 2-3 sentences maximum\n- Professional but conversational tone\n- No special characters or formatting\n- Ask questions to understand their challenge\n- Guide qualified prospects toward consultation\n- Never mention specific client names or confidential projects\n- Avoid repetitive questions - build on previous conversation\n- Provide specific, authentic responses based on context\n\n{{ $json.knowledgeContext }}\n\nCONVERSATION GOAL: Understand their challenge and assess if we can help. Be natural and authentic.\n\nWHEN USER PROVIDES CONTACT INFO OR WANTS TO BE CONTACTED:\nAcknowledge their interest warmly and let them know Frederick will personally review their needs and reach out within 24 hours. Direct them to share details via fieldporter.com/contact for fastest response.",
+          "maxIterations": 5,
+          "returnIntermediateSteps": false
+        }
+      },
+      "id": "bd6013a2-7f8b-4eee-be69-1a51ff20ad04",
+      "name": "FIELDPORTER AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [340, 100]
+    },
+    {
+      "parameters": {
+        "options": {
+          "frequencyPenalty": 0.1,
+          "maxTokens": 150,
+          "presencePenalty": 0.1,
+          "temperature": 0.3,
+          "topP": 0.9
+        }
+      },
+      "id": "3bdd1781-fa4a-4700-9fc4-742550550b38",
+      "name": "DeepSeek Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [380, 320],
+      "credentials": {
+        "deepSeekApi": {
+          "id": "WQs8dzH5ndbRE6bJ",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 3
+      },
+      "id": "bfb9de0a-7d4b-4389-9de2-9b69d2fc70c1",
+      "name": "Conversation Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [500, 320]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format response and prepare notification data\nconst data = $input.all()[0].json;\n\n// Handle health check responses\nif (data.response && data.metadata && data.metadata.agent === 'fieldporter_enhanced') {\n  return data;\n}\n\n// Extract and clean AI response\nlet responseText = '';\nif (data.output) {\n  responseText = data.output;\n} else if (data.text) {\n  responseText = data.text;\n} else if (data.response) {\n  responseText = data.response;\n} else {\n  responseText = \"I'd love to learn about your AI challenges. What specific area is your organization looking to optimize with AI?\";\n}\n\n// Clean and optimize response\nresponseText = responseText.trim();\n\n// CONFIDENTIALITY CHECKS - Critical security feature\nconst confidentialTerms = ['papps mastery', 'voycap', 'harpers', 'sir the label', 'steve papps'];\nconst lowerResponse = responseText.toLowerCase();\n\nfor (const term of confidentialTerms) {\n  if (lowerResponse.includes(term)) {\n    responseText = \"I'd be happy to discuss how FIELDPORTER can help with your strategic challenges. What specific business problem are you looking to solve?\";\n    break;\n  }\n}\n\n// Remove any special formatting that could cause display issues\nresponseText = responseText\n  .replace(/[\\*\\#\\`\\[\\]\\(\\)]/g, '')\n  .replace(/\\n\\n+/g, ' ')\n  .replace(/\\s+/g, ' ')\n  .trim();\n\n// Ensure response length is appropriate for chat (mobile-friendly)\nif (responseText.length > 400) {\n  const truncated = responseText.substring(0, 380);\n  const lastSentence = truncated.lastIndexOf('.');\n  if (lastSentence > 200) {\n    responseText = truncated.substring(0, lastSentence + 1);\n  } else {\n    responseText = truncated + '...';\n  }\n}\n\n// Ensure minimum quality and professional tone\nif (!responseText || responseText.length < 20) {\n  responseText = \"Thanks for your question! This sounds like something our team should discuss with you directly. What's the best way to connect about your AI strategy needs?\";\n}\n\n// Extract session data\nconst sessionId = data.sessionId || 'unknown_session';\nconst messageCount = (data.messageCount || 1) + 1;\nconst leadScore = data.leadScore || 1;\n\n// Check if we need to send notification\nconst shouldNotify = leadScore >= 7 || data.hasContactInfo || data.wantsContact;\n\n// Enhanced response with business intelligence\nconst formattedResponse = {\n  response: responseText,\n  sessionId: sessionId,\n  messageCount: messageCount,\n  shouldNotify: shouldNotify,\n  userEmail: data.userEmail || null,\n  userPhone: data.userPhone || null,\n  chatInput: data.chatInput || '',\n  conversationContext: data.conversationContext || '',\n  metadata: {\n    timestamp: new Date().toISOString(),\n    agent: 'fieldporter_enhanced',\n    leadScore: leadScore,\n    responseLength: responseText.length,\n    conversationSaved: true,\n    confidentialityChecked: true,\n    emailCollected: !!data.userEmail,\n    phoneCollected: !!data.userPhone,\n    contactRequested: data.wantsContact || false\n  }\n};\n\nreturn formattedResponse;"
+      },
+      "id": "d967e829-2a3c-4b05-8e6e-548727d740f2",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 100]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.shouldNotify }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4a163f44-3b51-4c8e-843d-42d73c3dd9e9",
+      "name": "Check if Need Notification",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.1,
+      "position": [940, 220]
+    },
+    {
+      "parameters": {
+        "toRecipients": "freddy@fieldporter.com",
+        "subject": "=🔥 FIELDPORTER Lead: Score {{ $json.metadata.leadScore }}/10{{ $json.userEmail ? ' - ' + $json.userEmail : '' }}",
+        "bodyContent": "=<h2>🔥 New Lead from AI Chat</h2>\n<div style=\"background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;\">\n<p><strong>Lead Score:</strong> <span style=\"color: #d73a49; font-size: 18px;\">{{ $json.metadata.leadScore }}/10</span></p>\n<p><strong>Session ID:</strong> {{ $json.sessionId }}</p>\n{{ $json.userEmail ? '<p><strong>📧 Email:</strong> <a href=\"mailto:' + $json.userEmail + '\">' + $json.userEmail + '</a></p>' : '' }}\n{{ $json.userPhone ? '<p><strong>📞 Phone:</strong> ' + $json.userPhone + '</p>' : '' }}\n</div>\n\n<h3>💬 Latest Interaction</h3>\n<div style=\"background: #e3f2fd; padding: 15px; border-radius: 8px; margin: 10px 0;\">\n<p><strong>User Message:</strong> {{ $json.chatInput }}</p>\n</div>\n<div style=\"background: #f3e5f5; padding: 15px; border-radius: 8px; margin: 10px 0;\">\n<p><strong>AI Response:</strong> {{ $json.response }}</p>\n</div>\n\n{{ $json.conversationContext ? '<h3>🗣️ Conversation Context</h3><div style=\"background: #f5f5f5; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 12px; line-height: 1.4; white-space: pre-wrap; margin: 10px 0;\">' + $json.conversationContext + '</div>' : '' }}\n\n<h3>📊 Lead Intelligence</h3>\n<div style=\"background: #e8f5e8; padding: 15px; border-radius: 8px; margin: 10px 0;\">\n<ul style=\"margin: 0; padding-left: 20px;\">\n<li>Contact Info Provided: <strong>{{ $json.metadata.emailCollected || $json.metadata.phoneCollected ? 'Yes ✅' : 'No ❌' }}</strong></li>\n<li>Contact Requested: <strong>{{ $json.metadata.contactRequested ? 'Yes ✅' : 'No ❌' }}</strong></li>\n<li>Message Count: <strong>{{ $json.messageCount }}</strong></li>\n<li>Timestamp: <strong>{{ $json.metadata.timestamp }}</strong></li>\n</ul>\n</div>\n\n<div style=\"text-align: center; margin: 30px 0;\">\n<a href=\"https://console.firebase.google.com/project/fieldporter-website/firestore/data/~2Fconversations_v2~2F{{ $json.sessionId }}\" style=\"background: #0969da; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold;\">📊 View Full Conversation in Firebase</a>\n</div>",
+        "additionalFields": {
+          "importance": "High",
+          "bodyContentType": "html"
+        }
+      },
+      "id": "150ab5ff-8946-4963-86b2-5ee0a7abb191",
+      "name": "Send Email Notification",
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [1160, 220],
+      "webhookId": "c0fc917c-0723-484d-a068-2054df3e4af4",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "2f8oS1wGi2iGEAB4",
+          "name": "Microsoft Outlook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://fieldporter-website-default-rtdb.firebaseio.com/conversations/{{ $json.sessionId }}.json",
+        "options": {
+          "bodyContentType": "json",
+          "jsonBody": "={\n  \"last_active\": \"{{ $json.metadata.timestamp }}\",\n  \"messages_count\": {{ $json.messageCount }},\n  \"lead_score\": {{ $json.metadata.leadScore }},\n  \"status\": \"{{ $json.metadata.leadScore > 5 ? 'qualified' : 'active' }}\",\n  \"agent_version\": \"enhanced_v2\",\n  \"updated_at\": \"{{ $json.metadata.timestamp }}\",\n  \"email_collected\": {{ $json.metadata.emailCollected }},\n  \"phone_collected\": {{ $json.metadata.phoneCollected }},\n  \"contact_requested\": {{ $json.metadata.contactRequested }},\n  \"notification_sent\": {{ $json.shouldNotify }},\n  \"latest_message\": \"{{ $json.chatInput }}\",\n  \"latest_response\": \"{{ $json.response }}\"\n}",
+          "headers": {
+            "Content-Type": "application/json"
+          }
+        }
+      },
+      "id": "f501057f-8eee-4e74-846c-67f1d99d6692",
+      "name": "Save Conversation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [940, 100]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ response: $json.response, sessionId: $json.sessionId, messageCount: $json.messageCount, metadata: $json.metadata }) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "id": "4dba9720-0a38-45f2-9f51-4bf38ebc988a",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1160, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Enhanced error handler with FIELDPORTER context\nconst error = $input.all()[0];\n\n// Determine error type and provide appropriate fallback\nlet errorType = 'general_error';\nlet fallbackResponse = \"I apologize for the technical hiccup. I'm FIELDPORTER's AI assistant, and I'd love to help you explore how AI can transform your business. What specific challenge are you facing?\";\n\nif (error.message?.includes('DeepSeek')) {\n  errorType = 'ai_service_error';\n  fallbackResponse = \"I'm experiencing a brief technical issue, but I'm here to help with your AI strategy questions. We've helped companies like yours implement AI solutions. What's your biggest operational challenge?\";\n} else if (error.message?.includes('Firebase')) {\n  errorType = 'database_error';\n  fallbackResponse = \"Thanks for your patience with a quick technical issue. As FIELDPORTER's AI assistant, I can share how we've helped companies optimize their operations with AI. What industry are you in?\";\n}\n\nconst enhancedFallback = {\n  response: fallbackResponse,\n  sessionId: error.json?.sessionId || 'error_session',\n  messageCount: error.json?.messageCount || 1,\n  metadata: {\n    error: true,\n    errorType: errorType,\n    timestamp: new Date().toISOString(),\n    agent: 'fieldporter_enhanced_fallback',\n    leadScore: 1\n  }\n};\n\nreturn enhancedFallback;"
+      },
+      "id": "ae7547b2-4793-4181-bbc8-eeb558add8e9",
+      "name": "Error Handler",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 320]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "aea753c8-b25e-44fd-ada6-55659e48b526",
+      "name": "Error Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [940, 320]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Process Input & Detect Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Input & Detect Contact": {
+      "main": [
+        [
+          {
+            "node": "Knowledge Fallback",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Knowledge Base",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Error Handler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Knowledge Fallback": {
+      "main": [
+        [
+          {
+            "node": "Prepare Knowledge Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Knowledge Base": {
+      "main": [
+        [
+          {
+            "node": "Prepare Knowledge Context",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Prepare Knowledge Context": {
+      "main": [
+        [
+          {
+            "node": "FIELDPORTER AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FIELDPORTER AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Error Handler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "FIELDPORTER AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conversation Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "FIELDPORTER AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Response": {
+      "main": [
+        [
+          {
+            "node": "Check if Need Notification",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Save Conversation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if Need Notification": {
+      "main": [
+        [
+          {
+            "node": "Send Email Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email Notification": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Conversation": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Handler": {
+      "main": [
+        [
+          {
+            "node": "Error Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "80490970067c96bad09a01f5db09f21dda0685db6652b035ad218cd3cf76bd0b"
+  }
+}

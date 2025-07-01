@@ -1,0 +1,510 @@
+'use client';
+
+import React from 'react';
+import { ContactFormData, firebaseFormsService } from '@/lib/firebase-forms';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  ArrowRight,
+  CheckCircle,
+  Clock,
+  MessageSquare,
+  User,
+  ChevronDown,
+  Activity,
+  Target,
+  Lightbulb,
+} from 'lucide-react';
+import { useState } from 'react';
+
+// Enhanced form data interface
+interface EnhancedContactFormData extends ContactFormData {
+  whatBringsYouHere: string;
+  additionalContext: {
+    timeline: string;
+    currentTools: string;
+    teamSize: string;
+  };
+}
+
+const WHAT_BRINGS_YOU_OPTIONS = [
+  'I know what I want to automate',
+  'I need help identifying opportunities',
+  'Just exploring AI possibilities',
+];
+
+const FIELD_CONFIGS = {
+  'I know what I want to automate': {
+    label: 'Project details',
+    placeholder: 'Describe your automation idea, workflow challenges, or AI integration needs...',
+    helperText: 'The more specific, the better we can help',
+  },
+  'I need help identifying opportunities': {
+    label: 'Current situation',
+    placeholder: 'Tell us about your work, daily tasks, or processes that take too much time...',
+    helperText: "We'll analyze your workflow and suggest automation opportunities",
+  },
+  'Just exploring AI possibilities': {
+    label: 'Areas of interest',
+    placeholder: 'What aspects of AI interest you? Research, automation, development, or something else?',
+    helperText: "Let's start a conversation about what's possible",
+  },
+};
+
+export function SimpleContactForm() {
+  const [formData, setFormData] = useState<EnhancedContactFormData>({
+    name: '',
+    email: '',
+    company: '',
+    projectType: '',
+    challengeDescription: '',
+    timeline: '',
+    budgetRange: '',
+    whatBringsYouHere: '',
+    additionalContext: {
+      timeline: '',
+      currentTools: '',
+      teamSize: '',
+    },
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errors, setErrors] = useState<string[]>([]);
+  const [showAdditionalContext, setShowAdditionalContext] = useState(false);
+
+  // Form validation - simplified, no character minimums
+  const isFormValid =
+    formData.name.trim().length > 0 &&
+    formData.email.trim().length > 0 &&
+    formData.email.includes('@') &&
+    formData.whatBringsYouHere.length > 0 &&
+    formData.challengeDescription.trim().length > 0;
+
+  const updateFormData = (field: string, value: string) => {
+    if (field.includes('.')) {
+      const [parent, child] = field.split('.');
+      if (parent === 'additionalContext') {
+        setFormData(prev => ({
+          ...prev,
+          additionalContext: {
+            ...prev.additionalContext,
+            [child]: value,
+          },
+        }));
+      }
+    } else {
+      setFormData(prev => ({ ...prev, [field]: value }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!isFormValid || isSubmitting) return;
+
+    setIsSubmitting(true);
+    setErrors([]);
+
+    try {
+      // Prepare form data for Firebase
+      const submissionData: ContactFormData = {
+        name: formData.name,
+        email: formData.email,
+        company: formData.company || '',
+        projectType: formData.whatBringsYouHere || 'AI Project Inquiry',
+        challengeDescription: formData.challengeDescription,
+        timeline: formData.additionalContext.timeline || 'Flexible',
+        budgetRange: formData.budgetRange || "Let's discuss",
+      };
+
+      const result = await firebaseFormsService.submitContactForm(submissionData);
+
+      if (result.success) {
+        setIsSubmitted(true);
+      } else {
+        setErrors([result.error || 'An unexpected error occurred. Please try again.']);
+      }
+    } catch (error) {
+      setErrors(['Network error. Please check your connection and try again.']);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const currentFieldConfig = formData.whatBringsYouHere 
+    ? FIELD_CONFIGS[formData.whatBringsYouHere as keyof typeof FIELD_CONFIGS]
+    : null;
+
+  const getFieldIcon = (option: string) => {
+    switch (option) {
+      case 'I know what I want to automate':
+        return <Target className='h-4 w-4 text-blue-400' />;
+      case 'I need help identifying opportunities':
+        return <Activity className='h-4 w-4 text-blue-400' />;
+      case 'Just exploring AI possibilities':
+        return <Lightbulb className='h-4 w-4 text-blue-400' />;
+      default:
+        return null;
+    }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+      },
+    },
+  };
+
+  if (isSubmitted) {
+    return (
+      <section id='contact-form' className='relative py-32 md:py-40 lg:py-48 overflow-hidden'>
+        <div className='absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-black' />
+
+        <div className='relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            className='max-w-3xl mx-auto text-center'
+          >
+            <div className='relative bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 hover:bg-white/[0.04] transition-all duration-300'>
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <CheckCircle className='h-16 w-16 text-emerald-400 mx-auto mb-6' />
+              </motion.div>
+
+              <h2 className='text-2xl md:text-3xl font-semibold text-white mb-6 leading-tight'>
+                Thanks for Reaching Out!
+              </h2>
+
+              <p className='text-lg text-gray-300 mb-8 leading-relaxed'>
+                We've received your message and are already thinking about how we can help. Here's what happens next:
+              </p>
+
+              <div className='bg-white/[0.02] border border-white/10 rounded-2xl p-6 mb-8'>
+                <div className='grid md:grid-cols-3 gap-6 text-left'>
+                  <div className='flex flex-col items-center text-center'>
+                    <div className='w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center mb-4'>
+                      <Clock className='h-6 w-6 text-blue-400' />
+                    </div>
+                    <h3 className='text-white font-semibold mb-2'>Within 24 hours</h3>
+                    <p className='text-gray-400 text-sm'>We'll analyze your needs and identify specific opportunities</p>
+                  </div>
+                  
+                  <div className='flex flex-col items-center text-center'>
+                    <div className='w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mb-4'>
+                      <MessageSquare className='h-6 w-6 text-green-400' />
+                    </div>
+                    <h3 className='text-white font-semibold mb-2'>Personalized response</h3>
+                    <p className='text-gray-400 text-sm'>You'll receive tailored recommendations based on your situation</p>
+                  </div>
+                  
+                  <div className='flex flex-col items-center text-center'>
+                    <div className='w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mb-4'>
+                      <ArrowRight className='h-6 w-6 text-purple-400' />
+                    </div>
+                    <h3 className='text-white font-semibold mb-2'>Next steps</h3>
+                    <p className='text-gray-400 text-sm'>We'll suggest a focused call, resources, or automation roadmap</p>
+                  </div>
+                </div>
+              </div>
+
+              <p className='text-blue-400 text-base'>
+                <strong>In the meantime:</strong> Feel free to explore our{' '}
+                <a href='/portfolio' className='underline hover:text-blue-300 transition-colors'>
+                  case studies
+                </a>{' '}
+                or check out our{' '}
+                <a href='/insights' className='underline hover:text-blue-300 transition-colors'>
+                  latest insights
+                </a>{' '}
+                on AI automation.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section id='contact-form' className='relative py-32 md:py-40 lg:py-48 overflow-hidden'>
+      <div className='absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-black' />
+      
+      {/* Subtle background elements */}
+      <div className='absolute inset-0 opacity-30'>
+        <div className='absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl' />
+        <div className='absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl' />
+      </div>
+
+      <div className='relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <motion.div
+          variants={containerVariants}
+          initial='hidden'
+          animate='visible'
+          className='max-w-2xl mx-auto'
+        >
+          {/* Header */}
+          <motion.div variants={itemVariants} className='text-center mb-12'>
+            <h1 className='text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight'>
+              Let's Talk About Your AI Project
+            </h1>
+            <p className='text-xl text-gray-300 leading-relaxed'>
+              Whether you have a specific automation in mind or want to explore possibilities, we'll help you find the right approach.
+            </p>
+          </motion.div>
+
+          {/* Contact Form */}
+          <motion.form
+            variants={itemVariants}
+            onSubmit={handleSubmit}
+            className='relative bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 hover:bg-white/[0.04] transition-all duration-300'
+          >
+            {/* Error Messages */}
+            <AnimatePresence>
+              {errors.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className='mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl'
+                >
+                  <ul className='text-red-400 text-sm space-y-1'>
+                    {errors.map((error, index) => (
+                      <li key={index}>{error}</li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <div className='space-y-8'>
+              {/* Your Information Section */}
+              <div>
+                <h3 className='text-lg font-semibold text-white mb-6 flex items-center gap-2'>
+                  <User className='h-5 w-5 text-blue-400' />
+                  Your Information
+                </h3>
+                
+                <div className='grid md:grid-cols-2 gap-6'>
+                  <div>
+                    <label className='block text-sm font-medium text-gray-300 mb-2'>
+                      Your name <span className='text-red-400'>*</span>
+                    </label>
+                    <input
+                      type='text'
+                      value={formData.name}
+                      onChange={(e) => updateFormData('name', e.target.value)}
+                      placeholder='Full name'
+                      className='w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200'
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className='block text-sm font-medium text-gray-300 mb-2'>
+                      Email address <span className='text-red-400'>*</span>
+                    </label>
+                    <input
+                      type='email'
+                      value={formData.email}
+                      onChange={(e) => updateFormData('email', e.target.value)}
+                      placeholder='your@email.com'
+                      className='w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200'
+                      required
+                    />
+                  </div>
+                </div>
+                
+                <div className='mt-6'>
+                  <label className='block text-sm font-medium text-gray-300 mb-2'>
+                    Organization <span className='text-gray-500'>(optional)</span>
+                  </label>
+                  <input
+                    type='text'
+                    value={formData.company}
+                    onChange={(e) => updateFormData('company', e.target.value)}
+                    placeholder='Company or personal project'
+                    className='w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200'
+                  />
+                </div>
+              </div>
+
+              {/* Tell Us More Section */}
+              <div>
+                <h3 className='text-lg font-semibold text-white mb-6 flex items-center gap-2'>
+                  <MessageSquare className='h-5 w-5 text-blue-400' />
+                  Tell Us More
+                </h3>
+                
+                {/* What brings you here dropdown */}
+                <div className='mb-6'>
+                  <label className='block text-sm font-medium text-gray-300 mb-2'>
+                    What brings you here? <span className='text-red-400'>*</span>
+                  </label>
+                  <div className='relative'>
+                    <select
+                      value={formData.whatBringsYouHere}
+                      onChange={(e) => {
+                        updateFormData('whatBringsYouHere', e.target.value);
+                        // Reset challenge description when switching options
+                        updateFormData('challengeDescription', '');
+                      }}
+                      className='w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 appearance-none'
+                      required
+                    >
+                      <option value='' className='bg-gray-900 text-gray-300'>
+                        Choose what describes you best...
+                      </option>
+                      {WHAT_BRINGS_YOU_OPTIONS.map((option) => (
+                        <option key={option} value={option} className='bg-gray-900 text-white'>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className='absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none' />
+                  </div>
+                </div>
+
+                {/* Dynamic field based on selection */}
+                <AnimatePresence mode='wait'>
+                  {currentFieldConfig && (
+                    <motion.div
+                      key={formData.whatBringsYouHere}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <label className='block text-sm font-medium text-gray-300 mb-2 flex items-center gap-2'>
+                        {getFieldIcon(formData.whatBringsYouHere)}
+                        {currentFieldConfig.label} <span className='text-red-400'>*</span>
+                      </label>
+                      <textarea
+                        value={formData.challengeDescription}
+                        onChange={(e) => updateFormData('challengeDescription', e.target.value)}
+                        placeholder={currentFieldConfig.placeholder}
+                        rows={4}
+                        className='w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 resize-none'
+                        required
+                      />
+                      <p className='text-sm text-gray-400 mt-2'>{currentFieldConfig.helperText}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Additional Context (Expandable) */}
+              <div>
+                <button
+                  type='button'
+                  onClick={() => setShowAdditionalContext(!showAdditionalContext)}
+                  className='flex items-center gap-2 text-gray-300 hover:text-white transition-colors duration-200 mb-4'
+                >
+                  <motion.div
+                    animate={{ rotate: showAdditionalContext ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ChevronDown className='h-4 w-4' />
+                  </motion.div>
+                  Additional Context <span className='text-gray-500'>(optional)</span>
+                </button>
+
+                <AnimatePresence>
+                  {showAdditionalContext && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className='space-y-6'
+                    >
+                      <div className='grid md:grid-cols-3 gap-6'>
+                        <div>
+                          <label className='block text-sm font-medium text-gray-300 mb-2'>
+                            Timeline
+                          </label>
+                          <input
+                            type='text'
+                            value={formData.additionalContext.timeline}
+                            onChange={(e) => updateFormData('additionalContext.timeline', e.target.value)}
+                            placeholder='When are you looking to start?'
+                            className='w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200'
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className='block text-sm font-medium text-gray-300 mb-2'>
+                            Current tools
+                          </label>
+                          <input
+                            type='text'
+                            value={formData.additionalContext.currentTools}
+                            onChange={(e) => updateFormData('additionalContext.currentTools', e.target.value)}
+                            placeholder='Any AI tools you're already using?'
+                            className='w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200'
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className='block text-sm font-medium text-gray-300 mb-2'>
+                            Team size
+                          </label>
+                          <input
+                            type='text'
+                            value={formData.additionalContext.teamSize}
+                            onChange={(e) => updateFormData('additionalContext.teamSize', e.target.value)}
+                            placeholder='Just you or a larger team?'
+                            className='w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200'
+                          />
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Submit Button */}
+              <div className='pt-6'>
+                <button
+                  type='submit'
+                  disabled={!isFormValid || isSubmitting}
+                  className='w-full px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 group'
+                >
+                  {isSubmitting ? (
+                    <div className='animate-spin rounded-full h-5 w-5 border-b-2 border-white' />
+                  ) : (
+                    <>
+                      Start the Conversation
+                      <ArrowRight className='h-5 w-5 group-hover:translate-x-1 transition-transform duration-200' />
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </motion.form>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+

@@ -1,223 +1,185 @@
-'use client';
+"use client";
 
-import { BRAND, FOOTER_LINKS } from '@/config/constants';
-import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
-import { ArrowUpRight, Linkedin, Mail, MapPin, Twitter } from 'lucide-react';
-import Link from 'next/link';
+import { BRAND } from "@/config/constants";
+import { cn } from "@/lib/utils";
+import { Linkedin, Mail } from "lucide-react";
+import Link from "next/link";
 
 interface FooterProps {
   className?: string;
 }
 
-// Enhanced content structure reflecting current FIELDPORTER offerings
-const serviceCategories = [
+// Correct service structure with proper anchor links - MATCHING EXACT SERVICE TITLES
+const services = [
   {
-    name: 'Services',
-    links: [
-      { label: 'Strategic Research Intelligence', href: '/services' },
-      { label: 'Rapid Development & Integration', href: '/services' },
-      { label: 'Process Efficiency & Workflow Optimization', href: '/services' },
-      { label: 'AI Training & Implementation Education', href: '/services' },
-    ],
+    label: "Strategic Research Intelligence",
+    href: "/services#strategic-research",
+    description: "Deep strategic intelligence and market analysis",
+  },
+  {
+    label: "Rapid Development & Integration",
+    href: "/services#rapid-development",
+    description: "Custom solutions built and deployed fast",
+  },
+  {
+    label: "Process Efficiency & Workflow Optimization",
+    href: "/services#workflow-optimization",
+    description: "Streamline operations with intelligent automation",
+  },
+  {
+    label: "AI Training & Implementation Education",
+    href: "/services#ai-training",
+    description: "Team capability building and knowledge transfer",
   },
 ];
 
-const companyPages = [
-  { label: 'About', href: '/about' },
-  { label: 'Portfolio', href: '/portfolio' },
-  { label: 'Insights', href: '/insights' },
-  { label: 'Contact', href: '/contact' },
-];
-
-const resourcesLinks = [
-  { label: 'AI Strategy Insights', href: '/insights/why-ai-consulting-fails' },
-  { label: 'Automation ROI', href: '/insights/real-cost-not-automating' },
-  { label: 'VC Portfolio Optimization', href: '/insights/vc-portfolio-optimization' },
-];
-
-const socialLinks = [
-  {
-    name: 'LinkedIn',
-    href: 'https://linkedin.com/company/fieldporter',
-    icon: Linkedin,
-  },
-  {
-    name: 'Twitter',
-    href: 'https://twitter.com/fieldporter',
-    icon: Twitter,
-  },
+const company = [
+  { label: "About", href: "/about" },
+  { label: "Portfolio", href: "/portfolio" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export function Footer({ className }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className={cn('bg-fieldporter-black border-t border-white/10', className)}>
-      {/* Main Footer Content */}
-      <div className='container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 lg:py-24'>
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 md:gap-12'>
-          {/* Company Information - Enhanced */}
-          <div className='md:col-span-2 lg:col-span-5'>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className='space-y-6'
-            >
-              <Link
-                href='/'
-                className='inline-block text-3xl lg:text-4xl font-bold text-white mb-4 hover:text-fieldporter-blue transition-colors duration-300'
-              >
-                {BRAND.name}
-              </Link>
-
-              <div className='space-y-4'>
-                <p className='text-white/80 text-lg leading-relaxed max-w-md'>
-                  Strategic Research & Business Development
+    <footer className={cn("bg-black", className)}>
+      {/* Main Footer Content - Premium Layout */}
+      <div className="border-t border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
+            {/* LEFT SECTION - Brand Anchor */}
+            <div className="md:col-span-4 space-y-6">
+              <div className="space-y-4">
+                <Link
+                  href="/"
+                  className="inline-block text-2xl font-bold text-white hover:text-blue-400 transition-colors duration-200"
+                >
+                  {BRAND.name}
+                </Link>
+                <p className="text-gray-300 text-lg font-light">
+                  Building AI-Powered Futures
                 </p>
-                <p className='text-white/60 text-base leading-relaxed max-w-lg'>
-                  AI-powered strategic research and rapid prototyping for ambitious founders, VCs,
-                  and growth-stage companies making critical business decisions.
+                <p className="text-gray-400 text-sm">
+                  Auckland, New Zealand • Remote Worldwide
                 </p>
               </div>
 
-              {/* Contact Information */}
-              <div className='space-y-4'>
-                <div className='flex items-center space-x-3 text-white/70 hover:text-white transition-colors duration-200'>
-                  <Mail className='w-5 h-5 text-fieldporter-blue flex-shrink-0' />
-                  <a
-                    href={`mailto:${BRAND.email}`}
-                    className='hover:text-fieldporter-blue transition-colors duration-200'
-                  >
-                    {BRAND.email}
-                  </a>
-                </div>
-                <div className='flex items-center space-x-3 text-white/70'>
-                  <MapPin className='w-5 h-5 text-fieldporter-blue flex-shrink-0' />
-                  <span>New Zealand • Remote Worldwide</span>
-                </div>
+              {/* Social Links - LinkedIn Only */}
+              <div className="flex space-x-3">
+                <a
+                  href="https://linkedin.com/company/fieldporter"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 rounded-lg bg-gray-900 text-gray-400 hover:text-white hover:bg-gray-800 transition-all duration-200 min-w-[40px] min-h-[40px] flex items-center justify-center"
+                  aria-label="Follow us on LinkedIn"
+                >
+                  <Linkedin className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+
+            {/* CENTER SECTION - Services & Company */}
+            <div className="md:col-span-5 grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Services */}
+              <div className="space-y-6">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
+                  Services
+                </h3>
+                <ul className="space-y-4">
+                  {services.map((service) => (
+                    <li key={service.href}>
+                      <Link
+                        href={service.href}
+                        className="group block space-y-1"
+                      >
+                        <div className="text-gray-200 hover:text-white transition-colors duration-200 text-base font-medium">
+                          {service.label}
+                        </div>
+                        <div className="text-gray-500 text-sm leading-relaxed group-hover:text-gray-400 transition-colors duration-200">
+                          {service.description}
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
 
-              {/* Social Links */}
-              <div className='flex space-x-4 pt-2'>
-                {socialLinks.map(social => (
-                  <a
-                    key={social.name}
-                    href={social.href}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white hover:bg-fieldporter-blue/20 hover:border-fieldporter-blue/30 transition-all duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center'
-                    aria-label={`Follow us on ${social.name}`}
-                  >
-                    <social.icon className='w-5 h-5' />
-                  </a>
-                ))}
+              {/* Company */}
+              <div className="space-y-6">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
+                  Company
+                </h3>
+                <ul className="space-y-3">
+                  {company.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className="text-gray-300 hover:text-white transition-colors duration-200 text-base block py-1"
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </motion.div>
-          </div>
+            </div>
 
-          {/* Services Links */}
-          <div className='lg:col-span-2'>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              viewport={{ once: true }}
-              className='space-y-6'
-            >
-              <h3 className='text-white font-semibold text-xl mb-6'>Services</h3>
-              <ul className='space-y-4'>
-                {FOOTER_LINKS.services.map(link => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className='text-white/70 hover:text-white transition-colors duration-200 flex items-center group text-base min-h-[44px] py-1'
-                    >
-                      {link.label}
-                      <ArrowUpRight className='w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-all duration-200 transform group-hover:translate-x-1 group-hover:-translate-y-1' />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          </div>
-
-          {/* Company Links */}
-          <div className='lg:col-span-2'>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              viewport={{ once: true }}
-              className='space-y-6'
-            >
-              <h3 className='text-white font-semibold text-xl mb-6'>Company</h3>
-              <ul className='space-y-4'>
-                {companyPages.map(link => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className='text-white/70 hover:text-white transition-colors duration-200 flex items-center group text-base min-h-[44px] py-1'
-                    >
-                      {link.label}
-                      <ArrowUpRight className='w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-all duration-200 transform group-hover:translate-x-1 group-hover:-translate-y-1' />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          </div>
-
-          {/* Resources Links */}
-          <div className='lg:col-span-3'>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              viewport={{ once: true }}
-              className='space-y-6'
-            >
-              <h3 className='text-white font-semibold text-xl mb-6'>Insights</h3>
-              <div className='space-y-4'>
-                {resourcesLinks.map(resource => (
-                  <Link
-                    key={resource.href}
-                    href={resource.href}
-                    className='block p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 hover:border-fieldporter-blue/30 transition-all duration-300 group'
-                  >
-                    <div className='flex items-start justify-between'>
-                      <h4 className='text-white font-medium text-base group-hover:text-fieldporter-blue transition-colors duration-200'>
-                        {resource.label}
-                      </h4>
-                      <ArrowUpRight className='w-4 h-4 text-white/40 group-hover:text-fieldporter-blue opacity-0 group-hover:opacity-100 transition-all duration-200 transform group-hover:translate-x-1 group-hover:-translate-y-1 flex-shrink-0 ml-2' />
-                    </div>
-                  </Link>
-                ))}
+            {/* RIGHT SECTION - Premium CTA */}
+            <div className="md:col-span-3 space-y-6">
+              <div className="space-y-3">
+                <h3 className="text-white font-semibold text-lg leading-tight">
+                  Ready to Build?
+                </h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Let's discuss your AI project and explore how we can
+                  accelerate your outcomes.
+                </p>
               </div>
-            </motion.div>
+
+              {/* Refined Premium CTA Button */}
+              <div className="space-y-3">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center w-full px-6 py-3 rounded-lg border border-white/15 bg-white/[0.02] backdrop-blur-sm text-white font-medium text-sm transition-all duration-300 hover:bg-white/[0.05] hover:border-white/25 hover:shadow-lg hover:shadow-white/10"
+                >
+                  Start Your Project
+                </Link>
+
+                {/* Direct Contact */}
+                <a
+                  href={`mailto:${BRAND.email}`}
+                  className="inline-flex items-center space-x-2 text-gray-400 hover:text-white transition-colors duration-200 text-sm"
+                >
+                  <Mail className="w-4 h-4" />
+                  <span>{BRAND.email}</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Bottom Bar - Enhanced */}
-      <div className='border-t border-white/10 bg-white/5 backdrop-blur-sm'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8 py-8'>
-          <div className='flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0'>
-            <div className='text-white/60 text-base font-medium'>
-              © {currentYear} {BRAND.name}. All rights reserved.
-            </div>
-            <div className='flex flex-wrap items-center gap-8 text-base'>
-              {FOOTER_LINKS.legal.map(link => (
+        {/* Integrated Copyright Bar - Same Background */}
+        <div className="border-t border-gray-800 py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
+              <div className="text-gray-500 text-sm">
+                © {currentYear} {BRAND.name}
+              </div>
+              <div className="flex items-center gap-6 text-sm">
                 <Link
-                  key={link.href}
-                  href={link.href}
-                  className='text-white/60 hover:text-white transition-colors duration-200 min-h-[44px] flex items-center'
+                  href="/privacy-policy"
+                  className="text-gray-500 hover:text-white transition-colors duration-200"
                 >
-                  {link.label}
+                  Privacy
                 </Link>
-              ))}
+                <Link
+                  href="/terms-of-service"
+                  className="text-gray-500 hover:text-white transition-colors duration-200"
+                >
+                  Terms
+                </Link>
+              </div>
             </div>
           </div>
         </div>

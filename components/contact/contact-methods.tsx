@@ -1,160 +1,160 @@
-'use client';
+"use client";
 
-import { Card, CardContent } from '@/components/ui/card';
-import { Clock, ExternalLink, Linkedin, Mail, MapPin } from 'lucide-react';
+import { motion } from "framer-motion";
+import { ArrowRight, Calendar, Clock, Mail } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export function ContactMethods() {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Ensure immediate animation trigger
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+      },
+    },
+  };
+
+  const processSteps = [
+    {
+      icon: Mail,
+      title: "Send Message",
+      description: "Use the form above or email directly",
+      detail: "freddy@fieldporter.com",
+      color: "text-blue-400",
+    },
+    {
+      icon: Clock,
+      title: "Get Response",
+      description: "Personal response within 24 hours",
+      detail: "Project fit assessment included",
+      color: "text-emerald-400",
+    },
+    {
+      icon: Calendar,
+      title: "Schedule Call",
+      description: "If aligned, 30-minute discussion",
+      detail: "Fixed-price proposal follows",
+      color: "text-purple-400",
+    },
+  ];
+
   return (
-    <section className='py-16 lg:py-24 bg-bg-fieldporter-primary'>
-      <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
-        <div className='text-center mb-16'>
-          <h2 className='text-3xl md:text-4xl font-bold text-fieldporter-white mb-4'>
-            Alternative Contact Methods
-          </h2>
-          <p className='text-lg text-fieldporter-gray max-w-2xl mx-auto leading-relaxed'>
-            Prefer different communication channels? Here are additional ways to connect directly.
-          </p>
-        </div>
+    <section className="relative py-32 md:py-40 lg:py-48 overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-black to-gray-950" />
 
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16'>
-          {/* Email Contact */}
-          <Card className='bg-white/5 border-white/10 backdrop-blur-md hover:bg-white/10 transition-all duration-300 group'>
-            <CardContent className='p-8 text-center'>
-              <div className='w-16 h-16 bg-fieldporter-blue/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform'>
-                <Mail className='h-8 w-8 text-fieldporter-blue' />
-              </div>
-              <h3 className='text-fieldporter-white font-semibold text-lg mb-2'>Direct Email</h3>
-              <p className='text-fieldporter-gray text-sm mb-4 leading-relaxed'>
-                Personal email for all business inquiries and project discussions
-              </p>
-              <a
-                href='mailto:freddy@fieldporter.com'
-                className='text-fieldporter-blue hover:text-fieldporter-blue/80 font-medium transition-colors'
-              >
-                freddy@fieldporter.com
-              </a>
-              <div className='mt-4 pt-4 border-t border-white/10'>
-                <div className='flex items-center justify-center text-xs text-fieldporter-gray'>
-                  <Clock className='h-3 w-3 mr-1' />
-                  Response within 24 hours
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate={isLoaded ? "visible" : "hidden"}
+          className="text-center mb-16 md:mb-20"
+        >
+          <motion.h2
+            variants={itemVariants}
+            className="text-4xl sm:text-5xl lg:text-6xl font-light text-white mb-6 md:mb-8 leading-tight tracking-[-0.02em]"
+          >
+            What Happens{" "}
+            <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+              Next
+            </span>
+          </motion.h2>
+
+          <motion.p
+            variants={itemVariants}
+            className="text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light"
+          >
+            Simple process - no lengthy sales cycles or unclear expectations
+          </motion.p>
+        </motion.div>
+
+        {/* Process Steps */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 mb-16 md:mb-20">
+          {processSteps.map((step, index) => (
+            <motion.div
+              key={step.title}
+              variants={itemVariants}
+              initial="hidden"
+              animate={isLoaded ? "visible" : "hidden"}
+              transition={{ delay: index * 0.1 }}
+              className="relative bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-10 hover:bg-white/[0.04] transition-all duration-300 group text-center"
+            >
+              {/* Step Number */}
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <div className="w-8 h-8 bg-gray-900 border border-white/20 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                  {index + 1}
                 </div>
               </div>
-            </CardContent>
-          </Card>
 
-          {/* LinkedIn */}
-          <Card className='bg-white/5 border-white/10 backdrop-blur-md hover:bg-white/10 transition-all duration-300 group'>
-            <CardContent className='p-8 text-center'>
-              <div className='w-16 h-16 bg-fieldporter-blue/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform'>
-                <Linkedin className='h-8 w-8 text-fieldporter-blue' />
+              {/* Icon */}
+              <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 backdrop-blur-sm group-hover:scale-105 transition-transform duration-300 mx-auto">
+                <step.icon className={`w-8 h-8 ${step.color}`} />
               </div>
-              <h3 className='text-fieldporter-white font-semibold text-lg mb-2'>LinkedIn</h3>
-              <p className='text-fieldporter-gray text-sm mb-4 leading-relaxed'>
-                Connect for professional networking and industry insights
-              </p>
-              <a
-                href='https://www.linkedin.com/in/freddyjhopkins/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='text-fieldporter-blue hover:text-fieldporter-blue/80 font-medium transition-colors inline-flex items-center'
-              >
-                Professional Profile
-                <ExternalLink className='h-3 w-3 ml-1' />
-              </a>
-              <div className='mt-4 pt-4 border-t border-white/10'>
-                <div className='text-xs text-fieldporter-gray'>Professional updates & insights</div>
-              </div>
-            </CardContent>
-          </Card>
 
-          {/* Location */}
-          <Card className='bg-white/5 border-white/10 backdrop-blur-md hover:bg-white/10 transition-all duration-300 group sm:col-span-2 lg:col-span-1'>
-            <CardContent className='p-8 text-center'>
-              <div className='w-16 h-16 bg-fieldporter-gray/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform'>
-                <MapPin className='h-8 w-8 text-fieldporter-gray' />
+              <div className="space-y-4">
+                <h3 className="text-xl md:text-2xl font-semibold text-white leading-tight">
+                  {step.title}
+                </h3>
+
+                <p className="text-lg text-gray-300 leading-relaxed">
+                  {step.description}
+                </p>
+
+                <p className={`text-base font-medium ${step.color}`}>
+                  {step.detail}
+                </p>
               </div>
-              <h3 className='text-fieldporter-white font-semibold text-lg mb-2'>Location</h3>
-              <p className='text-fieldporter-gray text-sm mb-4 leading-relaxed'>
-                Based in Auckland, New Zealand with global client reach
-              </p>
-              <div className='text-fieldporter-blue font-medium'>
-                <div>Auckland, New Zealand</div>
-                <div className='text-sm text-fieldporter-gray mt-1'>NZDT Timezone</div>
-              </div>
-              <div className='mt-4 pt-4 border-t border-white/10'>
-                <div className='text-xs text-fieldporter-gray'>Video calls worldwide</div>
-              </div>
-            </CardContent>
-          </Card>
+            </motion.div>
+          ))}
         </div>
 
-        {/* Communication Preferences */}
-        <Card className='bg-white/5 border-white/10 backdrop-blur-md mb-12'>
-          <CardContent className='p-8'>
-            <h3 className='text-2xl font-bold text-fieldporter-white text-center mb-8'>
-              Communication Preferences
+        {/* Direct Contact CTA */}
+        <motion.div
+          variants={itemVariants}
+          initial="hidden"
+          animate={isLoaded ? "visible" : "hidden"}
+          className="text-center"
+        >
+          <div className="relative bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 max-w-4xl mx-auto">
+            <h3 className="text-2xl md:text-3xl font-semibold text-white mb-4 leading-tight">
+              Prefer Direct Contact?
             </h3>
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
-              <div className='text-center'>
-                <div className='w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4'>
-                  <Mail className='h-6 w-6 text-green-500' />
-                </div>
-                <h4 className='text-fieldporter-white font-semibold mb-2'>Email First</h4>
-                <p className='text-fieldporter-gray text-sm leading-relaxed'>
-                  We prefer email for initial contact to understand your challenge thoughtfully
-                </p>
-              </div>
-              <div className='text-center'>
-                <div className='w-12 h-12 bg-fieldporter-blue/20 rounded-full flex items-center justify-center mx-auto mb-4'>
-                  <Clock className='h-6 w-6 text-fieldporter-blue' />
-                </div>
-                <h4 className='text-fieldporter-white font-semibold mb-2'>Video Calls</h4>
-                <p className='text-fieldporter-gray text-sm leading-relaxed'>
-                  30-minute video calls for qualified opportunities to discuss fit and approach
-                </p>
-              </div>
-              <div className='text-center'>
-                <div className='w-12 h-12 bg-fieldporter-blue/20 rounded-full flex items-center justify-center mx-auto mb-4'>
-                  <Linkedin className='h-6 w-6 text-fieldporter-blue' />
-                </div>
-                <h4 className='text-fieldporter-white font-semibold mb-2'>Professional Network</h4>
-                <p className='text-fieldporter-gray text-sm leading-relaxed'>
-                  LinkedIn for ongoing professional relationship and industry insights
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Working Hours & Availability */}
-        <div className='text-center'>
-          <div className='max-w-4xl mx-auto'>
-            <div className='flex items-center justify-center mb-4'>
-              <div className='w-8 h-8 bg-fieldporter-blue/20 rounded-full flex items-center justify-center mr-3'>
-                <Clock className='h-4 w-4 text-fieldporter-blue' />
-              </div>
-              <h4 className='text-fieldporter-white font-semibold'>Working Hours & Availability</h4>
-            </div>
-            <p className='text-fieldporter-gray text-sm leading-relaxed mb-6 max-w-2xl mx-auto'>
-              Based in Auckland, New Zealand (NZDT) but work with clients globally. Flexible video
-              call scheduling across time zones.
+            <p className="text-lg text-gray-300 mb-8 leading-relaxed max-w-2xl mx-auto">
+              Skip the form and email directly for faster response
             </p>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto'>
-              <div className='bg-white/5 border-white/10 rounded-lg p-4'>
-                <p className='text-fieldporter-white font-medium mb-2'>Email Response</p>
-                <p className='text-fieldporter-gray text-sm'>
-                  Usually within 24 hours, often faster during NZ business hours
-                </p>
-              </div>
-              <div className='bg-white/5 border-white/10 rounded-lg p-4'>
-                <p className='text-fieldporter-white font-medium mb-2'>Video Calls</p>
-                <p className='text-fieldporter-gray text-sm'>
-                  Flexible scheduling across time zones, typically 30-60 minutes
-                </p>
-              </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-lg mx-auto">
+              <a
+                href="mailto:freddy@fieldporter.com"
+                className="group flex items-center gap-3 px-8 py-4 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 hover:border-blue-500/50 rounded-2xl text-blue-400 hover:text-blue-300 transition-all duration-300 font-medium"
+              >
+                <Mail className="w-5 h-5" />
+                freddy@fieldporter.com
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+              </a>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
-import { ReactNode } from 'react';
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import { ReactNode } from "react";
 
 interface PageWrapperProps {
   children: ReactNode;
@@ -14,19 +14,11 @@ interface PageWrapperProps {
 export function PageWrapper({
   children,
   className,
-  withPadding = true,
+  withPadding = false,
   withAnimation = true,
 }: PageWrapperProps) {
   const content = (
-    <main
-      className={cn(
-        'min-h-screen bg-black',
-        withPadding && 'pt-16 lg:pt-20', // Account for fixed header
-        className
-      )}
-    >
-      {children}
-    </main>
+    <main className={cn("min-h-screen bg-black", className)}>{children}</main>
   );
 
   if (!withAnimation) {
@@ -38,7 +30,7 @@ export function PageWrapper({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
     >
       {content}
     </motion.div>

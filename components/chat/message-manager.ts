@@ -1,16 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-'use client';
+"use client";
 
-import { OptimizedFirebaseChatService } from '@/lib/optimized-firebase-chat-service';
-import type { ConversationData, Message } from '@/types/chat';
+import { OptimizedFirebaseChatService } from "@/lib/optimized-firebase-chat-service";
+import type { ConversationData, Message } from "@/types/chat";
 
 interface MessageValidation {
   isValid: boolean;
   error?: string;
 }
 
-const STORAGE_KEY = 'fieldporter-chat-conversation';
-const SESSION_KEY = 'fieldporter-chat-session';
+const STORAGE_KEY = "fieldporter-chat-conversation";
+const SESSION_KEY = "fieldporter-chat-session";
 const MAX_USER_MESSAGE_LENGTH = 1000;
 const MAX_AI_MESSAGE_LENGTH = 4000;
 const STORAGE_EXPIRY_HOURS = 24;
@@ -25,6 +24,7 @@ export class MessageManager {
   private leadScore: number = 1;
   private serviceInterest: string[] = [];
   private consultationRequested: boolean = false;
+  private conversationStarted: boolean = false;
 
   constructor() {
     this.sessionId = this.getOrCreateSessionId();
@@ -39,8 +39,8 @@ export class MessageManager {
       this.loadFromStorage();
       await this.initializeFirebase();
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error initializing message manager:', error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error initializing message manager:", error);
       }
       this.isFirebaseEnabled = false;
     }
@@ -48,28 +48,38 @@ export class MessageManager {
 
   private async initializeFirebase(): Promise<void> {
     try {
-      const messages = await this.firebaseService.getConversationHistory(this.sessionId);
+      const messages = await this.firebaseService.getConversationHistory(
+        this.sessionId,
+      );
       if (messages.length > 0) {
-        if (this.messages.length === 0 || messages.length > this.messages.length) {
+        if (
+          this.messages.length === 0 ||
+          messages.length > this.messages.length
+        ) {
           this.messages = messages;
           this.saveToStorage();
         }
         this.isFirebaseEnabled = true;
+        this.conversationStarted = true;
       } else {
-        await this.firebaseService.createConversation(this.sessionId);
         this.isFirebaseEnabled = true;
+        this.conversationStarted = false;
       }
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Firebase initialization failed, using localStorage only:', error);
+      if (process.env.NODE_ENV === "development") {
+        console.error(
+          "Firebase initialization failed, using localStorage only:",
+          error,
+        );
       }
       this.isFirebaseEnabled = false;
+      this.conversationStarted = false;
     }
   }
 
   private getOrCreateSessionId(): string {
     try {
-      if (typeof window !== 'undefined' && window.sessionStorage) {
+      if (typeof window !== "undefined" && window.sessionStorage) {
         const existingSessionId = sessionStorage.getItem(SESSION_KEY);
         if (existingSessionId) {
           const stored = sessionStorage.getItem(STORAGE_KEY);
@@ -88,9 +98,13 @@ export class MessageManager {
         }
       }
 
-      if (typeof window !== 'undefined' && window.localStorage) {
-        const persistentSessionId = localStorage.getItem('fieldporter-session-id');
-        const persistentTimestamp = localStorage.getItem('fieldporter-session-timestamp');
+      if (typeof window !== "undefined" && window.localStorage) {
+        const persistentSessionId = localStorage.getItem(
+          "fieldporter-session-id",
+        );
+        const persistentTimestamp = localStorage.getItem(
+          "fieldporter-session-timestamp",
+        );
 
         if (persistentSessionId && persistentTimestamp) {
           const sessionAge = Date.now() - parseInt(persistentTimestamp);
@@ -102,14 +116,14 @@ export class MessageManager {
             }
             return persistentSessionId;
           } else {
-            localStorage.removeItem('fieldporter-session-id');
-            localStorage.removeItem('fieldporter-session-timestamp');
+            localStorage.removeItem("fieldporter-session-id");
+            localStorage.removeItem("fieldporter-session-timestamp");
           }
         }
       }
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error checking existing session:', error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error checking existing session:", error);
       }
     }
 
@@ -120,18 +134,21 @@ export class MessageManager {
     const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     try {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         if (window.sessionStorage) {
           sessionStorage.setItem(SESSION_KEY, newSessionId);
         }
         if (window.localStorage) {
-          localStorage.setItem('fieldporter-session-id', newSessionId);
-          localStorage.setItem('fieldporter-session-timestamp', Date.now().toString());
+          localStorage.setItem("fieldporter-session-id", newSessionId);
+          localStorage.setItem(
+            "fieldporter-session-timestamp",
+            Date.now().toString(),
+          );
         }
       }
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error storing new session ID:', error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error storing new session ID:", error);
       }
     }
 
@@ -147,27 +164,36 @@ export class MessageManager {
       /document\.(write|writeln|createElement)/gi,
     ];
 
-    return scriptPatterns.some(pattern => pattern.test(content));
+    return scriptPatterns.some((pattern) => pattern.test(content));
   }
 
   private async addMessageToFirebase(message: Message): Promise<void> {
     try {
+      if (!this.conversationStarted && message.role === "user") {
+        await this.firebaseService.createConversation(this.sessionId);
+        this.conversationStarted = true;
+      }
+
       await this.firebaseService.saveMessage(this.sessionId, message);
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error adding message to Firebase:', error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error adding message to Firebase:", error);
       }
     }
   }
 
-  private validateMessage(content: string, type: 'user' | 'assistant'): MessageValidation {
+  private validateMessage(
+    content: string,
+    type: "user" | "assistant",
+  ): MessageValidation {
     if (!content.trim()) {
-      return { isValid: false, error: 'Message cannot be empty' };
+      return { isValid: false, error: "Message cannot be empty" };
     }
 
-    const maxLength = type === 'user' ? MAX_USER_MESSAGE_LENGTH : MAX_AI_MESSAGE_LENGTH;
+    const maxLength =
+      type === "user" ? MAX_USER_MESSAGE_LENGTH : MAX_AI_MESSAGE_LENGTH;
     if (content.length > maxLength) {
-      if (type === 'user') {
+      if (type === "user") {
         return {
           isValid: false,
           error: `Message too long (${content.length}/${maxLength} characters)`,
@@ -176,27 +202,31 @@ export class MessageManager {
     }
 
     if (this.containsScriptContent(content)) {
-      return { isValid: false, error: 'Invalid content detected' };
+      return { isValid: false, error: "Invalid content detected" };
     }
 
     return { isValid: true };
   }
 
-  async addMessage(content: string, type: 'user' | 'assistant', email?: string): Promise<Message> {
+  async addMessage(
+    content: string,
+    type: "user" | "assistant",
+    email?: string,
+  ): Promise<Message> {
     try {
-      if (type === 'assistant' && content.length > MAX_AI_MESSAGE_LENGTH) {
-        content = content.substring(0, MAX_AI_MESSAGE_LENGTH) + '...';
+      if (type === "assistant" && content.length > MAX_AI_MESSAGE_LENGTH) {
+        content = content.substring(0, MAX_AI_MESSAGE_LENGTH) + "...";
       }
 
-      if (type === 'user' && content.length > MAX_USER_MESSAGE_LENGTH) {
+      if (type === "user" && content.length > MAX_USER_MESSAGE_LENGTH) {
         throw new Error(
-          `Message too long (${content.length}/${MAX_USER_MESSAGE_LENGTH} characters)`
+          `Message too long (${content.length}/${MAX_USER_MESSAGE_LENGTH} characters)`,
         );
       }
 
       const validation = this.validateMessage(content, type);
       if (!validation.isValid) {
-        throw new Error(validation.error || 'Message validation failed');
+        throw new Error(validation.error || "Message validation failed");
       }
 
       const message: Message = {
@@ -204,7 +234,7 @@ export class MessageManager {
         content: content.trim(),
         role: type,
         timestamp: new Date(),
-        status: type === 'user' ? 'sending' : 'sent',
+        status: type === "user" ? "sending" : "sent",
       };
 
       this.messages.push(message);
@@ -215,24 +245,27 @@ export class MessageManager {
       if (this.isFirebaseEnabled) {
         try {
           await this.addMessageToFirebase(message);
-          message.status = 'sent';
+          message.status = "sent";
         } catch (error) {
-          message.status = 'failed';
-          if (process.env.NODE_ENV === 'development') {
-            console.error('Firebase save failed:', error);
+          message.status = "failed";
+          if (process.env.NODE_ENV === "development") {
+            console.error("Firebase save failed:", error);
           }
         }
       }
 
       return message;
     } catch (error) {
-      console.error('Error in addMessage:', error);
+      console.error("Error in addMessage:", error);
       throw error;
     }
   }
 
-  updateMessageStatus(messageId: string, status: 'sending' | 'sent' | 'failed'): void {
-    const message = this.messages.find(m => m.id === messageId);
+  updateMessageStatus(
+    messageId: string,
+    status: "sending" | "sent" | "failed",
+  ): void {
+    const message = this.messages.find((m) => m.id === messageId);
     if (message) {
       message.status = status;
       this.saveToStorage();
@@ -251,10 +284,12 @@ export class MessageManager {
       if (this.isFirebaseEnabled) {
         try {
           await this.firebaseService.setUserEmail(this.sessionId, email);
-          this.leadScore = await this.firebaseService.calculateLeadScore(this.sessionId);
+          this.leadScore = await this.firebaseService.calculateLeadScore(
+            this.sessionId,
+          );
         } catch (error) {
-          if (process.env.NODE_ENV === 'development') {
-            console.error('Error updating email in Firebase:', error);
+          if (process.env.NODE_ENV === "development") {
+            console.error("Error updating email in Firebase:", error);
           }
         }
       }
@@ -274,10 +309,12 @@ export class MessageManager {
         await this.firebaseService.updateConversationMetadata(this.sessionId, {
           consultation_requested: true,
         });
-        this.leadScore = await this.firebaseService.calculateLeadScore(this.sessionId);
+        this.leadScore = await this.firebaseService.calculateLeadScore(
+          this.sessionId,
+        );
       } catch (error) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('Error marking consultation in Firebase:', error);
+        if (process.env.NODE_ENV === "development") {
+          console.error("Error marking consultation in Firebase:", error);
         }
       }
     }
@@ -298,19 +335,19 @@ export class MessageManager {
 
     // Clear storage and generate new session
     try {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         if (window.sessionStorage) {
           sessionStorage.removeItem(STORAGE_KEY);
           sessionStorage.removeItem(SESSION_KEY);
         }
         if (window.localStorage) {
-          localStorage.removeItem('fieldporter-session-id');
-          localStorage.removeItem('fieldporter-session-timestamp');
+          localStorage.removeItem("fieldporter-session-id");
+          localStorage.removeItem("fieldporter-session-timestamp");
         }
       }
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error clearing storage:', error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error clearing storage:", error);
       }
     }
 
@@ -322,10 +359,12 @@ export class MessageManager {
   getConversationSummary() {
     return {
       messageCount: this.messages.length,
-      userMessageCount: this.messages.filter(m => m.role === 'user').length,
-      assistantMessageCount: this.messages.filter(m => m.role === 'assistant').length,
+      userMessageCount: this.messages.filter((m) => m.role === "user").length,
+      assistantMessageCount: this.messages.filter((m) => m.role === "assistant")
+        .length,
       hasEmail: !!this.userEmail,
-      sessionDuration: Date.now() - new Date(this.sessionId.split('_')[1] || '0').getTime(),
+      sessionDuration:
+        Date.now() - new Date(this.sessionId.split("_")[1] || "0").getTime(),
       lastActivity: this.lastActivity,
       leadScore: this.leadScore,
       serviceInterest: this.serviceInterest,
@@ -346,7 +385,7 @@ export class MessageManager {
         consultationRequested: this.consultationRequested,
       };
 
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         // Save to sessionStorage for current session
         if (window.sessionStorage) {
           sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -355,20 +394,23 @@ export class MessageManager {
 
         // Update localStorage timestamp to extend session persistence
         if (window.localStorage) {
-          localStorage.setItem('fieldporter-session-id', this.sessionId);
-          localStorage.setItem('fieldporter-session-timestamp', Date.now().toString());
+          localStorage.setItem("fieldporter-session-id", this.sessionId);
+          localStorage.setItem(
+            "fieldporter-session-timestamp",
+            Date.now().toString(),
+          );
         }
       }
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error saving conversation:', error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error saving conversation:", error);
       }
     }
   }
 
   private loadFromStorage(): void {
     try {
-      if (typeof window !== 'undefined' && window.sessionStorage) {
+      if (typeof window !== "undefined" && window.sessionStorage) {
         const stored = sessionStorage.getItem(STORAGE_KEY);
         const storedSessionId = sessionStorage.getItem(SESSION_KEY);
 
@@ -384,15 +426,15 @@ export class MessageManager {
             sessionStorage.removeItem(STORAGE_KEY);
             sessionStorage.removeItem(SESSION_KEY);
             if (window.localStorage) {
-              localStorage.removeItem('fieldporter-session-id');
-              localStorage.removeItem('fieldporter-session-timestamp');
+              localStorage.removeItem("fieldporter-session-id");
+              localStorage.removeItem("fieldporter-session-timestamp");
             }
             return;
           }
 
           // Load conversation data
           if (data.sessionId === this.sessionId) {
-            this.messages = data.messages.map(msg => ({
+            this.messages = data.messages.map((msg) => ({
               ...msg,
               timestamp: new Date(msg.timestamp),
             }));
@@ -402,7 +444,7 @@ export class MessageManager {
             this.serviceInterest = data.serviceInterest || [];
             this.consultationRequested = data.consultationRequested || false;
 
-            if (process.env.NODE_ENV === 'development') {
+            if (process.env.NODE_ENV === "development") {
               // Development logging removed for production compliance
             }
           }
@@ -412,11 +454,11 @@ export class MessageManager {
         }
       }
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error loading conversation from sessionStorage:', error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error loading conversation from sessionStorage:", error);
       }
       // Clean up corrupted data
-      if (typeof window !== 'undefined' && window.sessionStorage) {
+      if (typeof window !== "undefined" && window.sessionStorage) {
         sessionStorage.removeItem(STORAGE_KEY);
         sessionStorage.removeItem(SESSION_KEY);
       }
@@ -426,37 +468,40 @@ export class MessageManager {
   private clearPreviousSession(): void {
     // Clear any old localStorage data
     try {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         if (window.localStorage) {
           const keysToRemove: string[] = [];
           for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (key && key.startsWith('fieldporter-chat-')) {
+            if (key && key.startsWith("fieldporter-chat-")) {
               keysToRemove.push(key);
             }
           }
-          keysToRemove.forEach(key => localStorage.removeItem(key));
+          keysToRemove.forEach((key) => localStorage.removeItem(key));
         }
       }
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error clearing old storage data:', error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error clearing old storage data:", error);
       }
     }
   }
 
   shouldShowEmailPrompt(): boolean {
-    return !this.userEmail && this.messages.filter(m => m.role === 'user').length >= 3;
+    return (
+      !this.userEmail &&
+      this.messages.filter((m) => m.role === "user").length >= 3
+    );
   }
 
   getFailedMessages(): Message[] {
-    return this.messages.filter(m => m.status === 'failed');
+    return this.messages.filter((m) => m.status === "failed");
   }
 
   retryMessage(messageId: string): Message | null {
-    const message = this.messages.find(m => m.id === messageId);
-    if (message && message.status === 'failed') {
-      message.status = 'sending';
+    const message = this.messages.find((m) => m.id === messageId);
+    if (message && message.status === "failed") {
+      message.status = "sending";
       this.saveToStorage();
       return message;
     }
@@ -489,14 +534,16 @@ export class MessageManager {
     operationCount?: number;
   }> {
     try {
-      const metrics = await this.firebaseService.getPerformanceMetrics(this.sessionId);
+      const metrics = await this.firebaseService.getPerformanceMetrics(
+        this.sessionId,
+      );
       return {
         queryTime: metrics.queryTime,
         estimatedCostReduction: metrics.estimatedCostReduction,
         operationCount: metrics.operationCount,
       };
     } catch (error) {
-      console.error('Failed to get performance metrics:', error);
+      console.error("Failed to get performance metrics:", error);
       return {
         queryTime: 0,
         estimatedCostReduction: 0,

@@ -1,147 +1,255 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { animations } from '@/lib/animations';
-import { motion, useInView } from 'framer-motion';
-import { ArrowRight, Clock, User, Zap } from 'lucide-react';
-import { useRef } from 'react';
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { ArrowDown } from "lucide-react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
-export function ContactHero() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-10%' });
+// Premium aurora background matching services page with performance optimization
+function PremiumAuroraBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      {/* Sophisticated gradient base */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black" />
 
-  const scrollToForm = () => {
-    const formElement = document.getElementById('contact-form');
+      {/* Enhanced grain texture overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.015]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+        }}
+      />
+
+      {/* Subtle aurora effects with hardware acceleration */}
+      <div className="absolute inset-0">
+        <motion.div
+          className="absolute -top-1/2 -left-1/2 w-[600px] h-[600px] rounded-full opacity-20 blur-[100px]"
+          style={{
+            background:
+              "linear-gradient(45deg, rgba(16, 185, 129, 0.3), rgba(59, 130, 246, 0.2))",
+            willChange: "transform",
+            backfaceVisibility: "hidden",
+            transform: "translateZ(0)",
+          }}
+          animate={{
+            x: [0, 150, -100, 0],
+            y: [0, -100, 80, 0],
+            scale: [1, 1.1, 0.9, 1],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear",
+            type: "tween",
+          }}
+        />
+
+        <motion.div
+          className="absolute -top-1/3 -right-1/3 w-[500px] h-[500px] rounded-full opacity-15 blur-[80px]"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(249, 115, 22, 0.2))",
+            willChange: "transform",
+            backfaceVisibility: "hidden",
+            transform: "translateZ(0)",
+          }}
+          animate={{
+            x: [0, -120, 100, 0],
+            y: [0, 80, -60, 0],
+            scale: [1, 0.9, 1.1, 1],
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "linear",
+            delay: 5,
+            type: "tween",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+// Floating geometric elements with performance optimization
+function FloatingElements() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <motion.div
+        className="absolute top-20 right-20 w-2 h-2 bg-blue-400/30 rounded-full"
+        style={{
+          willChange: "transform",
+          backfaceVisibility: "hidden",
+        }}
+        animate={{
+          y: [-10, 10, -10],
+          opacity: [0.3, 0.7, 0.3],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut",
+          type: "tween",
+        }}
+      />
+      <motion.div
+        className="absolute bottom-32 left-16 w-1 h-1 bg-white/40 rounded-full"
+        style={{
+          willChange: "transform",
+          backfaceVisibility: "hidden",
+        }}
+        animate={{
+          y: [10, -10, 10],
+          opacity: [0.2, 0.6, 0.2],
+        }}
+        transition={{
+          duration: 6,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2,
+          type: "tween",
+        }}
+      />
+    </div>
+  );
+}
+
+export const ContactHero = React.memo(() => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Ensure immediate centering on mount
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
+  const y = useTransform(smoothProgress, [0, 1], ["0%", "20%"]);
+  const opacity = useTransform(smoothProgress, [0, 0.5], [1, 0.7]);
+
+  const containerVariants = useMemo(
+    () => ({
+      hidden: { opacity: 0 },
+      visible: {
+        opacity: 1,
+        transition: {
+          staggerChildren: 0.15,
+          delayChildren: 0.1,
+        },
+      },
+    }),
+    [],
+  );
+
+  const itemVariants = useMemo(
+    () => ({
+      hidden: { opacity: 0, y: 15 },
+      visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+          duration: 0.8,
+          ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+        },
+      },
+    }),
+    [],
+  );
+
+  const scrollToForm = useCallback(() => {
+    const formElement = document.getElementById("contact-form");
     if (formElement) {
-      formElement.scrollIntoView({ behavior: 'smooth' });
+      formElement.scrollIntoView({ behavior: "smooth" });
     }
-  };
+  }, []);
 
   return (
     <section
-      ref={ref}
-      className='relative min-h-screen flex items-center justify-center bg-black pt-24 md:pt-32 lg:pt-20'
+      ref={containerRef}
+      className="relative h-[60vh] flex items-center justify-center overflow-hidden"
     >
-      {/* Sophisticated Background with Parallax */}
-      <div className='absolute inset-0 bg-black' />
+      <PremiumAuroraBackground />
+      <FloatingElements />
+
       <motion.div
-        variants={animations.parallaxBackground}
-        animate={isInView ? 'animate' : 'initial'}
-        className='absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,102,255,0.08),transparent_60%)]'
-      />
-      <motion.div
-        variants={animations.parallaxBackground}
-        animate={isInView ? 'animate' : 'initial'}
-        className='absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.02),transparent_50%)]'
-        style={{ animationDelay: '10s' }}
-      />
-
-      <div className='content-container relative z-10 text-center py-8'>
-        <motion.div
-          variants={animations.premiumStaggerContainer}
-          initial='initial'
-          animate={isInView ? 'animate' : 'initial'}
-          className='component-spacing-lg max-w-5xl mx-auto'
-        >
-          {/* Main Headline with mobile-optimized typography */}
-          <motion.h1
-            variants={animations.dramaticTextReveal}
-            className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-white leading-tight tracking-[-0.02em] mb-6'
-          >
-            Strategic Research{' '}
-            <motion.span
-              className='font-semibold bg-gradient-to-r from-[#0066FF] to-[#0052CC] bg-clip-text text-transparent'
-              whileHover={{
-                scale: 1.02,
-                transition: { duration: 0.3, ease: 'easeOut' },
-              }}
-            >
-              & Development
-            </motion.span>
-          </motion.h1>
-
-          {/* Value Proposition */}
-          <motion.p
-            variants={animations.premiumFadeInUp}
-            className='text-base sm:text-lg md:text-xl text-fieldporter-gray max-w-4xl mx-auto leading-relaxed font-light mb-12'
-          >
-            We build working applications, teach AI workflows, and provide systematic research for
-            businesses ready to implement solutions. Tell us about your specific challenge and
-            we&apos;ll assess honestly whether we can help solve it.
-          </motion.p>
-
-          {/* Trust Signals with mobile-optimized layout */}
+        style={{ y, opacity, willChange: "transform" }}
+        className="relative z-10 w-full"
+      >
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
-            variants={animations.premiumStaggerContainer}
-            className='grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12'
+            variants={containerVariants}
+            initial="hidden"
+            animate={isLoaded ? "visible" : "hidden"}
+            className="space-y-8"
           >
-            {[
-              {
-                icon: <User className='h-6 w-6 sm:h-8 sm:w-8 text-fieldporter-blue' />,
-                title: 'Direct Access',
-                description: 'Work directly with us, not account managers',
-              },
-              {
-                icon: <Zap className='h-6 w-6 sm:h-8 sm:w-8 text-fieldporter-blue' />,
-                title: 'Systematic Methodology',
-                description: 'Proven approach delivers results faster than traditional methods',
-              },
-              {
-                icon: <Clock className='h-6 w-6 sm:h-8 sm:w-8 text-fieldporter-blue' />,
-                title: '24-Hour Response',
-                description: 'We respond to all qualified inquiries within 24 hours',
-              },
-            ].map((feature, index) => (
-              <motion.div key={feature.title} variants={animations.premiumFadeInUp}>
-                <Card className='glass-premium hover:glass-hover transition-all duration-300 group h-full'>
-                  <CardContent className='p-4 sm:p-6 text-center'>
-                    <div className='mx-auto mb-3 group-hover:scale-110 transition-transform duration-300'>
-                      {feature.icon}
-                    </div>
-                    <h3 className='text-fieldporter-white font-semibold mb-2 text-sm sm:text-base'>
-                      {feature.title}
-                    </h3>
-                    <p className='text-fieldporter-gray text-xs sm:text-sm leading-relaxed'>
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Enhanced CTA Button with mobile optimization */}
-          <motion.div variants={animations.premiumFadeInUp} className='mb-12'>
-            <Button
-              onClick={scrollToForm}
-              variant='fieldporter-blue'
-              size='enterprise-lg'
-              enableAnimations={true}
-              className='group relative overflow-hidden w-full sm:w-auto min-h-[48px] px-6 sm:px-8'
+            {/* Clean headline */}
+            <motion.h1
+              variants={itemVariants}
+              className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-[-0.025em]"
             >
-              {/* Button Glow Effect */}
-              <div className='absolute inset-0 bg-gradient-to-r from-[#0066FF] to-[#0052CC] opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+              Let&apos;s{" "}
+              <span className="font-light bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                Talk
+              </span>
+            </motion.h1>
 
-              <div className='relative flex items-center justify-center space-x-2 sm:space-x-3'>
-                <span className='text-sm sm:text-base'>Start the Conversation</span>
-                <motion.div whileHover={{ x: 4 }} transition={{ duration: 0.2 }}>
-                  <ArrowRight className='w-4 h-4 sm:w-5 sm:h-5' />
+            {/* Simple subtitle */}
+            <motion.p
+              variants={itemVariants}
+              className="text-xl lg:text-2xl text-white/80 font-light max-w-2xl mx-auto leading-relaxed"
+            >
+              Tell me what you&apos;re trying to automate
+            </motion.p>
+
+            {/* Direct scroll-to-form CTA */}
+            <motion.div variants={itemVariants} className="pt-8">
+              <motion.button
+                onClick={scrollToForm}
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="group flex items-center gap-3 mx-auto px-8 py-4 bg-white/[0.015] hover:bg-white/[0.04] border border-white/20 hover:border-blue-400/40 rounded-2xl text-white hover:text-blue-300 transition-all duration-300 font-medium backdrop-blur-xl hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]"
+              >
+                <span className="text-lg">Start here</span>
+                <motion.div
+                  animate={{ y: [0, 4, 0] }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <ArrowDown className="w-5 h-5" />
                 </motion.div>
-              </div>
-            </Button>
-          </motion.div>
+              </motion.button>
+            </motion.div>
 
-          {/* Honest Positioning */}
-          <motion.p
-            variants={animations.premiumFadeInUp}
-            className='text-fieldporter-gray text-xs sm:text-sm max-w-2xl mx-auto leading-relaxed'
-          >
-            We&apos;ll tell you honestly if we&apos;re the right fit for your project, or who might
-            be better suited to help.
-          </motion.p>
-        </motion.div>
-      </div>
+            {/* Premium divider */}
+            <motion.div
+              variants={itemVariants}
+              className="flex justify-center pt-12"
+            >
+              <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
+            </motion.div>
+          </motion.div>
+        </div>
+      </motion.div>
     </section>
   );
-}
+});
+
+ContactHero.displayName = "ContactHero";

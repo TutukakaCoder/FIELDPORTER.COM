@@ -3,7 +3,7 @@
  * Optimized for <1 second response times on 80% of queries
  */
 
-import { findQuickResponse, hasQuickResponse } from './quick-responses';
+import { findQuickResponse, hasQuickResponse } from "./quick-responses";
 
 interface CacheEntry {
   response: string;
@@ -21,6 +21,18 @@ interface CacheAnalytics {
   averageResponseTime: number;
   topQueries: Array<{ query: string; count: number }>;
   cacheHitRate: number;
+}
+
+interface CachedResponse {
+  response: string;
+  timestamp: number;
+  hitCount: number;
+}
+
+interface CacheStats {
+  hits: number;
+  misses: number;
+  hitRate: number;
 }
 
 export class ResponseCacheService {
@@ -52,8 +64,12 @@ export class ResponseCacheService {
    */
   async getCachedResponse(
     query: string,
-    sessionId: string
-  ): Promise<{ response: string; source: 'quick' | 'cache' | null; responseTime: number }> {
+    sessionId: string,
+  ): Promise<{
+    response: string;
+    source: "quick" | "cache" | null;
+    responseTime: number;
+  }> {
     const startTime = Date.now();
     this.analytics.totalQueries++;
 
@@ -65,7 +81,10 @@ export class ResponseCacheService {
 
     // 1. Check for instant quick responses (0ms target)
     const quickResponse = findQuickResponse(normalizedQuery);
-    if (quickResponse && quickResponse.confidence >= this.MIN_CONFIDENCE_THRESHOLD) {
+    if (
+      quickResponse &&
+      quickResponse.confidence >= this.MIN_CONFIDENCE_THRESHOLD
+    ) {
       this.analytics.quickResponseHits++;
       this.analytics.cacheHits++;
 
@@ -74,7 +93,7 @@ export class ResponseCacheService {
 
       return {
         response: quickResponse.response,
-        source: 'quick',
+        source: "quick",
         responseTime,
       };
     }
@@ -95,7 +114,7 @@ export class ResponseCacheService {
 
       return {
         response: cachedEntry.response,
-        source: 'cache',
+        source: "cache",
         responseTime,
       };
     }
@@ -106,7 +125,7 @@ export class ResponseCacheService {
     this.updateAnalytics(responseTime);
 
     return {
-      response: '',
+      response: "",
       source: null,
       responseTime,
     };
@@ -119,12 +138,15 @@ export class ResponseCacheService {
     query: string,
     response: string,
     sessionId: string,
-    confidence: number = 0.8
+    confidence: number = 0.8,
   ): void {
     const normalizedQuery = this.normalizeQuery(query);
 
     // Don't cache low-confidence or very personalized responses
-    if (confidence < this.MIN_CONFIDENCE_THRESHOLD || this.isPersonalizedQuery(normalizedQuery)) {
+    if (
+      confidence < this.MIN_CONFIDENCE_THRESHOLD ||
+      this.isPersonalizedQuery(normalizedQuery)
+    ) {
       return;
     }
 
@@ -147,10 +169,13 @@ export class ResponseCacheService {
     return query
       .toLowerCase()
       .trim()
-      .replace(/[\?\.\!]/g, '')
-      .replace(/\s+/g, ' ')
-      .replace(/\b(my|our|we|i|me)\b/g, '')
-      .replace(/\b(?!fieldporter)\w+\s?(company|corp|ltd|llc|inc)\b/gi, 'company')
+      .replace(/[\?\.\!]/g, "")
+      .replace(/\s+/g, " ")
+      .replace(/\b(my|our|we|i|me)\b/g, "")
+      .replace(
+        /\b(?!fieldporter)\w+\s?(company|corp|ltd|llc|inc)\b/gi,
+        "company",
+      )
       .trim();
   }
 
@@ -165,7 +190,7 @@ export class ResponseCacheService {
       /\b[A-Z][a-z]+\s+(limited|ltd|corp|inc|llc)\b/i,
     ];
 
-    return personalizedPatterns.some(pattern => pattern.test(query));
+    return personalizedPatterns.some((pattern) => pattern.test(query));
   }
 
   /**
@@ -196,7 +221,8 @@ export class ResponseCacheService {
     const age = now - entry.timestamp;
 
     // Quick responses have longer TTL
-    const ttl = entry.confidence >= 0.9 ? this.QUICK_RESPONSE_TTL : this.LRU_CACHE_TTL;
+    const ttl =
+      entry.confidence >= 0.9 ? this.QUICK_RESPONSE_TTL : this.LRU_CACHE_TTL;
 
     return age < ttl;
   }
@@ -220,7 +246,8 @@ export class ResponseCacheService {
       (totalResponseTime + responseTime) / this.analytics.totalQueries;
 
     // Update hit rate
-    this.analytics.cacheHitRate = (this.analytics.cacheHits / this.analytics.totalQueries) * 100;
+    this.analytics.cacheHitRate =
+      (this.analytics.cacheHits / this.analytics.totalQueries) * 100;
 
     // Update top queries (limit to top 20)
     this.analytics.topQueries = Array.from(this.queryFrequency.entries())
@@ -234,19 +261,19 @@ export class ResponseCacheService {
    */
   private setupCacheWarming(): void {
     const commonQueries = [
-      'what does fieldporter do',
-      'what are your services',
-      'how much does it cost',
-      'can you help with automation',
-      'do you have experience in my industry',
-      'how long does implementation take',
-      'what is your pricing model',
-      'can i book a consultation',
-      'what industries do you work with',
-      'what is your track record',
+      "what does fieldporter do",
+      "what are your services",
+      "how much does it cost",
+      "can you help with automation",
+      "do you have experience in my industry",
+      "how long does implementation take",
+      "what is your pricing model",
+      "can i book a consultation",
+      "what industries do you work with",
+      "what is your track record",
     ];
 
-    commonQueries.forEach(query => {
+    commonQueries.forEach((query) => {
       const quickResponse = findQuickResponse(query);
       if (quickResponse) {
         const normalizedQuery = this.normalizeQuery(query);
@@ -270,7 +297,7 @@ export class ResponseCacheService {
       () => {
         this.cleanExpiredEntries();
       },
-      30 * 60 * 1000
+      30 * 60 * 1000,
     );
   }
 
@@ -302,15 +329,17 @@ export class ResponseCacheService {
     performanceTarget: {
       targetHitRate: number;
       targetResponseTime: number;
-      currentPerformance: 'excellent' | 'good' | 'needs_improvement';
+      currentPerformance: "excellent" | "good" | "needs_improvement";
     };
   } {
     const currentPerformance =
-      this.analytics.cacheHitRate >= 80 && this.analytics.averageResponseTime <= 1000
-        ? 'excellent'
-        : this.analytics.cacheHitRate >= 60 && this.analytics.averageResponseTime <= 2000
-          ? 'good'
-          : 'needs_improvement';
+      this.analytics.cacheHitRate >= 80 &&
+      this.analytics.averageResponseTime <= 1000
+        ? "excellent"
+        : this.analytics.cacheHitRate >= 60 &&
+            this.analytics.averageResponseTime <= 2000
+          ? "good"
+          : "needs_improvement";
 
     return {
       ...this.analytics,
@@ -330,8 +359,8 @@ export class ResponseCacheService {
   invalidateCache(patterns: string[]): number {
     let invalidatedCount = 0;
 
-    patterns.forEach(pattern => {
-      const regex = new RegExp(pattern, 'i');
+    patterns.forEach((pattern) => {
+      const regex = new RegExp(pattern, "i");
 
       // Invalidate from LRU cache
       for (const [key] of this.lruCache.entries()) {

@@ -1,11 +1,10 @@
-'use client';
+"use client";
 
-import { GlassCard } from '@/components/ui/card';
-import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
-import { useState } from 'react';
+import { motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+import { useState } from "react";
 
-interface FAQSectionProps {
+export interface FAQSectionProps {
   title: string;
   subtitle: string;
   faqs: Array<{
@@ -22,29 +21,29 @@ export function FAQSection({ title, subtitle, faqs }: FAQSectionProps) {
   };
 
   return (
-    <section className='py-20 lg:py-28 relative'>
+    <section className="py-32 md:py-36 lg:py-44 relative">
       {/* Background */}
-      <div className='absolute inset-0 bg-gradient-to-b from-bg-fieldporter-tertiary to-bg-fieldporter-primary' />
+      <div className="absolute inset-0 bg-gradient-to-b from-black to-gray-950" />
 
-      <div className='relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className='text-center space-y-6 mb-16'
+          className="text-center space-y-6 mb-16"
         >
-          <h2 className='text-display-sm md:text-display-md font-bold text-fieldporter-white'>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-6">
             {title}
           </h2>
-          <p className='text-body-lg text-fieldporter-gray max-w-2xl mx-auto leading-relaxed'>
+          <p className="text-base lg:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
             {subtitle}
           </p>
         </motion.div>
 
         {/* FAQ Items */}
-        <div className='space-y-4'>
+        <div className="space-y-4">
           {faqs.map((faq, index) => (
             <motion.div
               key={index}
@@ -53,18 +52,24 @@ export function FAQSection({ title, subtitle, faqs }: FAQSectionProps) {
               transition={{ duration: 0.4, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <GlassCard className='overflow-hidden'>
+              <div
+                className="
+                bg-white/[0.01] backdrop-blur-sm border border-white/10 rounded-2xl
+                hover:bg-white/[0.02] hover:border-white/20 transition-all duration-300
+                overflow-hidden
+              "
+              >
                 <button
                   onClick={() => toggleFAQ(index)}
-                  className='w-full p-6 text-left flex items-center justify-between hover:bg-white/5 transition-colors duration-200'
+                  className="w-full p-6 md:p-8 text-left flex items-center justify-between hover:bg-white/[0.01] transition-colors duration-200"
                   aria-expanded={openIndex === index}
                 >
-                  <h3 className='text-heading-sm font-semibold text-fieldporter-white pr-4'>
+                  <h3 className="text-lg font-medium text-white pr-4 leading-relaxed">
                     {faq.question}
                   </h3>
                   <ChevronDown
-                    className={`w-5 h-5 text-fieldporter-gray transition-transform duration-200 flex-shrink-0 ${
-                      openIndex === index ? 'rotate-180' : ''
+                    className={`w-5 h-5 text-gray-400 transition-all duration-300 flex-shrink-0 ${
+                      openIndex === index ? "rotate-180 text-blue-400" : ""
                     }`}
                   />
                 </button>
@@ -72,19 +77,25 @@ export function FAQSection({ title, subtitle, faqs }: FAQSectionProps) {
                 <motion.div
                   initial={false}
                   animate={{
-                    height: openIndex === index ? 'auto' : 0,
+                    height: openIndex === index ? "auto" : 0,
                     opacity: openIndex === index ? 1 : 0,
                   }}
-                  transition={{ duration: 0.3, ease: 'easeInOut' }}
-                  className='overflow-hidden'
+                  transition={{
+                    duration: 0.3,
+                    ease: "easeOut",
+                    height: { duration: 0.4 },
+                  }}
+                  className="overflow-hidden"
                 >
-                  <div className='px-6 pb-6'>
-                    <p className='text-body-md text-fieldporter-gray leading-relaxed'>
-                      {faq.answer}
-                    </p>
+                  <div className="px-6 md:px-8 pb-6 md:pb-8">
+                    <div className="pt-4 border-t border-white/10">
+                      <p className="text-base text-gray-300 leading-relaxed">
+                        {faq.answer}
+                      </p>
+                    </div>
                   </div>
                 </motion.div>
-              </GlassCard>
+              </div>
             </motion.div>
           ))}
         </div>

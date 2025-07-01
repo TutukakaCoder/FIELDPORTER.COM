@@ -5,7 +5,7 @@ export interface ChatAnalytics {
   userSatisfaction?: number;
   leadScore: number;
   conversationSource: string;
-  deviceType: 'mobile' | 'desktop';
+  deviceType: "mobile" | "desktop";
   timestamp: Date;
 }
 
@@ -21,7 +21,7 @@ class ChatbotAnalyticsService {
   private metrics: ChatAnalytics[] = [];
   private readonly maxStorageSize = 1000;
 
-  trackInteraction(analytics: Omit<ChatAnalytics, 'timestamp'>) {
+  trackInteraction(analytics: Omit<ChatAnalytics, "timestamp">) {
     const fullAnalytics: ChatAnalytics = {
       ...analytics,
       timestamp: new Date(),
@@ -40,40 +40,42 @@ class ChatbotAnalyticsService {
 
   private async sendToFirebase(analytics: ChatAnalytics) {
     try {
-      const firebaseUrl = `https://fieldporter-website-default-rtdb.firebaseio.com/analytics/chatbot/${analytics.sessionId}.json`;
+      // Use Firestore instead of Realtime Database
+      if (typeof window !== "undefined") {
+        const { db } = await import("./firebase");
+        const { collection, addDoc, serverTimestamp } = await import(
+          "firebase/firestore"
+        );
 
-      await fetch(firebaseUrl, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        await addDoc(collection(db, "chatbot_analytics"), {
           ...analytics,
-          timestamp: analytics.timestamp.toISOString(),
-        }),
-      });
+          timestamp: serverTimestamp(),
+        });
+      }
     } catch (error) {
-      console.error('Failed to send analytics to Firebase:', error);
+      console.error("Failed to send analytics to Firebase:", error);
     }
   }
 
-  getPerformanceMetrics(timeframe: 'hour' | 'day' | 'week' = 'day'): PerformanceMetrics {
+  getPerformanceMetrics(
+    timeframe: "hour" | "day" | "week" = "day",
+  ): PerformanceMetrics {
     const now = new Date();
     const timeLimit = new Date();
 
     switch (timeframe) {
-      case 'hour':
+      case "hour":
         timeLimit.setHours(now.getHours() - 1);
         break;
-      case 'day':
+      case "day":
         timeLimit.setDate(now.getDate() - 1);
         break;
-      case 'week':
+      case "week":
         timeLimit.setDate(now.getDate() - 7);
         break;
     }
 
-    const recentMetrics = this.metrics.filter(m => m.timestamp > timeLimit);
+    const recentMetrics = this.metrics.filter((m) => m.timestamp > timeLimit);
 
     if (recentMetrics.length === 0) {
       return {
@@ -85,20 +87,31 @@ class ChatbotAnalyticsService {
       };
     }
 
-    const totalResponseTime = recentMetrics.reduce((sum, m) => sum + m.responseTime, 0);
+    const totalResponseTime = recentMetrics.reduce(
+      (sum, m) => sum + m.responseTime,
+      0,
+    );
     const averageResponseTime = totalResponseTime / recentMetrics.length;
 
-    const successfulResponses = recentMetrics.filter(m => m.responseTime < 8000);
-    const successRate = (successfulResponses.length / recentMetrics.length) * 100;
+    const successfulResponses = recentMetrics.filter(
+      (m) => m.responseTime < 8000,
+    );
+    const successRate =
+      (successfulResponses.length / recentMetrics.length) * 100;
 
-    const quickResponses = recentMetrics.filter(m => m.responseTime < 1000);
-    const quickResponseHitRate = (quickResponses.length / recentMetrics.length) * 100;
+    const quickResponses = recentMetrics.filter((m) => m.responseTime < 1000);
+    const quickResponseHitRate =
+      (quickResponses.length / recentMetrics.length) * 100;
 
-    const qualifiedLeads = recentMetrics.filter(m => m.leadScore > 5);
-    const leadQualificationRate = (qualifiedLeads.length / recentMetrics.length) * 100;
+    const qualifiedLeads = recentMetrics.filter((m) => m.leadScore > 5);
+    const leadQualificationRate =
+      (qualifiedLeads.length / recentMetrics.length) * 100;
 
-    const completedConversations = recentMetrics.filter(m => m.messageCount >= 3);
-    const conversationCompletionRate = (completedConversations.length / recentMetrics.length) * 100;
+    const completedConversations = recentMetrics.filter(
+      (m) => m.messageCount >= 3,
+    );
+    const conversationCompletionRate =
+      (completedConversations.length / recentMetrics.length) * 100;
 
     return {
       averageResponseTime,
@@ -111,10 +124,10 @@ class ChatbotAnalyticsService {
 
   getResponseTimeDistribution() {
     return {
-      under1s: this.metrics.filter(m => m.responseTime < 1000).length,
-      under3s: this.metrics.filter(m => m.responseTime < 3000).length,
-      under5s: this.metrics.filter(m => m.responseTime < 5000).length,
-      over5s: this.metrics.filter(m => m.responseTime >= 5000).length,
+      under1s: this.metrics.filter((m) => m.responseTime < 1000).length,
+      under3s: this.metrics.filter((m) => m.responseTime < 3000).length,
+      under5s: this.metrics.filter((m) => m.responseTime < 5000).length,
+      over5s: this.metrics.filter((m) => m.responseTime >= 5000).length,
     };
   }
 
@@ -123,23 +136,31 @@ class ChatbotAnalyticsService {
     const opportunities: string[] = [];
 
     if (metrics.averageResponseTime > 3000) {
-      opportunities.push('Response time optimization needed - consider caching common responses');
+      opportunities.push(
+        "Response time optimization needed - consider caching common responses",
+      );
     }
 
     if (metrics.successRate < 95) {
-      opportunities.push('Error rate too high - review n8n workflow reliability');
+      opportunities.push(
+        "Error rate too high - review API reliability and error handling",
+      );
     }
 
     if (metrics.quickResponseHitRate < 20) {
-      opportunities.push('Expand quick response patterns for common questions');
+      opportunities.push("Expand quick response patterns for common questions");
     }
 
     if (metrics.leadQualificationRate < 10) {
-      opportunities.push('Improve conversation flow to better identify qualified prospects');
+      opportunities.push(
+        "Improve conversation flow to better identify qualified prospects",
+      );
     }
 
     if (metrics.conversationCompletionRate < 50) {
-      opportunities.push('Review conversation engagement - users may be dropping off too early');
+      opportunities.push(
+        "Review conversation engagement - users may be dropping off too early",
+      );
     }
 
     return opportunities;

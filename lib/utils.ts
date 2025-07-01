@@ -1,8 +1,8 @@
 // FIELDPORTER Enterprise Utility Functions
 // Premium AI Consultancy Platform Utilities
 
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 // ============================================================================
 // STYLING UTILITIES
@@ -34,7 +34,7 @@ export function isValidEmail(email: string): boolean {
  */
 export function isValidPhone(phone: string): boolean {
   const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-  const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
+  const cleanPhone = phone.replace(/[\s\-\(\)]/g, "");
   return phoneRegex.test(cleanPhone);
 }
 
@@ -54,11 +54,11 @@ export function isValidCompanyName(name: string): boolean {
  */
 export function formatCurrency(
   amount: number,
-  currency: string = 'USD',
-  locale: string = 'en-US'
+  currency: string = "USD",
+  locale: string = "en-US",
 ): string {
   return new Intl.NumberFormat(locale, {
-    style: 'currency',
+    style: "currency",
     currency,
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
@@ -70,13 +70,13 @@ export function formatCurrency(
  */
 export function formatNumber(num: number): string {
   if (num >= 1000000000) {
-    return (num / 1000000000).toFixed(1) + 'B';
+    return (num / 1000000000).toFixed(1) + "B";
   }
   if (num >= 1000000) {
-    return (num / 1000000).toFixed(1) + 'M';
+    return (num / 1000000).toFixed(1) + "M";
   }
   if (num >= 1000) {
-    return (num / 1000).toFixed(1) + 'K';
+    return (num / 1000).toFixed(1) + "K";
   }
   return num.toString();
 }
@@ -87,27 +87,30 @@ export function formatNumber(num: number): string {
 export function formatDate(
   date: Date | string,
   options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  },
 ): string {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
-  return dateObj.toLocaleDateString('en-US', options);
+  const dateObj = typeof date === "string" ? new Date(date) : date;
+  return dateObj.toLocaleDateString("en-US", options);
 }
 
 /**
  * Format relative time (e.g., "2 hours ago")
  */
 export function formatRelativeTime(date: Date | string): string {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  const dateObj = typeof date === "string" ? new Date(date) : date;
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - dateObj.getTime()) / 1000);
 
-  if (diffInSeconds < 60) return 'just now';
-  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
-  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
-  if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+  if (diffInSeconds < 60) return "just now";
+  if (diffInSeconds < 3600)
+    return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+  if (diffInSeconds < 86400)
+    return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+  if (diffInSeconds < 2592000)
+    return `${Math.floor(diffInSeconds / 86400)} days ago`;
 
   return formatDate(dateObj);
 }
@@ -122,16 +125,19 @@ export function formatRelativeTime(date: Date | string): string {
 export function slugify(text: string): string {
   return text
     .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/[\s_-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 /**
  * Capitalize first letter of each word
  */
 export function titleCase(text: string): string {
-  return text.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+  return text.replace(
+    /\w\S*/g,
+    (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(),
+  );
 }
 
 /**
@@ -139,7 +145,7 @@ export function titleCase(text: string): string {
  */
 export function truncate(text: string, length: number): string {
   if (text.length <= length) return text;
-  return text.slice(0, length).trim() + '...';
+  return text.slice(0, length).trim() + "...";
 }
 
 /**
@@ -147,9 +153,9 @@ export function truncate(text: string, length: number): string {
  */
 export function getInitials(name: string): string {
   return name
-    .split(' ')
-    .map(word => word.charAt(0))
-    .join('')
+    .split(" ")
+    .map((word) => word.charAt(0))
+    .join("")
     .toUpperCase()
     .slice(0, 2);
 }
@@ -172,28 +178,29 @@ export function calculateLeadScore(data: {
 
   // Company size scoring
   const companySizeScores = {
-    'fortune-500': 40,
+    "fortune-500": 40,
     enterprise: 35,
-    'scale-up': 25,
+    "scale-up": 25,
     startup: 15,
   };
-  score += companySizeScores[data.companySize as keyof typeof companySizeScores] || 0;
+  score +=
+    companySizeScores[data.companySize as keyof typeof companySizeScores] || 0;
 
   // Budget scoring
   const budgetScores = {
-    'over-1m': 30,
-    '250k-1m': 25,
-    '50k-250k': 15,
-    'under-50k': 5,
+    "over-1m": 30,
+    "250k-1m": 25,
+    "50k-250k": 15,
+    "under-50k": 5,
   };
   score += budgetScores[data.budget as keyof typeof budgetScores] || 0;
 
   // Timeline scoring (urgency)
   const timelineScores = {
     immediate: 20,
-    '1-3-months': 15,
-    '3-6-months': 10,
-    '6-12-months': 5,
+    "1-3-months": 15,
+    "3-6-months": 10,
+    "6-12-months": 5,
   };
   score += timelineScores[data.timeline as keyof typeof timelineScores] || 0;
 
@@ -204,7 +211,8 @@ export function calculateLeadScore(data: {
     piloting: 6,
     exploring: 4,
   };
-  score += maturityScores[data.aiMaturityLevel as keyof typeof maturityScores] || 0;
+  score +=
+    maturityScores[data.aiMaturityLevel as keyof typeof maturityScores] || 0;
 
   return Math.min(score, 100); // Cap at 100
 }
@@ -212,10 +220,12 @@ export function calculateLeadScore(data: {
 /**
  * Determine consultation priority based on lead score
  */
-export function getConsultationPriority(leadScore: number): 'high' | 'medium' | 'low' {
-  if (leadScore >= 80) return 'high';
-  if (leadScore >= 50) return 'medium';
-  return 'low';
+export function getConsultationPriority(
+  leadScore: number,
+): "high" | "medium" | "low" {
+  if (leadScore >= 80) return "high";
+  if (leadScore >= 50) return "medium";
+  return "low";
 }
 
 // ============================================================================
@@ -227,7 +237,7 @@ export function getConsultationPriority(leadScore: number): 'high' | 'medium' | 
  */
 export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
-  wait: number
+  wait: number,
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout;
   return (...args: Parameters<T>) => {
@@ -241,7 +251,7 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
  */
 export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
-  limit: number
+  limit: number,
 ): (...args: Parameters<T>) => void {
   let inThrottle: boolean;
   return (...args: Parameters<T>) => {
@@ -267,9 +277,12 @@ export function generateSessionId(): string {
 /**
  * Track page view for analytics
  */
-export function trackPageView(page: string, properties?: Record<string, unknown>): void {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('config', process.env.NEXT_PUBLIC_GA_ID!, {
+export function trackPageView(
+  page: string,
+  properties?: Record<string, unknown>,
+): void {
+  if (typeof window !== "undefined" && window.gtag) {
+    window.gtag("config", process.env.NEXT_PUBLIC_GA_ID!, {
       page_title: page,
       page_location: window.location.href,
       custom_map: properties,
@@ -282,10 +295,10 @@ export function trackPageView(page: string, properties?: Record<string, unknown>
  */
 export function trackEvent(
   eventName: string,
-  properties?: Record<string, string | number | boolean>
+  properties?: Record<string, string | number | boolean>,
 ): void {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', eventName, properties);
+  if (typeof window !== "undefined" && window.gtag) {
+    window.gtag("event", eventName, properties);
   }
 }
 
@@ -309,8 +322,8 @@ export function safeJsonParse<T>(json: string, fallback: T): T {
  */
 export function createErrorResponse(
   message: string,
-  code: string = 'UNKNOWN_ERROR',
-  details?: Record<string, unknown>
+  code: string = "UNKNOWN_ERROR",
+  details?: Record<string, unknown>,
 ) {
   return {
     success: false,
@@ -322,7 +335,7 @@ export function createErrorResponse(
     meta: {
       timestamp: new Date().toISOString(),
       requestId: generateSessionId(),
-      version: '1.0.0',
+      version: "1.0.0",
     },
   };
 }
@@ -342,12 +355,12 @@ export function isDefined<T>(value: T | null | undefined): value is T {
  * Check if string is not empty
  */
 export function isNonEmptyString(value: unknown): value is string {
-  return typeof value === 'string' && value.trim().length > 0;
+  return typeof value === "string" && value.trim().length > 0;
 }
 
 /**
  * Check if value is a valid number
  */
 export function isValidNumber(value: unknown): value is number {
-  return typeof value === 'number' && !isNaN(value) && isFinite(value);
+  return typeof value === "number" && !isNaN(value) && isFinite(value);
 }

@@ -1,61 +1,65 @@
-import { EnhancedChatWidget } from '@/components/chat';
+import { EnhancedChatWidget } from "@/components/chat";
 import {
   BackToTop,
   EntranceProvider,
   Footer,
   Header,
   NewsletterSlideout,
-} from '@/components/layout';
-import { PageTransition } from '@/components/ui/page-transition';
-import { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
-import type React from 'react';
-import './globals.css';
+} from "@/components/layout";
+import { PageTransition } from "@/components/ui/page-transition";
+import { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
+import type React from "react";
+import "./globals.css";
 
 const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const viewport: Viewport = {
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
   maximumScale: 5,
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://fieldporter.com'),
-  title: 'FIELDPORTER',
+  metadataBase: new URL("https://fieldporter.com"),
+  title: "FIELDPORTER",
   description:
-    'Turn hours into minutes through intelligent automation. We build AI workflow automation, teach advanced LLM integration, and conduct strategic research using AI agents.',
+    "Turn hours into minutes through intelligent automation. We build AI workflow automation, teach advanced LLM integration, and conduct strategic research using AI agents.",
   keywords:
-    'AI automation, LLM integration, strategic research, workflow automation, Frederick Hopkins',
-  authors: [{ name: 'Frederick Hopkins' }],
-  creator: 'Frederick Hopkins',
-  publisher: 'FIELDPORTER',
-  robots: 'index, follow',
+    "AI automation, LLM integration, strategic research, workflow automation, FIELDPORTER",
+  authors: [{ name: "FIELDPORTER" }],
+  creator: "FIELDPORTER",
+  publisher: "FIELDPORTER",
+  robots: "index, follow",
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: 'https://fieldporter.com',
-    title: 'FIELDPORTER',
+    type: "website",
+    locale: "en_US",
+    url: "https://fieldporter.com",
+    title: "FIELDPORTER",
     description:
-      'Turn hours into minutes through intelligent automation. We build AI workflow automation, teach advanced LLM integration, and conduct strategic research using AI agents.',
-    siteName: 'FIELDPORTER',
+      "Turn hours into minutes through intelligent automation. We build AI workflow automation, teach advanced LLM integration, and conduct strategic research using AI agents.",
+    siteName: "FIELDPORTER",
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'FIELDPORTER',
+    card: "summary_large_image",
+    title: "FIELDPORTER",
     description:
-      'Turn hours into minutes through intelligent automation. We build AI workflow automation, teach advanced LLM integration, and conduct strategic research using AI agents.',
-    creator: '@fieldporter',
+      "Turn hours into minutes through intelligent automation. We build AI workflow automation, teach advanced LLM integration, and conduct strategic research using AI agents.",
+    creator: "@fieldporter",
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang='en' className='scroll-smooth'>
-      <body className={inter.className} style={{ backgroundColor: '#000000' }}>
+    <html lang="en" className="scroll-smooth">
+      <body className={inter.className} style={{ backgroundColor: "#000000" }}>
         <EntranceProvider>
           <Header />
           <PageTransition>{children}</PageTransition>
@@ -67,42 +71,42 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Schema.org structured data for SEO */}
         <script
-          type='application/ld+json'
+          type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Organization',
-              name: 'FIELDPORTER',
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "FIELDPORTER",
               description:
-                'Turn hours into minutes through intelligent automation. We build AI workflow automation, teach advanced LLM integration, and conduct strategic research using AI agents.',
-              url: 'https://fieldporter.com',
-              logo: 'https://fieldporter.com/images/fieldporter-logo.png',
-              sameAs: ['https://twitter.com/fieldporter'],
+                "Turn hours into minutes through intelligent automation. We build AI workflow automation, teach advanced LLM integration, and conduct strategic research using AI agents.",
+              url: "https://fieldporter.com",
+              logo: "https://fieldporter.com/images/fieldporter-logo.png",
+              sameAs: ["https://twitter.com/fieldporter"],
               contactPoint: {
-                '@type': 'ContactPoint',
-                contactType: 'customer service',
-                url: 'https://fieldporter.com/contact',
+                "@type": "ContactPoint",
+                contactType: "customer service",
+                url: "https://fieldporter.com/contact",
               },
               service: [
                 {
-                  '@type': 'Service',
-                  name: 'Strategic Research Intelligence',
-                  description: 'Multi-model AI research and validation systems',
+                  "@type": "Service",
+                  name: "Strategic Research Intelligence",
+                  description: "Multi-model AI research and validation systems",
                 },
                 {
-                  '@type': 'Service',
-                  name: 'Rapid Development Solutions',
-                  description: 'Custom application development and automation',
+                  "@type": "Service",
+                  name: "Rapid Development Solutions",
+                  description: "Custom application development and automation",
                 },
                 {
-                  '@type': 'Service',
-                  name: 'Workflow Optimization',
-                  description: 'Business process automation and optimization',
+                  "@type": "Service",
+                  name: "Workflow Optimization",
+                  description: "Business process automation and optimization",
                 },
                 {
-                  '@type': 'Service',
-                  name: 'AI Training & Implementation',
-                  description: 'Team training and AI system implementation',
+                  "@type": "Service",
+                  name: "AI Training & Implementation",
+                  description: "Team training and AI system implementation",
                 },
               ],
             }),
