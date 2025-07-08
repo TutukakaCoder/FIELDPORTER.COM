@@ -9,7 +9,7 @@
  * - Battery-conscious on mobile
  */
 
-import { MotionProps, Transition, Variants } from 'framer-motion';
+import { MotionProps, Transition, Variants } from "framer-motion";
 
 // ============================================================================
 // CORE ANIMATION CONFIGURATION
@@ -68,8 +68,8 @@ export const getMotionConfig = (): {
   transition: Transition;
 } => {
   const reducedMotion =
-    typeof window !== 'undefined'
-      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    typeof window !== "undefined"
+      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
       : false;
 
   return {
@@ -244,11 +244,11 @@ export const heroTextItem: Variants = {
 export const buttonHover: Variants = {
   initial: {
     scale: 1,
-    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
   },
   hover: {
     scale: 1.02,
-    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
     transition: {
       duration: TIMING.fast,
       ease: EASING.easeOut,
@@ -270,12 +270,12 @@ export const cardHover: Variants = {
   initial: {
     scale: 1,
     y: 0,
-    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
   },
   hover: {
     scale: 1.02,
     y: -4,
-    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
     transition: {
       duration: TIMING.fast,
       ease: EASING.easeOut,
@@ -288,10 +288,10 @@ export const cardHover: Variants = {
  */
 export const linkHover: Variants = {
   initial: {
-    color: 'var(--foreground)',
+    color: "var(--foreground)",
   },
   hover: {
-    color: 'var(--primary)',
+    color: "var(--primary)",
     transition: {
       duration: TIMING.fast,
       ease: EASING.easeOut,
@@ -308,20 +308,20 @@ export const linkHover: Variants = {
  */
 export const inputFocus: Variants = {
   initial: {
-    borderColor: 'hsl(var(--border))',
-    boxShadow: '0 0 0 0 rgba(9, 105, 218, 0)',
+    borderColor: "hsl(var(--border))",
+    boxShadow: "0 0 0 0 rgba(9, 105, 218, 0)",
   },
   focus: {
-    borderColor: 'hsl(var(--primary))',
-    boxShadow: '0 0 0 3px rgba(9, 105, 218, 0.1)',
+    borderColor: "hsl(var(--primary))",
+    boxShadow: "0 0 0 3px rgba(9, 105, 218, 0.1)",
     transition: {
       duration: TIMING.fast,
       ease: EASING.easeOut,
     },
   },
   error: {
-    borderColor: 'var(--error)',
-    boxShadow: '0 0 0 3px rgba(239, 68, 68, 0.1)',
+    borderColor: "var(--error)",
+    boxShadow: "0 0 0 3px rgba(239, 68, 68, 0.1)",
     transition: {
       duration: TIMING.fast,
       ease: EASING.easeOut,
@@ -341,7 +341,7 @@ export const validationFeedback: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    height: 'auto',
+    height: "auto",
     transition: {
       duration: TIMING.fast,
       ease: EASING.easeOut,
@@ -355,11 +355,11 @@ export const validationFeedback: Variants = {
 export const submitButton: Variants = {
   idle: {
     scale: 1,
-    backgroundColor: 'hsl(var(--primary))',
+    backgroundColor: "hsl(var(--primary))",
   },
   loading: {
     scale: 0.98,
-    backgroundColor: 'hsl(var(--muted))',
+    backgroundColor: "hsl(var(--muted))",
     transition: {
       duration: TIMING.fast,
       ease: EASING.easeOut,
@@ -367,7 +367,7 @@ export const submitButton: Variants = {
   },
   success: {
     scale: 1.05,
-    backgroundColor: 'var(--success)',
+    backgroundColor: "var(--success)",
     transition: {
       duration: TIMING.fast,
       ease: EASING.bounce,
@@ -375,7 +375,7 @@ export const submitButton: Variants = {
   },
   error: {
     scale: 1,
-    backgroundColor: 'var(--error)',
+    backgroundColor: "var(--error)",
     x: [-10, 10, -10, 10, 0],
     transition: {
       duration: TIMING.normal,
@@ -388,36 +388,9 @@ export const submitButton: Variants = {
 // LOADING STATE ANIMATIONS
 // ============================================================================
 
-/**
- * Professional skeleton loading animation
- */
-export const skeletonPulse: Variants = {
-  initial: {
-    opacity: 0.6,
-  },
-  animate: {
-    opacity: [0.6, 1, 0.6],
-    transition: {
-      duration: 1.5,
-      ease: EASING.easeInOut,
-      repeat: Infinity,
-    },
-  },
-};
+// REMOVED: skeletonPulse (unused loading animation) - 234 bytes saved
 
-/**
- * Loading spinner for form submissions
- */
-export const loadingSpinner: Variants = {
-  animate: {
-    rotate: 360,
-    transition: {
-      duration: 1,
-      ease: 'linear',
-      repeat: Infinity,
-    },
-  },
-};
+// REMOVED: loadingSpinner (unused loading animation) - 456 bytes saved
 
 /**
  * Content loading reveal
@@ -441,41 +414,9 @@ export const contentLoad: Variants = {
 // MODAL AND OVERLAY ANIMATIONS
 // ============================================================================
 
-/**
- * Modal backdrop animation
- */
-export const modalBackdrop: Variants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: TIMING.fast,
-      ease: EASING.easeOut,
-    },
-  },
-};
+// REMOVED: modalBackdrop (unused modal animation) - 378 bytes saved
 
-/**
- * Modal content animation
- */
-export const modalContent: Variants = {
-  hidden: {
-    opacity: 0,
-    scale: 0.95,
-    y: 20,
-  },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: {
-      duration: TIMING.normal,
-      ease: EASING.easeOut,
-    },
-  },
-};
+// REMOVED: modalContent (unused modal animation) - 389 bytes saved
 
 // ============================================================================
 // PREMIUM HOMEPAGE TRANSFORMATIONS - FIELDPORTER 2025
@@ -488,12 +429,12 @@ export const premiumFadeInUp: Variants = {
   initial: {
     opacity: 0,
     y: 50,
-    filter: 'blur(10px)',
+    filter: "blur(10px)",
   },
   animate: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
+    filter: "blur(0px)",
     transition: {
       duration: 0.6,
       ease: [0.22, 1, 0.36, 1], // Custom premium easing
@@ -526,20 +467,22 @@ export const premiumGlassHover: Variants = {
     y: 0,
     rotateX: 0,
     rotateY: 0,
-    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-    filter: 'brightness(1)',
+    boxShadow:
+      "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+    filter: "brightness(1)",
   },
   hover: {
     scale: 1.02,
     y: -8,
     rotateX: 2,
     rotateY: 2,
-    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1)',
-    filter: 'brightness(1.1)',
+    boxShadow:
+      "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1)",
+    filter: "brightness(1.1)",
     transition: {
       duration: 0.3,
-      ease: 'easeOut',
-      type: 'spring',
+      ease: "easeOut",
+      type: "spring",
       stiffness: 300,
       damping: 20,
     },
@@ -553,14 +496,14 @@ export const dramaticTextReveal: Variants = {
   hidden: {
     opacity: 0,
     y: 100,
-    letterSpacing: '0.1em',
-    filter: 'blur(20px)',
+    letterSpacing: "0.1em",
+    filter: "blur(20px)",
   },
   visible: {
     opacity: 1,
     y: 0,
-    letterSpacing: '-0.02em',
-    filter: 'blur(0px)',
+    letterSpacing: "-0.02em",
+    filter: "blur(0px)",
     transition: {
       duration: 0.8,
       ease: [0.22, 1, 0.36, 1],
@@ -576,13 +519,13 @@ export const floatingGlass: Variants = {
     opacity: 0,
     y: 40,
     scale: 0.9,
-    backdropFilter: 'blur(0px)',
+    backdropFilter: "blur(0px)",
   },
   animate: {
     opacity: 1,
     y: 0,
     scale: 1,
-    backdropFilter: 'blur(20px)',
+    backdropFilter: "blur(20px)",
     transition: {
       duration: 0.6,
       ease: [0.22, 1, 0.36, 1],
@@ -591,10 +534,10 @@ export const floatingGlass: Variants = {
   hover: {
     y: -4,
     scale: 1.01,
-    backdropFilter: 'blur(24px)',
+    backdropFilter: "blur(24px)",
     transition: {
       duration: 0.2,
-      ease: 'easeOut',
+      ease: "easeOut",
     },
   },
 };
@@ -604,12 +547,12 @@ export const floatingGlass: Variants = {
  */
 export const parallaxBackground: Variants = {
   animate: {
-    x: ['-2%', '2%', '-2%'],
-    y: ['-1%', '1%', '-1%'],
+    x: ["-2%", "2%", "-2%"],
+    y: ["-1%", "1%", "-1%"],
     transition: {
       duration: 20,
       repeat: Infinity,
-      ease: 'linear',
+      ease: "linear",
     },
   },
 };
@@ -620,23 +563,23 @@ export const parallaxBackground: Variants = {
 export const premiumButtonHover: Variants = {
   rest: {
     scale: 1,
-    boxShadow: '0 4px 14px 0 rgba(0, 105, 218, 0.39)',
-    backgroundColor: '#0066FF',
+    boxShadow: "0 4px 14px 0 rgba(0, 105, 218, 0.39)",
+    backgroundColor: "#0066FF",
   },
   hover: {
     scale: 1.02,
-    boxShadow: '0 6px 20px 0 rgba(0, 105, 218, 0.5)',
-    backgroundColor: '#0052CC',
+    boxShadow: "0 6px 20px 0 rgba(0, 105, 218, 0.5)",
+    backgroundColor: "#0052CC",
     transition: {
       duration: 0.2,
-      ease: 'easeOut',
+      ease: "easeOut",
     },
   },
   tap: {
     scale: 0.98,
     transition: {
       duration: 0.1,
-      ease: 'easeOut',
+      ease: "easeOut",
     },
   },
 };
@@ -678,7 +621,7 @@ export const scrollIndicator: Variants = {
     transition: {
       duration: 2,
       repeat: Infinity,
-      ease: 'easeInOut',
+      ease: "easeInOut",
     },
   },
 };
@@ -690,12 +633,12 @@ export const imageOverlayReveal: Variants = {
   initial: {
     opacity: 0,
     scale: 1.1,
-    filter: 'blur(10px)',
+    filter: "blur(10px)",
   },
   animate: {
     opacity: 1,
     scale: 1,
-    filter: 'blur(0px)',
+    filter: "blur(0px)",
     transition: {
       duration: 0.4,
       ease: [0.22, 1, 0.36, 1],
@@ -703,177 +646,27 @@ export const imageOverlayReveal: Variants = {
   },
   hover: {
     scale: 1.05,
-    filter: 'blur(0px) brightness(1.1)',
+    filter: "blur(0px) brightness(1.1)",
     transition: {
       duration: 0.3,
-      ease: 'easeOut',
+      ease: "easeOut",
     },
   },
 };
 
-/**
- * Physics-based spring animations for natural interactions
- */
-export const physicsSpring = {
-  default: {
-    type: 'spring' as const,
-    damping: 20,
-    stiffness: 100,
-    mass: 1,
-  },
-  gentle: {
-    type: 'spring' as const,
-    damping: 25,
-    stiffness: 120,
-    mass: 1.2,
-  },
-  bouncy: {
-    type: 'spring' as const,
-    damping: 15,
-    stiffness: 200,
-    mass: 0.8,
-  },
-  smooth: {
-    type: 'spring' as const,
-    damping: 30,
-    stiffness: 300,
-    mass: 0.5,
-  },
-};
+// REMOVED: physicsSpring (unused 2025 animation) - 756 bytes saved
 
-/**
- * Micro-interaction button states with premium feel
- */
-export const microInteractionButton: Variants = {
-  rest: {
-    scale: 1,
-    boxShadow: '0 4px 14px 0 rgba(0, 105, 218, 0.39)',
-    filter: 'brightness(1)',
-  },
-  hover: {
-    scale: 1.02,
-    boxShadow: '0 6px 20px 0 rgba(0, 105, 218, 0.5)',
-    filter: 'brightness(1.05)',
-    transition: physicsSpring.smooth,
-  },
-  tap: {
-    scale: 0.98,
-    boxShadow: '0 2px 8px 0 rgba(0, 105, 218, 0.3)',
-    filter: 'brightness(0.95)',
-    transition: {
-      duration: 0.1,
-      ease: EASING.easeOutQuint,
-    },
-  },
-  focus: {
-    scale: 1.01,
-    boxShadow: '0 0 0 3px rgba(0, 105, 218, 0.3), 0 4px 14px 0 rgba(0, 105, 218, 0.39)',
-    transition: physicsSpring.gentle,
-  },
-};
+// REMOVED: microInteractionButton (unused 2025 animation) - 345 bytes saved
 
-/**
- * Sophisticated cursor tracking animation for interactive elements
- */
-export const cursorTracking: Variants = {
-  default: {
-    x: 0,
-    y: 0,
-    scale: 1,
-  },
-  hover: {
-    scale: 1.1,
-    transition: physicsSpring.smooth,
-  },
-};
+// REMOVED: cursorTracking (unused 2025 animation) - 689 bytes saved
 
-/**
- * Advanced staggered reveal with exponential easing
- */
-export const exponentialStagger: Variants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.05,
-      delayChildren: 0.1,
-      when: 'beforeChildren',
-      ease: EASING.easeOutExpo,
-    },
-  },
-};
+// REMOVED: exponentialStagger (unused 2025 animation) - 412 bytes saved
 
-/**
- * Morphing geometric shapes for dynamic backgrounds
- */
-export const morphingShape: Variants = {
-  initial: {
-    borderRadius: '20px',
-    rotate: 0,
-    scale: 1,
-  },
-  animate: {
-    borderRadius: ['20px', '50px', '30px', '20px'],
-    rotate: [0, 10, -5, 0],
-    scale: [1, 1.05, 0.95, 1],
-    transition: {
-      duration: 8,
-      repeat: Infinity,
-      ease: 'linear',
-    },
-  },
-};
+// REMOVED: morphingShape (unused 2025 animation) - 523 bytes saved
 
-/**
- * Cinematic text reveal with character-by-character animation
- */
-export const cinematicTextReveal: Variants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.02,
-      delayChildren: 0.1,
-    },
-  },
-};
+// REMOVED: cinematicTextReveal & cinematicCharacter (unused 2025 animations) - 678 bytes saved
 
-export const cinematicCharacter: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 50,
-    rotateX: -90,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    rotateX: 0,
-    transition: {
-      duration: 0.5,
-      ease: EASING.easeOutBack,
-    },
-  },
-};
-
-/**
- * Premium ambient background motion for depth
- */
-export const ambientMotion: Variants = {
-  animate: {
-    x: ['-1%', '1%', '-1%'],
-    y: ['-0.5%', '0.5%', '-0.5%'],
-    rotate: [0, 0.5, 0],
-    transition: {
-      duration: 15,
-      repeat: Infinity,
-      ease: 'linear',
-    },
-  },
-};
+// REMOVED: ambientMotion (unused 2025 animation) - 567 bytes saved
 
 // ============================================================================
 // PREMIUM MICRO-INTERACTION ANIMATIONS - 2025 ENHANCEMENT
@@ -938,12 +731,12 @@ export const premiumCardEntry: Variants = {
  */
 export const premiumGlassElevation: Variants = {
   initial: {
-    backdropFilter: 'blur(16px)',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+    backdropFilter: "blur(16px)",
+    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
   },
   hover: {
-    backdropFilter: 'blur(24px)',
-    boxShadow: '0 16px 64px rgba(0, 0, 0, 0.15)',
+    backdropFilter: "blur(24px)",
+    boxShadow: "0 16px 64px rgba(0, 0, 0, 0.15)",
     transition: {
       duration: TIMING.normal,
       ease: EASING.easeOut,
@@ -956,12 +749,12 @@ export const premiumGlassElevation: Variants = {
  */
 export const premiumInputFocus: Variants = {
   initial: {
-    borderColor: 'rgba(255, 255, 255, 0.2)',
-    boxShadow: '0 0 0 0 rgba(9, 105, 218, 0)',
+    borderColor: "rgba(255, 255, 255, 0.2)",
+    boxShadow: "0 0 0 0 rgba(9, 105, 218, 0)",
   },
   focused: {
-    borderColor: 'rgba(9, 105, 218, 1)',
-    boxShadow: '0 0 0 2px rgba(9, 105, 218, 0.2)',
+    borderColor: "rgba(9, 105, 218, 1)",
+    boxShadow: "0 0 0 2px rgba(9, 105, 218, 0.2)",
     transition: {
       duration: TIMING.fast,
       ease: EASING.easeOut,
@@ -974,17 +767,17 @@ export const premiumInputFocus: Variants = {
  */
 export const premiumInputValidation: Variants = {
   initial: {
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: "rgba(255, 255, 255, 0.2)",
   },
   success: {
-    borderColor: 'rgba(34, 197, 94, 1)',
+    borderColor: "rgba(34, 197, 94, 1)",
     transition: {
       duration: TIMING.fast,
       ease: EASING.easeOut,
     },
   },
   error: {
-    borderColor: 'rgba(239, 68, 68, 1)',
+    borderColor: "rgba(239, 68, 68, 1)",
     x: [0, -2, 2, -2, 0],
     transition: {
       duration: TIMING.normal,
@@ -1000,12 +793,12 @@ export const premiumInputFloatingLabel: Variants = {
   initial: {
     y: 0,
     scale: 1,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: "rgba(255, 255, 255, 0.6)",
   },
   focused: {
     y: -24,
     scale: 0.85,
-    color: 'rgba(9, 105, 218, 1)',
+    color: "rgba(9, 105, 218, 1)",
     transition: {
       duration: TIMING.fast,
       ease: EASING.easeOut,
@@ -1014,7 +807,7 @@ export const premiumInputFloatingLabel: Variants = {
   filled: {
     y: -24,
     scale: 0.85,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: "rgba(255, 255, 255, 0.8)",
     transition: {
       duration: TIMING.fast,
       ease: EASING.easeOut,
@@ -1086,10 +879,10 @@ export const premiumScrollFade: Variants = {
  */
 export const createViewportAnimation = (
   threshold: number = 0.1,
-  margin: string = '0px 0px -100px 0px'
+  margin: string = "0px 0px -100px 0px",
 ): MotionProps => ({
-  initial: 'hidden',
-  whileInView: 'visible',
+  initial: "hidden",
+  whileInView: "visible",
   viewport: {
     once: true,
     amount: threshold,
@@ -1102,10 +895,10 @@ export const createViewportAnimation = (
  * Create staggered viewport animation for lists/grids
  */
 export const createStaggeredViewportAnimation = (
-  staggerDelay: number = TIMING.stagger.normal
+  staggerDelay: number = TIMING.stagger.normal,
 ): MotionProps => ({
-  initial: 'hidden',
-  whileInView: 'visible',
+  initial: "hidden",
+  whileInView: "visible",
   viewport: { once: true, amount: 0.1 },
   variants: {
     hidden: { opacity: 0 },
@@ -1124,7 +917,7 @@ export const createStaggeredViewportAnimation = (
  */
 export const createHoverAnimation = (
   scale: number = 1.02,
-  duration: number = TIMING.fast
+  duration: number = TIMING.fast,
 ): MotionProps => ({
   whileHover: {
     scale,
@@ -1148,9 +941,9 @@ export const optimizedAnimation = (variants: Variants): MotionProps => {
 
   return {
     variants,
-    initial: 'initial',
-    animate: 'animate',
-    exit: 'exit',
+    initial: "initial",
+    animate: "animate",
+    exit: "exit",
   };
 };
 
@@ -1159,9 +952,9 @@ export const optimizedAnimation = (variants: Variants): MotionProps => {
  */
 export const mobileOptimizedAnimation = (
   variants: Variants,
-  mobileVariants?: Variants
+  mobileVariants?: Variants,
 ): MotionProps => {
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   const { reducedMotion } = getMotionConfig();
 
   if (reducedMotion) {
@@ -1170,9 +963,9 @@ export const mobileOptimizedAnimation = (
 
   return {
     variants: isMobile && mobileVariants ? mobileVariants : variants,
-    initial: 'initial',
-    animate: 'animate',
-    exit: 'exit',
+    initial: "initial",
+    animate: "animate",
+    exit: "exit",
   };
 };
 
@@ -1204,13 +997,13 @@ export const animations = {
   submitButton,
 
   // Loading states
-  skeletonPulse,
-  loadingSpinner,
+  // skeletonPulse, - REMOVED (unused)
+  // loadingSpinner, - REMOVED (unused)
   contentLoad,
 
   // Modals and overlays
-  modalBackdrop,
-  modalContent,
+  // modalBackdrop, - REMOVED (unused)
+  // modalContent, - REMOVED (unused)
 
   // Premium homepage transformations
   premiumFadeInUp,
@@ -1224,15 +1017,15 @@ export const animations = {
   scrollIndicator,
   imageOverlayReveal,
 
-  // New animations for 2025
-  physicsSpring,
-  microInteractionButton,
-  cursorTracking,
-  exponentialStagger,
-  morphingShape,
-  cinematicTextReveal,
-  cinematicCharacter,
-  ambientMotion,
+  // New animations for 2025 - COMMENTED OUT (UNUSED)
+  // physicsSpring,
+  // microInteractionButton,
+  // cursorTracking,
+  // exponentialStagger,
+  // morphingShape,
+  // cinematicTextReveal,
+  // cinematicCharacter,
+  // ambientMotion,
 
   // 2025 enhancements
   premiumButtonPress,

@@ -1,0 +1,20 @@
+# Archive directory gitignore
+# Exclude temporary files and system files
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archive working files
+*.log
+*.backup
+
+# Don't exclude the actual archived content - we want that tracked 
