@@ -65,6 +65,7 @@ export class ResponseCacheService {
   async getCachedResponse(
     query: string,
     sessionId: string,
+    conversationLength: number = 0,
   ): Promise<{
     response: string;
     source: "quick" | "cache" | null;
@@ -78,6 +79,20 @@ export class ResponseCacheService {
 
     // Track query frequency for analytics
     this.trackQueryFrequency(normalizedQuery);
+
+    // CONTEXT AWARENESS: Never use cache for ongoing conversations
+    // Only cache responses for initial questions or very short conversations
+    if (conversationLength > 1) {
+      this.analytics.cacheMisses++;
+      const responseTime = Date.now() - startTime;
+      this.updateAnalytics(responseTime);
+
+      return {
+        response: "",
+        source: null,
+        responseTime,
+      };
+    }
 
     // 1. Check for instant quick responses (0ms target)
     const quickResponse = findQuickResponse(normalizedQuery);
@@ -139,13 +154,16 @@ export class ResponseCacheService {
     response: string,
     sessionId: string,
     confidence: number = 0.8,
+    conversationLength: number = 0,
   ): void {
     const normalizedQuery = this.normalizeQuery(query);
 
-    // Don't cache low-confidence or very personalized responses
+    // Don't cache responses from ongoing conversations or low-confidence/personalized responses
     if (
+      conversationLength > 1 ||
       confidence < this.MIN_CONFIDENCE_THRESHOLD ||
-      this.isPersonalizedQuery(normalizedQuery)
+      this.isPersonalizedQuery(normalizedQuery) ||
+      this.isConversationalQuery(normalizedQuery)
     ) {
       return;
     }
@@ -191,6 +209,35 @@ export class ResponseCacheService {
     ];
 
     return personalizedPatterns.some((pattern) => pattern.test(query));
+  }
+
+  /**
+   * Check if query is conversational/follow-up that shouldn't be cached
+   */
+  private isConversationalQuery(query: string): boolean {
+    const conversationalPatterns = [
+      // Follow-up questions
+      /\b(and what about|how about|what if|but what)\b/i,
+      /\b(you mentioned|as you said|going back to)\b/i,
+
+      // Contextual references
+      /\b(that sounds|that makes sense|i see|understood|got it)\b/i,
+      /\b(thanks|thank you|great|perfect|excellent)\b/i,
+
+      // Continuation patterns
+      /\b(also|additionally|furthermore|moreover|besides)\b/i,
+      /\b(another question|one more thing|follow up)\b/i,
+
+      // Clarification requests
+      /\b(can you explain|could you clarify|what do you mean)\b/i,
+      /\b(more details|tell me more|elaborate)\b/i,
+
+      // Referencing previous conversation
+      /\b(the automation you mentioned|the solution we discussed)\b/i,
+      /\b(from our conversation|as we talked about)\b/i,
+    ];
+
+    return conversationalPatterns.some((pattern) => pattern.test(query));
   }
 
   /**

@@ -601,10 +601,10 @@ const HeroServiceSelector = memo(() => {
 
   // Enhanced service labels mapping for premium dock
   const serviceLabels = {
-    "Smart Research": "Research",
-    "Rapid AI Builds": "Build",
-    "Workflow Magic": "Workflows",
-    "AI Training": "Learn",
+    "Smart Research": isMobile ? "Research" : "Research",
+    "Rapid AI Builds": isMobile ? "Build" : "Build",
+    "Workflow Magic": isMobile ? "Flows" : "Workflows",
+    "AI Training": isMobile ? "Learn" : "Learn",
   };
 
   // Portal-based tooltip component
@@ -668,7 +668,14 @@ const HeroServiceSelector = memo(() => {
     <div className="flex justify-center">
       <div
         ref={containerRef}
-        className="flex items-center gap-8 sm:gap-10 md:gap-12 px-6 sm:px-8 py-4 sm:py-5 bg-black/20 backdrop-blur-md rounded-2xl shadow-lg border border-white/5"
+        className={`
+          ${
+            isMobile
+              ? "grid grid-cols-2 gap-3 max-w-[280px] px-4 py-3"
+              : "flex items-center gap-8 sm:gap-10 md:gap-12 px-6 sm:px-8 py-4 sm:py-5"
+          } 
+          bg-black/20 backdrop-blur-md rounded-2xl shadow-lg border border-white/5 mx-auto
+        `}
         role="navigation"
         aria-label="Service categories"
       >
@@ -679,15 +686,19 @@ const HeroServiceSelector = memo(() => {
                 iconRefs.current[index] = el;
               }}
               className={`
-                flex flex-col items-center gap-3 p-4 sm:p-5 rounded-xl backdrop-blur-sm
+                flex flex-col items-center gap-2 rounded-xl backdrop-blur-sm
                 transition-all duration-300 cursor-pointer relative
                 hover:bg-white/8 border border-transparent hover:border-white/10
                 focus:outline-none focus:ring-2 focus:ring-blue-400/50
-                min-h-[80px] min-w-[80px]
+                ${
+                  isMobile
+                    ? "min-h-[70px] min-w-[120px] p-3"
+                    : "min-h-[80px] min-w-[80px] p-4 sm:p-5 gap-3"
+                }
                 ${activeService?.title === service.title ? "bg-white/12 shadow-lg border-white/15" : ""}
               `}
               whileHover={
-                prefersReducedMotion
+                prefersReducedMotion || isMobile
                   ? {}
                   : {
                       scale: 1.05,
@@ -708,7 +719,11 @@ const HeroServiceSelector = memo(() => {
               {/* Icon Container */}
               <div className="relative">
                 <service.icon
-                  className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 ${service.iconColor} transition-all duration-300 group-hover:scale-110`}
+                  className={`
+                    ${isMobile ? "w-5 h-5" : "w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8"} 
+                    ${service.iconColor} transition-all duration-300 group-hover:scale-110
+                    drop-shadow-sm
+                  `}
                   aria-hidden="true"
                 />
               </div>
@@ -734,7 +749,7 @@ HeroServiceSelector.displayName = "HeroServiceSelector";
 // Main Hero Section Component with Performance Monitoring
 export function HeroSection() {
   const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-10%" });
+  const isInView = useInView(ref, { once: true, margin: "0px", amount: 0.05 });
   const isMobile = useStableMobile();
   const prefersReducedMotion = useReducedMotion();
   const { metrics } = usePerformanceMonitor();
@@ -769,7 +784,7 @@ export function HeroSection() {
         opacity: 1,
         transition: {
           staggerChildren: isMobile ? 0.08 : 0.12,
-          delayChildren: isMobile ? 0.1 : 0.15,
+          delayChildren: 0, // Removed blocking delay for immediate scroll response
         },
       },
     }),

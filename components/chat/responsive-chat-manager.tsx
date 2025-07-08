@@ -1,13 +1,13 @@
 "use client";
 
-import { useStableMobile } from '@/hooks';
-import { cn } from '@/lib/utils';
-import { Message } from '@/types/chat';
-import { motion } from 'framer-motion';
-import { MessageSquare } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { DesktopChatSidebar } from './desktop-chat-sidebar';
-import { MobileChatInterface } from './mobile-chat-interface';
+import { useStableMobile } from "@/hooks";
+import { cn } from "@/lib/utils";
+import { Message } from "@/types/chat";
+import { motion } from "framer-motion";
+import { MessageSquare } from "lucide-react";
+import { useEffect, useState } from "react";
+import { DesktopChatSidebar } from "./desktop-chat-sidebar";
+import { MobileChatInterface } from "./mobile-chat-interface";
 
 interface ResponsiveChatManagerProps {
   isOpen: boolean;
@@ -18,6 +18,7 @@ interface ResponsiveChatManagerProps {
   onSendMessage: () => void;
   isLoading: boolean;
   onBookConsultation: () => void;
+  onNewChat: () => void;
   className?: string;
 }
 
@@ -30,7 +31,8 @@ export function ResponsiveChatManager({
   onSendMessage,
   isLoading,
   onBookConsultation,
-  className = ""
+  onNewChat,
+  className = "",
 }: ResponsiveChatManagerProps) {
   const isMobile = useStableMobile();
   const [isButtonVisible, setIsButtonVisible] = useState(true);
@@ -50,11 +52,11 @@ export function ResponsiveChatManager({
     if (!hasAnimated && !isOpen) {
       const timer = setTimeout(() => {
         // Subtle pulse animation on first load
-        const button = document.querySelector('[data-chat-button]');
+        const button = document.querySelector("[data-chat-button]");
         if (button) {
-          button.classList.add('animate-pulse');
+          button.classList.add("animate-pulse");
           setTimeout(() => {
-            button.classList.remove('animate-pulse');
+            button.classList.remove("animate-pulse");
             setHasAnimated(true);
           }, 2000);
         }
@@ -62,7 +64,7 @@ export function ResponsiveChatManager({
 
       return () => clearTimeout(timer);
     }
-    
+
     // Return empty cleanup function for other code paths
     return () => {};
   }, [hasAnimated, isOpen]);
@@ -83,26 +85,26 @@ export function ResponsiveChatManager({
           data-chat-button
           className={cn(
             "fixed z-[60] transition-all duration-300",
-            isMobile 
-              ? "bottom-4 right-4 w-14 h-14" 
+            isMobile
+              ? "bottom-4 right-4 w-14 h-14"
               : "bottom-6 right-6 w-16 h-16",
-            
+
             // Premium glassmorphism background
             "bg-black/20 backdrop-blur-xl border border-white/10",
             "hover:bg-black/30 hover:border-white/20",
-            
+
             // Subtle glow effect
             "shadow-[0_0_20px_rgba(59,130,246,0.15)]",
             "hover:shadow-[0_0_30px_rgba(59,130,246,0.25)]",
-            
+
             // Perfect rounded button
             "rounded-2xl",
-            
+
             // Center the icon
             "flex items-center justify-center",
-            
+
             // Touch-friendly
-            "touch-manipulation select-none"
+            "touch-manipulation select-none",
           )}
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.95 }}
@@ -110,11 +112,8 @@ export function ResponsiveChatManager({
           onClick={onToggle}
           aria-label="Open FIELDPORTER Agent"
         >
-          <MessageSquare 
-            className={cn(
-              isMobile ? "w-6 h-6" : "w-7 h-7", 
-              "text-white/90"
-            )}
+          <MessageSquare
+            className={cn(isMobile ? "w-6 h-6" : "w-7 h-7", "text-white/90")}
             strokeWidth={1.5}
           />
         </motion.button>
@@ -130,7 +129,8 @@ export function ResponsiveChatManager({
         onSendMessage={onSendMessage}
         isLoading={isLoading}
         onBookConsultation={onBookConsultation}
+        onNewChat={onNewChat}
       />
     </div>
   );
-} 
+}

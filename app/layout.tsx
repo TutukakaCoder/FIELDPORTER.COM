@@ -1,10 +1,10 @@
 import { EnhancedChatWidget } from "@/components/chat";
 import {
-    BackToTop,
-    EntranceProvider,
-    Footer,
-    Header,
-    ScrollRestoration,
+  BackToTop,
+  EntranceProvider,
+  Footer,
+  Header,
+  ScrollRestoration,
 } from "@/components/layout";
 import { PageTransition } from "@/components/ui/page-transition";
 import { Metadata, Viewport } from "next";
@@ -40,17 +40,53 @@ export const metadata: Metadata = {
   robots: "index, follow",
   icons: {
     icon: [
+      // Default fallback (for browsers that don't support media queries)
       { url: "/favicon.ico" },
+      // Light mode favicon (black F on transparent/white background)
+      {
+        url: "/images/square-f-black.png",
+        type: "image/png",
+        sizes: "32x32",
+        media: "(prefers-color-scheme: light)",
+      },
+      // Dark mode favicon (white F on transparent/dark background)
+      {
+        url: "/images/square-f-white.png",
+        type: "image/png",
+        sizes: "32x32",
+        media: "(prefers-color-scheme: dark)",
+      },
+      // SVG favicon for modern browsers (adaptive)
       { url: "/favicon.svg", type: "image/svg+xml" },
     ],
     apple: [
-      { url: "/favicon.svg", sizes: "180x180", type: "image/svg+xml" },
+      {
+        url: "/images/square-f-black.png",
+        sizes: "180x180",
+        type: "image/png",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/images/square-f-white.png",
+        sizes: "180x180",
+        type: "image/png",
+        media: "(prefers-color-scheme: dark)",
+      },
     ],
     other: [
       {
         rel: "icon",
-        url: "/favicon.svg",
-        type: "image/svg+xml",
+        url: "/images/square-f-black.png",
+        type: "image/png",
+        sizes: "32x32",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        rel: "icon",
+        url: "/images/square-f-white.png",
+        type: "image/png",
+        sizes: "32x32",
+        media: "(prefers-color-scheme: dark)",
       },
     ],
   },

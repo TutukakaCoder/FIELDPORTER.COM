@@ -13,7 +13,7 @@ interface VideoEntranceProps {
 
 export function VideoEntrance({
   onComplete,
-  videoSrc = "/videos/shortened-animation-2.mp4",
+  videoSrc = "/videos/new-intro-video.mp4",
 }: VideoEntranceProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [showSkip, setShowSkip] = useState(false);
@@ -97,12 +97,14 @@ export function VideoEntrance({
 
           if (playPromise !== undefined) {
             await playPromise;
-            
+
             // Start preloading routes while video plays
-            startPreloading(MAIN_NAVIGATION.map(item => item.href));
-            
+            startPreloading(MAIN_NAVIGATION.map((item) => item.href));
+
             if (process.env.NODE_ENV === "development") {
-              console.log("🎯 FIELDPORTER: Video playing successfully (muted) - Starting resource preloading");
+              console.log(
+                "🎯 FIELDPORTER: Video playing successfully (muted) - Starting resource preloading",
+              );
             }
           }
         }

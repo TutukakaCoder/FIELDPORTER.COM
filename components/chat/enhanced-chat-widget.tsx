@@ -7,7 +7,7 @@ import { FALLBACK_RESPONSES } from "@/lib/chatbot-system-prompt";
 import { enhancedChatService } from "@/lib/enhanced-chat-service";
 import { cn } from "@/lib/utils";
 import type { Message } from "@/types/chat";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { MessageManager } from "./message-manager";
 import { ResponsiveChatManager } from "./responsive-chat-manager";
 
@@ -30,11 +30,11 @@ const formatChatResponse = (content: string): string => {
   ];
 
   // Replace with accurate model list that includes DeepSeek
-  multipleModelPatterns.forEach(pattern => {
+  multipleModelPatterns.forEach((pattern) => {
     if (pattern.test(processedContent)) {
       processedContent = processedContent.replace(
         pattern,
-        'Claude, GPT-4, Gemini, and DeepSeek'
+        "Claude, GPT-4, Gemini, and DeepSeek",
       );
     }
   });
@@ -116,16 +116,23 @@ Our services include strategic research ($500-$3,000), rapid development ($3,000
   }
 
   // Replace generic automation claims with specific FIELDPORTER capabilities
-  if (processedContent.includes("automate workflows") && !processedContent.includes("strategic research")) {
+  if (
+    processedContent.includes("automate workflows") &&
+    !processedContent.includes("strategic research")
+  ) {
     processedContent = processedContent.replace(
       /automate workflows?/gi,
-      "automate workflows using React, Firebase, and AI tools like Claude and DeepSeek"
+      "automate workflows using React, Firebase, and AI tools like Claude and DeepSeek",
     );
   }
 
   // Ensure proper email follow-up messaging
-  if (processedContent.includes("@") && !processedContent.includes("Frederick")) {
-    processedContent += " I'll make sure Frederick reaches out within 24 hours to discuss your specific needs.";
+  if (
+    processedContent.includes("@") &&
+    !processedContent.includes("Frederick")
+  ) {
+    processedContent +=
+      " I'll make sure Frederick reaches out within 24 hours to discuss your specific needs.";
   }
 
   return (
@@ -402,7 +409,7 @@ interface EnhancedChatWidgetProps {
 export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
   // Mobile detection using project's stable hook
   const isMobile = useStableMobile();
-  
+
   const [isOpen, setIsOpen] = useState(false);
   const [messageManager] = useState(() => new MessageManager());
   const [messages, setMessages] = useState<Message[]>([]);
@@ -475,42 +482,33 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
     setError(null);
     setRetryableError(null);
 
+    // Immediately update UI for better perceived performance
+    setInputValue("");
+    setIsLoading(true);
+    setResponseStartTime(Date.now());
+
     // Add user message
     const userMessage = await messageManager.addMessage(userInput, "user");
     if (!userMessage) {
       setError(
         "Failed to send message. Please check your input and try again.",
       );
+      setIsLoading(false);
       return;
     }
 
     setMessages(messageManager.getMessages());
-    setInputValue("");
-    setIsLoading(true);
-    setResponseStartTime(Date.now());
 
     try {
-      // Business intelligence analysis before sending
-      const updatedMessages = messageManager.getMessages();
-      const { score, qualification, reasoning } =
-        calculateLeadScore(updatedMessages);
-      const intelligence = analyseMessageForIntelligence(userInput);
-
       if (process.env.NODE_ENV === "development") {
         console.log("🚀 Starting AI request for message:", userInput);
-        console.log("🧠 Business Intelligence:", {
-          score,
-          qualification,
-          reasoning,
-          intelligence,
-        });
       }
 
-      setIsLoading(true);
+      // Single API call - all processing happens server-side now
       const aiResponse = await enhancedChatService.getChatResponse(
         userInput,
         messageManager.getSessionId(),
-        messageManager.getMessages().slice(-8), // Increased memory window from 3 to 8
+        messageManager.getMessages().slice(-8),
         userEmail,
       );
 
@@ -521,14 +519,12 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
         });
       }
 
-      const responseTime = Date.now() - responseStartTime;
-
       let responseContent: string;
 
       if (aiResponse.error) {
         if (aiResponse.error.retryable) {
           setRetryableError(aiResponse.error.message);
-          responseContent = aiResponse.response; // Enhanced service provides better fallbacks
+          responseContent = aiResponse.response;
         } else {
           responseContent = FALLBACK_RESPONSES.error;
         }
@@ -536,27 +532,13 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
       } else {
         responseContent = aiResponse.response;
 
-        // Validate response quality
+        // Quick validation only
         if (responseContent.length < 10) {
           responseContent = FALLBACK_RESPONSES.inappropriate;
         }
 
-        // Check for confidentiality breaches
-        if (
-          responseContent.toLowerCase().includes("self-development platform")
-        ) {
-          responseContent =
-            "I'd be happy to discuss how FIELDPORTER can help with your strategic challenges. What specific business problem are you looking to solve?";
-        }
-
         setRetryableError(null);
         setIsN8nConnected(true);
-      }
-
-      // Add qualification prompts for high-value prospects
-      const qualificationPrompt = generateQualificationPrompt(updatedMessages);
-      if (qualificationPrompt && score >= 8) {
-        responseContent += "\n\n" + qualificationPrompt;
       }
 
       const assistantMessage = await messageManager.addMessage(
@@ -568,32 +550,16 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
         messageManager.updateMessageStatus(userMessage.id, "sent");
         setMessages(messageManager.getMessages());
 
-        // Enhanced analytics with business intelligence
+        // Simple analytics tracking
         const finalResponseTime = Date.now() - responseStartTime;
         chatbotAnalytics.trackInteraction({
           sessionId: messageManager.getSessionId(),
           messageCount: messageManager.getMessages().length,
           responseTime: finalResponseTime,
-          leadScore: score,
+          leadScore: aiResponse.leadScore || 1,
           conversationSource: "chat_widget",
           deviceType: window.innerWidth < 768 ? "mobile" : "desktop",
         });
-
-        // High-value lead notification
-        if (score >= 12) {
-          console.log("🔥 QUALIFIED LEAD DETECTED:", {
-            sessionId: messageManager.getSessionId(),
-            score,
-            qualification,
-            reasoning,
-            painPoints: intelligence.painPoints,
-            urgencySignals: intelligence.urgencySignals,
-            email: userEmail,
-          });
-
-          // TODO: Trigger email notification to Frederick
-          // This would typically call a Firebase function or n8n webhook
-        }
       } else {
         throw new Error("Failed to process AI response");
       }
@@ -623,6 +589,37 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
     window.location.href = "/contact";
   };
 
+  const handleNewChat = useCallback(async () => {
+    try {
+      // Clear local state
+      setMessages([]);
+      setInputValue("");
+      setUserEmail("");
+      setError(null);
+      setRetryableError(null);
+      setIsLoading(false);
+      setLeadScore(1);
+
+      // Clear MessageManager conversation
+      messageManager.clearConversation();
+
+      // Reset Firebase connection
+      setIsFirebaseConnected(messageManager.isFirebaseConnected());
+
+      if (process.env.NODE_ENV === "development") {
+        console.log(
+          "🔄 New chat session started:",
+          messageManager.getSessionId(),
+        );
+      }
+
+      // No automatic message - let user start fresh
+    } catch (error) {
+      console.error("Error starting new chat:", error);
+      setError("Failed to start new conversation. Please try again.");
+    }
+  }, [messageManager]);
+
   const handleToggleChat = () => {
     setIsOpen(!isOpen);
   };
@@ -638,6 +635,7 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
         onSendMessage={handleSendMessage}
         isLoading={isLoading}
         onBookConsultation={handleBookConsultation}
+        onNewChat={handleNewChat}
       />
     </div>
   );
