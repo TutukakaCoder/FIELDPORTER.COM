@@ -3,11 +3,11 @@
 import { trackServiceInterest } from "@/lib/firebase-analytics";
 import { motion, useInView } from "framer-motion";
 import {
-    ArrowRight,
-    BookOpen,
-    Building2,
-    Code,
-    TrendingUp,
+  ArrowRight,
+  BookOpen,
+  Building2,
+  Code,
+  TrendingUp,
 } from "lucide-react";
 import { memo, useCallback, useRef } from "react";
 
@@ -132,11 +132,15 @@ const PremiumBackground = memo(() => {
       {/* Mobile-optimized floating orbs - much smaller and simpler */}
       <div className="absolute inset-0 opacity-20">
         {/* Reduced size for mobile compatibility */}
-        <div className="absolute top-1/4 left-1/3 w-32 h-32 md:w-48 md:h-48 lg:w-64 lg:w-64 bg-blue-500/6 rounded-full blur-xl md:blur-2xl animate-pulse" />
-        <div className="absolute bottom-1/3 right-1/4 w-28 h-28 md:w-40 md:h-40 lg:w-56 lg:h-56 bg-emerald-500/6 rounded-full blur-xl md:blur-2xl animate-pulse" 
-             style={{ animationDelay: '2s' }} />
-        <div className="absolute top-2/3 left-1/6 w-24 h-24 md:w-36 md:h-36 lg:w-48 lg:h-48 bg-purple-500/4 rounded-full blur-lg md:blur-xl animate-pulse" 
-             style={{ animationDelay: '3s' }} />
+        <div className="absolute top-1/4 left-1/3 w-32 h-32 md:w-48 md:h-48 lg:w-64 bg-blue-500/6 rounded-full blur-xl md:blur-2xl animate-pulse" />
+        <div
+          className="absolute bottom-1/3 right-1/4 w-28 h-28 md:w-40 md:h-40 lg:w-56 lg:h-56 bg-emerald-500/6 rounded-full blur-xl md:blur-2xl animate-pulse"
+          style={{ animationDelay: "2s" }}
+        />
+        <div
+          className="absolute top-2/3 left-1/6 w-24 h-24 md:w-36 md:h-36 lg:w-48 lg:h-48 bg-purple-500/4 rounded-full blur-lg md:blur-xl animate-pulse"
+          style={{ animationDelay: "3s" }}
+        />
       </div>
 
       {/* Simplified grain texture - disabled on mobile for performance */}
@@ -147,67 +151,64 @@ const PremiumBackground = memo(() => {
           backgroundRepeat: "repeat",
         }}
       />
-      
+
       {/* Subtle radial overlay */}
       <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/20" />
     </div>
   );
 });
 
-PremiumBackground.displayName = 'PremiumBackground';
+PremiumBackground.displayName = "PremiumBackground";
 
 // Mobile-optimized service card component
-const ServiceCard = memo(({
-  service,
-  index,
-}: {
-  service: (typeof services)[0];
-  index: number;
-}) => {
-  const handleServiceClick = useCallback(() => {
-    trackServiceInterest(service.id, "learn_more", {
-      service_name: service.title,
-      location: "services_section",
-    });
+const ServiceCard = memo(
+  ({ service, index }: { service: (typeof services)[0]; index: number }) => {
+    const handleServiceClick = useCallback(() => {
+      trackServiceInterest(service.id, "learn_more", {
+        service_name: service.title,
+        location: "services_section",
+      });
 
-    // Navigate directly to the specific service section with proper anchor
-    const serviceAnchor = service.id;
-    window.location.href = `/services#${serviceAnchor}`;
-  }, [service.id, service.title]);
+      // Navigate directly to the specific service section with proper anchor
+      const serviceAnchor = service.id;
+      window.location.href = `/services#${serviceAnchor}`;
+    }, [service.id, service.title]);
 
-  return (
-    <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-10%" }}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: "easeOut",
-      }}
-      className="group relative cursor-pointer touch-manipulation"
-      data-service-id={service.id}
-      onClick={handleServiceClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          handleServiceClick();
-        }
-      }}
-    >
-      {/* Premium phase number background */}
-      <div className="absolute -top-2 -left-2 text-6xl font-thin text-white/[0.03] pointer-events-none select-none">
-        {service.phase}
-      </div>
+    return (
+      <motion.article
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-10%" }}
+        transition={{
+          duration: 0.6,
+          delay: index * 0.1,
+          ease: "easeOut",
+        }}
+        className="group relative cursor-pointer touch-manipulation"
+        data-service-id={service.id}
+        onClick={handleServiceClick}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleServiceClick();
+          }
+        }}
+      >
+        {/* Premium phase number background */}
+        <div className="absolute -top-2 -left-2 text-6xl font-thin text-white/[0.03] pointer-events-none select-none">
+          {service.phase}
+        </div>
 
-      {/* Mobile-optimized hover glow effect - reduced for performance */}
-      <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${service.shadowColor} hidden md:block`} />
+        {/* Mobile-optimized hover glow effect - reduced for performance */}
+        <div
+          className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${service.shadowColor} hidden md:block`}
+        />
 
-      {/* Main card with mobile-optimized glassmorphism */}
-      <div
-        className={`
+        {/* Main card with mobile-optimized glassmorphism */}
+        <div
+          className={`
           relative bg-white/[0.02] border ${service.borderColor} ${service.hoverBorder}
           rounded-2xl p-6 sm:p-8 lg:p-10 transition-all duration-300 ease-out
           hover:bg-white/[0.03] hover:shadow-xl md:hover:shadow-2xl
@@ -215,94 +216,107 @@ const ServiceCard = memo(({
           min-h-[360px] sm:min-h-[420px] lg:min-h-[450px] flex flex-col
           backdrop-blur-sm
         `}
-      >
-        {/* Simplified glassmorphism layers for mobile */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent rounded-2xl" />
-        <div className={`absolute inset-0 bg-gradient-to-br ${service.gradientFrom} ${service.gradientTo} rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 md:duration-500`} />
-        
-        <div className="relative z-10 flex flex-col h-full">
-          {/* Enhanced header */}
-          <div className="flex items-start justify-between mb-6 sm:mb-8">
-            <div className="p-3 sm:p-4 rounded-xl bg-white/10 border border-white/20 backdrop-blur-sm group-hover:bg-white/15 transition-all duration-300">
-              <service.icon className={`w-6 h-6 sm:w-7 sm:h-7 ${service.iconColor}`} />
-            </div>
+        >
+          {/* Simplified glassmorphism layers for mobile */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent rounded-2xl" />
+          <div
+            className={`absolute inset-0 bg-gradient-to-br ${service.gradientFrom} ${service.gradientTo} rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 md:duration-500`}
+          />
 
-            <div className="text-right">
-              <div className="text-xs sm:text-xs text-white/40 mb-1">Timeline</div>
-              <div className={`text-sm sm:text-sm font-medium ${service.accentColor}`}>
-                {service.timeline}
-              </div>
-            </div>
-          </div>
-
-          {/* Enhanced content */}
-          <div className="flex-1 space-y-6">
-            {/* Title and tagline */}
-            <div className="space-y-3">
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white leading-tight tracking-[-0.01em]">
-                {service.title}
-              </h3>
-              <p className="text-base sm:text-lg text-white/80 font-light">
-                {service.tagline}
-              </p>
-              <div
-                className={`inline-block px-3 py-1 rounded-full bg-white/10 border border-white/20 text-sm ${service.accentColor} font-medium backdrop-blur-sm`}
-              >
-                {service.impact}
-              </div>
-            </div>
-
-            {/* Enhanced benefits */}
-            <div className="space-y-3">
-              {service.benefits.map((benefit, idx) => (
-                <div key={idx} className="flex items-start gap-3">
-                  <div className="relative flex-shrink-0 mt-2">
-                    <div className={`w-1.5 h-1.5 rounded-full ${service.iconColor}`} />
-                    <div className={`absolute inset-0 ${service.iconColor} blur-sm opacity-60`} />
-                  </div>
-                  <span className="text-sm text-white/70 leading-relaxed group-hover:text-white/90 transition-colors duration-300">
-                    {benefit}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Enhanced footer */}
-          <div className="mt-8 pt-6 border-t border-white/10">
-            {/* Premium example tags */}
-            <div className="flex flex-wrap gap-2 mb-4">
-              {service.examples.map((example, idx) => (
-                <span
-                  key={idx}
-                  className="px-2.5 py-1 rounded-full bg-white/[0.05] border border-white/10 text-xs text-white/50 hover:text-white/70 hover:bg-white/[0.08] transition-colors duration-200 backdrop-blur-sm"
-                >
-                  {example}
-                </span>
-              ))}
-            </div>
-
-            {/* Enhanced CTA */}
-            <div className="flex items-center justify-between">
-              <span
-                className={`text-sm font-medium ${service.accentColor} group-hover:text-white transition-colors duration-300`}
-              >
-                Learn More
-              </span>
-              <div className="p-1.5 rounded-full bg-white/5 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300">
-                <ArrowRight
-                  className={`w-4 h-4 ${service.accentColor} group-hover:text-white group-hover:translate-x-1 transition-all duration-300`}
+          <div className="relative z-10 flex flex-col h-full">
+            {/* Enhanced header */}
+            <div className="flex items-start justify-between mb-6 sm:mb-8">
+              <div className="p-3 sm:p-4 rounded-xl bg-white/10 border border-white/20 backdrop-blur-sm group-hover:bg-white/15 transition-all duration-300">
+                <service.icon
+                  className={`w-6 h-6 sm:w-7 sm:h-7 ${service.iconColor}`}
                 />
+              </div>
+
+              <div className="text-right">
+                <div className="text-xs sm:text-xs text-white/40 mb-1">
+                  Timeline
+                </div>
+                <div
+                  className={`text-sm sm:text-sm font-medium ${service.accentColor}`}
+                >
+                  {service.timeline}
+                </div>
+              </div>
+            </div>
+
+            {/* Enhanced content */}
+            <div className="flex-1 space-y-6">
+              {/* Title and tagline */}
+              <div className="space-y-3">
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white leading-tight tracking-[-0.01em]">
+                  {service.title}
+                </h3>
+                <p className="text-base sm:text-lg text-white/80 font-light">
+                  {service.tagline}
+                </p>
+                <div
+                  className={`inline-block px-3 py-1 rounded-full bg-white/10 border border-white/20 text-sm ${service.accentColor} font-medium backdrop-blur-sm`}
+                >
+                  {service.impact}
+                </div>
+              </div>
+
+              {/* Enhanced benefits */}
+              <div className="space-y-3">
+                {service.benefits.map((benefit, idx) => (
+                  <div key={idx} className="flex items-start gap-3">
+                    <div className="relative flex-shrink-0 mt-2">
+                      <div
+                        className={`w-1.5 h-1.5 rounded-full ${service.iconColor}`}
+                      />
+                      <div
+                        className={`absolute inset-0 ${service.iconColor} blur-sm opacity-60`}
+                      />
+                    </div>
+                    <span className="text-sm text-white/70 leading-relaxed group-hover:text-white/90 transition-colors duration-300">
+                      {benefit}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Enhanced footer */}
+            <div className="mt-8 pt-6 border-t border-white/10">
+              {/* Premium example tags */}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {service.examples.map((example, idx) => (
+                  <span
+                    key={idx}
+                    className="px-2.5 py-1 rounded-full bg-white/[0.05] border border-white/10 text-xs text-white/50 hover:text-white/70 hover:bg-white/[0.08] transition-colors duration-200 backdrop-blur-sm"
+                  >
+                    {example}
+                  </span>
+                ))}
+              </div>
+
+              {/* Enhanced CTA */}
+              <div className="flex items-center justify-between">
+                <span
+                  className={`text-sm font-medium ${service.accentColor} group-hover:text-white transition-colors duration-300`}
+                >
+                  Learn More
+                </span>
+                <div className="p-1.5 rounded-full bg-white/5 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <ArrowRight
+                    className={`w-4 h-4 ${service.accentColor} group-hover:text-white group-hover:translate-x-1 transition-all duration-300`}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </motion.article>
-  );
-});
+      </motion.article>
+    );
+  },
+);
 
-ServiceCard.displayName = 'ServiceCard';
+ServiceCard.displayName = "ServiceCard";
 
 export function ServicesSection() {
   const ref = useRef(null);
