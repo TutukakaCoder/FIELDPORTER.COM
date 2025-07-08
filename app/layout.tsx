@@ -44,16 +44,41 @@ export const metadata: Metadata = {
       { url: "/favicon.ico" },
       // Light mode favicon (black F on transparent/white background)
       {
-        url: "/images/square-f-black.png",
+        url: "/favicon-light.png",
         type: "image/png",
         sizes: "32x32",
         media: "(prefers-color-scheme: light)",
       },
       // Dark mode favicon (white F on transparent/dark background)
       {
-        url: "/images/square-f-white.png",
+        url: "/favicon-dark.png",
         type: "image/png",
         sizes: "32x32",
+        media: "(prefers-color-scheme: dark)",
+      },
+      // Multiple sizes for better browser support
+      {
+        url: "/favicon-light-16.png",
+        type: "image/png",
+        sizes: "16x16",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/favicon-dark-16.png",
+        type: "image/png",
+        sizes: "16x16",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
+        url: "/favicon-light-48.png",
+        type: "image/png",
+        sizes: "48x48",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/favicon-dark-48.png",
+        type: "image/png",
+        sizes: "48x48",
         media: "(prefers-color-scheme: dark)",
       },
       // SVG favicon for modern browsers (adaptive)
@@ -61,13 +86,13 @@ export const metadata: Metadata = {
     ],
     apple: [
       {
-        url: "/images/square-f-black.png",
+        url: "/apple-icon-light.png",
         sizes: "180x180",
         type: "image/png",
         media: "(prefers-color-scheme: light)",
       },
       {
-        url: "/images/square-f-white.png",
+        url: "/apple-icon-dark.png",
         sizes: "180x180",
         type: "image/png",
         media: "(prefers-color-scheme: dark)",
@@ -76,14 +101,14 @@ export const metadata: Metadata = {
     other: [
       {
         rel: "icon",
-        url: "/images/square-f-black.png",
+        url: "/favicon-light.png",
         type: "image/png",
         sizes: "32x32",
         media: "(prefers-color-scheme: light)",
       },
       {
         rel: "icon",
-        url: "/images/square-f-white.png",
+        url: "/favicon-dark.png",
         type: "image/png",
         sizes: "32x32",
         media: "(prefers-color-scheme: dark)",
