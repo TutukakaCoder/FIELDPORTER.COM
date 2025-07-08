@@ -4,16 +4,16 @@ import { Button } from "@/components/ui/button";
 import { ContactFormData } from "@/lib/firebase-forms";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Activity,
-  ArrowRight,
-  CheckCircle,
-  ChevronDown,
-  Clock,
-  Lightbulb,
-  Loader2,
-  MessageSquare,
-  Target,
-  User,
+    Activity,
+    ArrowRight,
+    CheckCircle,
+    ChevronDown,
+    Clock,
+    Lightbulb,
+    Loader2,
+    MessageSquare,
+    Target,
+    User,
 } from "lucide-react";
 import React, { useState } from "react";
 
@@ -325,11 +325,10 @@ export function SimpleContactForm() {
             className="text-center mb-12 lg:mb-16"
           >
             <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 leading-tight tracking-tight">
-              Strategic AI Implementation
+              Contact Us
             </h1>
             <p className="text-lg md:text-xl lg:text-2xl text-gray-300 leading-relaxed max-w-3xl mx-auto">
-              Partner with operators who build AI companies. From strategic
-              research to rapid prototyping — we deliver what matters.
+              Use the form below or chat with our AI assistant and share your email or details - someone from our team will get back to you shortly.
             </p>
           </motion.div>
 

@@ -1,112 +1,15 @@
 /* eslint-disable react/self-closing-comp, react/no-unescaped-entities */
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { EnterpriseInput } from "@/components/ui/input";
+import { useStableMobile } from "@/hooks";
 import { chatbotAnalytics } from "@/lib/chatbot-analytics";
 import { FALLBACK_RESPONSES } from "@/lib/chatbot-system-prompt";
 import { enhancedChatService } from "@/lib/enhanced-chat-service";
 import { cn } from "@/lib/utils";
 import type { Message } from "@/types/chat";
-import { AnimatePresence, motion } from "framer-motion";
-import {
-  AlertCircle,
-  Bot,
-  Calendar,
-  MessageCircle,
-  RefreshCw,
-  Send,
-  User,
-  Wifi,
-  WifiOff,
-} from "lucide-react";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { MessageManager } from "./message-manager";
-
-// Add new AnimatedChatButton component with forwardRef
-const AnimatedChatButton = forwardRef<
-  HTMLButtonElement,
-  { children: React.ReactNode }
->(function AnimatedChatButton({ children }, ref) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [hasAnimated, setHasAnimated] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-  const prefersReducedMotion = useRef(false);
-  const timeoutRef = useRef<NodeJS.Timeout>();
-
-  useEffect(() => {
-    setIsMounted(true);
-    // Check for reduced motion preference
-    prefersReducedMotion.current = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    // Trigger initial animation after a short delay
-    if (!prefersReducedMotion.current && !hasAnimated) {
-      timeoutRef.current = setTimeout(() => {
-        setIsHovered(true);
-        // Hide after 2 seconds
-        setTimeout(() => {
-          setIsHovered(false);
-          setHasAnimated(true);
-        }, 2000);
-      }, 1500);
-    }
-
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [hasAnimated]);
-
-  // Don't render anything until mounted to prevent hydration issues
-  if (!isMounted) {
-    return <>{children}</>;
-  }
-
-  return (
-    <div className="relative">
-      {children}
-      <AnimatePresence>
-        {isHovered && !prefersReducedMotion.current && (
-          <motion.div
-            initial={{ opacity: 0, x: -20, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -20, scale: 0.95 }}
-            transition={{
-              duration: 0.3,
-              ease: [0.16, 1, 0.3, 1],
-              scale: { duration: 0.2 },
-            }}
-            className="absolute right-full mr-4 whitespace-nowrap"
-          >
-            <div className="relative">
-              <div className="bg-fieldporter-blue text-fieldporter-white px-4 py-2 rounded-lg text-sm font-medium shadow-lg border border-white/20 backdrop-blur-sm">
-                <div className="flex items-center gap-2">
-                  <MessageCircle className="h-3.5 w-3.5 text-fieldporter-white/90" />
-                  <span className="text-xs">AI Assistant Available</span>
-                </div>
-              </div>
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 rotate-45 w-2 h-2 bg-fieldporter-blue/90 border-r border-b border-white/20" />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-});
-
-// Add display name for better debugging
-AnimatedChatButton.displayName = "AnimatedChatButton";
+import { ResponsiveChatManager } from "./responsive-chat-manager";
 
 // Helper function to decode HTML entities and filter wrong consultation links
 const decodeHtmlEntities = (text: string): string => {
@@ -119,7 +22,70 @@ const decodeHtmlEntities = (text: string): string => {
 const formatChatResponse = (content: string): string => {
   let processedContent = content;
 
-  // Critical: Filter out booking capability claims and replace with throttled response
+  // Keep multiple model claims but ensure DeepSeek is included
+  const multipleModelPatterns = [
+    /Claude 4 Opus|Claude Opus 4/gi,
+    /GPT-4 Turbo/gi,
+    /Gemini 2\.5 Pro/gi,
+  ];
+
+  // Replace with accurate model list that includes DeepSeek
+  multipleModelPatterns.forEach(pattern => {
+    if (pattern.test(processedContent)) {
+      processedContent = processedContent.replace(
+        pattern,
+        'Claude, GPT-4, Gemini, and DeepSeek'
+      );
+    }
+  });
+
+  // Ensure "throttled for web use" messaging is preserved - don't remove it
+  // The user likes this positioning
+
+  // Remove false 3D/rendering capability claims
+  const false3DCapabilityPatterns = [
+    /NVIDIA\s+Omniverse/gi,
+    /Blender\s+(scripting|automation|workflows)/gi,
+    /Unity\s+(rendering|workflows|optimisation)/gi,
+    /(built|developed|created)\s+.*3D.*pipelines?/gi,
+  ];
+
+  const hasFalse3DClaim = false3DCapabilityPatterns.some((pattern) =>
+    pattern.test(processedContent),
+  );
+
+  if (hasFalse3DClaim) {
+    processedContent =
+      "That's outside our current service focus. We specialise in strategic research, AI implementation, and workflow automation. What specific business challenge are you looking to solve?";
+  }
+
+  // Replace false client work claims with real FIELDPORTER examples
+  const falseWorkPatterns = [
+    /gaming\s+(client|project|work)/gi,
+    /AR\/VR\s+(client|project|work)/gi,
+    /visual\s+effects\s+(client|project|work)/gi,
+    /40%.*production.*time.*reduction/gi,
+    /8\s+hours?\s+to\s+90\s+minutes?/gi,
+    /GPU.*optimisation.*for.*clients/gi,
+    /(built|developed|created)\s+.*(?:gaming|3D|VR|AR).*(?:pipelines?|workflows?|systems?)/gi,
+  ];
+
+  const hasFalseWork = falseWorkPatterns.some((pattern) =>
+    pattern.test(processedContent),
+  );
+
+  if (hasFalseWork) {
+    processedContent = `Here are some real examples of our work:
+
+• Self-Development Platform: 8 months live, 1,000+ daily interactions, 15 hours weekly saved through automation
+• VOYCAP Investment News: Improved image success from 30% to 85%, AI content summarisation  
+• Lead Generation Platform: 85% email classification accuracy, 70% reduction in manual review time
+• Strategic Research: Market entry analysis, VC portfolio validation frameworks
+
+Our services include strategic research ($500-$3,000), rapid development ($3,000-$8,000), and workflow optimisation ($2,000-$5,000). What type of challenge are you facing?`;
+  }
+
+  // Replace booking capability claims with contact page redirect
   const bookingPatterns = [
     /I('ll|'ll|'ll|\s+will)\s+(send|resend|email)\s+(you\s+)?a?\s+(calendar\s+)?(invite|meeting|appointment)/gi,
     /I('ll|'ll|'ll|\s+will)\s+book\s+(you\s+)?a?\s+(meeting|appointment|call)/gi,
@@ -128,7 +94,6 @@ const formatChatResponse = (content: string): string => {
     /calendar\s+invite.*(is\s+)?(on\s+its\s+way|sent|coming)/gi,
     /zoom\s+invite.*(is\s+)?(on\s+its\s+way|sent|coming)/gi,
     /let\s+me\s+(resend|send).*(invite|meeting)/gi,
-    /I('ll|'ll|'ll|\s+will)\s+send\s+you.*tomorrow\s+at/gi,
   ];
 
   const hasBookingClaim = bookingPatterns.some((pattern) =>
@@ -137,10 +102,10 @@ const formatChatResponse = (content: string): string => {
 
   if (hasBookingClaim) {
     processedContent =
-      "We can help connect you with FIELDPORTER's team, but our web scheduling is currently limited. Please use the contact page and our team will get back to you with scheduling options.";
+      "I can help connect you with FIELDPORTER's team. Please use the contact page or 'Book Consultation' button to schedule a discussion about your specific needs.";
   }
 
-  // Filter out wrong consultation links and replace with proper message
+  // Filter out wrong consultation links
   if (
     processedContent.includes("fieldporter.com/consult") ||
     processedContent.includes("direct link again") ||
@@ -148,6 +113,19 @@ const formatChatResponse = (content: string): string => {
   ) {
     processedContent =
       "Please use the 'Book Consultation' button below to connect with our team directly.";
+  }
+
+  // Replace generic automation claims with specific FIELDPORTER capabilities
+  if (processedContent.includes("automate workflows") && !processedContent.includes("strategic research")) {
+    processedContent = processedContent.replace(
+      /automate workflows?/gi,
+      "automate workflows using React, Firebase, and AI tools like Claude and DeepSeek"
+    );
+  }
+
+  // Ensure proper email follow-up messaging
+  if (processedContent.includes("@") && !processedContent.includes("Frederick")) {
+    processedContent += " I'll make sure Frederick reaches out within 24 hours to discuss your specific needs.";
   }
 
   return (
@@ -175,9 +153,9 @@ const formatChatResponse = (content: string): string => {
       .replace(/\.\s{2,}/g, ". ")
       // Clean up list formatting
       .replace(/^\s*[-•]\s*/gm, "• ")
-      // Remove any remaining external links
+      // Remove any remaining external links except contact page
       .replace(
-        /(?:https?:\/\/)?(?:www\.)?fieldporter\.com\/\S+/gi,
+        /(?:https?:\/\/)?(?:www\.)?fieldporter\.com\/(?!contact)\S+/gi,
         "our contact page",
       )
       // Clean up leading/trailing whitespace
@@ -185,110 +163,8 @@ const formatChatResponse = (content: string): string => {
   );
 };
 
-// Premium thinking messages that build rapport and demonstrate intelligence
-const PREMIUM_THINKING_MESSAGES = [
-  // Research phase messages
-  "Researching your specific challenge...",
-  "Cross-referencing our case studies...",
-  "Analyzing similar client scenarios...",
-  "Consulting our knowledge base...",
-  "Reviewing relevant methodologies...",
-
-  // Analysis phase messages
-  "Processing your requirements...",
-  "Thinking about optimal approaches...",
-  "Evaluating potential solutions...",
-  "Considering implementation strategies...",
-  "Assessing complexity factors...",
-
-  // Intelligence phase messages
-  "Refining my understanding...",
-  "Connecting the strategic dots...",
-  "Building a comprehensive response...",
-  "Synthesizing our expertise...",
-  "Crafting tailored recommendations...",
-
-  // Relationship building messages
-  "I want to give you a thorough answer...",
-  "Making sure this is genuinely helpful...",
-  "Ensuring we address your core needs...",
-  "Drawing from our best practices...",
-  "Personalizing this for your situation...",
-
-  // Slow/timeout messages
-  "Still working on this - complex questions deserve thoughtful answers...",
-  "Taking extra time to ensure quality insights...",
-  "Deep analysis in progress - your question deserves our best thinking...",
-  "Compiling comprehensive recommendations...",
-  "Almost ready with detailed insights...",
-];
-
-// Enhanced typing indicator component with premium branding and random messages
-const PremiumTypingIndicator = ({
-  stage,
-}: {
-  stage: "thinking" | "analyzing" | "calculating" | "slow" | "timeout";
-}) => {
-  const [currentMessage, setCurrentMessage] = useState("");
-
-  useEffect(() => {
-    let messages: string[];
-
-    switch (stage) {
-      case "thinking":
-        messages = PREMIUM_THINKING_MESSAGES.slice(0, 5); // Research phase
-        break;
-      case "analyzing":
-        messages = PREMIUM_THINKING_MESSAGES.slice(5, 10); // Analysis phase
-        break;
-      case "calculating":
-        messages = PREMIUM_THINKING_MESSAGES.slice(10, 15); // Intelligence phase
-        break;
-      case "slow":
-        messages = PREMIUM_THINKING_MESSAGES.slice(15, 20); // Relationship building
-        break;
-      case "timeout":
-        messages = PREMIUM_THINKING_MESSAGES.slice(20); // Slow/timeout messages
-        break;
-      default:
-        messages = PREMIUM_THINKING_MESSAGES.slice(0, 5);
-    }
-
-    // Pick a random message from the appropriate set
-    const randomMessage =
-      messages[Math.floor(Math.random() * messages.length)] ||
-      "Analyzing your request...";
-    setCurrentMessage(randomMessage);
-  }, [stage]);
-
-  return (
-    <div className="px-4 py-3 flex items-center gap-3">
-      <div className="flex space-x-1">
-        <motion.div
-          className="w-2 h-2 bg-fieldporter-blue rounded-full"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 1, repeat: Infinity, delay: 0 }}
-        />
-        <motion.div
-          className="w-2 h-2 bg-fieldporter-blue rounded-full"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
-        />
-        <motion.div
-          className="w-2 h-2 bg-fieldporter-blue rounded-full"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
-        />
-      </div>
-      <span className="text-sm text-fieldporter-gray italic">
-        {currentMessage}
-      </span>
-    </div>
-  );
-};
-
-// Business intelligence message analyzer
-const analyzeMessageForIntelligence = (
+// Business intelligence message analyser
+const analyseMessageForIntelligence = (
   content: string,
 ): {
   businessKeywords: string[];
@@ -307,7 +183,7 @@ const analyzeMessageForIntelligence = (
     "roi",
     "save time",
     "competitive advantage",
-    "optimize",
+    "optimise",
     "streamline",
     "automate",
     "workflow",
@@ -379,7 +255,7 @@ const analyzeMessageForIntelligence = (
     "employees",
     "company",
     "business",
-    "organization",
+    "organisation",
     "we are",
     "we have",
     "our team",
@@ -416,9 +292,9 @@ const calculateLeadScore = (
     companySignals: [] as string[],
   };
 
-  // Analyze all user messages and accumulate intelligence
+  // Analyse all user messages and accumulate intelligence
   userMessages.forEach((msg) => {
-    const intel = analyzeMessageForIntelligence(msg.content);
+    const intel = analyseMessageForIntelligence(msg.content);
     allIntelligence.businessKeywords.push(...intel.businessKeywords);
     allIntelligence.painPoints.push(...intel.painPoints);
     allIntelligence.urgencySignals.push(...intel.urgencySignals);
@@ -495,7 +371,7 @@ const generateQualificationPrompt = (messages: Message[]): string | null => {
   if (userMessages.length < 2) return null;
 
   const lastMessage = userMessages[userMessages.length - 1]?.content || "";
-  const intelligence = analyzeMessageForIntelligence(lastMessage);
+  const intelligence = analyseMessageForIntelligence(lastMessage);
 
   // High-value prospect prompts
   if (qualification === "qualified") {
@@ -519,74 +395,26 @@ const generateQualificationPrompt = (messages: Message[]): string | null => {
   return null;
 };
 
-// Quick response checker for common queries - temporarily disabled
-const getQuickResponse = (input: string): string | null => {
-  // TODO: Re-implement quick responses with business intelligence
-  return null;
-};
-
 interface EnhancedChatWidgetProps {
   className?: string;
 }
 
 export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
+  // Mobile detection using project's stable hook
+  const isMobile = useStableMobile();
+  
   const [isOpen, setIsOpen] = useState(false);
   const [messageManager] = useState(() => new MessageManager());
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingStage, setLoadingStage] = useState<
-    "thinking" | "analyzing" | "calculating" | "slow" | "timeout"
-  >("thinking");
-
   const [userEmail, setUserEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isFirebaseConnected, setIsFirebaseConnected] = useState(false);
   const [isN8nConnected, setIsN8nConnected] = useState(false);
   const [retryableError, setRetryableError] = useState<string | null>(null);
-  const [isHovered, setIsHovered] = useState(false);
-  const [hasAnimated, setHasAnimated] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
   const [responseStartTime, setResponseStartTime] = useState<number>(0);
-  const [detectedContactInfo, setDetectedContactInfo] = useState<{
-    email?: string;
-    phone?: string;
-  } | null>(null);
-  const [teamNotified, setTeamNotified] = useState(false);
-  const [showContactPrompt, setShowContactPrompt] = useState(false);
   const [leadScore, setLeadScore] = useState(1);
-  const prefersReducedMotion = useRef(false);
-  const timeoutRef = useRef<NodeJS.Timeout>();
-  const loadingTimeoutRef = useRef<NodeJS.Timeout>();
-  const slowWarningRef = useRef<NodeJS.Timeout>();
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    setIsMounted(true);
-    // Check for reduced motion preference
-    prefersReducedMotion.current = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    // Trigger initial animation after a short delay
-    if (!prefersReducedMotion.current && !hasAnimated) {
-      timeoutRef.current = setTimeout(() => {
-        setIsHovered(true);
-        // Hide after 2 seconds
-        setTimeout(() => {
-          setIsHovered(false);
-          setHasAnimated(true);
-        }, 2000);
-      }, 1500);
-    }
-
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [hasAnimated]);
 
   // Initialize messages and email from Enhanced MessageManager
   useEffect(() => {
@@ -619,20 +447,6 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
     initializeChat();
   }, [messageManager]);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  useEffect(() => {
-    if (isOpen && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [isOpen]);
-
   // Listen for open chat widget events from other components
   useEffect(() => {
     const handleOpenChat = () => {
@@ -661,41 +475,6 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
     setError(null);
     setRetryableError(null);
 
-    // Check for quick responses first
-    const quickResponse = getQuickResponse(userInput);
-    if (quickResponse) {
-      // Add user message
-      const userMessage = await messageManager.addMessage(userInput, "user");
-      if (userMessage) {
-        setMessages(messageManager.getMessages());
-        setInputValue("");
-
-        // Add quick response immediately
-        setTimeout(async () => {
-          const assistantMessage = await messageManager.addMessage(
-            quickResponse,
-            "assistant",
-          );
-          if (assistantMessage) {
-            messageManager.updateMessageStatus(userMessage.id, "sent");
-            setMessages(messageManager.getMessages());
-
-            // Track analytics for successful interaction
-            const finalResponseTime = Date.now() - responseStartTime;
-            chatbotAnalytics.trackInteraction({
-              sessionId: messageManager.getSessionId(),
-              messageCount: messageManager.getMessages().length,
-              responseTime: finalResponseTime,
-              leadScore: 1,
-              conversationSource: "chat_widget",
-              deviceType: window.innerWidth < 768 ? "mobile" : "desktop",
-            });
-          }
-        }, 300); // Brief delay for natural feel
-      }
-      return;
-    }
-
     // Add user message
     const userMessage = await messageManager.addMessage(userInput, "user");
     if (!userMessage) {
@@ -708,57 +487,14 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
     setMessages(messageManager.getMessages());
     setInputValue("");
     setIsLoading(true);
-    setLoadingStage("thinking");
     setResponseStartTime(Date.now());
-
-    // Set up progressive loading indicators
-    slowWarningRef.current = setTimeout(() => {
-      setLoadingStage("slow");
-    }, 5000);
-
-    loadingTimeoutRef.current = setTimeout(() => {
-      setLoadingStage("timeout");
-      // Auto-suggest direct contact after timeout
-      setTimeout(async () => {
-        if (isLoading) {
-          setIsLoading(false);
-          const timeoutMessage = await messageManager.addMessage(
-            FALLBACK_RESPONSES.timeout,
-            "assistant",
-          );
-          if (timeoutMessage) {
-            messageManager.updateMessageStatus(userMessage.id, "failed");
-            setMessages(messageManager.getMessages());
-
-            // Track failed interaction
-            const finalResponseTime = Date.now() - responseStartTime;
-            chatbotAnalytics.trackInteraction({
-              sessionId: messageManager.getSessionId(),
-              messageCount: messageManager.getMessages().length,
-              responseTime: finalResponseTime,
-              leadScore: 0,
-              conversationSource: "chat_widget_error",
-              deviceType: window.innerWidth < 768 ? "mobile" : "desktop",
-            });
-          }
-        }
-      }, 3000);
-    }, 8000);
 
     try {
       // Business intelligence analysis before sending
       const updatedMessages = messageManager.getMessages();
       const { score, qualification, reasoning } =
         calculateLeadScore(updatedMessages);
-      const intelligence = analyzeMessageForIntelligence(userInput);
-
-      // Advanced loading stages based on message complexity
-      if (intelligence.businessKeywords.length > 0) {
-        setLoadingStage("analyzing");
-      }
-      if (intelligence.budgetIndicators.length > 0) {
-        setLoadingStage("calculating");
-      }
+      const intelligence = analyseMessageForIntelligence(userInput);
 
       if (process.env.NODE_ENV === "development") {
         console.log("🚀 Starting AI request for message:", userInput);
@@ -873,71 +609,6 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
       setMessages(messageManager.getMessages());
     } finally {
       setIsLoading(false);
-      setLoadingStage("thinking");
-    }
-  };
-
-  const handleRetryMessage = (messageId: string) => {
-    const retryMessage = messageManager.retryMessage(messageId);
-    if (retryMessage) {
-      setMessages(messageManager.getMessages());
-      setError(null);
-      setRetryableError(null);
-      // Trigger resend logic here
-      handleSendMessage();
-    }
-  };
-
-  const handleRetryN8nRequest = async () => {
-    if (!retryableError) return;
-
-    setRetryableError(null);
-    setError(null);
-
-    // Get the last user message to retry
-    const lastUserMessage = messages.filter((m) => m.role === "user").pop();
-    if (lastUserMessage) {
-      setInputValue(lastUserMessage.content);
-      await handleSendMessage();
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
-
-  const handleEmailSubmit = async () => {
-    if (!userEmail.trim()) return;
-
-    try {
-      await messageManager.setUserEmail(userEmail);
-
-      const thankYouMessage = await messageManager.addMessage(
-        `Thank you for providing your email (${userEmail}). Our team will follow up with you. In the meantime, feel free to continue asking about our AI consulting services.`,
-        "assistant",
-      );
-
-      if (thankYouMessage) {
-        setMessages(messageManager.getMessages());
-
-        // Track email capture as an interaction
-        chatbotAnalytics.trackInteraction({
-          sessionId: messageManager.getSessionId(),
-          messageCount: messageManager.getMessages().length,
-          responseTime: 100, // Immediate response
-          leadScore: 5, // Email capture indicates higher interest
-          conversationSource: "email_capture",
-          deviceType: window.innerWidth < 768 ? "mobile" : "desktop",
-        });
-      }
-
-      setUserEmail("");
-    } catch (error) {
-      console.error("Email submission failed:", error);
-      setError("Failed to save email. Please try again.");
     }
   };
 
@@ -952,308 +623,22 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
     window.location.href = "/contact";
   };
 
-  const getMessageStatusIcon = (message: Message) => {
-    if (message.role === "assistant") return null;
-
-    switch (message.status) {
-      case "sending":
-        return (
-          <RefreshCw className="h-3 w-3 animate-spin text-fieldporter-gray" />
-        );
-      case "failed":
-        return (
-          <button
-            onClick={() => handleRetryMessage(message.id)}
-            className="text-red-400 hover:text-red-300 transition-colors"
-            title="Click to retry"
-          >
-            <AlertCircle className="h-3 w-3" />
-          </button>
-        );
-      case "sent":
-      default:
-        return null;
-    }
+  const handleToggleChat = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
-    <div
-      className={cn(
-        "fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50",
-        className,
-      )}
-    >
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        {/* Chat Button Container with improved positioning */}
-        <div className="relative flex items-center justify-end">
-          {/* Animated tooltip that appears to the left of the button */}
-          {isMounted && (
-            <AnimatePresence>
-              {isHovered && !prefersReducedMotion.current && (
-                <motion.div
-                  initial={{ opacity: 0, x: 20, scale: 0.95 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  exit={{ opacity: 0, x: 20, scale: 0.95 }}
-                  transition={{
-                    duration: 0.3,
-                    ease: [0.16, 1, 0.3, 1],
-                    scale: { duration: 0.2 },
-                  }}
-                  className="absolute right-full mr-3 whitespace-nowrap z-[60]"
-                  style={{
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                  }}
-                >
-                  <div className="relative flex items-center">
-                    <div className="bg-fieldporter-blue text-fieldporter-white px-3 py-2.5 rounded-lg text-sm font-medium shadow-lg border border-white/20 backdrop-blur-sm">
-                      <div className="flex items-center gap-2">
-                        <MessageCircle className="h-3.5 w-3.5 text-fieldporter-white/90 flex-shrink-0" />
-                        <span className="text-xs font-medium leading-none">
-                          AI Assistant Available
-                        </span>
-                      </div>
-                    </div>
-                    {/* Tooltip arrow pointing precisely to button center */}
-                    <div
-                      className="absolute left-full w-2 h-2 bg-fieldporter-blue/90 border-r border-b border-white/20 rotate-45"
-                      style={{
-                        top: "50%",
-                        transform: "translateY(-50%) translateX(-1px)",
-                      }}
-                    />
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          )}
-
-          {/* Chat Button - Precisely positioned */}
-          <DialogTrigger asChild>
-            <Button
-              data-chat-trigger="true"
-              data-chat-toggle="true"
-              variant="primary"
-              size="icon"
-              className={cn(
-                "h-12 w-12 sm:h-14 sm:w-14 rounded-full shadow-lg hover:shadow-xl",
-                "transition-all duration-300 ease-out",
-                "hover:scale-110 active:scale-95",
-                "bg-fieldporter-blue hover:bg-fieldporter-blue/90",
-                "border-2 border-white/20",
-                "relative z-[51]",
-                "flex items-center justify-center", // Ensure icon is perfectly centered
-              )}
-              aria-label="Open FIELDPORTER Agent"
-              onMouseEnter={() =>
-                !prefersReducedMotion.current && setIsHovered(true)
-              }
-              onMouseLeave={() =>
-                !prefersReducedMotion.current && setIsHovered(false)
-              }
-            >
-              <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6" />
-            </Button>
-          </DialogTrigger>
-        </div>
-
-        <DialogContent
-          className={cn(
-            "sm:max-w-md w-full max-h-[85vh] flex flex-col",
-            "md:max-w-lg lg:max-w-xl",
-            "p-0 gap-0 mx-4 sm:mx-auto",
-            "max-w-[calc(100vw-2rem)]",
-          )}
-        >
-          <DialogHeader className="p-4 sm:p-6 pb-3 sm:pb-4 border-b border-fieldporter-gray/20">
-            <DialogTitle className="flex items-center gap-2 sm:gap-3">
-              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-fieldporter-blue/20 flex items-center justify-center">
-                <Bot className="h-4 w-4 sm:h-5 sm:w-5 text-fieldporter-blue" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-base sm:text-lg font-semibold text-fieldporter-white truncate">
-                  FIELDPORTER Agent
-                </div>
-                <div className="text-xs sm:text-sm text-fieldporter-gray font-normal">
-                  AI Strategy Consulting Expert
-                </div>
-              </div>
-              <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-                {/* Firebase Status */}
-                <div className="flex items-center gap-1">
-                  <div
-                    className={cn(
-                      "h-2 w-2 rounded-full",
-                      isFirebaseConnected ? "bg-green-400" : "bg-yellow-400",
-                    )}
-                  />
-                  <span className="text-xs text-fieldporter-gray hidden sm:inline">
-                    {isFirebaseConnected ? "DB" : "Local"}
-                  </span>
-                </div>
-
-                {/* n8n AI Status */}
-                <div className="flex items-center gap-1">
-                  {isN8nConnected ? (
-                    <Wifi className="h-3 w-3 text-green-400" />
-                  ) : (
-                    <WifiOff className="h-3 w-3 text-red-400" />
-                  )}
-                  <span className="text-xs text-fieldporter-gray hidden sm:inline">
-                    {isN8nConnected ? "AI" : "Offline"}
-                  </span>
-                </div>
-              </div>
-            </DialogTitle>
-            <DialogDescription className="text-fieldporter-gray/80 mt-2 text-sm sm:text-base">
-              Discuss your challenges with our AI agent to help articulate what
-              you need from us more clearly.
-            </DialogDescription>
-          </DialogHeader>
-
-          {/* Error Display */}
-          {error && (
-            <div className="mx-4 sm:mx-6 mt-3 sm:mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
-              <div className="flex items-center gap-2 text-sm text-red-400">
-                <AlertCircle className="h-4 w-4 flex-shrink-0" />
-                <span className="text-xs sm:text-sm">{error}</span>
-              </div>
-            </div>
-          )}
-
-          {/* n8n Retry Display */}
-          {retryableError && (
-            <div className="mx-4 sm:mx-6 mt-3 sm:mt-4 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 text-sm text-yellow-400 min-w-0">
-                  <WifiOff className="h-4 w-4 flex-shrink-0" />
-                  <span className="text-xs sm:text-sm truncate">
-                    {retryableError}
-                  </span>
-                </div>
-                <Button
-                  variant="fieldporter-secondary"
-                  size="sm"
-                  onClick={handleRetryN8nRequest}
-                  className="text-xs px-2 sm:px-3 py-1 flex-shrink-0"
-                >
-                  Retry
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3 sm:space-y-4 min-h-[250px] sm:min-h-[300px] max-h-[350px] sm:max-h-[400px] scrollbar-thin">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={cn(
-                  "flex gap-2 sm:gap-3",
-                  message.role === "user" ? "justify-end" : "justify-start",
-                )}
-              >
-                {message.role === "assistant" && (
-                  <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-fieldporter-blue/20 flex items-center justify-center flex-shrink-0 mt-1">
-                    <Bot className="h-3 w-3 sm:h-4 sm:w-4 text-fieldporter-blue" />
-                  </div>
-                )}
-
-                <div className="flex flex-col gap-1 max-w-[85%] sm:max-w-[80%]">
-                  <div
-                    className={cn(
-                      "rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sm leading-relaxed whitespace-pre-wrap",
-                      message.role === "user"
-                        ? "bg-fieldporter-blue text-fieldporter-white"
-                        : "bg-bg-fieldporter-secondary border border-fieldporter-gray/20 text-fieldporter-white",
-                    )}
-                  >
-                    {formatChatResponse(message.content)}
-                  </div>
-
-                  {/* Message Status */}
-                  <div
-                    className={cn(
-                      "flex items-center gap-1 px-2",
-                      message.role === "user" ? "justify-end" : "justify-start",
-                    )}
-                  >
-                    {getMessageStatusIcon(message)}
-                    <span className="text-xs text-fieldporter-gray/60">
-                      {message.timestamp.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </span>
-                  </div>
-                </div>
-
-                {message.role === "user" && (
-                  <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-fieldporter-gray/20 flex items-center justify-center flex-shrink-0 mt-1">
-                    <User className="h-3 w-3 sm:h-4 sm:w-4 text-fieldporter-gray" />
-                  </div>
-                )}
-              </div>
-            ))}
-
-            {isLoading && (
-              <div className="flex gap-2 sm:gap-3 justify-start">
-                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-fieldporter-blue/20 flex items-center justify-center flex-shrink-0 mt-1">
-                  <Bot className="h-3 w-3 sm:h-4 sm:w-4 text-fieldporter-blue" />
-                </div>
-                <div className="bg-bg-fieldporter-secondary border border-fieldporter-gray/20 rounded-lg max-w-[85%] sm:max-w-[80%]">
-                  <PremiumTypingIndicator stage={loadingStage} />
-                </div>
-              </div>
-            )}
-
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input Area */}
-          <div className="p-4 sm:p-6 pt-3 sm:pt-4 border-t border-fieldporter-gray/20">
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-2 mb-3">
-              <Button
-                variant="fieldporter-secondary"
-                size="sm"
-                onClick={handleBookConsultation}
-                className="flex items-center justify-center gap-2 text-xs sm:text-sm h-9 px-3"
-              >
-                <Calendar className="h-3 w-3" />
-                <span className="hidden sm:inline">Book Consultation</span>
-                <span className="sm:hidden">Book Call</span>
-              </Button>
-            </div>
-
-            <div className="flex gap-2">
-              <EnterpriseInput
-                ref={inputRef}
-                placeholder="Describe your business challenge or what you need help with..."
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={handleKeyPress}
-                className="flex-1 text-sm"
-                disabled={isLoading}
-                maxLength={1000}
-              />
-              <Button
-                variant="primary"
-                size="icon"
-                onClick={handleSendMessage}
-                disabled={!inputValue.trim() || isLoading}
-                className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0"
-              >
-                <Send className="h-3 w-3 sm:h-4 sm:w-4" />
-              </Button>
-            </div>
-
-            {/* Character count */}
-            <div className="text-xs text-fieldporter-gray/60 mt-1 text-right">
-              {inputValue.length}/1000
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+    <div className={cn("", className)}>
+      <ResponsiveChatManager
+        isOpen={isOpen}
+        onToggle={handleToggleChat}
+        messages={messages}
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        onSendMessage={handleSendMessage}
+        isLoading={isLoading}
+        onBookConsultation={handleBookConsultation}
+      />
     </div>
   );
 }

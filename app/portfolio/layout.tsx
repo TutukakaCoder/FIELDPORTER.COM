@@ -1,22 +1,28 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Portfolio - Coming Soon | FIELDPORTER',
-  description:
-    'Our portfolio showcase is currently under development. Discover our strategic consulting work and business building projects soon.',
+  title: 'Portfolio & Case Studies',
+  description: 'FIELDPORTER\'s portfolio of AI automation projects, strategic research, and client platform development. See real results from our AI integration and automation consulting work.',
   keywords: [
     'FIELDPORTER portfolio',
-    'AI consulting projects',
-    'business building portfolio',
-    'strategic consulting work',
+    'AI automation projects',
+    'client case studies',
+    'strategic research',
+    'AI integration results',
+    'automation consulting portfolio',
+    'business AI solutions',
+    'project case studies',
   ],
   openGraph: {
-    title: 'Portfolio - Coming Soon | FIELDPORTER',
-    description:
-      'Our portfolio showcase is currently under development. Discover our strategic consulting work and business building projects soon.',
+    title: 'FIELDPORTER | Portfolio & Case Studies',
+    description: 'FIELDPORTER\'s portfolio of AI automation projects, strategic research, and client platform development. See real results from our AI integration and automation consulting work.',
     type: 'website',
     url: 'https://fieldporter.com/portfolio',
-    siteName: 'FIELDPORTER',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'FIELDPORTER | Portfolio & Case Studies',
+    description: 'FIELDPORTER\'s portfolio of AI automation projects, strategic research, and client platform development. See real results from our AI integration and automation consulting work.',
   },
   robots: {
     index: true,

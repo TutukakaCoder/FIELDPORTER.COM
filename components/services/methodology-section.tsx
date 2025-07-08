@@ -1,14 +1,15 @@
 "use client";
 
+import { useHorizontalSwipe } from "@/hooks";
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import {
-  ArrowRight,
-  CheckCircle,
-  ChevronDown,
-  FileText,
-  Filter,
-  Search,
-  Upload,
+    ArrowRight,
+    CheckCircle,
+    ChevronDown,
+    FileText,
+    Filter,
+    Search,
+    Upload,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -251,6 +252,35 @@ export function MethodologySection({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Swipe navigation functions
+  const scrollToNext = () => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      const cardWidth = isMobile ? 360 : 432;
+      const currentScrollLeft = container.scrollLeft;
+      const nextPosition = Math.min(
+        currentScrollLeft + cardWidth,
+        cardWidth * phases.length
+      );
+      container.scrollTo({ left: nextPosition, behavior: 'smooth' });
+      handleManualScroll();
+    }
+  };
+
+  const scrollToPrevious = () => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      const cardWidth = isMobile ? 360 : 432;
+      const currentScrollLeft = container.scrollLeft;
+      const prevPosition = Math.max(currentScrollLeft - cardWidth, 0);
+      container.scrollTo({ left: prevPosition, behavior: 'smooth' });
+      handleManualScroll();
+    }
+  };
+
+  // Add swipe gesture support
+  const swipeHandlers = useHorizontalSwipe(scrollToPrevious, scrollToNext);
+
   // Continuous auto-scroll with smooth infinite loop
   useEffect(() => {
     if (!isInView) return;
@@ -330,13 +360,12 @@ export function MethodologySection({
 
         {/* Fixed cards container */}
         <div className="relative min-h-[600px]">
-          {/* Scrollable cards with proper positioning */}
+          {/* Scrollable cards with proper positioning and swipe support */}
           <div
             ref={scrollContainerRef}
             className="relative overflow-x-auto scrollbar-hide"
             onWheel={handleManualScroll}
-            onTouchMove={handleManualScroll}
-            onMouseDown={handleManualScroll}
+            {...swipeHandlers}
             style={{
               scrollbarWidth: "none",
               msOverflowStyle: "none",

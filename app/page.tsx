@@ -1,9 +1,9 @@
 import {
-  CredibilitySection,
-  CTASection,
-  HeroSection,
-  PortfolioSection,
-  ServicesSection,
+    CTASection,
+    HeroSection,
+    PortfolioSection,
+    ServicesSection,
+    TrustIndicatorBar,
 } from "@/components/homepage";
 import { PageWrapper } from "@/components/layout";
 import { Metadata } from "next";
@@ -52,14 +52,15 @@ function UnifiedAuroraBackground() {
 }
 
 export const metadata: Metadata = {
-  title: "We Build AI Workflows Using Our Own Projects As Proof | FIELDPORTER",
+  title: "FIELDPORTER - Build Your Own AI Advantage | AI Integration",
   description:
-    "Claude API, n8n automation, Cursor development. If it works in our revenue-generating business, we'll show you how to use it in yours.",
+    "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. Claude API, n8n automation, Cursor development that works.",
   keywords: [
+    "FIELDPORTER",
+    "AI integration",
     "Claude API automation",
     "n8n workflows",
     "Cursor development",
-    "FIELDPORTER",
     "AI workflow setup",
     "business automation",
     "practical AI implementation",
@@ -67,9 +68,9 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title:
-      "We Build AI Workflows Using Our Own Projects As Proof | FIELDPORTER",
+      "FIELDPORTER - Build Your Own AI Advantage | AI Integration",
     description:
-      "Claude API, n8n automation, Cursor development. If it works in our revenue-generating business, we'll show you how to use it in yours.",
+      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. Claude API, n8n automation, Cursor development that works.",
     type: "website",
     url: "https://fieldporter.com",
     siteName: "FIELDPORTER",
@@ -78,16 +79,16 @@ export const metadata: Metadata = {
         url: "/og-image.svg",
         width: 1200,
         height: 630,
-        alt: "FIELDPORTER - We Build AI Workflows Using Our Own Projects As Proof",
+        alt: "FIELDPORTER - Build Your Own AI Advantage",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title:
-      "We Build AI Workflows Using Our Own Projects As Proof | FIELDPORTER",
+      "FIELDPORTER - Build Your Own AI Advantage | AI Integration",
     description:
-      "Claude API, n8n automation, Cursor development. If it works in our revenue-generating business, we'll show you how to use it in yours.",
+      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. Claude API, n8n automation, Cursor development that works.",
     images: ["/og-image.svg"],
   },
   robots: {
@@ -113,7 +114,7 @@ export default function Home() {
       <div className="relative z-10">
         <HeroSection />
         <ServicesSection />
-        <CredibilitySection />
+        <TrustIndicatorBar />
         <PortfolioSection />
         <CTASection />
       </div>

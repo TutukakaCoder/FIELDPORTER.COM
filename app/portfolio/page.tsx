@@ -1,27 +1,29 @@
 "use client";
 
 import { PageWrapper } from "@/components/layout";
+import { useHorizontalSwipe } from "@/hooks";
 import {
-  AnimatePresence,
-  motion,
-  useInView,
-  useScroll,
-  useTransform,
+    AnimatePresence,
+    motion,
+    useInView,
+    useScroll,
+    useTransform,
 } from "framer-motion";
 import {
-  ArrowLeft,
-  ArrowRight,
-  Brain,
-  Building2,
-  CheckCircle,
-  Clock,
-  Code2,
-  ExternalLink,
-  Globe,
-  Star,
-  Target,
-  TrendingUp,
-  Zap,
+    ArrowRight,
+    Brain,
+    Building2,
+    CheckCircle,
+    ChevronLeft,
+    ChevronRight,
+    Clock,
+    Code2,
+    ExternalLink,
+    Globe,
+    Star,
+    Target,
+    TrendingUp,
+    Zap
 } from "lucide-react";
 import React, { useRef, useState } from "react";
 
@@ -126,15 +128,15 @@ const portfolioSections: PortfolioSection[] = [
           "G-News API • EODHD Financial Data • Multi-Source Aggregation",
       },
       {
-        title: "Lead Generation Platform",
+        title: "Email Classifier and Responder System",
         status: "PROTOTYPE COMPLETE",
         category: "AI System",
         description:
-          "Built for marketing agency to replace their $15K quarterly solution. AI prototype classifies emails with 85% accuracy and generates contextual responses, cutting manual review time by 70%.",
+          "Built for VC firm to automate email triage and response. AI prototype classifies emails with 85% accuracy and generates contextual responses, cutting manual review time by 70%.",
         metrics: [
           { label: "85% email classification accuracy", icon: Target },
           { label: "70% reduction in manual review time", icon: Zap },
-          { label: "50%+ cost reduction potential", icon: CheckCircle },
+          { label: "Automated routing of investment inquiries", icon: CheckCircle },
         ],
         techStack: "React/TypeScript • Firebase • DeepSeek AI",
       },
@@ -308,7 +310,7 @@ function PremiumAuroraBackground() {
   );
 }
 
-// Portfolio Hero Section
+// Portfolio Hero Section with Subtle 3D Constellation Background
 function PortfolioHero() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -318,6 +320,12 @@ function PortfolioHero() {
       ref={ref}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
+      {/* Premium Aurora Background */}
+      <div className="absolute inset-0 z-0">
+        <PremiumAuroraBackground />
+      </div>
+
+      {/* Hero Content */}
       <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -333,8 +341,11 @@ function PortfolioHero() {
 
           <div className="space-y-6">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light text-white leading-tight tracking-[-0.02em]">
-              Building Tomorrow's AI Systems{" "}
               <span className="font-semibold bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+                FIELDPORTER
+              </span>{" "}
+              - Building Tomorrow's AI Systems{" "}
+              <span className="font-semibold bg-gradient-to-r from-emerald-400 to-emerald-600 bg-clip-text text-transparent">
                 Today
               </span>
             </h1>
@@ -360,6 +371,22 @@ function InteractivePortfolioShowcase() {
   );
   const currentSection = portfolioSections[safeIndex];
 
+  // Navigation functions for swipe support
+  const goToPrevious = () => {
+    setActiveSection(prev => 
+      prev > 0 ? prev - 1 : portfolioSections.length - 1
+    );
+  };
+
+  const goToNext = () => {
+    setActiveSection(prev => 
+      prev < portfolioSections.length - 1 ? prev + 1 : 0
+    );
+  };
+
+  // Add swipe gesture support
+  const swipeHandlers = useHorizontalSwipe(goToPrevious, goToNext);
+
   if (!currentSection) {
     return null;
   }
@@ -376,6 +403,7 @@ function InteractivePortfolioShowcase() {
             return (
               <button
                 key={section.id}
+                data-section-id={section.id}
                 onClick={() => setActiveSection(index)}
                 className={`
                   px-4 md:px-8 py-3 md:py-4 rounded-2xl transition-all duration-500 backdrop-blur-xl border font-medium text-sm md:text-lg hover:scale-105 transform will-change-transform touch-manipulation
@@ -400,243 +428,237 @@ function InteractivePortfolioShowcase() {
           })}
         </div>
 
-        {/* Slideshow Content */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeSection}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-            className="relative"
-          >
-            {/* Section Header */}
-            <div className="text-center mb-16 md:mb-20">
-              <div className="flex items-center justify-center gap-4 mb-6">
-                <div
-                  className={`w-16 h-16 rounded-2xl bg-white/5 border ${currentSection.borderColor} flex items-center justify-center backdrop-blur-sm`}
+        {/* Slideshow Content with Swipe Support */}
+        <div {...swipeHandlers} className="select-none">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeSection}
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -100 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="relative"
+            >
+              {/* Desktop Navigation Buttons */}
+              <div className="hidden lg:flex absolute left-8 top-1/2 transform -translate-y-1/2 z-20">
+                <button
+                  onClick={goToPrevious}
+                  className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-lg hover:bg-white/15 transition-all duration-500 flex items-center justify-center group hover:scale-105"
+                  aria-label="Previous section"
                 >
-                  {React.createElement(currentSection.icon, {
-                    className: `w-8 h-8 ${currentSection.iconColor}`,
-                  })}
-                </div>
+                  <ChevronLeft className="w-6 h-6 text-white group-hover:text-blue-300 transition-colors duration-500" />
+                </button>
               </div>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-4 leading-tight tracking-[-0.02em]">
-                {currentSection.id === "client-platforms" &&
-                  "Production Systems with Real Impact"}
-                {currentSection.id === "ai-automation" &&
-                  "Intelligence Systems That Scale"}
-                {currentSection.id === "strategic-research" &&
-                  "Deep Intelligence for Critical Decisions"}
-                {currentSection.id === "in-house-ventures" &&
-                  "Products We're Building"}
-              </h2>
-            </div>
 
-            {/* Projects Grid */}
-            <div className="space-y-12 md:space-y-16">
-              {currentSection.projects.map((project, projectIndex) => (
-                <motion.div
-                  key={projectIndex}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: projectIndex * 0.1 }}
-                  className="relative"
+              <div className="hidden lg:flex absolute right-8 top-1/2 transform -translate-y-1/2 z-20">
+                <button
+                  onClick={goToNext}
+                  className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-lg hover:bg-white/15 transition-all duration-500 flex items-center justify-center group hover:scale-105"
+                  aria-label="Next section"
                 >
+                  <ChevronRight className="w-6 h-6 text-white group-hover:text-blue-300 transition-colors duration-500" />
+                </button>
+              </div>
+              {/* Section Header */}
+              <div className="text-center mb-16 md:mb-20">
+                <div className="flex items-center justify-center gap-4 mb-6">
                   <div
-                    className={`grid gap-8 md:gap-12 lg:gap-16 items-start ${project.testimonial ? "lg:grid-cols-2" : "lg:grid-cols-1 max-w-4xl mx-auto"}`}
+                    className={`w-16 h-16 rounded-2xl bg-white/5 border ${currentSection.borderColor} flex items-center justify-center backdrop-blur-sm`}
                   >
-                    {/* Content Side */}
-                    <div className="space-y-6 md:space-y-8">
-                      <div className="space-y-4">
-                        <div className="flex items-center gap-3 text-sm text-gray-400">
-                          <span>{project.category}</span>
-                          <span>•</span>
-                          <span
-                            className={`px-3 py-1 rounded-xl border backdrop-blur-md font-medium ${getTimelineBadgeStyle(currentSection.timelineStyle)}`}
-                          >
-                            {project.status}
-                          </span>
+                    {React.createElement(currentSection.icon, {
+                      className: `w-8 h-8 ${currentSection.iconColor}`,
+                    })}
+                  </div>
+                </div>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-4 leading-tight tracking-[-0.02em]">
+                  {currentSection.id === "client-platforms" &&
+                    "Production Systems with Real Impact"}
+                  {currentSection.id === "ai-automation" &&
+                    "Intelligence Systems That Scale"}
+                  {currentSection.id === "strategic-research" &&
+                    "Deep Intelligence for Critical Decisions"}
+                  {currentSection.id === "in-house-ventures" &&
+                    "Products We're Building"}
+                </h2>
+              </div>
+
+              {/* Projects Grid */}
+              <div className="space-y-12 md:space-y-16">
+                {currentSection.projects.map((project, projectIndex) => (
+                  <motion.div
+                    key={projectIndex}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: projectIndex * 0.1 }}
+                    className="relative"
+                  >
+                    <div
+                      className={`grid gap-8 md:gap-12 lg:gap-16 items-start ${project.testimonial ? "lg:grid-cols-2" : "lg:grid-cols-1 max-w-4xl mx-auto"}`}
+                    >
+                      {/* Content Side */}
+                      <div className="space-y-6 md:space-y-8">
+                        <div className="space-y-4">
+                          <div className="flex items-center gap-3 text-sm text-gray-400">
+                            <span>{project.category}</span>
+                            <span>•</span>
+                            <span
+                              className={`px-3 py-1 rounded-xl border backdrop-blur-md font-medium ${getTimelineBadgeStyle(currentSection.timelineStyle)}`}
+                            >
+                              {project.status}
+                            </span>
+                          </div>
+
+                          <h3 className="text-2xl md:text-3xl font-semibold text-white leading-tight">
+                            {project.title}
+                          </h3>
+
+                          <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
+                            {project.description}
+                          </p>
                         </div>
 
-                        <h3 className="text-2xl md:text-3xl font-semibold text-white leading-tight">
-                          {project.title}
-                        </h3>
+                        {/* Vision Section */}
+                        {project.vision && (
+                          <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-2xl p-6">
+                            <h4 className="text-lg font-medium text-yellow-300 mb-3">
+                              Vision
+                            </h4>
+                            <p className="text-gray-300 leading-relaxed">
+                              {project.vision}
+                            </p>
+                            {project.approach && (
+                              <p className="text-gray-400 text-sm mt-3 italic">
+                                Approach: {project.approach}
+                              </p>
+                            )}
+                          </div>
+                        )}
 
-                        <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
-                          {project.description}
-                        </p>
+                        {/* Philosophy */}
+                        {project.philosophy && (
+                          <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-6">
+                            <p className="text-gray-300 leading-relaxed italic">
+                              "{project.philosophy}"
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Deliverables */}
+                        {project.deliverables && (
+                          <div className="space-y-4">
+                            <h4 className="text-white font-semibold text-lg">
+                              Key Deliverables:
+                            </h4>
+                            <ul className="space-y-3">
+                              {project.deliverables.map((deliverable, idx) => (
+                                <li
+                                  key={idx}
+                                  className="flex items-start gap-3 text-gray-300"
+                                >
+                                  <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                                  <span>{deliverable}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {/* Metrics */}
+                        {project.metrics && (
+                          <div className="space-y-4">
+                            <h4 className="text-white font-semibold text-lg">
+                              Impact Metrics:
+                            </h4>
+                            <div className="space-y-3">
+                              {project.metrics.map((metric, idx) => (
+                                <div
+                                  key={idx}
+                                  className="flex items-start gap-3 text-gray-300"
+                                >
+                                  {React.createElement(metric.icon, {
+                                    className: `w-5 h-5 ${currentSection.iconColor} flex-shrink-0 mt-0.5`,
+                                  })}
+                                  <span>{metric.label}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Tech Stack */}
+                        {project.techStack && (
+                          <div className="bg-gray-900/50 rounded-xl p-4 border border-gray-700/30">
+                            <div className="text-sm text-gray-400 mb-2">
+                              Technical Stack
+                            </div>
+                            <div className="text-gray-300">
+                              {project.techStack}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Outcome */}
+                        {project.outcome && (
+                          <div className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-4">
+                            <div className="text-blue-300 font-medium">
+                              {project.outcome}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Scope */}
+                        {project.scope && (
+                          <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4">
+                            <div className="text-emerald-300">
+                              {project.scope}
+                            </div>
+                          </div>
+                        )}
                       </div>
 
-                      {/* Vision Section */}
-                      {project.vision && (
-                        <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-2xl p-6">
-                          <h4 className="text-lg font-medium text-yellow-300 mb-3">
-                            Vision
-                          </h4>
-                          <p className="text-gray-300 leading-relaxed">
-                            {project.vision}
-                          </p>
-                          {project.approach && (
-                            <p className="text-gray-400 text-sm mt-3 italic">
-                              Approach: {project.approach}
-                            </p>
-                          )}
-                        </div>
-                      )}
+                      {/* Testimonial Side (only show for projects that have one) */}
+                      {project.testimonial && (
+                        <div className="relative order-first lg:order-last">
+                          <div className="relative">
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/5 rounded-3xl blur-xl opacity-60" />
 
-                      {/* Philosophy */}
-                      {project.philosophy && (
-                        <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-6">
-                          <p className="text-gray-300 leading-relaxed italic">
-                            "{project.philosophy}"
-                          </p>
-                        </div>
-                      )}
-
-                      {/* Deliverables */}
-                      {project.deliverables && (
-                        <div className="space-y-4">
-                          <h4 className="text-white font-semibold text-lg">
-                            Key Deliverables:
-                          </h4>
-                          <ul className="space-y-3">
-                            {project.deliverables.map((deliverable, idx) => (
-                              <li
-                                key={idx}
-                                className="flex items-start gap-3 text-gray-300"
-                              >
-                                <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                                <span>{deliverable}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-
-                      {/* Metrics */}
-                      {project.metrics && (
-                        <div className="space-y-4">
-                          <h4 className="text-white font-semibold text-lg">
-                            Impact Metrics:
-                          </h4>
-                          <div className="space-y-3">
-                            {project.metrics.map((metric, idx) => (
-                              <div
-                                key={idx}
-                                className="flex items-start gap-3 text-gray-300"
-                              >
-                                {React.createElement(metric.icon, {
-                                  className: `w-5 h-5 ${currentSection.iconColor} flex-shrink-0 mt-0.5`,
-                                })}
-                                <span>{metric.label}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Tech Stack */}
-                      {project.techStack && (
-                        <div className="bg-gray-900/50 rounded-xl p-4 border border-gray-700/30">
-                          <div className="text-sm text-gray-400 mb-2">
-                            Technical Stack
-                          </div>
-                          <div className="text-gray-300">
-                            {project.techStack}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Outcome */}
-                      {project.outcome && (
-                        <div className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-4">
-                          <div className="text-blue-300 font-medium">
-                            {project.outcome}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Scope */}
-                      {project.scope && (
-                        <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4">
-                          <div className="text-emerald-300">
-                            {project.scope}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Testimonial Side (only show for projects that have one) */}
-                    {project.testimonial && (
-                      <div className="relative order-first lg:order-last">
-                        <div className="relative">
-                          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/5 rounded-3xl blur-xl opacity-60" />
-
-                          <div className="relative bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12">
-                            <div className="flex items-start gap-4">
-                              <div className="text-blue-400 text-4xl leading-none">
-                                "
-                              </div>
-                              <div className="flex-1">
-                                <p className="text-gray-300 leading-relaxed mb-4 italic text-lg">
-                                  {project.testimonial.quote}
-                                </p>
-                                <div className="flex items-center gap-3">
-                                  <div className="flex gap-1">
-                                    {[...Array(project.testimonial.rating)].map(
-                                      (_, i) => (
-                                        <Star
-                                          key={i}
-                                          className="w-4 h-4 text-yellow-400 fill-current"
-                                        />
-                                      ),
-                                    )}
+                            <div className="relative bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12">
+                              <div className="flex items-start gap-4">
+                                <div className="text-blue-400 text-4xl leading-none">
+                                  "
+                                </div>
+                                <div className="flex-1">
+                                  <p className="text-gray-300 leading-relaxed mb-4 italic text-lg">
+                                    {project.testimonial.quote}
+                                  </p>
+                                  <div className="flex items-center gap-3">
+                                    <div className="flex gap-1">
+                                      {[...Array(project.testimonial.rating)].map(
+                                        (_, i) => (
+                                          <Star
+                                            key={i}
+                                            className="w-4 h-4 text-yellow-400 fill-current"
+                                          />
+                                        ),
+                                      )}
+                                    </div>
+                                    <span className="text-white font-medium">
+                                      — {project.testimonial.author}
+                                    </span>
                                   </div>
-                                  <span className="text-white font-medium">
-                                    — {project.testimonial.author}
-                                  </span>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Navigation Controls */}
-            <div className="flex justify-center gap-4 md:gap-6 mt-16">
-              <button
-                onClick={() =>
-                  setActiveSection(
-                    activeSection > 0
-                      ? activeSection - 1
-                      : portfolioSections.length - 1,
-                  )
-                }
-                className="p-3 md:p-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl touch-manipulation"
-              >
-                <ArrowLeft className="w-5 h-5 md:w-6 md:h-6 text-white" />
-              </button>
-              <button
-                onClick={() =>
-                  setActiveSection(
-                    activeSection < portfolioSections.length - 1
-                      ? activeSection + 1
-                      : 0,
-                  )
-                }
-                className="p-3 md:p-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl touch-manipulation"
-              >
-                <ArrowRight className="w-5 h-5 md:w-6 md:h-6 text-white" />
-              </button>
-            </div>
-          </motion.div>
-        </AnimatePresence>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </section>
   );

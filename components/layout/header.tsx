@@ -7,6 +7,7 @@ import { ArrowRight, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { OptimizedLink } from "@/components/ui/optimized-link";
 
 interface HeaderProps {
   className?: string;
@@ -74,7 +75,7 @@ export function Header({ className }: HeaderProps) {
             <nav className="hidden lg:flex items-center space-x-10 px-4">
               {MAIN_NAVIGATION.map((item) => (
                 <div key={item.label} className="relative flex items-center">
-                  <Link
+                  <OptimizedLink
                     href={item.href}
                     className={cn(
                       "flex items-center text-sm font-medium tracking-wide transition-all duration-300 py-4 relative leading-none",
@@ -84,7 +85,7 @@ export function Header({ className }: HeaderProps) {
                     )}
                   >
                     {item.label}
-                  </Link>
+                  </OptimizedLink>
 
                   {/* Fixed Gradient Active Indicator - Stops on active tab */}
                   {isActivePage(item.href) && (
@@ -110,13 +111,13 @@ export function Header({ className }: HeaderProps) {
 
             {/* Premium CTA Button - More to the right */}
             <div className="hidden lg:flex items-center pr-4">
-              <Link
+              <OptimizedLink
                 href="/contact"
                 className="group flex items-center gap-2 px-6 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-[#0969DA]/30 to-[#1E40AF]/30 hover:from-[#0969DA]/50 hover:to-[#1E40AF]/50 backdrop-blur-sm rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30 border border-blue-500/20"
               >
                 Get Started
                 <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </Link>
+              </OptimizedLink>
             </div>
 
             {/* Mobile Menu Button */}
@@ -170,7 +171,7 @@ export function Header({ className }: HeaderProps) {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05, duration: 0.2 }}
                   >
-                    <Link
+                    <OptimizedLink
                       href={item.href}
                       className={cn(
                         "flex items-center px-4 py-3 text-base font-medium rounded-xl transition-all duration-300 relative",
@@ -188,7 +189,7 @@ export function Header({ className }: HeaderProps) {
                           transition={{ duration: 0.3 }}
                         />
                       )}
-                    </Link>
+                    </OptimizedLink>
                   </motion.div>
                 ))}
 
@@ -198,13 +199,13 @@ export function Header({ className }: HeaderProps) {
                   transition={{ delay: 0.3, duration: 0.2 }}
                   className="pt-4 border-t border-white/[0.08]"
                 >
-                  <Link
+                  <OptimizedLink
                     href="/contact"
                     className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-medium text-white bg-gradient-to-r from-[#0969DA]/30 to-[#1E40AF]/30 hover:from-[#0969DA]/50 hover:to-[#1E40AF]/50 backdrop-blur-sm rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/20"
                   >
                     Get Started
                     <ArrowRight className="w-4 h-4" />
-                  </Link>
+                  </OptimizedLink>
                 </motion.div>
               </div>
             </motion.div>

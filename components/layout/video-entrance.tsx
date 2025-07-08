@@ -1,5 +1,7 @@
 "use client";
 
+import { MAIN_NAVIGATION } from "@/config/constants";
+import { useSimplePreloader } from "../../hooks/use-simple-preloader";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -11,13 +13,16 @@ interface VideoEntranceProps {
 
 export function VideoEntrance({
   onComplete,
-  videoSrc = "/videos/new-intro-animation.mp4",
+  videoSrc = "/videos/shortened-animation-2.mp4",
 }: VideoEntranceProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [showSkip, setShowSkip] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Simple preloader for routes
+  const { startPreloading, stats } = useSimplePreloader();
 
   const completeEntrance = useCallback(() => {
     setVideoEnded(true);
@@ -92,8 +97,12 @@ export function VideoEntrance({
 
           if (playPromise !== undefined) {
             await playPromise;
+            
+            // Start preloading routes while video plays
+            startPreloading(MAIN_NAVIGATION.map(item => item.href));
+            
             if (process.env.NODE_ENV === "development") {
-              console.log("🎯 FIELDPORTER: Video playing successfully (muted)");
+              console.log("🎯 FIELDPORTER: Video playing successfully (muted) - Starting resource preloading");
             }
           }
         }
@@ -156,7 +165,7 @@ export function VideoEntrance({
       video.removeEventListener("ended", handleEnded);
       video.removeEventListener("error", handleError);
     };
-  }, [completeEntrance, videoLoaded]);
+  }, [completeEntrance, videoLoaded, startPreloading]);
 
   // Don't render if not visible
   if (!isVisible) return null;
@@ -257,6 +266,12 @@ export function VideoEntrance({
             />
             <span>FIELDPORTER</span>
           </div>
+          {/* Debug: Show preloading progress in development */}
+          {process.env.NODE_ENV === "development" && stats.totalRoutes > 0 && (
+            <div className="mt-1 text-white/20 text-xs">
+              Preloading: {stats.loadedRoutes}/{stats.totalRoutes} routes
+            </div>
+          )}
         </div>
       </motion.div>
     </AnimatePresence>

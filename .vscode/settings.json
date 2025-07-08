@@ -143,5 +143,6 @@
   "prettier.requireConfig": true,
   "prettier.useEditorConfig": false,
   "typescript.disableAutomaticTypeAcquisition": false,
-  "typescript.suggest.includeAutomaticOptionalChainCompletions": true
+  "typescript.suggest.includeAutomaticOptionalChainCompletions": true,
+  "git.ignoreLimitWarning": true
 }

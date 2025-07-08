@@ -3,11 +3,11 @@
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
 } from "react";
 
 // Premium aurora background matching services page with performance optimization
@@ -202,9 +202,9 @@ export const ContactHero = React.memo(() => {
               variants={itemVariants}
               className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-[-0.025em]"
             >
-              Let&apos;s{" "}
+              Contact{" "}
               <span className="font-light bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                Talk
+                Us
               </span>
             </motion.h1>
 
@@ -213,7 +213,7 @@ export const ContactHero = React.memo(() => {
               variants={itemVariants}
               className="text-xl lg:text-2xl text-white/80 font-light max-w-2xl mx-auto leading-relaxed"
             >
-              Tell me what you&apos;re trying to automate
+              Use the form below or chat with our AI assistant
             </motion.p>
 
             {/* Direct scroll-to-form CTA */}

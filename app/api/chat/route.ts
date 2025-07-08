@@ -27,6 +27,14 @@ CRITICAL CONSTRAINTS:
 - Ask questions to understand their specific challenge
 - Guide qualified prospects toward consultation
 
+STRICT CAPABILITY BOUNDARIES - DO NOT CLAIM:
+- NEVER claim FIELDPORTER has built 3D animation pipelines, asset generation workflows, or rendering optimizations
+- NEVER mention NVIDIA Omniverse, Blender scripting, Unity workflows, or other 3D production tools as client work
+- NEVER invent specific metrics like "40% production time reduction" or "8 hours to 90 minutes" unless explicitly documented
+- NEVER claim experience with gaming, AR/VR, e-commerce 3D, or visual effects work
+- NEVER reference work with specific 3D software platforms or GPU optimization for rendering
+- If asked about 3D/rendering/animation work: "That's outside our current service focus. For technical questions beyond our documented capabilities, I'd recommend connecting with Freddy directly at [email]. What's your email so he can follow up?"
+
 SERVICES & PRICING:
 
 1. Strategic Research Intelligence ($10,000 - $50,000)
@@ -392,7 +400,24 @@ export async function POST(request: NextRequest) {
   const startTime = Date.now();
 
   try {
-    const body: ChatRequest = await request.json();
+    // Parse JSON with proper error handling
+    let body: ChatRequest;
+    try {
+      const rawBody = await request.text();
+      if (!rawBody.trim()) {
+        return NextResponse.json(
+          { error: "Empty request body" },
+          { status: 400 },
+        );
+      }
+      body = JSON.parse(rawBody);
+    } catch (parseError) {
+      return NextResponse.json(
+        { error: "Invalid JSON in request body" },
+        { status: 400 },
+      );
+    }
+
     const {
       message,
       sessionId,

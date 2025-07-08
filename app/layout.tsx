@@ -1,9 +1,10 @@
 import { EnhancedChatWidget } from "@/components/chat";
 import {
-  BackToTop,
-  EntranceProvider,
-  Footer,
-  Header,
+    BackToTop,
+    EntranceProvider,
+    Footer,
+    Header,
+    ScrollRestoration,
 } from "@/components/layout";
 import { PageTransition } from "@/components/ui/page-transition";
 import { Metadata, Viewport } from "next";
@@ -20,33 +21,53 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
+  viewportFit: "cover",
 };
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://fieldporter.com"),
-  title: "FIELDPORTER",
+  title: {
+    template: "FIELDPORTER | %s",
+    default: "FIELDPORTER - AI Integration & Automation Consulting",
+  },
   description:
-    "Turn hours into minutes through intelligent automation. We build AI workflow automation, teach advanced LLM integration, and conduct strategic research using AI agents.",
+    "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. Turn hours into minutes through intelligent automation.",
   keywords:
-    "AI automation, LLM integration, strategic research, workflow automation, FIELDPORTER",
+    "AI automation, LLM integration, strategic research, workflow automation, FIELDPORTER, AI consulting",
   authors: [{ name: "FIELDPORTER" }],
   creator: "FIELDPORTER",
   publisher: "FIELDPORTER",
   robots: "index, follow",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/favicon.svg", sizes: "180x180", type: "image/svg+xml" },
+    ],
+    other: [
+      {
+        rel: "icon",
+        url: "/favicon.svg",
+        type: "image/svg+xml",
+      },
+    ],
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://fieldporter.com",
-    title: "FIELDPORTER",
+    title: "FIELDPORTER - AI Integration & Automation Consulting",
     description:
-      "Turn hours into minutes through intelligent automation. We build AI workflow automation, teach advanced LLM integration, and conduct strategic research using AI agents.",
+      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. Turn hours into minutes through intelligent automation.",
     siteName: "FIELDPORTER",
   },
   twitter: {
     card: "summary_large_image",
-    title: "FIELDPORTER",
+    title: "FIELDPORTER - AI Integration & Automation Consulting",
     description:
-      "Turn hours into minutes through intelligent automation. We build AI workflow automation, teach advanced LLM integration, and conduct strategic research using AI agents.",
+      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. Turn hours into minutes through intelligent automation.",
     creator: "@fieldporter",
   },
 };
@@ -60,8 +81,11 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className={inter.className} style={{ backgroundColor: "#000000" }}>
         <EntranceProvider>
+          <ScrollRestoration />
           <Header />
-          <PageTransition>{children}</PageTransition>
+          <PageTransition>
+            <main className="flex-1">{children}</main>
+          </PageTransition>
           <Footer />
           <BackToTop />
           <EnhancedChatWidget />
@@ -140,7 +164,7 @@ export default function RootLayout({
                 primaryCursor.id = 'fieldporter-cursor-primary';
                 trailCursor.id = 'fieldporter-cursor-trail';
                 
-                // Premium FIELDPORTER styling
+                // Premium FIELDPORTER styling with optimized positioning
                 primaryCursor.style.cssText = \`
                   position: fixed;
                   width: 8px;
@@ -149,13 +173,13 @@ export default function RootLayout({
                   border-radius: 50%;
                   pointer-events: none;
                   z-index: 99999;
-                  transform: translate(-50%, -50%);
+                  transform: translate(-50%, -50%) translateZ(0);
                   opacity: 0.8;
                   display: block;
                   transition: opacity 0.2s ease, background-color 0.3s ease;
                   box-shadow: 0 0 16px rgba(37, 99, 235, 0.3);
-                  left: -100px;
-                  top: -100px;
+                  will-change: transform;
+                  contain: layout style paint;
                 \`;
                 
                 trailCursor.style.cssText = \`
@@ -166,12 +190,12 @@ export default function RootLayout({
                   border-radius: 50%;
                   pointer-events: none;
                   z-index: 99998;
-                  transform: translate(-50%, -50%);
+                  transform: translate(-50%, -50%) translateZ(0);
                   opacity: 0.4;
                   display: block;
                   transition: opacity 0.2s ease, background-color 0.3s ease;
-                  left: -100px;
-                  top: -100px;
+                  will-change: transform;
+                  contain: layout style paint;
                 \`;
                 
                 // Add to DOM
@@ -186,9 +210,18 @@ export default function RootLayout({
                 let trailY = 0;
                 let isVisible = false;
                 
-                // Smooth 60fps cursor movement with LERP
+                // Optimized cursor movement with performance monitoring
+                let animationId;
                 function updateCursors() {
                   if (!isVisible) return;
+                  
+                  // Performance optimization: only update if significant movement
+                  const deltaX = Math.abs(mouseX - primaryX);
+                  const deltaY = Math.abs(mouseY - primaryY);
+                  if (deltaX < 0.5 && deltaY < 0.5) {
+                    animationId = requestAnimationFrame(updateCursors);
+                    return;
+                  }
                   
                   // Primary cursor follows with slight delay for smoothness
                   primaryX += (mouseX - primaryX) * 0.15;
@@ -198,12 +231,11 @@ export default function RootLayout({
                   trailX += (primaryX - trailX) * 0.08;
                   trailY += (primaryY - trailY) * 0.08;
                   
-                  primaryCursor.style.left = primaryX + 'px';
-                  primaryCursor.style.top = primaryY + 'px';
-                  trailCursor.style.left = trailX + 'px';
-                  trailCursor.style.top = trailY + 'px';
+                  // Use transform for better performance than left/top
+                  primaryCursor.style.transform = \`translate(-50%, -50%) translateZ(0) translate(\${primaryX}px, \${primaryY}px)\`;
+                  trailCursor.style.transform = \`translate(-50%, -50%) translateZ(0) translate(\${trailX}px, \${trailY}px)\`;
                   
-                  requestAnimationFrame(updateCursors);
+                  animationId = requestAnimationFrame(updateCursors);
                 }
                 
                 // Zone-based color adaptation
@@ -267,11 +299,15 @@ export default function RootLayout({
                   colorThrottle++;
                 });
                 
-                // Handle mouse leave
+                // Handle mouse leave with cleanup
                 document.addEventListener('mouseleave', function() {
                   primaryCursor.style.opacity = '0';
                   trailCursor.style.opacity = '0';
                   isVisible = false;
+                  if (animationId) {
+                    cancelAnimationFrame(animationId);
+                    animationId = null;
+                  }
                 });
               }
             `,

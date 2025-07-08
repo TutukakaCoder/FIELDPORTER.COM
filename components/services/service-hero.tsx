@@ -1,11 +1,11 @@
 "use client";
 
 import {
-  motion,
-  useScroll,
-  useSpring,
-  useTransform,
-  Variants,
+    motion,
+    useScroll,
+    useSpring,
+    useTransform,
+    Variants,
 } from "framer-motion";
 import { ArrowRight, Layers } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -210,8 +210,11 @@ export function ServiceHero({
             {/* Main heading */}
             <motion.div variants={itemVariants} className="space-y-6">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light text-white leading-tight">
-                Strategic Research &{" "}
                 <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                  FIELDPORTER
+                </span>{" "}
+                Strategic Research &{" "}
+                <span className="font-semibold bg-gradient-to-r from-emerald-400 to-emerald-600 bg-clip-text text-transparent">
                   AI Implementation
                 </span>
               </h1>

@@ -36,101 +36,85 @@ const services = [
     id: "strategic-research",
     phase: "01",
     icon: TrendingUp,
-    title: "Strategic Research Intelligence",
-    description:
-      "Complex market analysis delivered in days. Deep research methodology scanning thousands of sources with AI agents across the web.",
-    detailedExplanation:
-      "Traditional market research takes an enormous amount of time because analysts work sequentially through sources. Our AI-powered approach processes thousands of sources simultaneously while maintaining accuracy through validation phases.",
+    title: "Strategic Research & Intelligence",
+    description: "Deep research that cuts through the noise to deliver actionable insights for strategic decisions.",
+    detailedExplanation: "We combine AI models like Claude and Perplexity with human insight to deliver research in hours, not weeks. Our process involves contextualising your challenge, parallel AI analysis across multiple sources, synthesis of findings, and delivery of decision-ready documentation. From market entry analysis to competitor intelligence, we handle complex research requirements with speed and accuracy.",
     outcomes: [
-      "Comprehensive analysis in 3-5 days versus traditional 4-6 weeks",
-      "Multi-source data validation across thousands of sources",
-      "Strategic insights enabling faster decision-making",
-      "Complete market intelligence and competitive analysis",
+      "Decision-relevant insights delivered 5-10x faster than traditional research",
+      "Multi-source analysis reducing information gaps and blind spots",
+      "Clear recommendations with confidence levels and risk assessments",
+      "Comprehensive documentation ready for strategic implementation"
     ],
-    proof:
-      "What You Get: Comprehensive market insights, competitive analysis, and clear business recommendations that inform million-dollar decisions.",
-    investment:
-      "$500-$3,000 depending on research scope and market complexity.",
+    investment: "$500-$3,000",
     timeline: "3-5 days",
     timelineStyle: "research",
     borderColor: "border-emerald-500/15",
     hoverBorderColor: "hover:border-emerald-500/25",
     iconColor: "text-emerald-400",
+    proof: "From 6-week market analysis to 3-day strategic brief with 40+ actionable insights."
   },
   {
     id: "rapid-development",
     phase: "02",
     icon: Code,
-    title: "Rapid Development & Integration",
-    description:
-      "From concept to working system in 1-2 weeks. Rapid prototyping & MVPs to validate concepts, full-stack development for small-scale applications, and API integration.",
-    detailedExplanation:
-      "We build working prototypes that prove concepts and provide clear technical roadmaps. Our development process uses React, TypeScript, and Firebase/MongoDB, then integrates AI tools for your specific challenge.",
+    title: "Rapid AI Development & Prototyping",
+    description: "Proof-of-concept to production-ready in weeks, not months.",
+    detailedExplanation: "We specialise in AI feature prototyping and integration roadmaps. Our sweet spot is proving AI concepts work for your specific use case in 1-3 weeks, then providing clear documentation for your team to implement at scale. From chat systems to workflow automation, we build working prototypes that demonstrate real value before major investment.",
     outcomes: [
-      "Functional applications ready for immediate deployment and testing",
-      "API endpoints for existing system integration and data flow",
-      "Complete technical documentation and handoff materials",
-      "Production-ready features with proven React, Firebase/Mongo, TypeScript stack",
+      "Working prototypes proving technical feasibility within 1-3 weeks",
+      "Clear implementation roadmaps for scaling with your existing team",
+      "Technical documentation enabling seamless handoff",
+      "Risk-free validation before larger development commitments"
     ],
-    proof:
-      "What You Get: Working applications, API integrations, technical documentation that enables your team to build confidently.",
-    investment:
-      "$3,000-$8,000 depending on complexity and integration requirements.",
-    timeline: "1-2 weeks",
-    timelineStyle: "training",
+    investment: "$3,000-$8,000",
+    timeline: "1-3 weeks",
+    timelineStyle: "development",
     borderColor: "border-blue-500/15",
     hoverBorderColor: "hover:border-blue-500/25",
     iconColor: "text-blue-400",
+    proof: "From manual 15-hour process to 4-hour automated workflow through prototype validation."
   },
   {
-    id: "workflow-optimization",
+    id: "workflow-optimisation",
     phase: "03",
     icon: Building2,
-    title: "Process Efficiency & Workflow Optimization",
-    description:
-      "Transform manual workflows into automated systems. Recent client reduced weekly administrative time from 15 hours to 4 hours through workflow optimization.",
-    detailedExplanation:
-      "Most businesses lose enormous time on manual tasks that software should handle. We identify these bottlenecks and build automation solutions using whatever combination of tools creates the best results.",
+    title: "Process Efficiency & Workflow Optimisation",
+    description: "Systematic identification and automation of repetitive tasks to reclaim time for strategic work.",
+    detailedExplanation: "We analyse your current workflows to identify automation opportunities, then build solutions that integrate seamlessly with your existing tools. Our approach focuses on high-impact, low-risk improvements that deliver measurable time savings within weeks. From lead generation systems to reporting automation, we optimise processes that actually matter to your business outcomes.",
     outcomes: [
-      "Business workflow analysis and automation implementation",
-      "Lead generation and outreach system optimization",
-      "Administrative task elimination with measurable time savings",
-      "Marketing process streamlining with training and handoff",
+      "Documented workflow analysis with specific optimisation recommendations",
+      "Automated systems reducing manual work by 60-80% in targeted areas",
+      "Lead generation and outreach system optimisation",
+      "Integration with your existing tools and platforms for minimal disruption"
     ],
-    proof:
-      "What You Get: Automated workflows, measurable efficiency gains, team training so you can maintain and improve systems independently.",
-    investment:
-      "$2,000-$5,000 depending on workflow complexity and automation scope.",
+    investment: "$2,000-$5,000",
     timeline: "2-4 weeks",
-    timelineStyle: "prototype",
+    timelineStyle: "automation",
     borderColor: "border-purple-500/15",
     hoverBorderColor: "hover:border-purple-500/25",
     iconColor: "text-purple-400",
+    proof: "Client saved 15+ hours weekly through strategic workflow optimisation."
   },
   {
-    id: "ai-training",
+    id: "ai-strategy",
     phase: "04",
     icon: BookOpen,
-    title: "AI Training & Implementation Education",
-    description:
-      "Become an AI power user in your specific industry. Project knowledge systems, prompt engineering for consistent results, AI tool selection, and workflow integration.",
-    detailedExplanation:
-      "Most AI training teaches generic techniques that don't translate to business value. We teach the specific approaches we use daily in revenue-generating businesses.",
+    title: "AI Strategy & Team Capability Building",
+    description: "Strategic guidance on AI adoption with hands-on training for your team.",
+    detailedExplanation: "Beyond just tools and tactics, we help you develop a strategic approach to AI that aligns with your business objectives. This includes capability assessment, tool selection and optimisation for your workflows, team training sessions, and ongoing strategic guidance. We focus on building internal AI capability rather than creating dependency.",
     outcomes: [
-      "Custom AI knowledge bases for your business contexts and requirements",
-      "Industry-specific prompt development for consistent, reliable results",
-      "AI tool selection and optimization for your workflows",
-      "Sustainable skill development reducing long-term dependency",
+      "Strategic AI adoption roadmap tailored to your business context",
+      "Team training on AI tools and best practices for your industry",
+      "AI tool selection and optimisation for your workflows",
+      "Internal capability building reducing reliance on external AI consultants"
     ],
-    proof:
-      "What You Get: Practical AI skills, custom knowledge systems, sustainable capabilities you can develop independently.",
-    investment:
-      "$75-$150 per hour for individual training sessions, flexible project-based pricing for team workshops.",
+    investment: "$75-$150 per hour",
     timeline: "Custom sessions",
-    timelineStyle: "portfolio",
+    timelineStyle: "strategic",
     borderColor: "border-orange-500/15",
     hoverBorderColor: "hover:border-orange-500/25",
     iconColor: "text-orange-400",
+    proof: "Organisations report 3-5x improvement in AI tool effectiveness after strategic guidance."
   },
 ];
 

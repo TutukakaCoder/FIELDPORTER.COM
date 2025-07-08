@@ -1,9 +1,9 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { useStableMobile } from '@/hooks';
 import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowUp } from 'lucide-react';
+import { ChevronUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface BackToTopProps {
@@ -13,6 +13,7 @@ interface BackToTopProps {
 
 export function BackToTop({ className, showAfter = 400 }: BackToTopProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const isMobile = useStableMobile();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,28 +34,49 @@ export function BackToTop({ className, showAfter = 400 }: BackToTopProps) {
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div
+        <motion.button
           initial={{ opacity: 0, scale: 0.8, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 20 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
-          className={cn('fixed bottom-8 left-8 z-30', className)}
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.95 }}
+          className={cn(
+            'fixed z-[60] transition-all duration-300',
+            isMobile 
+              ? 'bottom-4 left-4 w-14 h-14' 
+              : 'bottom-6 left-6 w-16 h-16',
+            
+            // Matching glassmorphism design
+            'bg-black/20 backdrop-blur-xl border border-white/10',
+            'hover:bg-black/30 hover:border-white/20',
+            
+            // Subtle glow effect
+            'shadow-[0_0_20px_rgba(59,130,246,0.15)]',
+            'hover:shadow-[0_0_30px_rgba(59,130,246,0.25)]',
+            
+            // Perfect rounded button
+            'rounded-2xl',
+            
+            // Center the icon
+            'flex items-center justify-center',
+            
+            // Touch-friendly
+            'touch-manipulation select-none',
+            
+            className
+          )}
+          onClick={scrollToTop}
+          aria-label='Back to top'
         >
-          <Button
-            onClick={scrollToTop}
-            size='icon'
+          <ChevronUp 
             className={cn(
-              'w-12 h-12 rounded-full shadow-lg',
-              'glass-dark border border-white/20',
-              'hover:border-fieldporter-blue/50 hover:bg-fieldporter-blue/20',
-              'focus:outline-none focus:ring-2 focus:ring-fieldporter-blue focus:ring-offset-2 focus:ring-offset-black',
-              'transition-all duration-200'
+              isMobile ? 'w-6 h-6' : 'w-7 h-7', 
+              'text-white/90'
             )}
-            aria-label='Back to top'
-          >
-            <ArrowUp className='w-5 h-5 text-white' />
-          </Button>
-        </motion.div>
+            strokeWidth={1.5}
+          />
+        </motion.button>
       )}
     </AnimatePresence>
   );

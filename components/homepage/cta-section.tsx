@@ -2,28 +2,23 @@
 
 import { trackCTA } from "@/lib/firebase-analytics";
 import {
-  easeInOut,
-  motion,
-  useInView,
-  useScroll,
-  useSpring,
-  useTransform,
+    easeInOut,
+    motion,
+    useInView,
+    useScroll,
+    useSpring,
+    useTransform,
 } from "framer-motion";
 import { ArrowRight, MessageSquare } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { CTAMagneticField3D, MobileMagneticEffect } from "./cta-magnetic-field-3d";
+import { CTAPremiumBackground } from "./cta-premium-background";
 
-// Optimized premium aurora background for better performance
-function PremiumAuroraBackground() {
+// Base gradient background for fallback
+function BaseGradientBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden">
-      {/* Continuous gradient from credibility section */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black" />
-
-      {/* Simplified aurora effects for better performance */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-blue-500/8 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-emerald-500/8 rounded-full blur-3xl animate-pulse delay-1000" />
-      </div>
     </div>
   );
 }
@@ -55,6 +50,28 @@ export function CTASection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-20%" });
 
+  // Button refs for magnetic field
+  const primaryButtonRef = useRef<HTMLButtonElement>(null);
+  const secondaryButtonRef = useRef<HTMLButtonElement>(null);
+  
+  // Hover states for magnetic field
+  const [isPrimaryHovered, setIsPrimaryHovered] = useState(false);
+  const [isSecondaryHovered, setIsSecondaryHovered] = useState(false);
+  
+  // Mobile detection
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || 
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Add vertical fade animations like hero section
   const { scrollY } = useScroll();
   const contentY = useTransform(scrollY, [0, 800], [0, -100]);
@@ -83,8 +100,21 @@ export function CTASection() {
       ref={ref}
       className="relative pt-32 md:pt-36 lg:pt-44 pb-40 md:pb-48 lg:pb-56 overflow-hidden"
     >
-      <PremiumAuroraBackground />
+      <BaseGradientBackground />
+      <CTAPremiumBackground />
       <InteractiveSpotlight />
+
+      {/* Magnetic Field 3D Effects */}
+      {!isMobile ? (
+        <CTAMagneticField3D
+          primaryButtonRef={primaryButtonRef}
+          secondaryButtonRef={secondaryButtonRef}
+          isPrimaryHovered={isPrimaryHovered}
+          isSecondaryHovered={isSecondaryHovered}
+        />
+      ) : (
+        <MobileMagneticEffect />
+      )}
 
       <motion.div
         style={{ y: springContentY, opacity: springOpacity }}
@@ -141,7 +171,10 @@ export function CTASection() {
                 transition={{ duration: 0.2, ease: "easeInOut" }}
               >
                 <button
+                  ref={primaryButtonRef}
                   onClick={handleContactCTA}
+                  onMouseEnter={() => setIsPrimaryHovered(true)}
+                  onMouseLeave={() => setIsPrimaryHovered(false)}
                   className="
                     group relative px-10 py-5 rounded-2xl backdrop-blur-xl border border-blue-500/20 transition-all duration-300
                     bg-gradient-to-r from-blue-600/20 to-blue-500/20 hover:from-blue-500/30 hover:to-blue-400/30 
@@ -179,7 +212,10 @@ export function CTASection() {
                 transition={{ duration: 0.2, ease: "easeInOut" }}
               >
                 <button
+                  ref={secondaryButtonRef}
                   onClick={handlePortfolioCTA}
+                  onMouseEnter={() => setIsSecondaryHovered(true)}
+                  onMouseLeave={() => setIsSecondaryHovered(false)}
                   className="
                     group relative px-10 py-5 rounded-2xl backdrop-blur-xl border border-white/20 transition-all duration-300
                     bg-white/5 hover:bg-white/10 hover:border-purple-400/40

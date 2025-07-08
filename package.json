@@ -7,6 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "build:clean": "node scripts/clean-build.js",
+    "build:firebase": "npm run build && firebase deploy --only hosting",
+    "deploy:firebase": "npm run build:firebase",
+    "deploy:all": "npm run build && firebase deploy",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
@@ -15,6 +18,8 @@
     "format:check": "prettier --check .",
     "analyze": "ANALYZE=true npm run build",
     "clean": "rimraf .next dist build",
+    "firebase:serve": "firebase serve --only hosting",
+    "firebase:emulators": "firebase emulators:start",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -24,9 +29,12 @@
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-slot": "^1.2.3",
+    "@react-three/drei": "^9.112.0",
+    "@react-three/fiber": "^8.16.8",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
+    "@types/three": "^0.165.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.0",
     "firebase": "^11.8.1",
@@ -38,6 +46,8 @@
     "react-dom": "^18.2.0",
     "resend": "^4.6.0",
     "tailwind-merge": "^2.2.1",
+    "three": "^0.165.0",
+    "web-vitals": "^5.0.3",
     "zod": "^3.25.28"
   },
   "devDependencies": {
@@ -65,7 +75,7 @@
     "webpack-bundle-analyzer": "^4.10.1"
   },
   "engines": {
-    "node": ">=18.17.0",
+    "node": "20",
     "npm": ">=9.0.0"
   },
   "lint-staged": {

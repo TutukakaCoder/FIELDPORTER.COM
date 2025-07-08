@@ -88,29 +88,35 @@ const config: Config = {
         extrabold: '800',
       },
 
-      // Typography Scale
+      // Enhanced Typography Scale with Mobile-First Approach
       fontSize: {
-        // Display (Hero Headlines)
-        'display-xl': ['72px', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
-        'display-lg': ['60px', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
-        'display-md': ['48px', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
-        'display-sm': ['36px', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
+        // Mobile-first Display (Hero Headlines)
+        'display-xl': ['clamp(3rem, 8vw, 4.5rem)', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+        'display-lg': ['clamp(2.5rem, 6vw, 3.75rem)', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+        'display-md': ['clamp(2rem, 5vw, 3rem)', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
+        'display-sm': ['clamp(1.5rem, 4vw, 2.25rem)', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
 
-        // Headings
-        'heading-xl': ['32px', { lineHeight: '1.25' }],
-        'heading-lg': ['28px', { lineHeight: '1.3' }],
-        'heading-md': ['24px', { lineHeight: '1.3' }],
-        'heading-sm': ['20px', { lineHeight: '1.4' }],
+        // Mobile-optimized Headings
+        'heading-xl': ['clamp(1.75rem, 3vw, 2rem)', { lineHeight: '1.25' }],
+        'heading-lg': ['clamp(1.5rem, 2.5vw, 1.75rem)', { lineHeight: '1.3' }],
+        'heading-md': ['clamp(1.25rem, 2vw, 1.5rem)', { lineHeight: '1.3' }],
+        'heading-sm': ['clamp(1.125rem, 1.5vw, 1.25rem)', { lineHeight: '1.4' }],
 
-        // Body Text
+        // Mobile-safe Body Text (16px+ to prevent iOS zoom)
         'body-xl': ['20px', { lineHeight: '1.6' }],
         'body-lg': ['18px', { lineHeight: '1.6' }],
-        'body-md': ['16px', { lineHeight: '1.6' }],
-        'body-sm': ['14px', { lineHeight: '1.5' }],
-        'body-xs': ['12px', { lineHeight: '1.5' }],
+        'body-md': ['16px', { lineHeight: '1.6' }], // iOS zoom-safe
+        'body-sm': ['16px', { lineHeight: '1.5' }], // Bumped from 14px to prevent zoom
+        'body-xs': ['14px', { lineHeight: '1.5' }], // Use sparingly
+
+        // Mobile-specific sizes
+        'mobile-hero': ['clamp(2rem, 6vw, 3.5rem)', { lineHeight: '1.1' }],
+        'mobile-title': ['clamp(1.5rem, 4vw, 2rem)', { lineHeight: '1.2' }],
+        'mobile-body': ['16px', { lineHeight: '1.6' }],
+        'mobile-caption': ['14px', { lineHeight: '1.4' }],
       },
 
-      // 8px Grid Spacing System
+      // Enhanced 8px Grid Spacing System with Mobile Touch Targets
       spacing: {
         '0.5': '2px', // 0.25 * 8
         '1': '4px', // 0.5 * 8
@@ -123,7 +129,8 @@ const config: Config = {
         '7': '28px', // 3.5 * 8
         '8': '32px', // 4 * 8
         '10': '40px', // 5 * 8
-        '12': '48px', // 6 * 8
+        '11': '44px', // 5.5 * 8 - Mobile touch target minimum
+        '12': '48px', // 6 * 8 - Premium touch target
         '14': '56px', // 7 * 8
         '16': '64px', // 8 * 8
         '20': '80px', // 10 * 8
@@ -141,20 +148,35 @@ const config: Config = {
         '72': '288px', // 36 * 8
         '80': '320px', // 40 * 8
         '96': '384px', // 48 * 8
+
+        // Mobile-specific spacing
+        'mobile-edge': '16px', // Minimum screen edge padding
+        'mobile-section': '48px', // Section padding for mobile
+        'mobile-component': '24px', // Component spacing
+        'touch-target': '44px', // Minimum touch target size
+        'touch-target-premium': '48px', // Premium touch target size
       },
 
-      // Enterprise Device Breakpoints
+      // Enhanced Device Breakpoints with Mobile Focus
       screens: {
-        xs: '320px', // Mobile small
-        sm: '640px', // Mobile large
-        md: '768px', // Tablet
-        lg: '1024px', // Desktop small
-        xl: '1280px', // Desktop large
+        'xs': '320px', // iPhone SE (smallest)
+        'sm': '375px', // iPhone 12/13/14 (standard)
+        'mobile-lg': '390px', // iPhone 14 Pro
+        'mobile-xl': '428px', // iPhone 14 Plus
+        'md': '768px', // iPad Mini
+        'lg': '1024px', // Desktop small
+        'xl': '1280px', // Desktop large
         '2xl': '1536px', // Desktop extra large
         '3xl': '1920px', // Enterprise monitors
+
+        // Touch-specific breakpoints
+        'touch': { 'raw': '(pointer: coarse)' },
+        'no-touch': { 'raw': '(pointer: fine)' },
+        'hover-none': { 'raw': '(hover: none)' },
+        'hover-available': { 'raw': '(hover: hover)' },
       },
 
-      // Professional Animation Configuration
+      // Mobile-Optimized Animation Configuration
       animation: {
         'fade-in': 'fadeIn 300ms ease-out',
         'fade-out': 'fadeOut 200ms ease-in',
@@ -162,10 +184,15 @@ const config: Config = {
         'slide-down': 'slideDown 300ms ease-out',
         'scale-in': 'scaleIn 200ms ease-out',
         'scale-out': 'scaleOut 200ms ease-in',
-        float: 'float 6s ease-in-out infinite',
+        'float': 'float 6s ease-in-out infinite',
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'animation-delay-1000': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite 1s',
         'animation-delay-2000': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite 2s',
+        
+        // Mobile-optimized animations (reduced motion consideration)
+        'mobile-fade': 'fadeIn 200ms ease-out',
+        'mobile-slide': 'slideUp 250ms ease-out',
+        'mobile-scale': 'scaleIn 150ms ease-out',
       },
 
       keyframes: {
@@ -199,15 +226,17 @@ const config: Config = {
         },
       },
 
-      // Transition Timing
+      // Mobile-Optimized Transition Timing
       transitionDuration: {
+        '150': '150ms', // Fast mobile interactions
         '200': '200ms',
+        '250': '250ms', // Mobile standard
         '300': '300ms',
         '400': '400ms',
         '500': '500ms',
       },
 
-      // Backdrop Blur for Glassmorphism
+      // Backdrop Blur for Glassmorphism (mobile-optimized)
       backdropBlur: {
         xs: '2px',
         sm: '4px',
@@ -216,9 +245,10 @@ const config: Config = {
         xl: '16px',
         '2xl': '24px',
         '3xl': '32px',
+        'mobile': '8px', // Optimized for mobile performance
       },
 
-      // Border Radius
+      // Enhanced Border Radius with Mobile Touch Considerations
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
@@ -228,14 +258,40 @@ const config: Config = {
         '2xl': '24px',
         '3xl': '32px',
         full: '9999px',
+        'mobile': '12px', // Good for mobile touch targets
+        'mobile-lg': '16px', // Premium mobile touch targets
       },
 
-      // Box Shadow for Depth
+      // Enhanced Box Shadow for Mobile Depth
       boxShadow: {
         glass: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
         'glass-sm': '0 4px 16px 0 rgba(0, 0, 0, 0.25)',
         'glass-lg': '0 16px 64px 0 rgba(0, 0, 0, 0.5)',
         enterprise: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+        'mobile': '0 4px 12px 0 rgba(0, 0, 0, 0.15)', // Lighter for mobile
+        'mobile-hover': '0 8px 24px 0 rgba(0, 0, 0, 0.25)', // Mobile touch feedback
+      },
+
+      // Mobile-Specific Utilities
+      minHeight: {
+        'touch-target': '44px',
+        'touch-target-premium': '48px',
+        'mobile-button': '44px',
+        'mobile-input': '44px',
+        'mobile-nav': '48px',
+      },
+
+      minWidth: {
+        'touch-target': '44px',
+        'touch-target-premium': '48px',
+        'mobile-button': '44px',
+      },
+
+      // Enhanced Container Sizes with Mobile Edge Padding
+      maxWidth: {
+        'mobile': '100%',
+        'mobile-safe': 'calc(100% - 32px)', // 16px each side
+        'mobile-content': 'calc(100% - 48px)', // 24px each side
       },
     },
   },

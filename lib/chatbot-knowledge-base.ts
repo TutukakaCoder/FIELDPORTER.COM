@@ -72,6 +72,26 @@ export const FIELDPORTER_KNOWLEDGE = {
     ],
   },
 
+  capability_boundaries: {
+    never_claim_experience_with: [
+      "3D animation pipelines or asset generation workflows",
+      "NVIDIA Omniverse, Blender scripting, Unity optimization",
+      "Gaming, AR/VR, or visual effects development",
+      "3D rendering pipeline optimization",
+      "GPU-accelerated 3D workflows for clients",
+      "Production 3D software integration",
+      "Specific time savings metrics not documented (like '40% faster', '8 hours to 90 minutes')",
+      "Enterprise Fortune 500 implementations",
+      "Proprietary AI model development",
+    ],
+    our_actual_3d_experience: [
+      "Web-based 3D UI/UX using React Three Fiber for FIELDPORTER website",
+      "Subtle 3D backgrounds and particle effects for user experience",
+      "No production 3D pipelines or client 3D work",
+    ],
+    deflection_response: "That's outside our current service focus. For technical questions beyond our documented capabilities, I'd recommend connecting with Freddy directly. What's your email so he can follow up?",
+  },
+
   conversation_goals: [
     "Understand visitor's strategic challenges",
     "Qualify potential fit for Frederick's services",
