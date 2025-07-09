@@ -7,6 +7,7 @@ import {
   ScrollRestoration,
 } from "@/components/layout";
 import { PageTransition } from "@/components/ui/page-transition";
+import { AuthProvider } from "@/contexts/auth-context";
 import { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import type React from "react";
@@ -20,8 +21,10 @@ const inter = Inter({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 5,
+  maximumScale: 1, // Prevent zoom on input focus
+  userScalable: false, // Disable pinch to zoom for better touch UX
   viewportFit: "cover",
+  themeColor: "#000000",
 };
 
 export const metadata: Metadata = {
@@ -141,16 +144,18 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={inter.className} style={{ backgroundColor: "#000000" }}>
-        <EntranceProvider>
-          <ScrollRestoration />
-          <Header />
-          <PageTransition>
-            <main className="flex-1">{children}</main>
-          </PageTransition>
-          <Footer />
-          <BackToTop />
-          <EnhancedChatWidget />
-        </EntranceProvider>
+        <AuthProvider>
+          <EntranceProvider>
+            <ScrollRestoration />
+            <Header />
+            <PageTransition>
+              <main className="flex-1">{children}</main>
+            </PageTransition>
+            <Footer />
+            <BackToTop />
+            <EnhancedChatWidget />
+          </EntranceProvider>
+        </AuthProvider>
 
         {/* Schema.org structured data for SEO */}
         <script

@@ -13,8 +13,13 @@ interface LeadEmailData {
 
 interface NotificationEmailData {
   subject: string;
-  type: "chat" | "contact" | "newsletter" | "resource";
+  type: "chat" | "contact" | "newsletter" | "resource" | "welcome";
   data: any;
+}
+
+interface WelcomeEmailData {
+  email: string;
+  displayName: string;
 }
 
 class EmailService {
@@ -85,6 +90,168 @@ class EmailService {
       type: "chat",
       data: leadData,
     });
+  }
+
+  async sendWelcomeEmail(
+    email: string,
+    displayName: string,
+  ): Promise<{ success: boolean; error?: string }> {
+    if (!this.isEnabled || !this.resend) {
+      console.log("📧 Email service not configured - skipping welcome email");
+      return { success: false, error: "Email service not configured" };
+    }
+
+    try {
+      const welcomeData: WelcomeEmailData = { email, displayName };
+      const html = this.generateWelcomeEmailHtml(welcomeData);
+      const text = this.generateWelcomeEmailText(welcomeData);
+
+      const result = await this.resend.emails.send({
+        from: "FIELDPORTER <hello@fieldporter.com>",
+        to: [email],
+        subject: `Welcome to FIELDPORTER, ${displayName}!`,
+        html,
+        text,
+      });
+
+      if (result.error) {
+        console.error("❌ Welcome email failed:", result.error);
+        return { success: false, error: result.error.message };
+      }
+
+      console.log("✅ Welcome email sent successfully:", result.data?.id);
+      return {
+        success: true,
+        ...(result.data?.id && { id: result.data.id }),
+      };
+    } catch (error) {
+      console.error("❌ Welcome email service error:", error);
+      return { success: false, error: "Failed to send welcome email" };
+    }
+  }
+
+  private generateWelcomeEmailHtml(data: WelcomeEmailData): string {
+    return `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Welcome to FIELDPORTER</title>
+        </head>
+        <body style="margin: 0; padding: 0; background: #0a0a0a; font-family: Inter, Arial, sans-serif;">
+          <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden;">
+            
+            <!-- Premium FIELDPORTER Header -->
+            <div style="background: linear-gradient(135deg, #0969da 0%, #1e40af 50%, #7c3aed 100%); padding: 40px 32px; text-align: center;">
+              <h1 style="color: white; font-size: 32px; margin: 0; font-weight: 700; letter-spacing: 1px;">FIELDPORTER</h1>
+              <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0 0; font-size: 16px; font-weight: 500;">Strategic Research & Business Development</p>
+            </div>
+
+            <!-- Welcome Content -->
+            <div style="padding: 40px 32px;">
+              <h2 style="color: #1a1a1a; margin-bottom: 24px; font-size: 28px; font-weight: 600;">
+                Welcome ${data.displayName}!
+              </h2>
+              
+              <p style="color: #374151; font-size: 18px; line-height: 1.6; margin-bottom: 24px;">
+                Thank you for joining FIELDPORTER. We're excited to have you as part of our premium client community.
+              </p>
+
+              <div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 12px; padding: 24px; margin-bottom: 32px; border-left: 4px solid #0969da;">
+                <h3 style="margin: 0 0 16px 0; color: #1e293b; font-size: 20px;">What's Next?</h3>
+                <ul style="margin: 0; padding-left: 20px; color: #475569; font-size: 16px; line-height: 1.6;">
+                  <li style="margin-bottom: 8px;">We're currently setting up your personalized client portal</li>
+                  <li style="margin-bottom: 8px;">You'll receive an email notification once it's ready</li>
+                  <li style="margin-bottom: 8px;">Your portal will include project details, documents, and secure communication</li>
+                  <li>Our AI assistant is available 24/7 for immediate support</li>
+                </ul>
+              </div>
+
+              <!-- Portal Access -->
+              <div style="background: #0969da; border-radius: 8px; padding: 24px; text-align: center; margin-bottom: 24px;">
+                <h3 style="color: white; margin: 0 0 12px 0; font-size: 18px;">Access Your Portal</h3>
+                <p style="color: rgba(255,255,255,0.9); margin: 0 0 20px 0; font-size: 14px;">
+                  Sign in anytime to check the status of your portal setup
+                </p>
+                <a href="https://fieldporter.com/auth/signin" 
+                   style="display: inline-block; background: white; color: #0969da; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px;">
+                  Sign In to Portal
+                </a>
+              </div>
+
+              <!-- Support Section -->
+              <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+                <h3 style="margin: 0 0 16px 0; color: #1e293b; font-size: 18px;">Need Assistance?</h3>
+                <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                  <div style="flex: 1; min-width: 200px;">
+                    <strong style="color: #374151;">Email Support:</strong><br>
+                    <a href="mailto:support@fieldporter.com" style="color: #0969da; text-decoration: none;">support@fieldporter.com</a>
+                  </div>
+                  <div style="flex: 1; min-width: 200px;">
+                    <strong style="color: #374151;">AI Assistant:</strong><br>
+                    <span style="color: #6b7280;">Available on our website 24/7</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Professional Closing -->
+              <p style="color: #6b7280; font-size: 16px; line-height: 1.6; margin-bottom: 8px;">
+                We're committed to delivering exceptional results and look forward to working with you.
+              </p>
+              
+              <p style="color: #374151; font-size: 16px; font-weight: 500; margin: 0;">
+                Best regards,<br>
+                The FIELDPORTER Team
+              </p>
+            </div>
+
+            <!-- Professional Footer -->
+            <div style="background: #f8fafc; padding: 24px 32px; text-align: center; border-top: 1px solid #e5e7eb;">
+              <p style="margin: 0 0 8px 0; color: #6b7280; font-size: 14px;">
+                <strong>FIELDPORTER</strong> - Strategic Research & Business Development
+              </p>
+              <p style="margin: 0; color: #9ca3af; font-size: 12px;">
+                This email was sent to ${data.email}. 
+                <a href="https://fieldporter.com/privacy-policy" style="color: #0969da; text-decoration: none;">Privacy Policy</a>
+              </p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+  }
+
+  private generateWelcomeEmailText(data: WelcomeEmailData): string {
+    return `
+Welcome to FIELDPORTER, ${data.displayName}!
+
+Thank you for joining FIELDPORTER. We're excited to have you as part of our premium client community.
+
+What's Next?
+- We're currently setting up your personalized client portal
+- You'll receive an email notification once it's ready
+- Your portal will include project details, documents, and secure communication
+- Our AI assistant is available 24/7 for immediate support
+
+Access Your Portal:
+Sign in anytime to check the status of your portal setup
+https://fieldporter.com/auth/signin
+
+Need Assistance?
+Email Support: support@fieldporter.com
+AI Assistant: Available on our website 24/7
+
+We're committed to delivering exceptional results and look forward to working with you.
+
+Best regards,
+The FIELDPORTER Team
+
+---
+FIELDPORTER - Strategic Research & Business Development
+This email was sent to ${data.email}
+Privacy Policy: https://fieldporter.com/privacy-policy
+    `;
   }
 
   private generateEmailHtml(type: string, data: any): string {

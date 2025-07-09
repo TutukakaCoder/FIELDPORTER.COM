@@ -2,6 +2,7 @@ import {
   AuthError,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
@@ -116,6 +117,15 @@ export class AuthService {
     } catch (error) {
       console.error("Sign out error:", error);
       throw error;
+    }
+  }
+
+  static async resetPassword(email: string): Promise<void> {
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      console.error("Password reset error:", error);
+      throw this.formatAuthError(error as AuthError);
     }
   }
 

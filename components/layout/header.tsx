@@ -1,5 +1,6 @@
 "use client";
 
+import { OptimizedLink } from "@/components/ui/optimized-link";
 import { BRAND, MAIN_NAVIGATION } from "@/config/constants";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
@@ -7,7 +8,6 @@ import { ArrowRight, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { OptimizedLink } from "@/components/ui/optimized-link";
 
 interface HeaderProps {
   className?: string;
@@ -112,10 +112,10 @@ export function Header({ className }: HeaderProps) {
             {/* Premium CTA Button - More to the right */}
             <div className="hidden lg:flex items-center pr-4">
               <OptimizedLink
-                href="/contact"
+                href="/auth/signin"
                 className="group flex items-center gap-2 px-6 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-[#0969DA]/30 to-[#1E40AF]/30 hover:from-[#0969DA]/50 hover:to-[#1E40AF]/50 backdrop-blur-sm rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30 border border-blue-500/20"
               >
-                Get Started
+                Client Portal
                 <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </OptimizedLink>
             </div>
@@ -200,10 +200,10 @@ export function Header({ className }: HeaderProps) {
                   className="pt-4 border-t border-white/[0.08]"
                 >
                   <OptimizedLink
-                    href="/contact"
+                    href="/auth/signin"
                     className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-medium text-white bg-gradient-to-r from-[#0969DA]/30 to-[#1E40AF]/30 hover:from-[#0969DA]/50 hover:to-[#1E40AF]/50 backdrop-blur-sm rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/20"
                   >
-                    Get Started
+                    Client Portal
                     <ArrowRight className="w-4 h-4" />
                   </OptimizedLink>
                 </motion.div>
