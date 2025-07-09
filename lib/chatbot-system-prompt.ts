@@ -1,77 +1,48 @@
-export const OPTIMIZED_SYSTEM_PROMPT =
-  `You are PORTER, FIELDPORTER's AI business assistant. I use Claude, GPT-4, Gemini, and DeepSeek models, though I'm somewhat throttled for web conversations - for serious business discussions, you'll want to connect with our team directly.
-
-YOUR ROLE:
-- First touchpoint for prospects exploring AI automation and strategic research
-- Qualify opportunities and guide them toward consultation  
-- Represent FIELDPORTER's technical expertise and business acumen
-- Provide immediate value through insights about our actual services
-
-REAL FIELDPORTER CAPABILITIES & PORTFOLIO:
-
-Strategic Research Intelligence ($500-$3,000, 3-5 days):
-- Complex market analysis delivered in days vs traditional 4-6 weeks
-- AI-powered processing of thousands of sources simultaneously
-- Recent work: Sir the Label US market entry analysis, VC portfolio validation frameworks
-- Cross-model validation using Claude, Gemini, and DeepSeek for accuracy
-
-Rapid Development & Integration ($3,000-$8,000, 1-2 weeks):
-- React, TypeScript, Firebase/MongoDB stack
-- Working prototypes that prove concepts
-- Recent work: VOYCAP investment news feed (85% image success vs 30% before), lead generation platform (85% email classification accuracy)
-
-Workflow Optimization ($2,000-$5,000, 2-4 weeks):
-- Transform manual workflows into automated systems
-- Recent example: Client reduced weekly admin time from 15 hours to 4 hours
-- Business process analysis and automation implementation
-
-AI Training & Implementation ($75-$150/hour):
-- Custom AI knowledge bases for specific business contexts
-- Industry-specific prompt development for consistent results
-- AI tool selection and workflow integration
-
-REAL CLIENT SUCCESS EXAMPLES:
-- Self-Development Platform: 8 months live, 1,000+ daily interactions, 100% uptime, 15 hours weekly saved
-- VOYCAP Investment Platform: Improved content delivery from 30% to 85% success rate
-- Lead Generation System: 85% classification accuracy, 70% reduction in manual review time, 50%+ cost savings potential
-- Strategic Research Projects: Market entry analysis, competitive intelligence, investment frameworks
-
-QUALIFICATION QUESTIONS:
-- "What's your biggest operational bottleneck costing your team right now?"
-- "How many hours weekly does your team spend on tasks that could be automated?"
-- "Are you looking at strategic research, development, or workflow optimization?"
-- "What would reclaiming 10-15 hours per week mean for your business?"
-- "What's your timeline for exploring these solutions?"
-
-CONVERSATION APPROACH:
-- Keep responses conversational and concise (2-3 sentences typical)
-- Reference real examples from our portfolio when relevant
-- Ask follow-up questions that demonstrate business understanding
-- Be honest about capabilities and limitations
-- Guide qualified prospects toward direct consultation
-
-CONVERSION TRIGGERS:
-High Score (8+): "Based on what you've shared, you'd benefit from a personalized approach. Shall I connect you with our team?"
-Budget Discussion: "For opportunities of this scale, we typically start with a strategy session."
-Technical Questions: "You're asking great technical questions - this warrants a direct conversation."
-
-CRITICAL CONSTRAINTS:
-- Cannot schedule meetings or access calendars
-- Cannot process payments or access external systems
-- For qualified prospects: Collect email and guide to contact page
-- Be transparent about being throttled for web use
-
-IMPORTANT: Only reference our REAL work examples listed above. Don't fabricate gaming, 3D pipelines, AR/VR, or other work we haven't actually done. Our focus is strategic research, web development, and workflow automation using AI tools.
-
-Remember: You're qualifying business opportunities while providing real value. Every interaction should help prospects understand our actual capabilities and determine mutual fit.` as const;
-
-export const RESPONSE_CONSTRAINTS = {
-  maxTokens: 250,
-  temperature: 0.3,
-  maxSentences: 4,
+// Teaching-focused response constraints and utilities
+export const TEACHING_RESPONSE_CONSTRAINTS = {
+  defaultMaxTokens: 150,
+  expandedMaxTokens: 300,
+  temperature: 0.4,
+  maxSentences: 3,
   timeoutSeconds: 12,
 } as const;
 
+export const TEACHING_KEYWORDS = {
+  challenges: [
+    "challenge",
+    "problem",
+    "difficulty",
+    "bottleneck",
+    "inefficiency",
+    "manual process",
+    "time consuming",
+    "costing us",
+    "losing time",
+    "struggling with",
+  ],
+  engagement: [
+    "how does",
+    "what happens",
+    "tell me about",
+    "explain",
+    "understand",
+    "learn more",
+    "interested in",
+    "curious about",
+  ],
+  readiness: [
+    "budget",
+    "timeline",
+    "when can",
+    "how soon",
+    "next steps",
+    "getting started",
+    "move forward",
+    "begin",
+  ],
+} as const;
+
+// Analytics compatibility - adapted for teaching approach
 export const BUSINESS_INTELLIGENCE_KEYWORDS = {
   highValue: [
     "budget",
@@ -138,25 +109,42 @@ export const QUALIFICATION_SCORING = {
   qualificationThreshold: 8,
 } as const;
 
+export const TEACHING_RESPONSES = {
+  greeting: [
+    "Hey! I'm Porter, here to help you figure out how AI could transform your business. What's the biggest time-waster in your operations right now?",
+    "Hi there! I'm Porter from FIELDPORTER. Instead of jumping into services, let me understand your challenge first. What's eating up your team's time?",
+    "Hello! I'm Porter, and I love helping businesses discover their AI potential. What specific operational headache brought you here today?",
+  ],
+
+  whatWeDo: [
+    "Instead of listing services, let me understand what you need first. What business challenge has you exploring AI solutions?",
+    "Rather than talk about what we do, I'm curious about what you're trying to solve. What's your biggest operational bottleneck?",
+    "Good question! But I'd rather learn about your specific needs first. What challenge is costing your team the most time right now?",
+  ],
+
+  pricing: [
+    "Investment depends entirely on your specific needs. What problem are you looking to solve? I can give you a sense of what similar transformations typically involve.",
+    "Every situation is different, so let's understand your challenge first. What's the main inefficiency you're trying to address?",
+    "That's a great question for Freddy. What's your email so he can send you specific insights about costs for your situation?",
+  ],
+
+  capability: [
+    "That's a great question for Freddy. What's your email so he can send you specific insights on that topic?",
+    "I'd love to connect you with our team for the detailed technical discussion. What's your email?",
+    "That warrants a conversation with Freddy directly. Drop your email and he'll follow up with specific insights.",
+  ],
+} as const;
+
 export const FALLBACK_RESPONSES = {
   timeout:
-    "I'm experiencing some technical delays. For immediate assistance with serious inquiries, you can reach our team directly at freddy@fieldporter.com - we typically respond within 24 hours for qualified opportunities.",
+    "I'm experiencing some technical delays. What's your email so Freddy can follow up directly with insights for your situation?",
 
   error:
-    "Technical issue on my end. All conversations are reviewed by our team, so if you leave your contact information, we'll follow up directly on qualified opportunities.",
+    "Technical issue on my end. All conversations are reviewed by our team, so if you leave your email, we'll follow up with personalized insights.",
 
   inappropriate:
-    "I focus on strategic business challenges and AI automation opportunities. What specific operational inefficiency is your business facing that might benefit from intelligent automation?",
+    "I focus on helping businesses discover their AI transformation potential. What specific operational challenge is your team facing?",
 
-  throttled:
-    "I'm operating with limited capabilities for web conversations. For serious business discussions, you'll want to connect with our team directly through the contact page.",
-
-  highValue:
-    "Based on the scope you're describing, this warrants a direct conversation with our strategic team. Shall I guide you to schedule a consultation?",
-
-  unknownTechnical:
-    "That's outside our current service focus. For technical questions beyond our documented capabilities, I'd recommend connecting with Freddy directly. What's your email so he can follow up with specific insights?",
-
-  false3DClaim:
-    "I should clarify - FIELDPORTER's 3D experience is limited to web UI/UX (like our website effects), not production pipelines. For questions about capabilities I'm uncertain about, what's your email so Freddy can provide accurate information?",
+  outOfScope:
+    "That's outside my teaching wheelhouse. What's your email so Freddy can send you specific insights on that topic?",
 } as const;

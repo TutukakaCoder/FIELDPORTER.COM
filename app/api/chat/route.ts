@@ -1,4 +1,21 @@
+import {
+  FIELDPORTER_COMPANY,
+  getPersonalityResponse,
+  getServiceByType,
+} from "@/lib/company-knowledge";
+import {
+  analyzeConversationIntelligence,
+  getSmartResponse,
+} from "@/lib/quick-responses";
 import { responseCacheService } from "@/lib/response-cache";
+import {
+  CHALLENGE_SOLUTIONS,
+  CONVERSATION_PHASES,
+  EMAIL_COLLECTION_STRATEGIES,
+  type ChallengeType,
+  type ConversationPhase,
+  type IndustryType,
+} from "@/lib/teaching-templates";
 import type { Message } from "@/types/chat";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -7,172 +24,133 @@ const DEEPSEEK_API_KEY = process.env["DEEPSEEK_API_KEY"];
 const DEEPSEEK_BASE_URL =
   process.env["DEEPSEEK_BASE_URL"] || "https://api.deepseek.com";
 
-// ENHANCED FIELDPORTER system prompt with sophisticated context awareness
-const ENHANCED_SYSTEM_PROMPT = `You are PORTER, the AI assistant for FIELDPORTER - a business consultancy that doesn't just create strategies and presentations, we roll up our sleeves and build the software solutions that bring those strategies to life. Our philosophy: "We Build What We Recommend."
+// Enhanced teaching-focused system prompt with FIELDPORTER personality and knowledge
+const TEACHING_SYSTEM_PROMPT = `You are Porter, the AI assistant for FIELDPORTER - the consultancy that actually builds what we recommend.
 
-CORE IDENTITY & POSITIONING:
-- We bridge the gap between business needs and technical possibilities
-- Small team led by Frederick Hopkins means direct access to expertise, not junior consultants
-- We serve everyone: enterprises, startups, small businesses, and individuals
-- We test automation workflows and AI solutions in our own projects before recommending them
-- Strategic research funded by consulting work informs better client solutions
+CORE MISSION:
+Help users discover their AI transformation potential through questions, insights, and humor - not by listing services.
 
-WHAT MAKES US DIFFERENT:
-- We don't just consult - we build. When we recommend an AI solution, it's because we've implemented something similar ourselves
-- We've gone beyond just adding AI features; we design entire business models around AI
-- Real experience with measurable outcomes from our own implementations
-- We focus on practical, real-world tools that solve tangible problems
+PERSONALITY:
+- Smart but not arrogant
+- Direct but friendly  
+- Slightly cheeky with good humor
+- Genuinely helpful
+- No BS or marketing speak
 
-🤖 MAKING BUSINESSES SMARTER WITH AI:
-- **Supercharging Research**: Systems using Claude and Gemini that slash market research time from weeks to hours, delivering "McKinsey-level insights at Silicon Valley speed"
-- **Automating Sales & Marketing**: AI-powered lead generation that replaced expensive services, saving 50%+ costs and 15+ hours weekly
-- **Improving Meetings & Workflows**: AI tools for meeting transcription, action extraction, and sentiment analysis, reducing manual work by 40%
-- **Enhancing User Experience**: Intelligent news summaries for investment platforms with 60-70% cost reduction through smart design
-- **Building AI-Powered Businesses**: Complete business models around AI agents and automation workflows
+FIELDPORTER KNOWLEDGE:
+- We specialize in Strategic Research (AI-powered market analysis), Rapid Development (working prototypes), Workflow Optimization (intelligent automation), and Business Advisory
+- Real examples: VOYCAP platform (improved image success from 30% to 85%), global self-development platform (1000+ daily interactions, 100% uptime), lead classification system (85% accuracy, 70% time reduction)
+- We use React/TypeScript/Firebase stack and AI models like Claude, Gemini, and DeepSeek
+- Investment ranges: $2K-$50K depending on scope and complexity
+- Timeline: Days to weeks, not months
 
-🛠️ BUILDING & SCALING SOFTWARE PRODUCTS:
-- **Rapid Prototyping & MVPs**: Built high-end Porsche-branded feedback app in one week using AI tools
-- **Enterprise-Grade Systems**: Performance management systems used by 2,100+ staff globally
-- **Fixing & Enhancing Existing Systems**: VOYCAP image display fix achieving 85-90% success rates
-- **Building the AI 'Engine Room'**: High-performance systems for large AI models, up to 10x faster and cheaper
+CONVERSATION APPROACH:
+1. ASK about their specific challenge first (with personality)
+2. TEACH how AI addresses that type of challenge (with real examples)
+3. RELATE it to their industry/situation (with humor when appropriate)
+4. GUIDE them to next steps (naturally, not pushy)
 
-📈 DRIVING BUSINESS STRATEGY & GROWTH:
-- **Growth Planning**: Helped SIR The Label develop strategy to triple revenue to $75M+ with 9x ROI projection
-- **Market Analysis & Positioning**: Deep analysis frameworks for multi-billion dollar markets in EdTech, sustainability, robotics
-- **Technology Roadmaps**: Assessing systems and recommending the best fit for specific needs and budgets
+RESPONSE STYLE:
+- Use humor and personality ("Remember when market research took 6 weeks? Yeah, we fixed that")
+- Share honest insights ("The hardest part isn't the AI, it's cleaning up your data")
+- Reference real FIELDPORTER examples when relevant
+- Ask engaging follow-up questions
+- Adjust length based on complexity (Quick/Standard/Educational)
 
-🔗 INTEGRATING SYSTEMS & AUTOMATING PROCESSES:
-- **Connecting the Dots**: POS systems with membership databases and accounting software integration
-- **Workflow Automation**: FamilyLink AI system for automatic message routing and task management
-- **Improving Efficiency**: Automated performance tracking, reporting, and manual process elimination
+EMAIL COLLECTION:
+When appropriate: "Want me to have Freddy send you a customized roadmap for your specific situation? No spam - just genuinely useful insights."
 
-CONVERSATION CONTEXT AWARENESS:
-- ALWAYS reference previous parts of the conversation when relevant
-- Build on topics already discussed rather than starting fresh
-- If they've asked similar questions, acknowledge that and provide new angles
-- Use their specific industry/company context in responses
-- Remember their stated challenges and refer back to them
-- Adapt your tone based on their communication style (formal vs casual)
+KNOWLEDGE BOUNDARIES:
+- Don't claim expertise in 3D animation, gaming, or AR/VR
+- If unsure: "That's a great question for Freddy. What's your email so he can send you specific insights?"
+- Focus on: strategic research, workflow automation, AI implementation, business intelligence
 
-RESPONSE VARIETY & NATURAL FLOW:
-- Vary your opening phrases: "That's interesting...", "Good question...", "Based on what you've shared...", "Building on that..."
-- Use different question formats: "What's driving that need?", "How would that impact your team?", "What have you tried so far?"
-- Alternate between direct answers and consultative responses
-- Match their energy level and sophistication
-- Use industry-appropriate language when they demonstrate expertise
+Remember: You're teaching them about their AI potential while showcasing FIELDPORTER's expertise through personality and real examples.`;
 
-CRITICAL CONSTRAINTS:
-- You CANNOT schedule meetings, send calendar invites, or book appointments
-- You CAN collect email addresses to notify our team
-- For booking requests, direct them to the contact page or ask for email
-- Never mention specific client names or confidential projects
-- Keep responses 100-300 characters typically (2-4 sentences)
-- Professional but conversational tone
-- No special characters, markdown, or formatting in responses
-- Ask follow-up questions that demonstrate business understanding
-- Guide qualified prospects toward consultation
+// Query complexity analyzer for dynamic response length
+function analyzeQueryComplexity(
+  message: string,
+  conversationHistory: Message[],
+): {
+  mode: "quick" | "standard" | "educational";
+  maxTokens: number;
+  reasoning: string;
+} {
+  const lowerMessage = message.toLowerCase();
+  const words = lowerMessage.split(/\s+/);
 
-STRICT CAPABILITY BOUNDARIES - DO NOT CLAIM:
-- NEVER claim FIELDPORTER has built 3D animation pipelines, asset generation workflows, or rendering optimizations
-- NEVER mention NVIDIA Omniverse, Blender scripting, Unity workflows, or other 3D production tools as client work
-- NEVER invent specific metrics like "40% production time reduction" or "8 hours to 90 minutes" unless explicitly documented
-- NEVER claim experience with gaming, AR/VR, e-commerce 3D, or visual effects work
-- NEVER reference work with specific 3D software platforms or GPU optimization for rendering
-- If asked about 3D/rendering/animation work: "That's outside our current service focus. We specialize in strategic research, AI implementation, and workflow automation. What specific business challenge are you looking to solve?"
+  // Quick responses (1-2 sentences, 100 tokens)
+  const quickPatterns = [
+    /^(hi|hello|hey|thanks|thank you|ok|okay|yes|no|sure)$/i,
+    /^(what's up|how's it going|good|great|awesome)$/i,
+  ];
 
-SERVICES & PRICING:
+  if (quickPatterns.some((pattern) => pattern.test(lowerMessage.trim()))) {
+    return {
+      mode: "quick",
+      maxTokens: 100,
+      reasoning: "Simple greeting or acknowledgment",
+    };
+  }
 
-1. Strategic Research Intelligence ($500-$5,000, 3-7 days)
-- AI-powered market research and competitive analysis delivered 90% faster
-- Deep research methodology scanning thousands of sources with AI agents
-- Recent work: SIR The Label US market entry analysis, Australian VC portfolio validation frameworks
-- Cross-model validation using Claude, Gemini, and DeepSeek for accuracy
+  // Educational responses (5-8 sentences, 400 tokens)
+  const educationalPatterns = [
+    /how does.*work/i,
+    /what.*process/i,
+    /explain.*how/i,
+    /walk me through/i,
+    /tell me about.*implementation/i,
+    /what.*methodology/i,
+    /how would you.*approach/i,
+    /what.*steps/i,
+    /technical.*details/i,
+    /architecture/i,
+    /integration/i,
+    /workflow/i,
+  ];
 
-2. Rapid Development & Integration ($1,000-$25,000, 1-4 weeks)
-- Concept validation through working prototypes, not production systems
-- Functional prototypes, MVPs, and API integrations with client team handoff
-- Recent work: VOYCAP investment news feed (85% image success vs 30% before), lead generation platform (85% email classification accuracy)
-- Focus on proof of concept and validation
+  if (educationalPatterns.some((pattern) => pattern.test(lowerMessage))) {
+    return {
+      mode: "educational",
+      maxTokens: 400,
+      reasoning: "User asking for detailed explanation or process information",
+    };
+  }
 
-3. Business Advisory ($2,000-$10,000/month)
-- Strategic guidance based on real portfolio business experience
-- Monthly or quarterly engagements with operational insights
-- Real operational experience from building businesses while consulting
-- Technology roadmaps and system recommendations
+  // Educational if message is long and complex
+  if (words.length > 20) {
+    return {
+      mode: "educational",
+      maxTokens: 400,
+      reasoning: "Long, complex message requiring detailed response",
+    };
+  }
 
-4. Process Automation & Workflow Optimization ($500-$8,000, 1-3 weeks)
-- Transform manual workflows into automated systems
-- Recent example: Client reduced weekly administrative time from 15 hours to 4 hours
-- Business process analysis and automation implementation
-- API integrations and system connections
+  // Educational if it's a follow-up to a technical discussion
+  const recentMessages = conversationHistory.slice(-4);
+  const hasTechnicalContext = recentMessages.some(
+    (msg) =>
+      msg.content.toLowerCase().includes("technical") ||
+      msg.content.toLowerCase().includes("implementation") ||
+      msg.content.toLowerCase().includes("workflow") ||
+      msg.content.toLowerCase().includes("process"),
+  );
 
-REAL CLIENT RESULTS FROM PORTFOLIO:
-- **Self-Development Platform**: 8+ months live, 1,000+ daily interactions, 100% uptime, global timezone handling
-- **VOYCAP Investment News Feed**: Improved image display from 30% to 85% success, three working prototypes delivered
-- **Email Classifier System**: 85% classification accuracy, 70% reduction in manual review time, automated investment inquiry routing
-- **SIR The Label Market Research**: Complete US market assessment for Australian fashion brand expansion
-- **Australian VC Firm**: Portfolio validation framework and founder assessment methodology
-- **Multiple Strategic Engagements**: Cross-industry strategic research and competitive intelligence
+  if (hasTechnicalContext && words.length > 8) {
+    return {
+      mode: "educational",
+      maxTokens: 400,
+      reasoning: "Technical discussion requiring detailed explanation",
+    };
+  }
 
-TECHNOLOGY STACK:
-AI & Analysis: Claude 4 Opus, GPT-4 Turbo, Gemini 2.5 Pro, DeepSeek V3, Perplexity Pro, Cursor AI
-Development: React, Next.js, TypeScript, Tailwind CSS, Firebase, MongoDB, Node.js, Python FastAPI
-Automation: n8n Cloud, GitHub Actions, Puppeteer, Custom APIs
-Infrastructure: Firebase, AWS, Google Cloud, Vercel, vLLM for AI model serving
-
-CONTEXTUAL CONVERSATION STRATEGIES:
-
-First-Time Visitors:
-- Focus on understanding their challenge first
-- Ask open-ended questions about their biggest operational bottlenecks
-- Provide relevant examples from our portfolio
-- Example: "What's the main operational challenge that brought you here today?"
-
-Returning/Engaged Prospects:
-- Reference previous conversation points
-- Dive deeper into specific aspects they've shown interest in
-- Move toward qualification and next steps
-- Example: "Earlier you mentioned [specific challenge] - how is that currently impacting your team's productivity?"
-
-Technical Audience:
-- Use more sophisticated language and technical details
-- Reference our tech stack and methodology
-- Ask about current tools and integration needs
-- Example: "What's your current tech stack? I'd love to understand how our React/Firebase approach might integrate with your existing systems."
-
-Business/Executive Audience:
-- Focus on ROI, business impact, and strategic outcomes
-- Use business metrics and efficiency language
-- Ask about team size, budget considerations, and timelines
-- Example: "How many hours weekly does your team spend on tasks that could be automated?"
-
-NATURAL EMAIL COLLECTION STRATEGY:
-When a prospect shows high interest (lead score 7+) or asks about next steps, naturally request contact information:
-
-Varied Email Collection Approaches:
-- "What's the best email to reach you at? I'll have Frederick follow up with specific recommendations for your [their challenge]."
-- "This sounds like something our team should discuss with you directly. What's your email for a follow-up?"
-- "Based on what you've shared, you'd benefit from a personalized approach. Shall I connect you with our team?"
-- "Feel free to share your contact info if you'd prefer to discuss this further with Frederick directly."
-
-After Email Collection:
-- "Perfect! Frederick will reach out within 24 hours with specific insights for your situation."
-- "Excellent! I'll make sure he sees our conversation and follows up with relevant recommendations."
-- "Great! He'll be in touch soon with some specific ideas for your [their industry/challenge]."
-
-LEAD QUALIFICATION SIGNALS:
-High Intent: Specific challenges with current systems, pricing/timeline questions, competitor references, "need/looking for/considering/budget" language, technical sophistication
-Mid Intent: General interest in services, asking about capabilities, timeline exploration
-Low Intent: Casual browsing, very general questions, price shopping without context
-
-RESPONSE ADAPTATION RULES:
-- Match their communication style (formal vs casual, technical vs business-focused)
-- Reference their previous messages to show you're listening
-- Use industry-specific examples when possible
-- Escalate sophistication as conversation progresses
-- Acknowledge and build on their expertise level
-
-Remember: Every response should feel like part of a continuous conversation, not isolated answers. Demonstrate that you understand their specific context and are building toward helping them solve their actual business challenges. We build what we recommend - that's our differentiator.`;
+  // Standard responses (2-4 sentences, 200 tokens) - default
+  return {
+    mode: "standard",
+    maxTokens: 200,
+    reasoning: "Standard conversational response with follow-up question",
+  };
+}
 
 // Enhanced lead scoring with more nuanced detection
 const ENHANCED_QUALIFICATION_KEYWORDS = {
@@ -992,15 +970,19 @@ function generateContextualResponse(
 async function callDeepSeekAPI(
   message: string,
   conversationContext: string,
+  conversationHistory: Message[] = [],
 ): Promise<string> {
   if (!DEEPSEEK_API_KEY) {
     throw new Error("DeepSeek API key not configured");
   }
 
+  // Analyze query complexity to determine response length
+  const complexity = analyzeQueryComplexity(message, conversationHistory);
+
   const messages = [
     {
       role: "system",
-      content: ENHANCED_SYSTEM_PROMPT,
+      content: TEACHING_SYSTEM_PROMPT,
     },
   ];
 
@@ -1011,6 +993,12 @@ async function callDeepSeekAPI(
       content: `Previous conversation context:\n${conversationContext}`,
     });
   }
+
+  // Add complexity guidance to the system
+  messages.push({
+    role: "system",
+    content: `Response mode: ${complexity.mode}. ${complexity.reasoning}. Adjust your response length accordingly.`,
+  });
 
   messages.push({
     role: "user",
@@ -1026,7 +1014,7 @@ async function callDeepSeekAPI(
     body: JSON.stringify({
       model: "deepseek-chat",
       messages,
-      max_tokens: 400, // Increased from 250 to allow complete thoughts
+      max_tokens: complexity.maxTokens, // Dynamic based on query complexity
       temperature: 0.6, // Increased from 0.3 for more natural variety
       top_p: 0.9,
       frequency_penalty: 0.3, // Increased from 0.1 to reduce repetition
@@ -1084,6 +1072,409 @@ function getFallbackResponse(message: string): string {
   return "Thanks for your question! This sounds like something our team should discuss with you directly. What's the best way to connect about your AI strategy needs?";
 }
 
+// Progressive teaching flow implementation
+function determineConversationPhase(conversationHistory: Message[]): {
+  phase: ConversationPhase;
+  reasoning: string;
+} {
+  const userMessages = conversationHistory.filter((msg) => msg.role === "user");
+  const totalMessages = conversationHistory.length;
+
+  // Discovery phase (early conversation)
+  if (userMessages.length <= 2) {
+    return {
+      phase: "discovery",
+      reasoning:
+        "Early in conversation, focus on understanding their challenge",
+    };
+  }
+
+  // Analyze message content to determine phase
+  const recentUserMessages = userMessages.slice(-3);
+  const recentContent = recentUserMessages
+    .map((msg) => msg.content.toLowerCase())
+    .join(" ");
+
+  // Decision phase indicators
+  const decisionSignals = [
+    "timeline",
+    "budget",
+    "next step",
+    "getting started",
+    "move forward",
+    "schedule",
+    "call",
+    "meeting",
+    "contact",
+    "team",
+    "email",
+  ];
+
+  if (decisionSignals.some((signal) => recentContent.includes(signal))) {
+    return {
+      phase: "decision",
+      reasoning: "User showing readiness signals, guide toward next steps",
+    };
+  }
+
+  // Evaluation phase indicators
+  const evaluationSignals = [
+    "how much",
+    "cost",
+    "pricing",
+    "compare",
+    "options",
+    "evaluate",
+    "consider",
+    "pros and cons",
+    "benefits",
+    "roi",
+    "implementation",
+  ];
+
+  if (evaluationSignals.some((signal) => recentContent.includes(signal))) {
+    return {
+      phase: "evaluation",
+      reasoning: "User evaluating options, help assess fit and feasibility",
+    };
+  }
+
+  // Learning phase indicators (or default after discovery)
+  const learningSignals = [
+    "how does",
+    "what happens",
+    "tell me",
+    "explain",
+    "understand",
+    "learn",
+    "process",
+    "work",
+    "implementation",
+    "approach",
+  ];
+
+  if (
+    learningSignals.some((signal) => recentContent.includes(signal)) ||
+    userMessages.length >= 3
+  ) {
+    return {
+      phase: "learning",
+      reasoning: "User ready to learn, teach how AI addresses their challenge",
+    };
+  }
+
+  // Default to discovery
+  return {
+    phase: "discovery",
+    reasoning: "Continue understanding their primary challenge",
+  };
+}
+
+function identifyUserChallenge(
+  conversationHistory: Message[],
+): ChallengeType | null {
+  const userMessages = conversationHistory.filter((msg) => msg.role === "user");
+  const allContent = userMessages
+    .map((msg) => msg.content.toLowerCase())
+    .join(" ");
+
+  // Match content to challenge types
+  const challengePatterns = {
+    manual_processes: [
+      "manual",
+      "repetitive",
+      "data entry",
+      "time consuming",
+      "tedious",
+    ],
+    data_analysis: [
+      "data",
+      "analysis",
+      "reporting",
+      "insights",
+      "patterns",
+      "analytics",
+    ],
+    customer_insights: [
+      "customer",
+      "client",
+      "churn",
+      "satisfaction",
+      "retention",
+    ],
+    workflow_optimization: [
+      "workflow",
+      "process",
+      "bottleneck",
+      "efficiency",
+      "optimize",
+    ],
+    communication_overhead: [
+      "meetings",
+      "communication",
+      "status",
+      "updates",
+      "coordination",
+    ],
+    decision_making: ["decisions", "evaluate", "choose", "options", "analysis"],
+  };
+
+  for (const [challenge, patterns] of Object.entries(challengePatterns)) {
+    if (patterns.some((pattern) => allContent.includes(pattern))) {
+      return challenge as ChallengeType;
+    }
+  }
+
+  return null;
+}
+
+function identifyUserIndustry(
+  conversationHistory: Message[],
+): IndustryType | null {
+  const userMessages = conversationHistory.filter((msg) => msg.role === "user");
+  const allContent = userMessages
+    .map((msg) => msg.content.toLowerCase())
+    .join(" ");
+
+  const industryPatterns = {
+    manufacturing: [
+      "manufacturing",
+      "factory",
+      "production",
+      "assembly",
+      "quality control",
+    ],
+    retail: ["retail", "store", "ecommerce", "inventory", "customers", "sales"],
+    healthcare: ["healthcare", "medical", "patients", "clinic", "hospital"],
+    financial: ["financial", "banking", "investment", "insurance", "loans"],
+    construction: ["construction", "building", "contractor", "project", "site"],
+    professional_services: [
+      "consulting",
+      "legal",
+      "accounting",
+      "professional",
+      "services",
+    ],
+  };
+
+  for (const [industry, patterns] of Object.entries(industryPatterns)) {
+    if (patterns.some((pattern) => allContent.includes(pattern))) {
+      return industry as IndustryType;
+    }
+  }
+
+  return null;
+}
+
+// Enhanced teaching response with FIELDPORTER knowledge and personality
+function generateTeachingResponse(
+  message: string,
+  conversationHistory: Message[],
+  phase: ConversationPhase,
+  challenge: ChallengeType | null,
+  industry: IndustryType | null,
+): string {
+  const lowerMessage = message.toLowerCase();
+
+  // Handle greetings with personality
+  if (
+    phase === "discovery" &&
+    conversationHistory.filter((m) => m.role === "user").length <= 1
+  ) {
+    if (
+      lowerMessage.includes("hello") ||
+      lowerMessage.includes("hi") ||
+      lowerMessage.includes("hey")
+    ) {
+      return getPersonalityResponse("greeting");
+    }
+  }
+
+  // Handle service inquiries with knowledge and personality
+  if (
+    lowerMessage.includes("what do you do") ||
+    lowerMessage.includes("services") ||
+    lowerMessage.includes("what does fieldporter")
+  ) {
+    const transition = getPersonalityResponse("transition");
+    const quirk = getPersonalityResponse("quirk");
+    return `${transition} ${quirk} Instead of rattling off services, let me understand your challenge first. What's the biggest time-waster in your operations right now?`;
+  }
+
+  // Handle pricing questions with honesty and humor
+  if (
+    lowerMessage.includes("price") ||
+    lowerMessage.includes("cost") ||
+    lowerMessage.includes("budget")
+  ) {
+    const humor = getPersonalityResponse("humor");
+    return `${humor} Investment really depends on what you're trying to solve. Our projects typically range from $2K for workflow automation to $50K for comprehensive market research. What specific challenge are you looking to tackle?`;
+  }
+
+  // Identify relevant service for their challenge
+  const relevantService = getServiceByType(message);
+
+  // Discovery phase - understand their challenge with personality
+  if (phase === "discovery") {
+    const phaseData = CONVERSATION_PHASES[phase];
+    const question =
+      phaseData.questions[
+        Math.floor(Math.random() * phaseData.questions.length)
+      ];
+    const followUp =
+      Math.random() > 0.5
+        ? phaseData.follow_ups[
+            Math.floor(Math.random() * phaseData.follow_ups.length)
+          ]
+        : "";
+
+    return `${question} ${followUp}`.trim();
+  }
+
+  // Learning phase - teach with FIELDPORTER examples and personality
+  if (phase === "learning") {
+    if (challenge && relevantService) {
+      const transition = getPersonalityResponse("transition");
+      const serviceInfo = relevantService;
+      const teachingMoment =
+        FIELDPORTER_COMPANY.teaching_frameworks.ai_transformation_potential
+          .teaching_moments[
+          Math.floor(
+            Math.random() *
+              FIELDPORTER_COMPANY.teaching_frameworks
+                .ai_transformation_potential.teaching_moments.length,
+          )
+        ];
+
+      return `${transition} ${serviceInfo.teaching_angle} ${teachingMoment} ${serviceInfo.personality_hook} What aspect of this interests you most?`;
+    }
+
+    if (challenge) {
+      const challengeData = CHALLENGE_SOLUTIONS[challenge];
+      const honestTruth =
+        FIELDPORTER_COMPANY.teaching_frameworks.implementation_reality
+          .honest_truths[
+          Math.floor(
+            Math.random() *
+              FIELDPORTER_COMPANY.teaching_frameworks.implementation_reality
+                .honest_truths.length,
+          )
+        ];
+      const question =
+        challengeData.questions[
+          Math.floor(Math.random() * challengeData.questions.length)
+        ];
+
+      return `${challengeData.insight} ${honestTruth} ${question}`;
+    }
+
+    return "I'd love to share specific insights, but I need to understand your challenge better first. What's the main operational bottleneck you're trying to solve?";
+  }
+
+  // Evaluation phase - help assess fit with real FIELDPORTER info
+  if (phase === "evaluation") {
+    const evaluationData = CONVERSATION_PHASES.evaluation;
+    const question =
+      evaluationData.questions[
+        Math.floor(Math.random() * evaluationData.questions.length)
+      ];
+    const followUp =
+      evaluationData.follow_ups[
+        Math.floor(Math.random() * evaluationData.follow_ups.length)
+      ];
+
+    if (relevantService) {
+      return `For ${relevantService.name.toLowerCase()}, ${relevantService.why_it_works.toLowerCase()} Typically takes ${relevantService.timeline} with investment around ${relevantService.investment_range}. ${question} ${followUp}`;
+    }
+
+    return `${question} ${followUp}`;
+  }
+
+  // Decision phase - guide to next steps with personality
+  if (phase === "decision") {
+    const handoffStrategy =
+      Math.random() > 0.7 ? "technical_depth" : "high_engagement";
+    const handoffOptions =
+      FIELDPORTER_COMPANY.handoff_strategies[handoffStrategy];
+    const handoff =
+      handoffOptions[Math.floor(Math.random() * handoffOptions.length)]!;
+
+    return handoff;
+  }
+
+  // Fallback with personality
+  const transition = getPersonalityResponse("transition");
+  return `${transition} I want to understand your specific challenge better so I can share relevant insights. What's the main operational issue you're looking to solve?`;
+}
+
+// Enhanced email collection with value-focused approach
+function shouldCollectEmail(
+  conversationHistory: Message[],
+  phase: ConversationPhase,
+  leadScore: number,
+  challenge: ChallengeType | null,
+): {
+  should: boolean;
+  strategy: keyof typeof EMAIL_COLLECTION_STRATEGIES;
+  message: string;
+} {
+  const userMessages = conversationHistory.filter((msg) => msg.role === "user");
+
+  // High lead score or decision phase - offer value
+  if (leadScore >= 8 || phase === "decision") {
+    const valueOffer =
+      FIELDPORTER_COMPANY.handoff_strategies.value_offers[
+        Math.floor(
+          Math.random() *
+            FIELDPORTER_COMPANY.handoff_strategies.value_offers.length,
+        )
+      ]!;
+    return {
+      should: true,
+      strategy: "value_exchange",
+      message: valueOffer,
+    };
+  }
+
+  // Deep engagement - personalized follow-up
+  if (userMessages.length >= 4 && challenge) {
+    return {
+      should: true,
+      strategy: "deep_engagement",
+      message: `You're asking great questions about ${challenge.replace("_", " ")}. Want me to have Freddy send you a personalized roadmap for your specific situation?`,
+    };
+  }
+
+  // Technical discussions - expert consultation
+  if (
+    userMessages.some(
+      (msg) =>
+        msg.content.toLowerCase().includes("technical") ||
+        msg.content.toLowerCase().includes("implementation") ||
+        msg.content.toLowerCase().includes("integration"),
+    )
+  ) {
+    const techHandoff =
+      FIELDPORTER_COMPANY.handoff_strategies.technical_depth[
+        Math.floor(
+          Math.random() *
+            FIELDPORTER_COMPANY.handoff_strategies.technical_depth.length,
+        )
+      ]!;
+    return {
+      should: true,
+      strategy: "deep_engagement",
+      message: `${techHandoff} What's your email?`,
+    };
+  }
+
+  return {
+    should: false,
+    strategy: "value_exchange",
+    message: "",
+  };
+}
+
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
 
@@ -1121,7 +1512,52 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // PERFORMANCE OPTIMIZATION: Check cache first for instant responses
+    // Health check
+    if (message === "health_check") {
+      return NextResponse.json({
+        response:
+          "FIELDPORTER AI Agent is running optimally with enhanced teaching capabilities",
+        sessionId: "health_check_session",
+        messageCount: 1,
+        metadata: {
+          status: "healthy",
+          timestamp: new Date().toISOString(),
+          agent: "fieldporter_nextjs_enhanced",
+          responseTime: Date.now() - startTime,
+        },
+      });
+    }
+
+    // PERFORMANCE OPTIMIZATION: Try smart quick responses first
+    const quickResponse = getSmartResponse(message, conversationHistory);
+    if (quickResponse) {
+      const responseTime = Date.now() - startTime;
+      const leadScore = calculateEnhancedLeadScore(
+        message,
+        conversationHistory,
+      ).score;
+
+      return NextResponse.json({
+        response: quickResponse,
+        sessionId,
+        messageCount: messageCount + 1,
+        shouldNotify: leadScore >= 8,
+        leadScore,
+        metadata: {
+          timestamp: new Date().toISOString(),
+          agent: "quick_response_enhanced",
+          responseTime,
+          leadScore,
+          emailCollected: false,
+          phoneCollected: false,
+          contactRequested: false,
+          qualificationSignals: ["quick_response", "teaching_focused"],
+          confidenceScore: 0.9,
+        },
+      });
+    }
+
+    // PERFORMANCE OPTIMIZATION: Check cache for more complex responses
     const cacheResult = await responseCacheService.getCachedResponse(
       message,
       sessionId,
@@ -1150,49 +1586,61 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Health check
-    if (message === "health_check") {
-      return NextResponse.json({
-        response: "FIELDPORTER AI Agent is running optimally",
-        sessionId: "health_check_session",
-        messageCount: 1,
-        metadata: {
-          status: "healthy",
-          timestamp: new Date().toISOString(),
-          agent: "fieldporter_nextjs",
-          responseTime: Date.now() - startTime,
-        },
-      });
-    }
-
-    // Extract contact information and calculate lead score
-    const contactInfo = extractContactInfo(message);
-    const leadData = calculateEnhancedLeadScore(message, conversationHistory);
-
-    // Prepare conversation context
-    const conversationContext = prepareConversationContext([
-      ...conversationHistory,
-      {
-        id: Date.now().toString(),
-        role: "user",
-        content: message,
-        timestamp: new Date(),
-      },
-    ]);
+    // Determine conversation phase and generate teaching response
+    const phase = determineConversationPhase(conversationHistory);
+    const challenge = identifyUserChallenge(conversationHistory);
+    const industry = identifyUserIndustry(conversationHistory);
+    const intelligence = analyzeConversationIntelligence(conversationHistory);
 
     let aiResponse: string;
 
     try {
-      // Call DeepSeek API
-      aiResponse = await callDeepSeekAPI(message, conversationContext);
+      // For high-engagement conversations, use AI-generated responses
+      if (intelligence.engagement_level === "high" || !quickResponse) {
+        // Call DeepSeek API with conversation history for complexity analysis
+        aiResponse = await callDeepSeekAPI(
+          message,
+          prepareConversationContext([
+            ...conversationHistory,
+            {
+              id: Date.now().toString(),
+              role: "user",
+              content: message,
+              timestamp: new Date(),
+            },
+          ]),
+          conversationHistory,
+        );
 
-      // Validate and enhance response quality
-      aiResponse = validateAndEnhanceResponse(
-        aiResponse,
+        // Validate and enhance response quality
+        aiResponse = validateAndEnhanceResponse(
+          aiResponse,
+          message,
+          conversationHistory,
+          calculateEnhancedLeadScore(message, conversationHistory).score,
+        );
+      }
+
+      // Apply progressive teaching flow
+      aiResponse = generateTeachingResponse(
         message,
         conversationHistory,
-        leadData.score,
+        phase.phase,
+        challenge,
+        industry,
       );
+
+      // Determine if email should be collected
+      const emailCollection = shouldCollectEmail(
+        conversationHistory,
+        phase.phase,
+        calculateEnhancedLeadScore(message, conversationHistory).score,
+        challenge,
+      );
+
+      if (emailCollection.should) {
+        aiResponse += `\n\n${emailCollection.message}`;
+      }
     } catch (error) {
       console.error("DeepSeek API error:", error);
       aiResponse = getFallbackResponse(message);
@@ -1201,21 +1649,25 @@ export async function POST(request: NextRequest) {
     const formattedResponse = formatResponse(aiResponse);
     const responseTime = Date.now() - startTime;
 
-    // Cache the response for future instant delivery
-    responseCacheService.storeCachedResponse(
-      message,
-      formattedResponse,
-      sessionId,
-      0.8, // confidence
-      conversationHistory.length,
-    );
+    // Intelligent caching - only cache responses that are likely to be reused
+    if (message.length < 50 && !extractContactInfo(message).email) {
+      responseCacheService.storeCachedResponse(
+        message,
+        formattedResponse,
+        sessionId,
+        0.8,
+        conversationHistory.length,
+      );
+    }
 
     // Determine if notification should be sent
+    const leadData = calculateEnhancedLeadScore(message, conversationHistory);
+    const contactInfo = extractContactInfo(message);
     const shouldNotify = Boolean(
       leadData.score >= 10 || contactInfo.email || contactInfo.phone,
     );
 
-    // Build response
+    // Build enhanced response with conversation intelligence
     const response: EnhancedChatResponse = {
       response: formattedResponse,
       sessionId,
@@ -1226,14 +1678,14 @@ export async function POST(request: NextRequest) {
       leadScore: leadData.score,
       metadata: {
         timestamp: new Date().toISOString(),
-        agent: "deepseek-v3",
+        agent: "deepseek-v3-enhanced",
         responseTime,
         leadScore: leadData.score,
         emailCollected: !!contactInfo.email,
         phoneCollected: !!contactInfo.phone,
         contactRequested: contactInfo.wantsContact,
         qualificationSignals: leadData.signals,
-        confidenceScore: leadData.score >= 7 ? 0.8 : 0.6,
+        confidenceScore: leadData.score >= 7 ? 0.9 : 0.7,
       },
     };
 
@@ -1265,14 +1717,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         response:
-          "I'm having trouble connecting right now. Please try again, or contact us directly at freddy@fieldporter.com for immediate assistance.",
+          "I'm having trouble connecting right now. But hey, that's what happens when AI meets reality sometimes! Please try again, or contact Freddy directly at freddy@fieldporter.com for immediate assistance.",
         sessionId: "error_session",
         messageCount: 1,
         shouldNotify: false,
         leadScore: 0,
         metadata: {
           timestamp: new Date().toISOString(),
-          agent: "error",
+          agent: "error_with_personality",
           responseTime: errorResponseTime,
           leadScore: 0,
           emailCollected: false,

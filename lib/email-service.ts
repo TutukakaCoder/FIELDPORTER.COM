@@ -107,7 +107,7 @@ class EmailService {
       const text = this.generateWelcomeEmailText(welcomeData);
 
       const result = await this.resend.emails.send({
-        from: "FIELDPORTER <hello@fieldporter.com>",
+        from: "Freddy Hopkins <freddy@fieldporter.com>",
         to: [email],
         subject: `Welcome to FIELDPORTER, ${displayName}!`,
         html,
@@ -186,7 +186,7 @@ class EmailService {
                 <div style="display: flex; gap: 16px; flex-wrap: wrap;">
                   <div style="flex: 1; min-width: 200px;">
                     <strong style="color: #374151;">Email Support:</strong><br>
-                    <a href="mailto:support@fieldporter.com" style="color: #0969da; text-decoration: none;">support@fieldporter.com</a>
+                    <a href="mailto:freddy@fieldporter.com" style="color: #0969da; text-decoration: none;">freddy@fieldporter.com</a>
                   </div>
                   <div style="flex: 1; min-width: 200px;">
                     <strong style="color: #374151;">AI Assistant:</strong><br>
@@ -239,7 +239,7 @@ Sign in anytime to check the status of your portal setup
 https://fieldporter.com/auth/signin
 
 Need Assistance?
-Email Support: support@fieldporter.com
+Email Support: freddy@fieldporter.com
 AI Assistant: Available on our website 24/7
 
 We're committed to delivering exceptional results and look forward to working with you.

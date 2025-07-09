@@ -81,11 +81,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
   ): Promise<void> => {
     try {
       setIsLoading(true);
+      // Sign up the user
       await AuthService.signUp(email, password, displayName);
-      // User state will be updated by the auth state listener
+
+      // CRITICAL FIX: Auto sign-in after successful signup
+      await AuthService.signIn(email, password);
+
+      // Refresh profile data
+      await refreshProfile();
+
+      // Send welcome email (non-blocking)
+      try {
+        await fetch("/api/welcome-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, displayName }),
+        });
+      } catch (emailError) {
+        console.warn("Failed to send welcome email:", emailError);
+      }
     } catch (error) {
-      setIsLoading(false);
+      console.error("Signup error:", error);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 

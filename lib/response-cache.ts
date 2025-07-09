@@ -3,7 +3,7 @@
  * Optimized for <1 second response times on 80% of queries
  */
 
-import { findQuickResponse, hasQuickResponse } from "./quick-responses";
+import { getContextualQuickResponse } from "./quick-responses";
 
 interface CacheEntry {
   response: string;
@@ -95,11 +95,8 @@ export class ResponseCacheService {
     }
 
     // 1. Check for instant quick responses (0ms target)
-    const quickResponse = findQuickResponse(normalizedQuery);
-    if (
-      quickResponse &&
-      quickResponse.confidence >= this.MIN_CONFIDENCE_THRESHOLD
-    ) {
+    const quickResponse = getContextualQuickResponse(normalizedQuery, []);
+    if (quickResponse) {
       this.analytics.quickResponseHits++;
       this.analytics.cacheHits++;
 
@@ -107,7 +104,7 @@ export class ResponseCacheService {
       this.updateAnalytics(responseTime);
 
       return {
-        response: quickResponse.response,
+        response: quickResponse,
         source: "quick",
         responseTime,
       };
@@ -321,15 +318,15 @@ export class ResponseCacheService {
     ];
 
     commonQueries.forEach((query) => {
-      const quickResponse = findQuickResponse(query);
+      const quickResponse = getContextualQuickResponse(query, []);
       if (quickResponse) {
         const normalizedQuery = this.normalizeQuery(query);
         this.quickResponseCache.set(normalizedQuery, {
-          response: quickResponse.response,
+          response: quickResponse,
           timestamp: Date.now(),
           hitCount: 0,
           sessionIds: new Set(),
-          confidence: quickResponse.confidence,
+          confidence: 0.9, // Default high confidence for pre-warmed responses
         });
       }
     });
@@ -451,7 +448,7 @@ export class ResponseCacheService {
    * Check if a query would likely have a quick response
    */
   wouldHaveQuickResponse(query: string): boolean {
-    return hasQuickResponse(this.normalizeQuery(query));
+    return getContextualQuickResponse(this.normalizeQuery(query), []) !== null;
   }
 }
 
