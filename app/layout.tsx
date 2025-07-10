@@ -1,9 +1,8 @@
 import { EnhancedChatWidget } from "@/components/chat";
 import {
   BackToTop,
+  ConditionalLayout,
   EntranceProvider,
-  Footer,
-  Header,
   ScrollRestoration,
 } from "@/components/layout";
 import { PageTransition } from "@/components/ui/page-transition";
@@ -147,11 +146,11 @@ export default function RootLayout({
         <AuthProvider>
           <EntranceProvider>
             <ScrollRestoration />
-            <Header />
-            <PageTransition>
-              <main className="flex-1">{children}</main>
-            </PageTransition>
-            <Footer />
+            <ConditionalLayout>
+              <PageTransition>
+                <main className="flex-1">{children}</main>
+              </PageTransition>
+            </ConditionalLayout>
             <BackToTop />
             <EnhancedChatWidget />
           </EntranceProvider>
@@ -317,62 +316,84 @@ export default function RootLayout({
                   let glow = 'rgba(37, 99, 235, 0.3)';
                   
                   switch(zone) {
-                    case 'hero':
-                      primaryColor = '#ffffff';
-                      primaryOpacity = '0.9';
-                      trailOpacity = '0.5';
-                      glow = 'rgba(255, 255, 255, 0.4)';
-                      break;
-                    case 'navigation':
-                      primaryColor = '#374151';
-                      primaryOpacity = '0.7';
-                      trailOpacity = '0.3';
-                      glow = 'rgba(55, 65, 81, 0.25)';
-                      break;
                     case 'cta':
                       primaryColor = '#2563eb';
                       primaryOpacity = '1';
                       trailOpacity = '0.6';
                       glow = 'rgba(37, 99, 235, 0.5)';
                       break;
+                    case 'text':
+                      primaryColor = '#6b7280';
+                      primaryOpacity = '0.6';
+                      trailOpacity = '0.3';
+                      glow = 'rgba(107, 114, 128, 0.2)';
+                      break;
+                    case 'interactive':
+                      primaryColor = '#8b5cf6';
+                      primaryOpacity = '1';
+                      trailOpacity = '0.6';
+                      glow = 'rgba(139, 92, 246, 0.4)';
+                      break;
+                    case 'danger':
+                      primaryColor = '#ef4444';
+                      primaryOpacity = '1';
+                      trailOpacity = '0.6';
+                      glow = 'rgba(239, 68, 68, 0.4)';
+                      break;
                   }
                   
+                  // Apply color changes with smooth transitions
                   primaryCursor.style.backgroundColor = primaryColor;
                   primaryCursor.style.opacity = primaryOpacity;
                   primaryCursor.style.boxShadow = \`0 0 16px \${glow}\`;
+                  
                   trailCursor.style.backgroundColor = primaryColor;
                   trailCursor.style.opacity = trailOpacity;
                 }
                 
-                // Mouse movement tracking
-                document.addEventListener('mousemove', function(e) {
+                // Mouse event handlers with performance optimization
+                let mouseMoveThrottle = 0;
+                document.addEventListener('mousemove', (e) => {
                   mouseX = e.clientX;
                   mouseY = e.clientY;
                   
-                  if (!isVisible) {
-                    isVisible = true;
-                    primaryX = mouseX;
-                    primaryY = mouseY;
-                    trailX = mouseX;
-                    trailY = mouseY;
-                    updateCursors();
+                  // Throttle zone updates for performance
+                  if (Date.now() - mouseMoveThrottle > 50) {
+                    updateCursorZones();
+                    mouseMoveThrottle = Date.now();
                   }
                   
-                  // Throttle zone color checks for performance
-                  if (colorThrottle % 5 === 0) {
-                    updateCursorZones();
+                  if (!isVisible) {
+                    isVisible = true;
+                    primaryCursor.style.opacity = '0.8';
+                    trailCursor.style.opacity = '0.4';
+                    updateCursors();
                   }
-                  colorThrottle++;
                 });
                 
-                // Handle mouse leave with cleanup
-                document.addEventListener('mouseleave', function() {
+                // Hide cursors when mouse leaves window
+                document.addEventListener('mouseleave', () => {
+                  isVisible = false;
                   primaryCursor.style.opacity = '0';
                   trailCursor.style.opacity = '0';
-                  isVisible = false;
                   if (animationId) {
                     cancelAnimationFrame(animationId);
-                    animationId = null;
+                  }
+                });
+                
+                // Show cursors when mouse enters window
+                document.addEventListener('mouseenter', () => {
+                  if (isVisible) {
+                    primaryCursor.style.opacity = '0.8';
+                    trailCursor.style.opacity = '0.4';
+                    updateCursors();
+                  }
+                });
+                
+                // Cleanup function for page unload
+                window.addEventListener('beforeunload', () => {
+                  if (animationId) {
+                    cancelAnimationFrame(animationId);
                   }
                 });
               }
