@@ -18,7 +18,11 @@ export function PageWrapper({
   withAnimation = true,
 }: PageWrapperProps) {
   const content = (
-    <main className={cn("min-h-screen bg-black relative", className)}>{children}</main>
+    <main
+      className={cn("min-h-screen bg-white dark:bg-black relative", className)}
+    >
+      {children}
+    </main>
   );
 
   if (!withAnimation) {

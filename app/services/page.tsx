@@ -37,13 +37,15 @@ const services = [
     phase: "01",
     icon: TrendingUp,
     title: "Strategic Research & Intelligence",
-    description: "Deep research that cuts through the noise to deliver actionable insights for strategic decisions.",
-    detailedExplanation: "We combine AI models like Claude and Perplexity with human insight to deliver research in hours, not weeks. Our process involves contextualising your challenge, parallel AI analysis across multiple sources, synthesis of findings, and delivery of decision-ready documentation. From market entry analysis to competitor intelligence, we handle complex research requirements with speed and accuracy.",
+    description:
+      "Deep research that cuts through the noise to deliver actionable insights for strategic decisions.",
+    detailedExplanation:
+      "We combine AI models like Claude and Perplexity with human insight to deliver research in hours, not weeks. Our process involves contextualising your challenge, parallel AI analysis across multiple sources, synthesis of findings, and delivery of decision-ready documentation. From market entry analysis to competitor intelligence, we handle complex research requirements with speed and accuracy.",
     outcomes: [
       "Decision-relevant insights delivered 5-10x faster than traditional research",
       "Multi-source analysis reducing information gaps and blind spots",
       "Clear recommendations with confidence levels and risk assessments",
-      "Comprehensive documentation ready for strategic implementation"
+      "Comprehensive documentation ready for strategic implementation",
     ],
     investment: "$500-$3,000",
     timeline: "3-5 days",
@@ -51,7 +53,8 @@ const services = [
     borderColor: "border-emerald-500/15",
     hoverBorderColor: "hover:border-emerald-500/25",
     iconColor: "text-emerald-400",
-    proof: "From 6-week market analysis to 3-day strategic brief with 40+ actionable insights."
+    proof:
+      "From 6-week market analysis to 3-day strategic brief with 40+ actionable insights.",
   },
   {
     id: "rapid-development",
@@ -59,12 +62,13 @@ const services = [
     icon: Code,
     title: "Rapid AI Development & Prototyping",
     description: "Proof-of-concept to production-ready in weeks, not months.",
-    detailedExplanation: "We specialise in AI feature prototyping and integration roadmaps. Our sweet spot is proving AI concepts work for your specific use case in 1-3 weeks, then providing clear documentation for your team to implement at scale. From chat systems to workflow automation, we build working prototypes that demonstrate real value before major investment.",
+    detailedExplanation:
+      "We specialise in AI feature prototyping and integration roadmaps. Our sweet spot is proving AI concepts work for your specific use case in 1-3 weeks, then providing clear documentation for your team to implement at scale. From chat systems to workflow automation, we build working prototypes that demonstrate real value before major investment.",
     outcomes: [
       "Working prototypes proving technical feasibility within 1-3 weeks",
       "Clear implementation roadmaps for scaling with your existing team",
       "Technical documentation enabling seamless handoff",
-      "Risk-free validation before larger development commitments"
+      "Risk-free validation before larger development commitments",
     ],
     investment: "$3,000-$8,000",
     timeline: "1-3 weeks",
@@ -72,20 +76,23 @@ const services = [
     borderColor: "border-blue-500/15",
     hoverBorderColor: "hover:border-blue-500/25",
     iconColor: "text-blue-400",
-    proof: "From manual 15-hour process to 4-hour automated workflow through prototype validation."
+    proof:
+      "From manual 15-hour process to 4-hour automated workflow through prototype validation.",
   },
   {
     id: "workflow-optimisation",
     phase: "03",
     icon: Building2,
     title: "Process Efficiency & Workflow Optimisation",
-    description: "Systematic identification and automation of repetitive tasks to reclaim time for strategic work.",
-    detailedExplanation: "We analyse your current workflows to identify automation opportunities, then build solutions that integrate seamlessly with your existing tools. Our approach focuses on high-impact, low-risk improvements that deliver measurable time savings within weeks. From lead generation systems to reporting automation, we optimise processes that actually matter to your business outcomes.",
+    description:
+      "Systematic identification and automation of repetitive tasks to reclaim time for strategic work.",
+    detailedExplanation:
+      "We analyse your current workflows to identify automation opportunities, then build solutions that integrate seamlessly with your existing tools. Our approach focuses on high-impact, low-risk improvements that deliver measurable time savings within weeks. From lead generation systems to reporting automation, we optimise processes that actually matter to your business outcomes.",
     outcomes: [
       "Documented workflow analysis with specific optimisation recommendations",
       "Automated systems reducing manual work by 60-80% in targeted areas",
       "Lead generation and outreach system optimisation",
-      "Integration with your existing tools and platforms for minimal disruption"
+      "Integration with your existing tools and platforms for minimal disruption",
     ],
     investment: "$2,000-$5,000",
     timeline: "2-4 weeks",
@@ -93,20 +100,23 @@ const services = [
     borderColor: "border-purple-500/15",
     hoverBorderColor: "hover:border-purple-500/25",
     iconColor: "text-purple-400",
-    proof: "Client saved 15+ hours weekly through strategic workflow optimisation."
+    proof:
+      "Client saved 15+ hours weekly through strategic workflow optimisation.",
   },
   {
     id: "ai-strategy",
     phase: "04",
     icon: BookOpen,
     title: "AI Strategy & Team Capability Building",
-    description: "Strategic guidance on AI adoption with hands-on training for your team.",
-    detailedExplanation: "Beyond just tools and tactics, we help you develop a strategic approach to AI that aligns with your business objectives. This includes capability assessment, tool selection and optimisation for your workflows, team training sessions, and ongoing strategic guidance. We focus on building internal AI capability rather than creating dependency.",
+    description:
+      "Strategic guidance on AI adoption with hands-on training for your team.",
+    detailedExplanation:
+      "Beyond just tools and tactics, we help you develop a strategic approach to AI that aligns with your business objectives. This includes capability assessment, tool selection and optimisation for your workflows, team training sessions, and ongoing strategic guidance. We focus on building internal AI capability rather than creating dependency.",
     outcomes: [
       "Strategic AI adoption roadmap tailored to your business context",
       "Team training on AI tools and best practices for your industry",
       "AI tool selection and optimisation for your workflows",
-      "Internal capability building reducing reliance on external AI consultants"
+      "Internal capability building reducing reliance on external AI consultants",
     ],
     investment: "$75-$150 per hour",
     timeline: "Custom sessions",
@@ -114,7 +124,8 @@ const services = [
     borderColor: "border-orange-500/15",
     hoverBorderColor: "hover:border-orange-500/25",
     iconColor: "text-orange-400",
-    proof: "Organisations report 3-5x improvement in AI tool effectiveness after strategic guidance."
+    proof:
+      "Organisations report 3-5x improvement in AI tool effectiveness after strategic guidance.",
   },
 ];
 
@@ -298,17 +309,17 @@ function InteractiveServiceShowcase() {
         <div key={service.id} id={service.id} className="absolute -top-20" />
       ))}
 
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-black" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:via-gray-950 dark:to-black" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-20 md:mb-32 lg:mb-40">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6 md:mb-8 lg:mb-12 leading-tight tracking-[-0.02em]">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-gray-900 dark:text-white mb-6 md:mb-8 lg:mb-12 leading-tight tracking-[-0.02em]">
             Four Things We{" "}
             <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
               Do
             </span>
           </h2>
-          <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed font-light">
+          <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed font-light">
             AI-powered solutions applied to specific business challenges with
             clear outcomes.
           </p>
@@ -325,8 +336,8 @@ function InteractiveServiceShowcase() {
                   px-3 md:px-4 lg:px-8 py-2 md:py-3 lg:py-4 rounded-xl md:rounded-2xl transition-all duration-500 backdrop-blur-xl border font-medium text-xs md:text-sm lg:text-lg hover:scale-105 transform will-change-transform touch-manipulation
                   ${
                     activeService === index
-                      ? "bg-blue-500/20 border-blue-500/40 text-white shadow-[0_0_30px_rgba(59,130,246,0.3)]"
-                      : "bg-white/[0.01] border-white/10 text-gray-400 hover:text-white hover:bg-white/[0.02]"
+                      ? "bg-blue-500/20 border-blue-500/40 text-gray-900 dark:text-white shadow-[0_0_30px_rgba(59,130,246,0.3)]"
+                      : "bg-gray-900/[0.01] dark:bg-white/[0.01] border-gray-900/10 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-900/[0.02] dark:hover:bg-white/[0.02]"
                   }
                 `}
               >
@@ -360,9 +371,9 @@ function InteractiveServiceShowcase() {
               <div className="space-y-8 md:space-y-12">
                 <div className="flex items-center gap-3 md:gap-4">
                   <div
-                    className={`w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-white/5 border ${currentService.borderColor} flex items-center justify-center backdrop-blur-sm`}
+                    className={`w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-gray-900/5 dark:bg-white/5 border ${currentService.borderColor} flex items-center justify-center backdrop-blur-sm`}
                   >
-                    <span className="text-lg md:text-2xl font-bold text-white">
+                    <span className="text-lg md:text-2xl font-bold text-gray-900 dark:text-white">
                       {currentService.phase}
                     </span>
                   </div>
@@ -372,33 +383,33 @@ function InteractiveServiceShowcase() {
                 </div>
 
                 <div className="space-y-6 md:space-y-8">
-                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-white leading-tight">
+                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-900 dark:text-white leading-tight">
                     {currentService.title}
                   </h3>
 
-                  <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
+                  <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
                     {currentService.description}
                   </p>
 
                   <details className="group mt-6 md:mt-8">
-                    <summary className="flex items-center justify-between cursor-pointer text-white font-medium text-base md:text-lg hover:text-blue-400 transition-colors duration-200 list-none touch-manipulation">
+                    <summary className="flex items-center justify-between cursor-pointer text-gray-900 dark:text-white font-medium text-base md:text-lg hover:text-blue-400 transition-colors duration-200 list-none touch-manipulation">
                       <span>How This Works</span>
                       <ChevronDown className="w-5 h-5 md:w-6 md:h-6 transition-transform duration-300 group-open:rotate-180" />
                     </summary>
                     <div className="mt-4 md:mt-6 space-y-4 md:space-y-6">
-                      <p className="text-base md:text-lg text-gray-400 leading-relaxed">
+                      <p className="text-base md:text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
                         {currentService.detailedExplanation}
                       </p>
 
                       <div className="space-y-3 md:space-y-4">
-                        <h4 className="text-white font-semibold text-lg md:text-xl">
+                        <h4 className="text-gray-900 dark:text-white font-semibold text-lg md:text-xl">
                           Key Outcomes:
                         </h4>
                         <ul className="space-y-2 md:space-y-3">
                           {currentService.outcomes.map((outcome, index) => (
                             <li
                               key={index}
-                              className="flex items-start space-x-3 md:space-x-4 text-base md:text-lg text-gray-100"
+                              className="flex items-start space-x-3 md:space-x-4 text-base md:text-lg text-gray-800 dark:text-gray-100"
                             >
                               <CheckCircle
                                 className={`w-5 h-5 md:w-6 md:h-6 ${currentService.iconColor} flex-shrink-0 mt-0.5 md:mt-1`}
@@ -411,9 +422,9 @@ function InteractiveServiceShowcase() {
                     </div>
                   </details>
 
-                  <div className="pt-6 md:pt-8 border-t border-white/10">
+                  <div className="pt-6 md:pt-8 border-t border-gray-900/10 dark:border-white/10">
                     <div className="space-y-2 md:space-y-3">
-                      <p className="text-base md:text-lg text-gray-400">
+                      <p className="text-base md:text-lg text-gray-500 dark:text-gray-400">
                         Investment:
                       </p>
                       <p
@@ -431,9 +442,9 @@ function InteractiveServiceShowcase() {
 
                 <div
                   className={`
-                  relative bg-white/[0.02] backdrop-blur-xl border ${currentService.borderColor} 
+                  relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border ${currentService.borderColor} 
                   rounded-3xl p-8 md:p-12 lg:p-16 xl:p-20 transition-all duration-700
-                  hover:bg-white/[0.04] ${currentService.hoverBorderColor}
+                  hover:bg-gray-900/[0.04] dark:hover:bg-white/[0.04] ${currentService.hoverBorderColor}
                   shadow-[0_20px_40px_rgba(0,0,0,0.3)]
                 `}
                 >
@@ -444,14 +455,14 @@ function InteractiveServiceShowcase() {
                   </div>
 
                   <div
-                    className={`w-16 h-16 md:w-24 md:h-24 rounded-2xl bg-white/5 border ${currentService.borderColor} flex items-center justify-center mb-6 md:mb-8 backdrop-blur-sm`}
+                    className={`w-16 h-16 md:w-24 md:h-24 rounded-2xl bg-gray-900/5 dark:bg-white/5 border ${currentService.borderColor} flex items-center justify-center mb-6 md:mb-8 backdrop-blur-sm`}
                   >
                     {React.createElement(currentService.icon, {
                       className: `w-8 h-8 md:w-12 md:h-12 ${currentService.iconColor}`,
                     })}
                   </div>
 
-                  <blockquote className="text-lg md:text-xl text-gray-300 italic leading-relaxed border-l-4 border-blue-500/30 pl-4 md:pl-6">
+                  <blockquote className="text-lg md:text-xl text-gray-600 dark:text-gray-300 italic leading-relaxed border-l-4 border-blue-500/30 pl-4 md:pl-6">
                     &ldquo;{currentService.proof}&rdquo;
                   </blockquote>
                 </div>
@@ -465,9 +476,9 @@ function InteractiveServiceShowcase() {
                     activeService > 0 ? activeService - 1 : services.length - 1,
                   )
                 }
-                className="p-3 md:p-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl touch-manipulation"
+                className="p-3 md:p-4 rounded-full bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 hover:bg-gray-900/10 dark:hover:bg-white/10 transition-all duration-300 backdrop-blur-xl touch-manipulation"
               >
-                <ArrowLeft className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                <ArrowLeft className="w-5 h-5 md:w-6 md:h-6 text-gray-900 dark:text-white" />
               </button>
               <button
                 onClick={() =>
@@ -475,9 +486,9 @@ function InteractiveServiceShowcase() {
                     activeService < services.length - 1 ? activeService + 1 : 0,
                   )
                 }
-                className="p-3 md:p-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl touch-manipulation"
+                className="p-3 md:p-4 rounded-full bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 hover:bg-gray-900/10 dark:hover:bg-white/10 transition-all duration-300 backdrop-blur-xl touch-manipulation"
               >
-                <ArrowRight className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                <ArrowRight className="w-5 h-5 md:w-6 md:h-6 text-gray-900 dark:text-white" />
               </button>
             </div>
           </motion.div>
@@ -494,7 +505,7 @@ export default function ServicesPage() {
       <InteractiveServiceShowcase />
 
       <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-950 to-black" />
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-black" />
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <MethodologySection {...methodologyData} />
         </div>

@@ -1,8 +1,8 @@
 "use client";
 
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import * as THREE from 'three';
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import * as THREE from "three";
 
 // Premium particle shaders
 const vertexShader = `
@@ -93,12 +93,15 @@ function useIsMobile() {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 1024);
+      setIsMobile(
+        /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
+          window.innerWidth < 1024,
+      );
     };
-    
+
     checkMobile();
-    window.addEventListener('resize', checkMobile, { passive: true });
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile, { passive: true });
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   return isMobile;
@@ -110,30 +113,36 @@ function PremiumParticleSystem() {
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const { camera, size } = useThree();
   const isMobile = useIsMobile();
-  
+
   // Mouse tracking with smooth interpolation
   const mouseRef = useRef({ x: 0, y: 0 });
   const currentMouse = useRef({ x: 0, y: 0 });
-  
+
   // Performance tracking
   const frameCount = useRef(0);
   const lastTime = useRef(0);
-  
+
   // Particle configuration based on device
-  const particleConfig = useMemo(() => ({
-    count: isMobile ? 1500 : 3000,
-    sizeMultiplier: isMobile ? 1.5 : 1.0,
-    spread: isMobile ? 40 : 60,
-  }), [isMobile]);
+  const particleConfig = useMemo(
+    () => ({
+      count: isMobile ? 1500 : 3000,
+      sizeMultiplier: isMobile ? 1.5 : 1.0,
+      spread: isMobile ? 40 : 60,
+    }),
+    [isMobile],
+  );
 
   // Premium color palette
-  const colorPalette = useMemo(() => [
-    new THREE.Color(0x3B82F6), // Primary blue
-    new THREE.Color(0x8B5CF6), // Purple
-    new THREE.Color(0x10B981), // Emerald accent
-    new THREE.Color(0x06B6D4), // Cyan
-    new THREE.Color(0x8B5CF6), // Violet
-  ], []);
+  const colorPalette = useMemo(
+    () => [
+      new THREE.Color(0x3b82f6), // Primary blue
+      new THREE.Color(0x8b5cf6), // Purple
+      new THREE.Color(0x10b981), // Emerald accent
+      new THREE.Color(0x06b6d4), // Cyan
+      new THREE.Color(0x8b5cf6), // Violet
+    ],
+    [],
+  );
 
   // Initialize particle geometry and material
   const { geometry, material } = useMemo(() => {
@@ -145,26 +154,26 @@ function PremiumParticleSystem() {
     // Generate particles in 3D space
     for (let i = 0; i < particleConfig.count; i++) {
       const i3 = i * 3;
-      
+
       // Position particles in a cloud formation
       positions[i3] = (Math.random() - 0.5) * particleConfig.spread;
       positions[i3 + 1] = (Math.random() - 0.5) * particleConfig.spread;
       positions[i3 + 2] = (Math.random() - 0.5) * particleConfig.spread;
-      
+
       // Random colors from premium palette
       const colorIndex = Math.floor(Math.random() * colorPalette.length);
-      const color = colorPalette[colorIndex] || new THREE.Color(0x3B82F6); // Fallback to blue
+      const color = colorPalette[colorIndex] || new THREE.Color(0x3b82f6); // Fallback to blue
       colors[i3] = color.r;
       colors[i3 + 1] = color.g;
       colors[i3 + 2] = color.b;
-      
+
       // Varied particle sizes for depth - BALANCED VISIBILITY
       sizes[i] = (Math.random() * 1.2 + 0.4) * particleConfig.sizeMultiplier;
     }
 
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute('customColor', new THREE.BufferAttribute(colors, 3));
-    geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute("customColor", new THREE.BufferAttribute(colors, 3));
+    geo.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
 
     const mat = new THREE.ShaderMaterial({
       uniforms: {
@@ -172,7 +181,7 @@ function PremiumParticleSystem() {
         uMouse: { value: new THREE.Vector2(0, 0) },
         uMouseInfluence: { value: 1.0 },
         uOpacity: { value: 0.8 },
-        uGlowColor: { value: new THREE.Color(0x10B981) }, // Emerald glow
+        uGlowColor: { value: new THREE.Color(0x10b981) }, // Emerald glow
       },
       vertexShader,
       fragmentShader,
@@ -190,7 +199,7 @@ function PremiumParticleSystem() {
       // Convert to world coordinates like the original for better responsiveness
       const x = (event.clientX / window.innerWidth) * 2 - 1;
       const y = -(event.clientY / window.innerHeight) * 2 + 1;
-      
+
       // Scale to world space for much more noticeable interaction
       mouseRef.current.x = x * 50;
       mouseRef.current.y = y * 50;
@@ -202,35 +211,38 @@ function PremiumParticleSystem() {
         if (touch) {
           const x = (touch.clientX / window.innerWidth) * 2 - 1;
           const y = -(touch.clientY / window.innerHeight) * 2 + 1;
-          
+
           mouseRef.current.x = x * 50;
           mouseRef.current.y = y * 50;
         }
       }
     };
 
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    window.addEventListener('touchmove', handleTouch, { passive: true });
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("touchmove", handleTouch, { passive: true });
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('touchmove', handleTouch);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouch);
     };
   }, []);
 
   // LOD (Level of Detail) system
-  const updateLOD = useCallback((camera: THREE.Camera, mesh: THREE.Points) => {
-    const distance = camera.position.length();
-    
-    if (distance > 100) {
-      // Reduce particle count at distance
-      mesh.geometry.setDrawRange(0, Math.floor(particleConfig.count * 0.5));
-    } else if (distance > 50) {
-      mesh.geometry.setDrawRange(0, Math.floor(particleConfig.count * 0.75));
-    } else {
-      mesh.geometry.setDrawRange(0, particleConfig.count);
-    }
-  }, [particleConfig.count]);
+  const updateLOD = useCallback(
+    (camera: THREE.Camera, mesh: THREE.Points) => {
+      const distance = camera.position.length();
+
+      if (distance > 100) {
+        // Reduce particle count at distance
+        mesh.geometry.setDrawRange(0, Math.floor(particleConfig.count * 0.5));
+      } else if (distance > 50) {
+        mesh.geometry.setDrawRange(0, Math.floor(particleConfig.count * 0.75));
+      } else {
+        mesh.geometry.setDrawRange(0, particleConfig.count);
+      }
+    },
+    [particleConfig.count],
+  );
 
   // Animation loop
   useFrame((state) => {
@@ -239,24 +251,26 @@ function PremiumParticleSystem() {
     // Performance monitoring
     frameCount.current++;
     const currentTime = state.clock.getElapsedTime();
-    
+
     // Skip frames if performance is poor
     if (currentTime - lastTime.current < 0.016) return; // Maintain ~60fps
     lastTime.current = currentTime;
 
     // Refined mouse interpolation for smooth, premium movement
     const interpolationSpeed = 0.06; // Reduced for smoother, more elegant interaction
-    currentMouse.current.x += (mouseRef.current.x - currentMouse.current.x) * interpolationSpeed;
-    currentMouse.current.y += (mouseRef.current.y - currentMouse.current.y) * interpolationSpeed;
+    currentMouse.current.x +=
+      (mouseRef.current.x - currentMouse.current.x) * interpolationSpeed;
+    currentMouse.current.y +=
+      (mouseRef.current.y - currentMouse.current.y) * interpolationSpeed;
 
     // Update shader uniforms with better scaling
-    if (materialRef.current.uniforms['uTime']) {
-      materialRef.current.uniforms['uTime'].value = currentTime;
+    if (materialRef.current.uniforms["uTime"]) {
+      materialRef.current.uniforms["uTime"].value = currentTime;
     }
-    if (materialRef.current.uniforms['uMouse']) {
-      materialRef.current.uniforms['uMouse'].value.set(
+    if (materialRef.current.uniforms["uMouse"]) {
+      materialRef.current.uniforms["uMouse"].value.set(
         currentMouse.current.x, // Direct use of world coordinates for stronger effect
-        currentMouse.current.y
+        currentMouse.current.y,
       );
     }
 
@@ -295,15 +309,31 @@ function EnhancedCameraControls() {
     const targetX = mouse.x * 2.0;
     const targetY = mouse.y * 1.0;
     const targetZ = 30;
-    
+
     // Smooth interpolation with increased responsiveness
     const lerpFactor = 0.02;
-    camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetX, lerpFactor);
-    camera.position.y = THREE.MathUtils.lerp(camera.position.y, 5 + targetY, lerpFactor);
-    camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, lerpFactor);
-    
+    camera.position.x = THREE.MathUtils.lerp(
+      camera.position.x,
+      targetX,
+      lerpFactor,
+    );
+    camera.position.y = THREE.MathUtils.lerp(
+      camera.position.y,
+      5 + targetY,
+      lerpFactor,
+    );
+    camera.position.z = THREE.MathUtils.lerp(
+      camera.position.z,
+      targetZ,
+      lerpFactor,
+    );
+
     // Subtle rotation for depth
-    camera.rotation.y = THREE.MathUtils.lerp(camera.rotation.y, mouse.x * 0.02, lerpFactor);
+    camera.rotation.y = THREE.MathUtils.lerp(
+      camera.rotation.y,
+      mouse.x * 0.02,
+      lerpFactor,
+    );
   });
 
   return null;
@@ -323,22 +353,26 @@ export function Hero3DBackground() {
 
   // ENHANCED: Prevent scrollbar issues with stronger containment
   const containerStyles: React.CSSProperties = {
-    position: 'absolute',
+    position: "absolute",
     inset: 0,
-    width: '100%',
-    height: '100%',
-    maxWidth: '100%',
-    maxHeight: '100%',
-    overflow: 'hidden', // Critical: prevents inner scrollbars
-    contain: 'layout style paint size', // CSS containment
-    isolation: 'isolate', // Create stacking context
+    width: "100%",
+    height: "100%",
+    maxWidth: "100%",
+    maxHeight: "100%",
+    overflow: "hidden", // Critical: prevents inner scrollbars
+    contain: "layout style paint size", // CSS containment
+    isolation: "isolate", // Create stacking context
     opacity: isLoaded ? 1 : 0,
-    transition: 'opacity 1.5s ease-out',
-    pointerEvents: 'none', // Allows interaction with content overlay
+    transition: "opacity 1.5s ease-out",
+    pointerEvents: "none", // Allows interaction with content overlay
   };
 
   // Skip 3D on very low-end mobile devices
-  if (isMobile && navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) {
+  if (
+    isMobile &&
+    navigator.hardwareConcurrency &&
+    navigator.hardwareConcurrency < 4
+  ) {
     return null;
   }
 
@@ -347,28 +381,28 @@ export function Hero3DBackground() {
       {/* Canvas container - absolute positioned */}
       <div ref={containerRef} style={containerStyles}>
         <Canvas
-          camera={{ 
-            position: [0, 5, 30], 
+          camera={{
+            position: [0, 5, 30],
             fov: 60,
             near: 0.1,
-            far: 200
+            far: 200,
           }}
           dpr={Math.min(window.devicePixelRatio, 2)} // Cap pixel ratio for performance
-          gl={{ 
+          gl={{
             antialias: false, // Disable for performance
             alpha: true,
             powerPreference: "high-performance",
             stencil: false,
             depth: false,
           }}
-          style={{ 
-            background: 'transparent',
-            display: 'block', // Prevent layout issues
-            width: '100%',
-            height: '100%',
-            maxWidth: '100%',
-            maxHeight: '100%',
-            contain: 'size layout style paint', // Enhanced containment
+          style={{
+            background: "transparent",
+            display: "block", // Prevent layout issues
+            width: "100%",
+            height: "100%",
+            maxWidth: "100%",
+            maxHeight: "100%",
+            contain: "size layout style paint", // Enhanced containment
           }}
           onCreated={({ gl }) => {
             // Optimize WebGL context
@@ -382,16 +416,18 @@ export function Hero3DBackground() {
       </div>
 
       {/* Premium gradient overlay for depth */}
-      <div 
+      <div
         style={{
-          position: 'absolute',
+          position: "absolute",
           inset: 0,
-          background: 'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%)',
-          pointerEvents: 'none',
-          opacity: isLoaded ? 0.6 : 0,
-          transition: 'opacity 1.5s ease-out',
+          background:
+            "radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.1) 100%)",
+          pointerEvents: "none",
+          opacity: isLoaded ? 0.2 : 0,
+          transition: "opacity 1.5s ease-out",
         }}
+        className="dark:opacity-60"
       />
     </>
   );
-} 
+}

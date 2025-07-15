@@ -3,13 +3,13 @@
 import { useHorizontalSwipe } from "@/hooks";
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import {
-    ArrowRight,
-    CheckCircle,
-    ChevronDown,
-    FileText,
-    Filter,
-    Search,
-    Upload,
+  ArrowRight,
+  CheckCircle,
+  ChevronDown,
+  FileText,
+  Filter,
+  Search,
+  Upload,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -101,7 +101,7 @@ const phases: MethodologyPhase[] = [
 const ScrollIndicator = () => (
   <div className="absolute top-1/2 -translate-y-1/2 right-4 lg:right-8 pointer-events-none z-20">
     <motion.div
-      className="flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-full px-3 py-2 border border-white/10"
+      className="flex items-center gap-2 bg-gray-900/50 dark:bg-black/50 backdrop-blur-sm rounded-full px-3 py-2 border border-gray-900/10 dark:border-white/10"
       animate={{ x: [0, 6, 0] }}
       transition={{
         repeat: Infinity,
@@ -109,8 +109,10 @@ const ScrollIndicator = () => (
         ease: "easeInOut",
       }}
     >
-      <span className="text-xs text-white/60">Auto-scrolling</span>
-      <ArrowRight className="w-3 h-3 text-white/60" />
+      <span className="text-xs text-gray-600 dark:text-white/60">
+        Auto-scrolling
+      </span>
+      <ArrowRight className="w-3 h-3 text-gray-600 dark:text-white/60" />
     </motion.div>
   </div>
 );
@@ -135,7 +137,7 @@ const InteractivePhaseCard = ({
     >
       {/* Simplified card with smooth height expansion */}
       <motion.div
-        className="relative p-6 sm:p-8 rounded-2xl border border-white/10 bg-black hover:border-white/20 transition-all duration-300 cursor-pointer overflow-hidden"
+        className="relative p-6 sm:p-8 rounded-2xl border border-gray-900/10 dark:border-white/10 bg-white dark:bg-black hover:border-gray-900/20 dark:hover:border-white/20 transition-all duration-300 cursor-pointer overflow-hidden"
         animate={{
           height: isExpanded ? "auto" : isMobile ? 380 : 420,
         }}
@@ -155,7 +157,9 @@ const InteractivePhaseCard = ({
             boxShadow: `0 0 20px rgba(${phase.colorRgb}, 0.3)`,
           }}
         >
-          <span className="text-lg font-light text-white">{phase.number}</span>
+          <span className="text-lg font-light text-gray-900 dark:text-white">
+            {phase.number}
+          </span>
         </div>
 
         {/* Subtle background number watermark */}
@@ -184,17 +188,17 @@ const InteractivePhaseCard = ({
           </motion.div>
 
           {/* Title */}
-          <h3 className="text-2xl font-light text-white mb-4 leading-tight">
+          <h3 className="text-2xl font-light text-gray-900 dark:text-white mb-4 leading-tight">
             {phase.title}
           </h3>
 
           {/* Value proposition */}
-          <p className="text-white/70 text-lg leading-relaxed mb-6">
+          <p className="text-gray-700 dark:text-white/70 text-lg leading-relaxed mb-6">
             {phase.value}
           </p>
 
           {/* Expand button */}
-          <div className="flex items-center gap-2 text-white/40 mb-4">
+          <div className="flex items-center gap-2 text-gray-600 dark:text-white/40 mb-4">
             <span className="text-sm">See example</span>
             <motion.div
               animate={{ rotate: isExpanded ? 180 : 0 }}
@@ -212,12 +216,14 @@ const InteractivePhaseCard = ({
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.3 }}
-                className="border-t border-white/10 pt-6 mt-6"
+                className="border-t border-gray-900/10 dark:border-white/10 pt-6 mt-6"
               >
-                <h4 className="text-lg font-light text-white mb-3">
+                <h4 className="text-lg font-light text-gray-900 dark:text-white mb-3">
                   Real Example:
                 </h4>
-                <p className="text-white/70 leading-relaxed">{phase.example}</p>
+                <p className="text-gray-700 dark:text-white/70 leading-relaxed">
+                  {phase.example}
+                </p>
               </motion.div>
             )}
           </AnimatePresence>
@@ -260,9 +266,9 @@ export function MethodologySection({
       const currentScrollLeft = container.scrollLeft;
       const nextPosition = Math.min(
         currentScrollLeft + cardWidth,
-        cardWidth * phases.length
+        cardWidth * phases.length,
       );
-      container.scrollTo({ left: nextPosition, behavior: 'smooth' });
+      container.scrollTo({ left: nextPosition, behavior: "smooth" });
       handleManualScroll();
     }
   };
@@ -273,7 +279,7 @@ export function MethodologySection({
       const cardWidth = isMobile ? 360 : 432;
       const currentScrollLeft = container.scrollLeft;
       const prevPosition = Math.max(currentScrollLeft - cardWidth, 0);
-      container.scrollTo({ left: prevPosition, behavior: 'smooth' });
+      container.scrollTo({ left: prevPosition, behavior: "smooth" });
       handleManualScroll();
     }
   };
@@ -345,14 +351,14 @@ export function MethodologySection({
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-4xl lg:text-6xl font-light text-white mb-6 tracking-tight">
+          <h2 className="text-4xl lg:text-6xl font-light text-gray-900 dark:text-white mb-6 tracking-tight">
             Our Deep Research Process
           </h2>
-          <p className="text-xl text-white/70 max-w-3xl mx-auto mb-4">
+          <p className="text-xl text-gray-700 dark:text-white/70 max-w-3xl mx-auto mb-4">
             Real examples of how we use AI to deliver comprehensive insights in
             hours, not weeks
           </p>
-          <p className="text-sm text-white/50 max-w-2xl mx-auto">
+          <p className="text-sm text-gray-600 dark:text-white/50 max-w-2xl mx-auto">
             Every project is different. These examples show our typical
             approach, but we adapt our process to match your specific needs.
           </p>
@@ -423,17 +429,17 @@ export function MethodologySection({
 
         {/* Updated bottom summary without timeline references */}
         <motion.div
-          className="text-center mt-20 pt-16 border-t border-white/10 relative z-10"
+          className="text-center mt-20 pt-16 border-t border-gray-900/10 dark:border-white/10 relative z-10"
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
         >
-          <p className="text-lg text-white/60 max-w-3xl mx-auto leading-relaxed mb-4">
+          <p className="text-lg text-gray-600 dark:text-white/60 max-w-3xl mx-auto leading-relaxed mb-4">
             Every research project is customized to your specific needs and
             objectives. This process adapts to deliver exactly the insights you
             need.
           </p>
-          <p className="text-sm text-white/40 max-w-2xl mx-auto">
+          <p className="text-sm text-gray-500 dark:text-white/40 max-w-2xl mx-auto">
             Have a specific research challenge? Let's discuss how we can tailor
             this process for you.
           </p>

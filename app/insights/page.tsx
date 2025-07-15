@@ -42,7 +42,7 @@ export default function InsightsPage() {
     <PageWrapper>
       <Suspense
         fallback={
-          <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black flex items-center justify-center">
+          <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-white dark:from-gray-950 dark:via-gray-900 dark:to-black flex items-center justify-center">
             <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
           </div>
         }

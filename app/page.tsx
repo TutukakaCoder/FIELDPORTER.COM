@@ -1,9 +1,9 @@
 import {
-    CTASection,
-    HeroSection,
-    PortfolioSection,
-    ServicesSection,
-    TrustIndicatorBar,
+  CTASection,
+  HeroSection,
+  PortfolioSection,
+  ServicesSection,
+  TrustIndicatorBar,
 } from "@/components/homepage";
 import { PageWrapper } from "@/components/layout";
 import { Metadata } from "next";
@@ -12,8 +12,8 @@ import { Metadata } from "next";
 function UnifiedAuroraBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Base gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-950 to-gray-900" />
+      {/* Base gradient - theme aware */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-gray-100 to-white dark:from-black dark:via-gray-950 dark:to-gray-900" />
 
       {/* Static aurora blobs */}
       <div
@@ -67,8 +67,7 @@ export const metadata: Metadata = {
     "working AI systems",
   ],
   openGraph: {
-    title:
-      "FIELDPORTER - Build Your Own AI Advantage | AI Integration",
+    title: "FIELDPORTER - Build Your Own AI Advantage | AI Integration",
     description:
       "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. Claude API, n8n automation, Cursor development that works.",
     type: "website",
@@ -85,8 +84,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title:
-      "FIELDPORTER - Build Your Own AI Advantage | AI Integration",
+    title: "FIELDPORTER - Build Your Own AI Advantage | AI Integration",
     description:
       "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. Claude API, n8n automation, Cursor development that works.",
     images: ["/og-image.svg"],

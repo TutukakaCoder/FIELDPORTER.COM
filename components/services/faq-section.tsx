@@ -23,7 +23,7 @@ export function FAQSection({ title, subtitle, faqs }: FAQSectionProps) {
   return (
     <section className="py-32 md:py-36 lg:py-44 relative">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black to-gray-950" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:to-gray-950" />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -34,10 +34,10 @@ export function FAQSection({ title, subtitle, faqs }: FAQSectionProps) {
           viewport={{ once: true }}
           className="text-center space-y-6 mb-16"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-6">
             {title}
           </h2>
-          <p className="text-base lg:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base lg:text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
             {subtitle}
           </p>
         </motion.div>
@@ -54,21 +54,21 @@ export function FAQSection({ title, subtitle, faqs }: FAQSectionProps) {
             >
               <div
                 className="
-                bg-white/[0.01] backdrop-blur-sm border border-white/10 rounded-2xl
-                hover:bg-white/[0.02] hover:border-white/20 transition-all duration-300
+                bg-gray-900/[0.01] dark:bg-white/[0.01] backdrop-blur-sm border border-gray-900/10 dark:border-white/10 rounded-2xl
+                hover:bg-gray-900/[0.02] dark:hover:bg-white/[0.02] hover:border-gray-900/20 dark:hover:border-white/20 transition-all duration-300
                 overflow-hidden
               "
               >
                 <button
                   onClick={() => toggleFAQ(index)}
-                  className="w-full p-6 md:p-8 text-left flex items-center justify-between hover:bg-white/[0.01] transition-colors duration-200"
+                  className="w-full p-6 md:p-8 text-left flex items-center justify-between hover:bg-gray-900/[0.01] dark:hover:bg-white/[0.01] transition-colors duration-200"
                   aria-expanded={openIndex === index}
                 >
-                  <h3 className="text-lg font-medium text-white pr-4 leading-relaxed">
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white pr-4 leading-relaxed">
                     {faq.question}
                   </h3>
                   <ChevronDown
-                    className={`w-5 h-5 text-gray-400 transition-all duration-300 flex-shrink-0 ${
+                    className={`w-5 h-5 text-gray-500 dark:text-gray-400 transition-all duration-300 flex-shrink-0 ${
                       openIndex === index ? "rotate-180 text-blue-400" : ""
                     }`}
                   />
@@ -88,8 +88,8 @@ export function FAQSection({ title, subtitle, faqs }: FAQSectionProps) {
                   className="overflow-hidden"
                 >
                   <div className="px-6 md:px-8 pb-6 md:pb-8">
-                    <div className="pt-4 border-t border-white/10">
-                      <p className="text-base text-gray-300 leading-relaxed">
+                    <div className="pt-4 border-t border-gray-900/10 dark:border-white/10">
+                      <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
                         {faq.answer}
                       </p>
                     </div>

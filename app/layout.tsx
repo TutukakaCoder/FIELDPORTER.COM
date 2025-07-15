@@ -141,8 +141,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={inter.className} style={{ backgroundColor: "#000000" }}>
+    <html lang="en" className="dark scroll-smooth" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const theme = localStorage.getItem('theme') || 'dark';
+                document.documentElement.classList.add(theme);
+              } catch {}
+            `,
+          }}
+        />
+      </head>
+      <body
+        className={`${inter.className} bg-white dark:bg-black transition-colors duration-300`}
+      >
         <AuthProvider>
           <EntranceProvider>
             <ScrollRestoration />

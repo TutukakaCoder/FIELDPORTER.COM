@@ -6,18 +6,23 @@ import { Suspense } from "react";
 
 // Dynamic import for heavy contact form
 const SimpleContactForm = dynamic(
-  () => import("@/components/contact/simple-contact-form").then((mod) => ({ default: mod.SimpleContactForm })),
+  () =>
+    import("@/components/contact/simple-contact-form").then((mod) => ({
+      default: mod.SimpleContactForm,
+    })),
   {
     loading: () => (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-400">Loading contact form...</p>
+          <p className="text-gray-500 dark:text-gray-400">
+            Loading contact form...
+          </p>
         </div>
       </div>
     ),
-    ssr: false
-  }
+    ssr: false,
+  },
 );
 
 export const metadata: Metadata = {
@@ -61,14 +66,18 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <PageWrapper>
-      <Suspense fallback={
-        <div className="min-h-screen bg-black flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-gray-400">Loading contact form...</p>
+      <Suspense
+        fallback={
+          <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+              <p className="text-gray-500 dark:text-gray-400">
+                Loading contact form...
+              </p>
+            </div>
           </div>
-        </div>
-      }>
+        }
+      >
         <SimpleContactForm />
       </Suspense>
       <ContactMethods />

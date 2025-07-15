@@ -174,7 +174,7 @@ const BackgroundPattern = memo(() => {
   );
 
   return (
-    <div className="absolute inset-0 overflow-hidden opacity-30">
+    <div className="absolute inset-0 overflow-hidden opacity-10 dark:opacity-30">
       <svg className="absolute w-full h-full">
         <defs>
           <pattern
@@ -186,8 +186,16 @@ const BackgroundPattern = memo(() => {
             <path
               d={patternSettings.path}
               fill="none"
+              stroke="rgba(0,0,0,0.03)"
+              strokeWidth="1"
+              className="dark:hidden"
+            />
+            <path
+              d={patternSettings.path}
+              fill="none"
               stroke="rgba(255,255,255,0.03)"
               strokeWidth="1"
+              className="hidden dark:block"
             />
           </pattern>
         </defs>
@@ -259,7 +267,7 @@ const PremiumAuroraBackground = memo(() => {
   return (
     <div className="absolute inset-0 overflow-hidden">
       {/* Sophisticated gradient base */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black" />
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-gray-100 to-white dark:from-gray-950 dark:via-gray-900 dark:to-black" />
 
       {/* Reduced grain texture overlay for better performance */}
       <div
@@ -407,9 +415,9 @@ const AnimatedCTA = memo(() => {
         group relative transition-all duration-300
         ${isMobile ? "px-8 py-4 text-base" : "px-10 py-5 text-lg"}
         
-        // Premium glassmorphism background matching mobile buttons
-        bg-black/20 backdrop-blur-xl border border-white/10
-        hover:bg-black/30 hover:border-white/20
+        // Premium glassmorphism background - lighter and more appealing
+        bg-blue-500/10 dark:bg-black/20 backdrop-blur-xl border border-blue-500/20 dark:border-white/10
+        hover:bg-blue-500/20 dark:hover:bg-black/30 hover:border-blue-500/30 dark:hover:border-white/20
         
         // Subtle glow effect
         shadow-[0_0_20px_rgba(59,130,246,0.15)]
@@ -422,7 +430,7 @@ const AnimatedCTA = memo(() => {
         touch-manipulation select-none
         
         // Focus states
-        focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:ring-offset-2 focus:ring-offset-black
+        focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-black
         
         min-w-[200px] sm:min-w-[240px]
       `}
@@ -445,10 +453,10 @@ const AnimatedCTA = memo(() => {
       <div className="absolute -inset-1 rounded-2xl bg-blue-500/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
 
       {/* Button content with enhanced AI visual cues */}
-      <span className="relative z-10 flex items-center justify-center gap-3 text-white font-medium">
+      <span className="relative z-10 flex items-center justify-center gap-3 text-gray-900 dark:text-white font-medium">
         <div className="flex items-center gap-2">
           <MessageSquare
-            className="w-5 h-5 sm:w-6 text-white/90"
+            className="w-5 h-5 sm:w-6 text-gray-900/90 dark:text-white/90"
             strokeWidth={1.5}
             aria-hidden="true"
           />
@@ -646,18 +654,18 @@ const HeroServiceSelector = memo(() => {
           width: "200px",
         }}
       >
-        <div className="bg-black/95 backdrop-blur-xl border border-white/25 rounded-lg px-3 py-2 text-center shadow-xl">
+        <div className="bg-white/95 dark:bg-black/95 backdrop-blur-xl border border-gray-900/25 dark:border-white/25 rounded-lg px-3 py-2 text-center shadow-xl">
           <h3
             className={`text-sm font-medium mb-0.5 ${activeService.iconColor}`}
           >
             {activeService.title}
           </h3>
-          <p className="text-gray-300 text-xs leading-tight">
+          <p className="text-gray-600 dark:text-gray-300 text-xs leading-tight">
             {activeService.description}
           </p>
         </div>
         <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-0.5">
-          <div className="w-1.5 h-1.5 bg-black/95 border-r border-b border-white/25 transform rotate-45"></div>
+          <div className="w-1.5 h-1.5 bg-white/95 dark:bg-black/95 border-r border-b border-gray-900/25 dark:border-white/25 transform rotate-45"></div>
         </div>
       </motion.div>,
       document.body,
@@ -674,7 +682,7 @@ const HeroServiceSelector = memo(() => {
               ? "grid grid-cols-2 gap-3 max-w-[280px] px-4 py-3"
               : "flex items-center gap-8 sm:gap-10 md:gap-12 px-6 sm:px-8 py-4 sm:py-5"
           } 
-          bg-black/20 backdrop-blur-md rounded-2xl shadow-lg border border-white/5 mx-auto
+          bg-white/90 dark:bg-black/20 backdrop-blur-md rounded-2xl shadow-lg border border-gray-900/10 dark:border-white/5 mx-auto
         `}
         role="navigation"
         aria-label="Service categories"
@@ -686,16 +694,16 @@ const HeroServiceSelector = memo(() => {
                 iconRefs.current[index] = el;
               }}
               className={`
-                flex flex-col items-center gap-2 rounded-xl backdrop-blur-sm
+                flex flex-col items-center gap-2 rounded-xl
                 transition-all duration-300 cursor-pointer relative
-                hover:bg-white/8 border border-transparent hover:border-white/10
+                hover:bg-gray-900/5 dark:hover:bg-white/5 border border-transparent hover:border-gray-900/10 dark:hover:border-white/10
                 focus:outline-none focus:ring-2 focus:ring-blue-400/50
                 ${
                   isMobile
                     ? "min-h-[70px] min-w-[120px] p-3"
                     : "min-h-[80px] min-w-[80px] p-4 sm:p-5 gap-3"
                 }
-                ${activeService?.title === service.title ? "bg-white/12 shadow-lg border-white/15" : ""}
+                ${activeService?.title === service.title ? "bg-gray-900/8 dark:bg-white/8 shadow-lg border-gray-900/10 dark:border-white/10" : ""}
               `}
               whileHover={
                 prefersReducedMotion || isMobile
@@ -730,7 +738,7 @@ const HeroServiceSelector = memo(() => {
 
               {/* Premium Context Label */}
               <span
-                className={`text-xs sm:text-sm font-medium transition-colors duration-300 tracking-wide uppercase ${service.iconColor} group-hover:text-white`}
+                className={`text-xs sm:text-sm font-medium transition-colors duration-300 tracking-wide uppercase ${service.iconColor} group-hover:text-gray-900 dark:group-hover:text-white`}
               >
                 {serviceLabels[service.title as keyof typeof serviceLabels]}
               </span>
@@ -832,7 +840,7 @@ export function HeroSection() {
             ? "min-h-[100dvh] py-24 flex flex-col justify-center"
             : "min-h-screen flex items-end justify-center pt-24 pb-32 sm:pt-32 sm:pb-40 md:pt-36 md:pb-48 lg:pt-44 lg:pb-56"
         }
-        bg-black relative
+        bg-white dark:bg-black relative
       `}
       style={{
         position: "relative",
@@ -914,11 +922,11 @@ export function HeroSection() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                <span className="text-white/95 mr-2 sm:mr-4">
+                <span className="text-gray-900/95 dark:text-white/95 mr-2 sm:mr-4">
                   Build Your Own
                 </span>
-                <span className="relative">
-                  <span className="relative z-10 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent font-normal">
+                <span className="relative pb-1">
+                  <span className="relative z-10 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent font-normal pb-1">
                     AI Advantage
                   </span>
                   <motion.span
@@ -939,7 +947,7 @@ export function HeroSection() {
               <p
                 className={`
                 ${isMobile ? "text-lg" : "text-xl sm:text-2xl md:text-3xl"} 
-                text-gray-200 leading-relaxed max-w-4xl mx-auto font-light
+                text-gray-700 dark:text-gray-200 leading-relaxed max-w-4xl mx-auto font-light
               `}
               >
                 Learn the tools. Master the workflows.{" "}
@@ -966,19 +974,6 @@ export function HeroSection() {
                 </motion.span>
                 .
               </p>
-
-              {/* Enhanced subtitle for mobile where 3D background is missing */}
-              {isMobile && (
-                <motion.p
-                  className="text-base text-gray-400 max-w-2xl mx-auto leading-relaxed"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  Transform your business with intelligent automation and
-                  AI-powered solutions
-                </motion.p>
-              )}
             </div>
           </motion.div>
 

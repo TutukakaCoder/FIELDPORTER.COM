@@ -1,11 +1,11 @@
 "use client";
 
 import {
-    motion,
-    useScroll,
-    useSpring,
-    useTransform,
-    Variants,
+  motion,
+  useScroll,
+  useSpring,
+  useTransform,
+  Variants,
 } from "framer-motion";
 import { ArrowRight, Layers } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -213,14 +213,12 @@ export function ServiceHero({
                 <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
                   FIELDPORTER
                 </span>{" "}
-                Strategic Research &{" "}
-                <span className="font-semibold bg-gradient-to-r from-emerald-400 to-emerald-600 bg-clip-text text-transparent">
-                  AI Implementation
-                </span>
+                Services{" "}
+                <span className="font-semibold bg-gradient-to-r from-emerald-400 to-emerald-600 bg-clip-text text-transparent"></span>
               </h1>
 
               {/* SMB AI Focus Subtitle */}
-              <div className="text-xl md:text-2xl text-gray-300 font-light">
+              <div className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 font-light">
                 {subtitle}
               </div>
             </motion.div>

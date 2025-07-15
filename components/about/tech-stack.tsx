@@ -217,7 +217,7 @@ const comprehensiveTechStack = [
 export function TechStack() {
   return (
     <section className="relative py-24 lg:py-32 overflow-hidden">
-      <div className="absolute inset-0 bg-white/[0.02]" />
+      <div className="absolute inset-0 bg-gray-900/[0.02] dark:bg-white/[0.02]" />
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -226,13 +226,13 @@ export function TechStack() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-light text-white mb-6">
+          <h2 className="text-4xl md:text-5xl font-light text-gray-900 dark:text-white mb-6">
             Technology{" "}
             <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               Experience
             </span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Tools and frameworks we have extensive experience implementing in
             production environments
           </p>
@@ -248,7 +248,7 @@ export function TechStack() {
               viewport={{ once: true }}
               className="space-y-8"
             >
-              <h3 className="text-2xl md:text-3xl font-medium text-white text-center">
+              <h3 className="text-2xl md:text-3xl font-medium text-gray-900 dark:text-white text-center">
                 {category.category}
               </h3>
 
@@ -263,21 +263,21 @@ export function TechStack() {
                     whileHover={{ y: -4, scale: 1.02 }}
                     className="group relative"
                   >
-                    <div className="relative p-6 rounded-xl backdrop-blur-xl border border-white/10 bg-white/[0.02] transition-all duration-300 group-hover:bg-white/[0.04] group-hover:border-white/20">
-                      <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
+                    <div className="relative p-6 rounded-xl backdrop-blur-xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-300 group-hover:bg-gray-900/[0.04] dark:group-hover:bg-white/[0.04] group-hover:border-gray-900/20 dark:group-hover:border-white/20">
+                      <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent pointer-events-none" />
 
                       <div className="relative z-10 space-y-4">
                         <div className="flex items-center justify-between">
-                          <div className="p-3 rounded-lg bg-white/5 border border-white/10 group-hover:bg-white/10 transition-colors duration-300">
-                            <tool.icon className="w-5 h-5 text-white/80" />
+                          <div className="p-3 rounded-lg bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 group-hover:bg-gray-900/10 dark:group-hover:bg-white/10 transition-colors duration-300">
+                            <tool.icon className="w-5 h-5 text-gray-700 dark:text-white/80" />
                           </div>
                         </div>
 
                         <div>
-                          <h4 className="text-lg font-medium text-white mb-2 group-hover:text-blue-400 transition-colors duration-300">
+                          <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                             {tool.name}
                           </h4>
-                          <p className="text-sm text-gray-400 leading-relaxed">
+                          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                             {tool.description}
                           </p>
                         </div>

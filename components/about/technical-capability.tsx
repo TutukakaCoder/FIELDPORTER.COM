@@ -33,7 +33,7 @@ const aiCapabilities = [
 export function TechnicalCapability() {
   return (
     <section className="relative py-24 lg:py-32 overflow-hidden">
-      <div className="absolute inset-0 bg-white/[0.02]" />
+      <div className="absolute inset-0 bg-gray-900/[0.02] dark:bg-white/[0.02]" />
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -42,13 +42,13 @@ export function TechnicalCapability() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-light text-white mb-6">
+          <h2 className="text-4xl md:text-5xl font-light text-gray-900 dark:text-white mb-6">
             AI Training &{" "}
             <span className="bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">
               Implementation
             </span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Helping people and organizations integrate AI into their daily
             workflows effectively
           </p>
@@ -66,9 +66,9 @@ export function TechnicalCapability() {
               className="relative group"
             >
               <div
-                className={`relative p-8 rounded-2xl backdrop-blur-xl border ${capability.color.split(" ")[0]} bg-white/[0.02] transition-all duration-500`}
+                className={`relative p-8 rounded-2xl backdrop-blur-xl border ${capability.color.split(" ")[0]} bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-500`}
               >
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent pointer-events-none" />
 
                 <div className="relative z-10 space-y-6">
                   <div className="flex items-center justify-between">
@@ -80,10 +80,10 @@ export function TechnicalCapability() {
                   </div>
 
                   <div>
-                    <h3 className="text-2xl font-medium text-white mb-4">
+                    <h3 className="text-2xl font-medium text-gray-900 dark:text-white mb-4">
                       {capability.title}
                     </h3>
-                    <p className="text-gray-300 leading-relaxed mb-4">
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
                       {capability.description}
                     </p>
                     <div

@@ -4,16 +4,16 @@ import { Button } from "@/components/ui/button";
 import { ContactFormData } from "@/lib/firebase-forms";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-    Activity,
-    ArrowRight,
-    CheckCircle,
-    ChevronDown,
-    Clock,
-    Lightbulb,
-    Loader2,
-    MessageSquare,
-    Target,
-    User,
+  Activity,
+  ArrowRight,
+  CheckCircle,
+  ChevronDown,
+  Clock,
+  Lightbulb,
+  Loader2,
+  MessageSquare,
+  Target,
+  User,
 } from "lucide-react";
 import React, { useState } from "react";
 
@@ -205,7 +205,7 @@ export function SimpleContactForm() {
         id="contact-form"
         className="relative py-32 md:py-40 lg:py-48 overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-black" />
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-50 via-gray-100 to-white dark:from-black dark:via-gray-950 dark:to-black" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -223,25 +223,25 @@ export function SimpleContactForm() {
                 <CheckCircle className="h-16 w-16 text-emerald-400 mx-auto mb-6" />
               </motion.div>
 
-              <h2 className="text-2xl md:text-3xl font-semibold text-white mb-6 leading-tight">
+              <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-6 leading-tight">
                 Thanks for Reaching Out!
               </h2>
 
-              <p className="text-lg text-gray-300 mb-8 leading-relaxed">
+              <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
                 We've received your message and are already thinking about how
                 we can help. Here's what happens next:
               </p>
 
-              <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-6 mb-8">
+              <div className="bg-gray-900/[0.02] dark:bg-white/[0.02] border border-gray-900/10 dark:border-white/10 rounded-2xl p-6 mb-8">
                 <div className="grid md:grid-cols-3 gap-6 text-left">
                   <div className="flex flex-col items-center text-center">
                     <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center mb-4">
                       <Clock className="h-6 w-6 text-blue-400" />
                     </div>
-                    <h3 className="text-white font-semibold mb-2">
+                    <h3 className="text-gray-900 dark:text-white font-semibold mb-2">
                       Within 24 hours
                     </h3>
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">
                       We'll analyze your needs and identify specific
                       opportunities
                     </p>
@@ -251,10 +251,10 @@ export function SimpleContactForm() {
                     <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mb-4">
                       <MessageSquare className="h-6 w-6 text-green-400" />
                     </div>
-                    <h3 className="text-white font-semibold mb-2">
+                    <h3 className="text-gray-900 dark:text-white font-semibold mb-2">
                       Personalized response
                     </h3>
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">
                       You'll receive tailored recommendations based on your
                       situation
                     </p>
@@ -304,7 +304,7 @@ export function SimpleContactForm() {
       id="contact-form"
       className="relative py-32 md:py-40 lg:py-48 overflow-hidden"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-black" />
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-50 via-gray-100 to-white dark:from-black dark:via-gray-950 dark:to-black" />
 
       {/* Subtle background elements */}
       <div className="absolute inset-0 opacity-30">
@@ -324,11 +324,13 @@ export function SimpleContactForm() {
             variants={itemVariants}
             className="text-center mb-12 lg:mb-16"
           >
-            <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 leading-tight tracking-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight tracking-tight">
               Contact Us
             </h1>
-            <p className="text-lg md:text-xl lg:text-2xl text-gray-300 leading-relaxed max-w-3xl mx-auto">
-              Use the form below or chat with our AI assistant and share your email or details - someone from our team will get back to you shortly.
+            <p className="text-lg md:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
+              Use the form below or chat with our AI assistant and share your
+              email or details - someone from our team will get back to you
+              shortly.
             </p>
           </motion.div>
 
@@ -336,7 +338,7 @@ export function SimpleContactForm() {
           <motion.form
             variants={itemVariants}
             onSubmit={handleSubmit}
-            className="relative bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 hover:bg-white/[0.04] transition-all duration-300"
+            className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-8 md:p-12 hover:bg-gray-900/[0.04] dark:hover:bg-white/[0.04] transition-all duration-300"
           >
             {/* Error Messages */}
             <AnimatePresence>
@@ -359,14 +361,14 @@ export function SimpleContactForm() {
             <div className="space-y-8">
               {/* Your Information Section */}
               <div>
-                <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
                   <User className="h-5 w-5 text-blue-400" />
                   Your Information
                 </h3>
 
                 <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
                       Your name <span className="text-red-400">*</span>
                     </label>
                     <input
@@ -374,13 +376,13 @@ export function SimpleContactForm() {
                       value={formData.name}
                       onChange={(e) => updateFormData("name", e.target.value)}
                       placeholder="Full name"
-                      className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[48px] touch-manipulation"
+                      className="w-full px-4 py-4 bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[48px] touch-manipulation"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
                       Email address <span className="text-red-400">*</span>
                     </label>
                     <input
@@ -388,7 +390,7 @@ export function SimpleContactForm() {
                       value={formData.email}
                       onChange={(e) => updateFormData("email", e.target.value)}
                       placeholder="your@email.com"
-                      className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[48px] touch-manipulation"
+                      className="w-full px-4 py-4 bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[48px] touch-manipulation"
                       required
                     />
                   </div>
@@ -411,14 +413,14 @@ export function SimpleContactForm() {
 
               {/* Tell Us More Section */}
               <div>
-                <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
                   <MessageSquare className="h-5 w-5 text-blue-400" />
                   Tell Us More
                 </h3>
 
                 {/* What brings you here dropdown */}
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
                     What brings you here?{" "}
                     <span className="text-red-400">*</span>
                   </label>
@@ -430,23 +432,26 @@ export function SimpleContactForm() {
                         // Reset challenge description when switching options
                         updateFormData("challengeDescription", "");
                       }}
-                      className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 appearance-none min-h-[48px] touch-manipulation"
+                      className="w-full px-4 py-4 bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 appearance-none min-h-[48px] touch-manipulation"
                       required
                     >
-                      <option value="" className="bg-gray-900 text-gray-300">
+                      <option
+                        value=""
+                        className="bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-300"
+                      >
                         Choose what describes you best...
                       </option>
                       {WHAT_BRINGS_YOU_OPTIONS.map((option) => (
                         <option
                           key={option}
                           value={option}
-                          className="bg-gray-900 text-white"
+                          className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
                         >
                           {option}
                         </option>
                       ))}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
+                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500 dark:text-gray-400 pointer-events-none" />
                   </div>
                 </div>
 

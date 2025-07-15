@@ -1,8 +1,8 @@
 "use client";
 
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import * as THREE from 'three';
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useEffect, useMemo, useRef, useState } from "react";
+import * as THREE from "three";
 
 // Simplified shaders for better performance
 const vertexShader = `
@@ -80,20 +80,23 @@ function SimplifiedParticleSystem() {
   const meshRef = useRef<THREE.Points>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const { camera } = useThree();
-  
+
   // Mouse tracking
   const mouseRef = useRef({ x: 0, y: 0 });
   const currentMouse = useRef({ x: 0, y: 0 });
-  
+
   // Reduced particle count for performance
   const particleCount = 800;
-  
+
   // Simplified color palette
-  const colorPalette = useMemo(() => [
-    new THREE.Color(0x3B82F6), // Blue
-    new THREE.Color(0x8B5CF6), // Purple
-    new THREE.Color(0x10B981), // Emerald
-  ], []);
+  const colorPalette = useMemo(
+    () => [
+      new THREE.Color(0x3b82f6), // Blue
+      new THREE.Color(0x8b5cf6), // Purple
+      new THREE.Color(0x10b981), // Emerald
+    ],
+    [],
+  );
 
   // Create geometry and material
   const { geometry, material } = useMemo(() => {
@@ -105,26 +108,26 @@ function SimplifiedParticleSystem() {
     // Create particles in a simpler distribution
     for (let i = 0; i < particleCount; i++) {
       const i3 = i * 3;
-      
+
       // Simple cloud distribution
       positions[i3] = (Math.random() - 0.5) * 60;
       positions[i3 + 1] = (Math.random() - 0.5) * 30;
       positions[i3 + 2] = (Math.random() - 0.5) * 40;
-      
+
       // Random color from palette
       const colorIndex = Math.floor(Math.random() * colorPalette.length);
-      const color = colorPalette[colorIndex] || new THREE.Color(0x3B82F6);
+      const color = colorPalette[colorIndex] || new THREE.Color(0x3b82f6);
       colors[i3] = color.r;
       colors[i3 + 1] = color.g;
       colors[i3 + 2] = color.b;
-      
+
       // Random size
       sizes[i] = Math.random() * 2 + 1;
     }
 
-    geom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geom.setAttribute('customColor', new THREE.BufferAttribute(colors, 3));
-    geom.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    geom.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geom.setAttribute("customColor", new THREE.BufferAttribute(colors, 3));
+    geom.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
 
     const mat = new THREE.ShaderMaterial({
       uniforms: {
@@ -149,7 +152,7 @@ function SimplifiedParticleSystem() {
       // Convert to world coordinates for more responsive interaction
       const x = (event.clientX / window.innerWidth) * 2 - 1;
       const y = -(event.clientY / window.innerHeight) * 2 + 1;
-      
+
       // Scale to world space for noticeable interaction
       mouseRef.current = {
         x: x * 30,
@@ -163,7 +166,7 @@ function SimplifiedParticleSystem() {
         if (touch) {
           const x = (touch.clientX / window.innerWidth) * 2 - 1;
           const y = -(touch.clientY / window.innerHeight) * 2 + 1;
-          
+
           mouseRef.current = {
             x: x * 30,
             y: y * 30,
@@ -172,12 +175,12 @@ function SimplifiedParticleSystem() {
       }
     };
 
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    window.addEventListener('touchmove', handleTouch, { passive: true });
-    
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("touchmove", handleTouch, { passive: true });
+
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('touchmove', handleTouch);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouch);
     };
   }, []);
 
@@ -186,20 +189,22 @@ function SimplifiedParticleSystem() {
     if (!meshRef.current || !materialRef.current) return;
 
     const currentTime = state.clock.getElapsedTime();
-    
+
     // Premium mouse interpolation for smooth, elegant interaction
     const interpolationSpeed = 0.05; // Refined for smoother, more premium feel
-    currentMouse.current.x += (mouseRef.current.x - currentMouse.current.x) * interpolationSpeed;
-    currentMouse.current.y += (mouseRef.current.y - currentMouse.current.y) * interpolationSpeed;
+    currentMouse.current.x +=
+      (mouseRef.current.x - currentMouse.current.x) * interpolationSpeed;
+    currentMouse.current.y +=
+      (mouseRef.current.y - currentMouse.current.y) * interpolationSpeed;
 
     // Update shader uniforms with direct coordinates for stronger effect
-    if (materialRef.current.uniforms['uTime']) {
-      materialRef.current.uniforms['uTime'].value = currentTime;
+    if (materialRef.current.uniforms["uTime"]) {
+      materialRef.current.uniforms["uTime"].value = currentTime;
     }
-    if (materialRef.current.uniforms['uMouse']) {
-      materialRef.current.uniforms['uMouse'].value.set(
+    if (materialRef.current.uniforms["uMouse"]) {
+      materialRef.current.uniforms["uMouse"].value.set(
         currentMouse.current.x, // Use direct coordinates for better interaction
-        currentMouse.current.y
+        currentMouse.current.y,
       );
     }
 
@@ -231,15 +236,31 @@ function SimplifiedCameraControls() {
     const targetX = mouse.x * 1.0;
     const targetY = mouse.y * 0.6;
     const targetZ = 25;
-    
+
     // Refined interpolation for premium smoothness
     const lerpFactor = 0.015; // Reduced for smoother, more elegant movement
-    camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetX, lerpFactor);
-    camera.position.y = THREE.MathUtils.lerp(camera.position.y, 3 + targetY, lerpFactor);
-    camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, lerpFactor);
-    
+    camera.position.x = THREE.MathUtils.lerp(
+      camera.position.x,
+      targetX,
+      lerpFactor,
+    );
+    camera.position.y = THREE.MathUtils.lerp(
+      camera.position.y,
+      3 + targetY,
+      lerpFactor,
+    );
+    camera.position.z = THREE.MathUtils.lerp(
+      camera.position.z,
+      targetZ,
+      lerpFactor,
+    );
+
     // Subtle rotation for premium depth effect
-    camera.rotation.y = THREE.MathUtils.lerp(camera.rotation.y, mouse.x * 0.008, lerpFactor);
+    camera.rotation.y = THREE.MathUtils.lerp(
+      camera.rotation.y,
+      mouse.x * 0.008,
+      lerpFactor,
+    );
   });
 
   return null;
@@ -257,46 +278,46 @@ export function Hero3DBackgroundSimplified() {
   }, []);
 
   const containerStyles: React.CSSProperties = {
-    position: 'absolute',
+    position: "absolute",
     inset: 0,
-    width: '100%',
-    height: '100%',
-    maxWidth: '100%',
-    maxHeight: '100%',
-    overflow: 'hidden',
-    contain: 'layout style paint size',
-    isolation: 'isolate',
+    width: "100%",
+    height: "100%",
+    maxWidth: "100%",
+    maxHeight: "100%",
+    overflow: "hidden",
+    contain: "layout style paint size",
+    isolation: "isolate",
     opacity: isLoaded ? 1 : 0,
-    transition: 'opacity 1s ease-out',
-    pointerEvents: 'none',
+    transition: "opacity 1s ease-out",
+    pointerEvents: "none",
   };
 
   return (
     <>
       <div ref={containerRef} style={containerStyles}>
         <Canvas
-          camera={{ 
-            position: [0, 3, 25], 
+          camera={{
+            position: [0, 3, 25],
             fov: 50,
             near: 0.1,
-            far: 100
+            far: 100,
           }}
           dpr={Math.min(window.devicePixelRatio, 1.5)} // Lower DPR for performance
-          gl={{ 
+          gl={{
             antialias: false,
             alpha: true,
             powerPreference: "default", // Don't force high performance
             stencil: false,
             depth: false,
           }}
-          style={{ 
-            background: 'transparent',
-            display: 'block',
-            width: '100%',
-            height: '100%',
-            maxWidth: '100%',
-            maxHeight: '100%',
-            contain: 'size layout style paint',
+          style={{
+            background: "transparent",
+            display: "block",
+            width: "100%",
+            height: "100%",
+            maxWidth: "100%",
+            maxHeight: "100%",
+            contain: "size layout style paint",
           }}
           onCreated={({ gl }) => {
             gl.setClearColor(0x000000, 0);
@@ -309,16 +330,18 @@ export function Hero3DBackgroundSimplified() {
       </div>
 
       {/* Simplified gradient overlay */}
-      <div 
+      <div
         style={{
-          position: 'absolute',
+          position: "absolute",
           inset: 0,
-          background: 'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.3) 100%)',
-          pointerEvents: 'none',
-          opacity: isLoaded ? 0.5 : 0,
-          transition: 'opacity 1s ease-out',
+          background:
+            "radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.1) 100%)",
+          pointerEvents: "none",
+          opacity: isLoaded ? 0.15 : 0,
+          transition: "opacity 1s ease-out",
         }}
+        className="dark:opacity-50"
       />
     </>
   );
-} 
+}

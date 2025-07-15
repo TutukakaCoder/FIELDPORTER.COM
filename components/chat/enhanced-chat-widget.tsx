@@ -143,29 +143,52 @@ Our services include strategic research ($500-$3,000), rapid development ($3,000
       .replace(/&amp;/g, "&")
       .replace(/&lt;/g, "<")
       .replace(/&gt;/g, ">")
-      // Remove markdown formatting characters that don't render well
-      .replace(/\*\*(.*?)\*\*/g, "$1")
-      .replace(/\*(.*?)\*/g, "$1")
-      .replace(/`(.*?)`/g, "$1")
+
+      // ENHANCED MARKDOWN REMOVAL - Handle all edge cases
+      // Remove nested/overlapping markdown (***text*** or **text**)
+      .replace(/\*{3,}(.*?)\*{3,}/g, "$1")
+      .replace(/\*{2,}(.*?)\*{2,}/g, "$1")
+
+      // Remove standard markdown formatting
+      .replace(/\*\*(.*?)\*\*/g, "$1") // **bold**
+      .replace(/\*(.*?)\*/g, "$1") // *italic*
+      .replace(/`(.*?)`/g, "$1") // `code`
+
+      // Remove asterisk dividers and standalone asterisks
+      .replace(/^\s*\*{4,}\s*$/gm, "") // Lines with multiple asterisks
+      .replace(/\*{2,}/g, "") // Multiple asterisks in a row
+
+      // Convert list items to proper bullets
+      .replace(/^\s*[-*]\s+/gm, "• ") // - or * at start of line
+      .replace(/^\s*•\s+/gm, "• ") // Normalize existing bullets
+
       // Remove excessive punctuation and symbols
       .replace(/[•●◦▪▫]/g, "•")
       .replace(/[→←↑↓]/g, "->")
       .replace(/[✓✔]/g, "✓")
       .replace(/[✗✘]/g, "✗")
+
       // Clean up spacing - ensure proper paragraph breaks
       .replace(/\n{3,}/g, "\n\n")
       .replace(/\r\n/g, "\n")
       .replace(/\r/g, "\n")
+
       // Ensure single spaces after periods
       .replace(/\.\s{2,}/g, ". ")
-      // Clean up list formatting
-      .replace(/^\s*[-•]\s*/gm, "• ")
+
+      // Clean up any remaining standalone asterisks
+      .replace(/\s+\*\s+/g, " ") // Asterisks with spaces around them
+      .replace(/^\*\s*/gm, "") // Asterisks at start of lines
+      .replace(/\s*\*$/gm, "") // Asterisks at end of lines
+
       // Remove any remaining external links except contact page
       .replace(
         /(?:https?:\/\/)?(?:www\.)?fieldporter\.com\/(?!contact)\S+/gi,
         "our contact page",
       )
-      // Clean up leading/trailing whitespace
+
+      // Final cleanup - remove empty lines created by asterisk removal
+      .replace(/\n\s*\n\s*\n/g, "\n\n")
       .trim()
   );
 };
@@ -530,7 +553,7 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
         }
         setIsN8nConnected(false);
       } else {
-        responseContent = aiResponse.response;
+        responseContent = formatChatResponse(aiResponse.response);
 
         // Quick validation only
         if (responseContent.length < 10) {

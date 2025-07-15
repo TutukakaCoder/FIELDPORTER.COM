@@ -194,7 +194,7 @@ export function InsightsHero() {
   return (
     <section
       ref={ref}
-      className="relative section-spacing bg-black overflow-hidden pt-24 md:pt-32 lg:pt-20"
+      className="relative section-spacing bg-white dark:bg-black overflow-hidden pt-24 md:pt-32 lg:pt-20"
     >
       <PremiumAuroraBackground />
       <InteractiveSpotlight />

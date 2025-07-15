@@ -24,6 +24,52 @@ service cloud.firestore {
          request.auth.uid == request.resource.data.user_id);
     }
     
+    // AI chat conversations - allow public write for anonymous users, read for authenticated
+    match /ai_conversations/{conversationId} {
+      allow write: if true; // Allow anonymous chat
+      allow read: if request.auth != null && 
+        (request.auth.uid == resource.data.user_id || 
+         resource.data.is_public == true);
+    }
+    
+    // Conversations collection used by chatbot API - FULL ACCESS
+    match /conversations/{document=**} {
+      allow read, write: if true;
+    }
+    
+    // NEW: conversations_v2 collection used by optimized chat service - FULL ACCESS  
+    match /conversations_v2/{document=**} {
+      allow read, write: if true;
+    }
+    
+    // NEW: chat_sessions collection used by optimized chat service - FULL ACCESS
+    match /chat_sessions/{document=**} {
+      allow read, write: if true;
+    }
+    
+    // Analytics data - allow public write for chatbot tracking - FULL ACCESS
+    match /analytics/{document=**} {
+      allow read, write: if true; // Allow chatbot to read/write analytics
+    }
+    
+    // Leads collection for chatbot qualification - FULL ACCESS
+    match /leads/{document=**} {
+      allow read, write: if true; // Allow chatbot to read/write leads
+    }
+    
+    // Chatbot specific collections - FULL ACCESS
+    match /chatbot_analytics/{document=**} {
+      allow read, write: if true;
+    }
+    
+    match /chatbot_conversations/{document=**} {
+      allow read, write: if true;
+    }
+    
+    match /chatbot_sessions/{document=**} {
+      allow read, write: if true;
+    }
+    
     // Public read access to company information
     match /company_info/{document=**} {
       allow read: if true;
@@ -42,22 +88,8 @@ service cloud.firestore {
       allow read: if false;
     }
     
-    // AI chat conversations - public write for anonymous users, read for authenticated
-    match /ai_conversations/{conversationId} {
-      allow write: if true; // Allow anonymous chat
-      allow read: if request.auth != null && 
-        (request.auth.uid == resource.data.user_id || 
-         resource.data.is_public == true);
-    }
-    
     // Admin-only collections
     match /admin/{document=**} {
-      allow read, write: if request.auth != null && 
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
-    }
-    
-    // Analytics data - admin only
-    match /analytics/{document=**} {
       allow read, write: if request.auth != null && 
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }

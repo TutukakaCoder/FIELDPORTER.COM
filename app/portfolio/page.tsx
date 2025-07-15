@@ -3,27 +3,27 @@
 import { PageWrapper } from "@/components/layout";
 import { useHorizontalSwipe } from "@/hooks";
 import {
-    AnimatePresence,
-    motion,
-    useInView,
-    useScroll,
-    useTransform,
+  AnimatePresence,
+  motion,
+  useInView,
+  useScroll,
+  useTransform,
 } from "framer-motion";
 import {
-    ArrowRight,
-    Brain,
-    Building2,
-    CheckCircle,
-    ChevronLeft,
-    ChevronRight,
-    Clock,
-    Code2,
-    ExternalLink,
-    Globe,
-    Star,
-    Target,
-    TrendingUp,
-    Zap
+  ArrowRight,
+  Brain,
+  Building2,
+  CheckCircle,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Code2,
+  ExternalLink,
+  Globe,
+  Star,
+  Target,
+  TrendingUp,
+  Zap,
 } from "lucide-react";
 import React, { useRef, useState } from "react";
 
@@ -136,7 +136,10 @@ const portfolioSections: PortfolioSection[] = [
         metrics: [
           { label: "85% email classification accuracy", icon: Target },
           { label: "70% reduction in manual review time", icon: Zap },
-          { label: "Automated routing of investment inquiries", icon: CheckCircle },
+          {
+            label: "Automated routing of investment inquiries",
+            icon: CheckCircle,
+          },
         ],
         techStack: "React/TypeScript • Firebase • DeepSeek AI",
       },
@@ -334,13 +337,13 @@ function PortfolioHero() {
           className="space-y-8"
         >
           <div className="flex justify-center">
-            <div className="p-4 rounded-2xl backdrop-blur-xl border border-white/10 bg-white/[0.015]">
+            <div className="p-4 rounded-2xl backdrop-blur-xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.015] dark:bg-white/[0.015]">
               <Code2 className="w-12 h-12 text-blue-400" />
             </div>
           </div>
 
           <div className="space-y-6">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light text-white leading-tight tracking-[-0.02em]">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-900 dark:text-white leading-tight tracking-[-0.02em]">
               <span className="font-semibold bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
                 FIELDPORTER
               </span>{" "}
@@ -349,7 +352,7 @@ function PortfolioHero() {
                 Today
               </span>
             </h1>
-            <p className="text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
+            <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
               A collection of real client work and internal ventures. Every
               project represents hands-on experience we bring to advising your
               business challenges.
@@ -373,14 +376,14 @@ function InteractivePortfolioShowcase() {
 
   // Navigation functions for swipe support
   const goToPrevious = () => {
-    setActiveSection(prev => 
-      prev > 0 ? prev - 1 : portfolioSections.length - 1
+    setActiveSection((prev) =>
+      prev > 0 ? prev - 1 : portfolioSections.length - 1,
     );
   };
 
   const goToNext = () => {
-    setActiveSection(prev => 
-      prev < portfolioSections.length - 1 ? prev + 1 : 0
+    setActiveSection((prev) =>
+      prev < portfolioSections.length - 1 ? prev + 1 : 0,
     );
   };
 
@@ -393,7 +396,7 @@ function InteractivePortfolioShowcase() {
 
   return (
     <section className="relative py-32 md:py-40 lg:py-48 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-black" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:via-gray-950 dark:to-black" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Navigation Buttons */}
@@ -409,8 +412,8 @@ function InteractivePortfolioShowcase() {
                   px-4 md:px-8 py-3 md:py-4 rounded-2xl transition-all duration-500 backdrop-blur-xl border font-medium text-sm md:text-lg hover:scale-105 transform will-change-transform touch-manipulation
                   ${
                     activeSection === index
-                      ? `bg-white/[0.08] ${section.borderColor.replace("/15", "/40")} text-white shadow-[0_0_30px_rgba(59,130,246,0.3)]`
-                      : "bg-white/[0.01] border-white/10 text-gray-400 hover:text-white hover:bg-white/[0.02]"
+                      ? `bg-gray-900/[0.08] dark:bg-white/[0.08] ${section.borderColor.replace("/15", "/40")} text-gray-900 dark:text-white shadow-[0_0_30px_rgba(59,130,246,0.3)]`
+                      : "bg-gray-900/[0.01] dark:bg-white/[0.01] border-gray-900/10 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-900/[0.02] dark:hover:bg-white/[0.02]"
                   }
                 `}
               >
@@ -443,34 +446,34 @@ function InteractivePortfolioShowcase() {
               <div className="hidden lg:flex absolute left-8 top-1/2 transform -translate-y-1/2 z-20">
                 <button
                   onClick={goToPrevious}
-                  className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-lg hover:bg-white/15 transition-all duration-500 flex items-center justify-center group hover:scale-105"
+                  className="w-12 h-12 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-lg hover:bg-gray-900/15 dark:hover:bg-white/15 transition-all duration-500 flex items-center justify-center group hover:scale-105"
                   aria-label="Previous section"
                 >
-                  <ChevronLeft className="w-6 h-6 text-white group-hover:text-blue-300 transition-colors duration-500" />
+                  <ChevronLeft className="w-6 h-6 text-gray-900 dark:text-white group-hover:text-blue-300 transition-colors duration-500" />
                 </button>
               </div>
 
               <div className="hidden lg:flex absolute right-8 top-1/2 transform -translate-y-1/2 z-20">
                 <button
                   onClick={goToNext}
-                  className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-lg hover:bg-white/15 transition-all duration-500 flex items-center justify-center group hover:scale-105"
+                  className="w-12 h-12 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-lg hover:bg-gray-900/15 dark:hover:bg-white/15 transition-all duration-500 flex items-center justify-center group hover:scale-105"
                   aria-label="Next section"
                 >
-                  <ChevronRight className="w-6 h-6 text-white group-hover:text-blue-300 transition-colors duration-500" />
+                  <ChevronRight className="w-6 h-6 text-gray-900 dark:text-white group-hover:text-blue-300 transition-colors duration-500" />
                 </button>
               </div>
               {/* Section Header */}
               <div className="text-center mb-16 md:mb-20">
                 <div className="flex items-center justify-center gap-4 mb-6">
                   <div
-                    className={`w-16 h-16 rounded-2xl bg-white/5 border ${currentSection.borderColor} flex items-center justify-center backdrop-blur-sm`}
+                    className={`w-16 h-16 rounded-2xl bg-gray-900/5 dark:bg-white/5 border ${currentSection.borderColor} flex items-center justify-center backdrop-blur-sm`}
                   >
                     {React.createElement(currentSection.icon, {
                       className: `w-8 h-8 ${currentSection.iconColor}`,
                     })}
                   </div>
                 </div>
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-4 leading-tight tracking-[-0.02em]">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-4 leading-tight tracking-[-0.02em]">
                   {currentSection.id === "client-platforms" &&
                     "Production Systems with Real Impact"}
                   {currentSection.id === "ai-automation" &&
@@ -498,7 +501,7 @@ function InteractivePortfolioShowcase() {
                       {/* Content Side */}
                       <div className="space-y-6 md:space-y-8">
                         <div className="space-y-4">
-                          <div className="flex items-center gap-3 text-sm text-gray-400">
+                          <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
                             <span>{project.category}</span>
                             <span>•</span>
                             <span
@@ -508,11 +511,11 @@ function InteractivePortfolioShowcase() {
                             </span>
                           </div>
 
-                          <h3 className="text-2xl md:text-3xl font-semibold text-white leading-tight">
+                          <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white leading-tight">
                             {project.title}
                           </h3>
 
-                          <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
+                          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
                             {project.description}
                           </p>
                         </div>
@@ -523,11 +526,11 @@ function InteractivePortfolioShowcase() {
                             <h4 className="text-lg font-medium text-yellow-300 mb-3">
                               Vision
                             </h4>
-                            <p className="text-gray-300 leading-relaxed">
+                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                               {project.vision}
                             </p>
                             {project.approach && (
-                              <p className="text-gray-400 text-sm mt-3 italic">
+                              <p className="text-gray-500 dark:text-gray-400 text-sm mt-3 italic">
                                 Approach: {project.approach}
                               </p>
                             )}
@@ -536,8 +539,8 @@ function InteractivePortfolioShowcase() {
 
                         {/* Philosophy */}
                         {project.philosophy && (
-                          <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-6">
-                            <p className="text-gray-300 leading-relaxed italic">
+                          <div className="bg-gray-900/[0.02] dark:bg-white/[0.02] border border-gray-900/10 dark:border-white/10 rounded-2xl p-6">
+                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed italic">
                               "{project.philosophy}"
                             </p>
                           </div>
@@ -546,14 +549,14 @@ function InteractivePortfolioShowcase() {
                         {/* Deliverables */}
                         {project.deliverables && (
                           <div className="space-y-4">
-                            <h4 className="text-white font-semibold text-lg">
+                            <h4 className="text-gray-900 dark:text-white font-semibold text-lg">
                               Key Deliverables:
                             </h4>
                             <ul className="space-y-3">
                               {project.deliverables.map((deliverable, idx) => (
                                 <li
                                   key={idx}
-                                  className="flex items-start gap-3 text-gray-300"
+                                  className="flex items-start gap-3 text-gray-600 dark:text-gray-300"
                                 >
                                   <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                                   <span>{deliverable}</span>
@@ -566,14 +569,14 @@ function InteractivePortfolioShowcase() {
                         {/* Metrics */}
                         {project.metrics && (
                           <div className="space-y-4">
-                            <h4 className="text-white font-semibold text-lg">
+                            <h4 className="text-gray-900 dark:text-white font-semibold text-lg">
                               Impact Metrics:
                             </h4>
                             <div className="space-y-3">
                               {project.metrics.map((metric, idx) => (
                                 <div
                                   key={idx}
-                                  className="flex items-start gap-3 text-gray-300"
+                                  className="flex items-start gap-3 text-gray-600 dark:text-gray-300"
                                 >
                                   {React.createElement(metric.icon, {
                                     className: `w-5 h-5 ${currentSection.iconColor} flex-shrink-0 mt-0.5`,
@@ -587,11 +590,11 @@ function InteractivePortfolioShowcase() {
 
                         {/* Tech Stack */}
                         {project.techStack && (
-                          <div className="bg-gray-900/50 rounded-xl p-4 border border-gray-700/30">
-                            <div className="text-sm text-gray-400 mb-2">
+                          <div className="bg-gray-100/50 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-300/30 dark:border-gray-700/30">
+                            <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
                               Technical Stack
                             </div>
-                            <div className="text-gray-300">
+                            <div className="text-gray-600 dark:text-gray-300">
                               {project.techStack}
                             </div>
                           </div>
@@ -622,27 +625,27 @@ function InteractivePortfolioShowcase() {
                           <div className="relative">
                             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/5 rounded-3xl blur-xl opacity-60" />
 
-                            <div className="relative bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12">
+                            <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-8 md:p-12">
                               <div className="flex items-start gap-4">
                                 <div className="text-blue-400 text-4xl leading-none">
                                   "
                                 </div>
                                 <div className="flex-1">
-                                  <p className="text-gray-300 leading-relaxed mb-4 italic text-lg">
+                                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4 italic text-lg">
                                     {project.testimonial.quote}
                                   </p>
                                   <div className="flex items-center gap-3">
                                     <div className="flex gap-1">
-                                      {[...Array(project.testimonial.rating)].map(
-                                        (_, i) => (
-                                          <Star
-                                            key={i}
-                                            className="w-4 h-4 text-yellow-400 fill-current"
-                                          />
-                                        ),
-                                      )}
+                                      {[
+                                        ...Array(project.testimonial.rating),
+                                      ].map((_, i) => (
+                                        <Star
+                                          key={i}
+                                          className="w-4 h-4 text-yellow-400 fill-current"
+                                        />
+                                      ))}
                                     </div>
-                                    <span className="text-white font-medium">
+                                    <span className="text-gray-900 dark:text-white font-medium">
                                       — {project.testimonial.author}
                                     </span>
                                   </div>
@@ -678,10 +681,10 @@ function PortfolioCTA() {
           transition={{ duration: 0.8 }}
           className="space-y-8"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-white leading-tight tracking-[-0.02em]">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white leading-tight tracking-[-0.02em]">
             From Concept to Revenue
           </h2>
-          <p className="text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
+          <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
             Whether you need strategic guidance, AI implementation advice, or
             help building prototypes, we bring hands-on experience to your
             business challenges. No theory. Just practical solutions.
@@ -698,7 +701,7 @@ function PortfolioCTA() {
             </motion.a>
             <motion.a
               href="/services"
-              className="group inline-flex items-center gap-4 bg-white/[0.03] border border-white/20 hover:bg-white/[0.08] hover:border-white/30 text-white px-10 py-5 rounded-2xl font-semibold text-lg transition-all duration-500 hover:shadow-xl backdrop-blur-xl"
+              className="group inline-flex items-center gap-4 bg-gray-900/[0.03] dark:bg-white/[0.03] border border-gray-900/20 dark:border-white/20 hover:bg-gray-900/[0.08] dark:hover:bg-white/[0.08] hover:border-gray-900/30 dark:hover:border-white/30 text-gray-900 dark:text-white px-10 py-5 rounded-2xl font-semibold text-lg transition-all duration-500 hover:shadow-xl backdrop-blur-xl"
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -717,7 +720,7 @@ export default function PortfolioPage() {
     <PageWrapper>
       <PremiumAuroraBackground />
 
-      <div className="relative z-10 bg-gradient-to-b from-black via-gray-950 to-black min-h-screen">
+      <div className="relative z-10 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:via-gray-950 dark:to-black min-h-screen">
         <PortfolioHero />
         <InteractivePortfolioShowcase />
         <PortfolioCTA />
