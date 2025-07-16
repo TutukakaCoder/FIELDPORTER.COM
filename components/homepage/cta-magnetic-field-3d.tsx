@@ -22,7 +22,7 @@ export function MobileMagneticEffect() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {/* Premium darker gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 via-gray-800/5 to-gray-900/10 dark:from-black/40 dark:via-gray-900/30 dark:to-black/40" />
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.02] via-transparent to-purple-500/[0.02] dark:from-black/40 dark:via-gray-900/30 dark:to-black/40" />
 
       {/* Refined magnetic particles with premium styling */}
       <div className="magnetic-particles">

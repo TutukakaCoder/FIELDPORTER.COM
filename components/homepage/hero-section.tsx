@@ -925,8 +925,8 @@ export function HeroSection() {
                 <span className="text-gray-900/95 dark:text-white/95 mr-2 sm:mr-4">
                   Build Your Own
                 </span>
-                <span className="relative pb-1">
-                  <span className="relative z-10 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent font-normal pb-1">
+                <span className="relative pb-2 leading-relaxed">
+                  <span className="relative z-10 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent font-normal pb-2 leading-[1.3]">
                     AI Advantage
                   </span>
                   <motion.span

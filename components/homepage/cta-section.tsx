@@ -209,9 +209,7 @@ export function CTASection() {
 
                   <div className="relative z-10 flex items-center justify-center space-x-3">
                     <MessageSquare className="w-5 h-5" />
-                    <span className="text-lg lg:text-xl">
-                      Start Your Journey
-                    </span>
+                    <span className="text-lg lg:text-xl">Contact Us</span>
                     <motion.div
                       whileHover={{ x: 4 }}
                       transition={{ duration: 0.2, ease: "easeInOut" }}
