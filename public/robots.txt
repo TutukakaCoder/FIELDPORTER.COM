@@ -1,4 +1,29 @@
+# https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
 
-Sitemap: https://fieldporter.com/sitemap.xml 
+# Sitemap location
+Sitemap: https://fieldporter.com/sitemap.xml
+
+# Crawl-delay (optional, remove if not needed)
+Crawl-delay: 1
+
+# Disallow admin and API routes
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /auth/
+Disallow: /portal/
+
+# Allow search engines to access static assets
+Allow: /*.js$
+Allow: /*.css$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.svg$
+Allow: /*.webp$
+Allow: /*.ico$
+
+# Disallow test and development paths
+Disallow: /test-video/
+Disallow: /n8n-demo/ 

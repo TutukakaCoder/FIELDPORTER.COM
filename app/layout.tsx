@@ -30,20 +30,34 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://fieldporter.com"),
   title: {
     template: "FIELDPORTER | %s",
-    default: "FIELDPORTER - AI Integration & Automation Consulting",
+    default: "FIELDPORTER - Build Your Own AI Advantage",
   },
   description:
-    "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. Turn hours into minutes through intelligent automation.",
+    "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. We specialize in Claude API, n8n, and Cursor development.",
   keywords:
     "AI automation, LLM integration, strategic research, workflow automation, FIELDPORTER, AI consulting",
   authors: [{ name: "FIELDPORTER" }],
   creator: "FIELDPORTER",
   publisher: "FIELDPORTER",
-  robots: "index, follow",
+  robots: {
+    index: true,
+    follow: true,
+    "max-video-preview": -1,
+    "max-image-preview": "standard",
+    "max-snippet": -1,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "standard",
+      "max-snippet": -1,
+    },
+  },
   icons: {
     icon: [
       // Default fallback (for browsers that don't support media queries)
       { url: "/favicon.ico" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
       // Light mode favicon (black F on transparent/white background)
       {
         url: "/favicon-light.png",
@@ -83,8 +97,6 @@ export const metadata: Metadata = {
         sizes: "48x48",
         media: "(prefers-color-scheme: dark)",
       },
-      // SVG favicon for modern browsers (adaptive)
-      { url: "/favicon.svg", type: "image/svg+xml" },
     ],
     apple: [
       {
@@ -121,17 +133,26 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://fieldporter.com",
-    title: "FIELDPORTER - AI Integration & Automation Consulting",
+    title: "FIELDPORTER - Build Your Own AI Advantage",
     description:
-      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. Turn hours into minutes through intelligent automation.",
+      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders.",
     siteName: "FIELDPORTER",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "FIELDPORTER - Build Your Own AI Advantage",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "FIELDPORTER - AI Integration & Automation Consulting",
+    title: "FIELDPORTER - Build Your Own AI Advantage",
     description:
-      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. Turn hours into minutes through intelligent automation.",
+      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders.",
     creator: "@fieldporter",
+    images: ["/opengraph-image"],
   },
 };
 
@@ -178,36 +199,72 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "FIELDPORTER",
-              description:
-                "Turn hours into minutes through intelligent automation. We build AI workflow automation, teach advanced LLM integration, and conduct strategic research using AI agents.",
+              alternateName: "FIELDPORTER Limited",
               url: "https://fieldporter.com",
-              logo: "https://fieldporter.com/images/fieldporter-logo.png",
-              sameAs: ["https://twitter.com/fieldporter"],
+              logo: "https://fieldporter.com/favicon-dark.png",
+              description:
+                "AI integration and automation consulting for ambitious founders",
+              email: "hello@fieldporter.com",
+              foundingDate: "2023",
+              founders: [
+                {
+                  "@type": "Person",
+                  name: "Freddy Krueger",
+                  jobTitle: "Founder & AI Integration Specialist",
+                },
+              ],
+              address: {
+                "@type": "PostalAddress",
+                addressCountry: "NZ",
+                addressLocality: "Auckland",
+              },
+              sameAs: [
+                "https://twitter.com/fieldporter",
+                "https://linkedin.com/company/fieldporter",
+                "https://github.com/fieldporter",
+              ],
               contactPoint: {
                 "@type": "ContactPoint",
                 contactType: "customer service",
                 url: "https://fieldporter.com/contact",
+                email: "hello@fieldporter.com",
               },
-              service: [
+              makesOffer: [
                 {
-                  "@type": "Service",
-                  name: "Strategic Research Intelligence",
-                  description: "Multi-model AI research and validation systems",
+                  "@type": "Offer",
+                  itemOffered: {
+                    "@type": "Service",
+                    name: "AI Integration Consulting",
+                    description:
+                      "Transform your business with custom AI solutions",
+                  },
                 },
                 {
-                  "@type": "Service",
-                  name: "Rapid Development Solutions",
-                  description: "Custom application development and automation",
+                  "@type": "Offer",
+                  itemOffered: {
+                    "@type": "Service",
+                    name: "Workflow Automation",
+                    description:
+                      "Automate repetitive tasks and streamline operations",
+                  },
                 },
                 {
-                  "@type": "Service",
-                  name: "Workflow Optimization",
-                  description: "Business process automation and optimization",
+                  "@type": "Offer",
+                  itemOffered: {
+                    "@type": "Service",
+                    name: "Strategic AI Research",
+                    description:
+                      "Data-driven insights for competitive advantage",
+                  },
                 },
                 {
-                  "@type": "Service",
-                  name: "AI Training & Implementation",
-                  description: "Team training and AI system implementation",
+                  "@type": "Offer",
+                  itemOffered: {
+                    "@type": "Service",
+                    name: "AI Training & Implementation",
+                    description:
+                      "Team training and hands-on AI system implementation",
+                  },
                 },
               ],
             }),

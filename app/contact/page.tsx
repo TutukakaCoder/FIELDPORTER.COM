@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     siteName: "FIELDPORTER",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: "Contact FIELDPORTER - AI Implementation & Automation",
@@ -59,7 +59,10 @@ export const metadata: Metadata = {
     title: "Contact Us | FIELDPORTER",
     description:
       "Get in touch with our team. Use our contact form or chat with our AI assistant - we'll get back to you shortly.",
-    images: ["/og-image.jpg"],
+    images: ["/opengraph-image"],
+  },
+  alternates: {
+    canonical: "https://fieldporter.com/contact",
   },
 };
 

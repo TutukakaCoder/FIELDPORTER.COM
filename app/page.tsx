@@ -52,30 +52,33 @@ function UnifiedAuroraBackground() {
 }
 
 export const metadata: Metadata = {
-  title: "FIELDPORTER - Build Your Own AI Advantage | AI Integration",
+  title: {
+    absolute: "FIELDPORTER - Build Your Own AI Advantage | AI Integration",
+  },
   description:
-    "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. Claude API, n8n automation, Cursor development that works.",
+    "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. We specialize in Claude API, n8n, and Cursor development.",
   keywords: [
     "FIELDPORTER",
-    "AI integration",
-    "Claude API automation",
-    "n8n workflows",
+    "AI integration consultant",
+    "business automation expert",
+    "Claude AI implementation",
+    "workflow automation services",
+    "AI strategy consulting",
+    "DeepSeek integration",
     "Cursor development",
-    "AI workflow setup",
-    "business automation",
-    "practical AI implementation",
-    "working AI systems",
+    "AI transformation partner",
+    "strategic AI research",
   ],
   openGraph: {
-    title: "FIELDPORTER - Build Your Own AI Advantage | AI Integration",
+    title: "FIELDPORTER - Build Your Own AI Advantage",
     description:
-      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. Claude API, n8n automation, Cursor development that works.",
+      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders.",
     type: "website",
     url: "https://fieldporter.com",
     siteName: "FIELDPORTER",
     images: [
       {
-        url: "/og-image.svg",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: "FIELDPORTER - Build Your Own AI Advantage",
@@ -84,21 +87,28 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "FIELDPORTER - Build Your Own AI Advantage | AI Integration",
+    title: "FIELDPORTER - Build Your Own AI Advantage",
     description:
-      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. Claude API, n8n automation, Cursor development that works.",
-    images: ["/og-image.svg"],
+      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders.",
+    images: ["/opengraph-image"],
+    creator: "@fieldporter",
   },
   robots: {
     index: true,
     follow: true,
+    "max-video-preview": -1,
+    "max-image-preview": "standard",
+    "max-snippet": -1,
     googleBot: {
       index: true,
       follow: true,
       "max-video-preview": -1,
-      "max-image-preview": "large",
+      "max-image-preview": "standard",
       "max-snippet": -1,
     },
+  },
+  alternates: {
+    canonical: "https://fieldporter.com",
   },
   verification: {
     google: "fieldporter-website-verification-pending", // Update when deploying to production

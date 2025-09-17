@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     url: "https://fieldporter.com/insights",
     images: [
       {
-        url: "/og-insights-coming-soon.jpg",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: "FIELDPORTER - AI Strategy Insights Coming Soon",
@@ -34,6 +34,9 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+  },
+  alternates: {
+    canonical: "https://fieldporter.com/insights",
   },
 };
 
