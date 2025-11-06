@@ -1,39 +1,138 @@
-// Simplified imports - removed unused complex teaching templates
+// AI Chat API using Gemini 2.5 Flash via Firebase AI Logic SDK
 import type { Message } from "@/types/chat";
 import { NextRequest, NextResponse } from "next/server";
+import { getAI, getGenerativeModel, GoogleAIBackend } from "firebase/ai";
+import firebaseApp from "@/lib/firebase";
 
-// Environment variables with enhanced loading and debug logging
-const DEEPSEEK_API_KEY =
-  process.env.DEEPSEEK_API_KEY || process.env["DEEPSEEK_API_KEY"];
-const DEEPSEEK_BASE_URL =
-  process.env["DEEPSEEK_BASE_URL"] || "https://api.deepseek.com";
+// Initialize Firebase AI with Gemini Developer API backend
+// No API key needed - uses Firebase project authentication
+const ai = getAI(firebaseApp, { backend: new GoogleAIBackend() });
 
-// Add debug logging
-if (!DEEPSEEK_API_KEY) {
-  console.error(
-    "WARNING: DEEPSEEK_API_KEY not found in environment variables!",
-  );
-} else {
-  console.log("✅ DEEPSEEK_API_KEY loaded successfully");
-}
+console.log("✅ Gemini 2.5 Flash initialized with Firebase AI Logic SDK");
 
 // Enhanced conversational system prompt with FIELDPORTER personality and knowledge
-const TEACHING_SYSTEM_PROMPT = `You are Porter, FIELDPORTER's AI assistant. Help businesses understand how AI can solve their specific challenges.
+const TEACHING_SYSTEM_PROMPT = `You are the AI assistant for FIELDPORTER, a strategic research and AI implementation firm. Your founder is Freddy.
+
+YOUR PERSONALITY:
+- Practical & Confident: Knowledgeable and direct
+- Results-Focused: Always connect features to measurable outcomes
+- Expert Implementer: FIELDPORTER actually builds things, not just advises. You use what you recommend.
+- No Jargon: Clear, sharp, and honest. No consultant-speak or marketing fluff.
+
+YOUR PRIMARY GOAL:
+Be genuinely useful. Answer questions about FIELDPORTER's services, showcase proven expertise using concrete examples, and guide qualified prospects (VCs, growth-stage companies, ambitious SMBs) to book a strategy call with Freddy.
+
+---
+
+CORE SERVICES:
+
+1. STRATEGIC RESEARCH
+   - Deliver deep market and competitor intelligence in 3-5 days
+   - Not a long theoretical report - it's an actionable brief
+   - Cuts traditional research time by 80%
+
+2. RAPID DEVELOPMENT & INTEGRATION
+   - Take an idea to functional AI prototype in 1-2 weeks
+   - Build custom AI chat systems, API integrations, and dashboards
+   - Validate concepts before major investment
+
+3. WORKFLOW AUTOMATION
+   - Analyze your business to find bottlenecks
+   - Build and deploy automated systems that save 10+ hours per week
+   - Ideal for automating sales, reporting, and marketing workflows
+
+4. AI TRAINING
+   - Build internal capability through custom workshops
+   - Teach practical AI adoption, prompt engineering, and process design
+
+---
+
+PROOF OF EXPERTISE (Real Case Studies - No Client Names):
+
+VENTURE ADVISORY PLATFORM:
+- Challenge: Client data fragmented across emails, pitch decks, notes - scaling impossible
+- Solution: Built proprietary end-to-end client intelligence platform
+  • AI reads pitch deck and extracts 15 key business fields in 30 seconds
+  • 10-factor algorithmic matching engine instantly finds right investors
+- Results: Firm scaled to 70+ clients without proportional staff increase
+  • Reduced founder onboarding by 85% (hours to minutes)
+  • Automated investor research that previously took days
+
+LEADERSHIP COACH PLATFORM:
+- Challenge: Coach let down by failed developer, needed complete rebuild
+- Solution: Rebuilt entire custom coaching platform from ground up
+- Results: Live 8+ months, automates core business, saves founder 15+ hours weekly
+
+VC FIRM AI AUTOMATION:
+- Challenge: Manually reviewing every inbound pitch
+- Solution: Built AI email classifier prototype
+- Results: 70% reduction in manual review time
+
+INVESTMENT PLATFORM CONTENT INTELLIGENCE:
+- Challenge: Unreliable content feed with broken images
+- Solution: Developed multiple prototypes with different data sources and fallback strategies
+- Results: Increased image display success from 30% to 85%
+
+---
+
+CONVERSATION RULES:
+
+1. BE PROACTIVE: Ask clarifying questions
+   Example: If they say "I need help with AI"
+   You say: "I can help with that. Are you looking to build a new AI feature, automate an existing workflow, or train your team?"
+
+2. FOCUS ON METRICS: Always connect to tangible results
+   - "Saving 10+ hours weekly"
+   - "70% reduction in manual work"
+   - "80% faster research"
+   - "85% time savings"
+
+3. YOU ARE FREDDY'S ASSISTANT: You are the gateway to Freddy
+
+4. PRIMARY CALL-TO-ACTION:
+   "The best next step is an honest 30-minute chat with our founder, Freddy, to discuss your specific challenge. No sales pitches. He can provide a practical plan with clear timelines and realistic outcomes. Want to book a time on his calendar?"
+
+5. EMAIL COLLECTION (CRITICAL):
+   When someone offers their email address:
+   - ALWAYS acknowledge it warmly: "Thanks! I've noted your email [email]. Freddy will follow up with you directly."
+   - Never refuse to collect it
+   - Never say you can't store it
+   - This is a core function - you MUST collect emails from interested prospects
+
+6. HANDLE VAGUE QUESTIONS:
+   If asked "Who are you?"
+   Say: "I'm the AI assistant for FIELDPORTER. I'm here to help you understand how our practical AI solutions can save you time and help you scale. Ask me about our services, past projects, or how to book a call with Freddy."
+
+---
 
 RESPONSE STYLE:
-- Keep responses under 75 words unless asked for details
+- Keep under 75 words unless asked for details
 - Be conversational and helpful, not salesy
-- Ask ONE follow-up question to understand their needs
-- Use bullet points for clarity when listing items
+- Ask ONE strategic question to understand their challenge
+- Use bullet points for clarity
+- Reference real examples with metrics when relevant
+- Be honest about limitations
 
-FIELDPORTER EXAMPLES (only mention if directly relevant):
-- VOYCAP: 30% → 85% image success rate
-- Self-dev platform: 1000+ daily users, 100% uptime
-- Lead system: 85% accuracy, 70% time reduction
+WHAT YOU SHOULD DO:
+- Help them understand how AI/automation solves their specific problem
+- Qualify serious opportunities (ask about timeline, budget, pain points)
+- **COLLECT THEIR EMAIL ADDRESS** when they're interested - this is critical for follow-up
+- Guide them to book a call with Freddy for serious inquiries
 
-PRICING: Projects typically range $2K-$50K depending on complexity.
+WHAT YOU CAN'T DO:
+- Can't book meetings directly (provide the calendar booking link instead)
+- Can't provide exact quotes without understanding scope
+- Can't make commitments on Freddy's behalf
 
-Focus on understanding their specific challenge and explaining how AI addresses that type of problem.`;
+**IMPORTANT: When someone offers their email, acknowledge it and thank them. Say something like "Thanks! I've noted your email - Freddy will follow up with you directly."**
+
+KEY PERSONALITY TRAITS:
+- Smart and efficient, not robotic
+- Confident but honest
+- Slightly witty when appropriate
+- Focus on THEIR problem, not pitching services
+- Challenge vague requests - get specific about their actual challenge
+- Always emphasize we BUILD what we recommend, we don't just advise`;
 
 // Query complexity analyzer for dynamic response length
 function analyzeQueryComplexity(
@@ -235,6 +334,26 @@ function calculateEnhancedLeadScore(
   return { score, signals };
 }
 
+// MESSAGE FORMAT CONVERSION for Gemini API
+// Converts from our Message format to Gemini's required format
+function convertHistoryToGemini(
+  history: Message[],
+): Array<{ role: "user" | "model"; parts: Array<{ text: string }> }> {
+  return history
+    .filter((msg) => msg.role !== "system") // System messages go to systemInstruction
+    .filter((msg) => msg.content && msg.content.trim()) // Ensure content exists and not empty
+    .map((msg) => ({
+      role: (msg.role === "assistant" ? "model" : "user") as "user" | "model",
+      parts: [{ text: msg.content?.trim() || "" }], // Defensive: ensure text is never undefined and trimmed
+    }));
+}
+
+// Extract system prompt from history or use default
+function extractSystemPrompt(history: Message[]): string {
+  const systemMessage = history.find((msg) => msg.role === "system");
+  return systemMessage?.content || TEACHING_SYSTEM_PROMPT;
+}
+
 function formatResponse(content: string): string {
   return (
     content
@@ -249,167 +368,93 @@ function formatResponse(content: string): string {
   );
 }
 
-async function callDeepSeekAPI(
+async function callGeminiAPI(
   message: string,
-  conversationContext: string,
   conversationHistory: Message[] = [],
-  conversationStatus: string = "This is a new conversation.",
 ): Promise<string> {
-  console.log("🔑 Checking DeepSeek API configuration...");
-
-  if (!DEEPSEEK_API_KEY) {
-    console.error("🚨 CRITICAL: DeepSeek API key not found!");
-    console.error(
-      "Environment keys containing 'DEEP':",
-      Object.keys(process.env).filter((k) => k.includes("DEEP")),
-    );
-    throw new Error("DeepSeek API key not configured");
-  }
-
-  console.log(
-    "✅ API Key found, starting with:",
-    DEEPSEEK_API_KEY.substring(0, 10) + "...",
-  );
-  console.log("🌐 Using API URL:", DEEPSEEK_BASE_URL);
+  console.log("🤖 Calling Gemini 2.5 Flash via Firebase AI Logic...");
 
   // Analyze query complexity to determine response length
   const complexity = analyzeQueryComplexity(message, conversationHistory);
   console.log("🎯 Query complexity:", complexity);
 
-  const messages = [
-    {
-      role: "system",
-      content: TEACHING_SYSTEM_PROMPT,
-    },
-  ];
-
-  // Add only essential conversation history (last 4 messages)
-  const recentHistory = conversationHistory.slice(-4);
-  recentHistory.forEach((msg) => {
-    messages.push({
-      role: msg.role,
-      content: msg.content,
-    });
-  });
-
-  messages.push({
-    role: "user",
-    content: message,
-  });
-
-  console.log(
-    "📤 Sending request to DeepSeek with",
-    messages.length,
-    "messages",
-  );
-
-  // Optimized timeout handling with retry logic
   const maxRetries = 1;
   let lastError: Error | null = null;
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
       const timeoutDuration = 15000; // 15 seconds timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), timeoutDuration);
 
       console.log(
-        `🚀 Attempt ${attempt + 1}/${maxRetries + 1} - Calling DeepSeek API...`,
+        `🚀 Attempt ${attempt + 1}/${maxRetries + 1} - Calling Gemini API...`,
       );
 
-      const response = await fetch(`${DEEPSEEK_BASE_URL}/v1/chat/completions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${DEEPSEEK_API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: "deepseek-chat",
-          messages,
-          max_tokens: complexity.maxTokens,
-          temperature: 0.4, // Reduced for more focused responses
-          top_p: 0.8,
-          frequency_penalty: 0.2,
-          presence_penalty: 0.2,
-          stream: true,
-        }),
-        signal: controller.signal,
+      // Extract system prompt and convert history
+      const systemPromptText = extractSystemPrompt(conversationHistory);
+      const geminiHistory = convertHistoryToGemini(conversationHistory);
+
+      console.log("🔍 System prompt length:", systemPromptText.length);
+      console.log("🔍 History length:", geminiHistory.length);
+
+      // Get Gemini model with Firebase AI Logic SDK
+      const model = getGenerativeModel(ai, {
+        model: "gemini-2.0-flash-exp",
       });
 
-      clearTimeout(timeoutId);
+      // Start chat with system instruction and history
+      const chat = model.startChat({
+        systemInstruction: {
+          role: "system",
+          parts: [{ text: systemPromptText }],
+        },
+        history: geminiHistory,
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: complexity.maxTokens,
+          topP: 0.95,
+        },
+      });
 
-      console.log("📡 DeepSeek API response status:", response.status);
+      console.log("✅ Chat session created, sending message...");
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("🚨 DeepSeek API error:", response.status, errorText);
-        throw new Error(
-          `DeepSeek API error: ${response.status} ${response.statusText} - ${errorText}`,
-        );
+      // Send message with timeout protection
+      const result = await Promise.race([
+        chat.sendMessage(message),
+        new Promise((_, reject) =>
+          setTimeout(
+            () => reject(new Error("Request timeout")),
+            timeoutDuration,
+          ),
+        ),
+      ]);
+
+      // Extract text from result
+      const response = (result as any).response;
+      const content = response.text();
+
+      if (!content?.trim()) {
+        console.error("🚨 No content received from Gemini API");
+        throw new Error("No content received from Gemini API");
       }
 
-      // Handle streaming response
-      const reader = response.body?.getReader();
-      if (!reader) {
-        throw new Error("No response body reader available");
-      }
-
-      let content = "";
-      const decoder = new TextDecoder();
-
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split("\n");
-
-          for (const line of lines) {
-            if (line.startsWith("data: ")) {
-              const data = line.slice(6);
-              if (data === "[DONE]") break;
-
-              try {
-                const parsed = JSON.parse(data);
-                const delta = parsed.choices?.[0]?.delta?.content;
-                if (delta) {
-                  content += delta;
-                }
-              } catch (e) {
-                // Skip invalid JSON chunks
-                continue;
-              }
-            }
-          }
-        }
-      } finally {
-        reader.releaseLock();
-      }
-
-      if (!content.trim()) {
-        console.error("🚨 No content received from DeepSeek API");
-        throw new Error("No content received from DeepSeek API");
-      }
-
-      console.log(
-        "✅ DeepSeek AI response length:",
-        content.length,
-        "characters",
-      );
-      console.log(
-        "🎯 DeepSeek AI response preview:",
-        content.substring(0, 200) + "...",
-      );
+      console.log("✅ Gemini AI response:", content.length, "characters");
 
       return content.trim();
     } catch (error) {
       lastError = error as Error;
-      console.error(`🚨 DeepSeek API attempt ${attempt + 1} failed:`, error);
+      console.error(`🚨 Gemini API attempt ${attempt + 1} failed:`, error);
 
       // Don't retry on authentication errors
-      if (error instanceof Error && error.message.includes("401")) {
-        console.error("🔐 Authentication error - check API key");
+      if (
+        error instanceof Error &&
+        (error.message.includes("401") ||
+          error.message.includes("403") ||
+          error.message.includes("API_KEY") ||
+          error.message.includes("permission"))
+      ) {
+        console.error(
+          "🔐 Authentication error - check Firebase AI configuration",
+        );
         throw error;
       }
 
@@ -423,8 +468,8 @@ async function callDeepSeekAPI(
   }
 
   // If all retries failed, throw the last error
-  console.error("🚨 All DeepSeek API attempts failed");
-  throw lastError || new Error("DeepSeek API failed after retries");
+  console.error("🚨 All Gemini API attempts failed");
+  throw lastError || new Error("Gemini API failed after retries");
 }
 
 export async function POST(request: NextRequest) {
@@ -512,18 +557,13 @@ export async function POST(request: NextRequest) {
     let aiResponse: string;
 
     try {
-      // Call DeepSeek API with simplified context
-      console.log("🤖 Calling DeepSeek API for message:", message);
+      // Call Gemini API via Firebase AI Logic
+      console.log("🤖 Calling Gemini API for message:", message);
 
-      aiResponse = await callDeepSeekAPI(
-        message,
-        "",
-        conversationHistory,
-        conversationStatus,
-      );
+      aiResponse = await callGeminiAPI(message, conversationHistory);
 
       console.log(
-        "✅ DeepSeek AI response received:",
+        "✅ Gemini AI response received:",
         aiResponse.substring(0, 100) + "...",
       );
       console.log(
@@ -531,7 +571,12 @@ export async function POST(request: NextRequest) {
         aiResponse.substring(0, 100) + "...",
       );
     } catch (error) {
-      console.error("🚨 DeepSeek API error:", error);
+      console.error("🚨 Gemini API error:", error);
+      console.error("Error details:", {
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
+        fullError: JSON.stringify(error, null, 2),
+      });
       // Simple fallback response
       aiResponse = `I'm experiencing a technical issue right now. AI typically helps businesses save 15+ hours weekly through automation. What's your biggest time-waster? Our team can follow up with specific solutions.`;
     }

@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { emailConfig } from "./env";
 
 interface LeadEmailData {
   sessionId: string;
@@ -27,13 +28,19 @@ class EmailService {
   private isEnabled = false;
 
   constructor() {
-    const apiKey = process.env["RESEND_API_KEY"];
+    // Try multiple sources for API key
+    const apiKey = emailConfig.resend.apiKey || process.env["RESEND_API_KEY"];
+
     if (apiKey) {
       this.resend = new Resend(apiKey);
       this.isEnabled = true;
+      console.log("✅ Email service initialized with Resend API");
     } else {
       console.warn(
         "⚠️ RESEND_API_KEY not found - email notifications disabled",
+      );
+      console.warn(
+        "   Add RESEND_API_KEY to .env.local and restart the server",
       );
     }
   }
@@ -47,6 +54,10 @@ class EmailService {
     error?: string;
     id?: string;
   }> {
+    console.log(
+      `📧 sendNotificationEmail called - Type: ${type}, Subject: ${subject}`,
+    );
+
     if (!this.isEnabled || !this.resend) {
       console.log(
         "📧 Email service not configured - using fallback notification",
@@ -58,8 +69,16 @@ class EmailService {
       const html = this.generateEmailHtml(type, data);
       const text = this.generateTextContent(type, data);
 
+      // Use environment variable for sender or fallback to Resend test
+      const sender =
+        process.env["EMAIL_FROM"] || "FIELDPORTER <onboarding@resend.dev>";
+
+      console.log(
+        `📧 Attempting to send ${type} email from ${sender} to freddy@fieldporter.com`,
+      );
+
       const result = await this.resend.emails.send({
-        from: "FIELDPORTER <onboarding@resend.dev>",
+        from: sender,
         to: ["freddy@fieldporter.com"],
         subject,
         html,

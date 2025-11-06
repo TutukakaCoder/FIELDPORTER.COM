@@ -115,7 +115,7 @@
 
   html {
     font-family: "Inter", system-ui, sans-serif;
-    scroll-behavior: smooth;
+    /* REMOVED: scroll-behavior smooth to prevent scroll freeze - handled by layout.tsx */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     /* Ensure black background from the start to prevent white flash */
@@ -1063,8 +1063,7 @@
 html {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer and Edge */
-  overflow-x: hidden !important;
-  scroll-behavior: smooth;
+  /* REMOVED: overflow-x: hidden to prevent nested scroll context */
   width: 100%;
   max-width: 100%;
 }
@@ -1139,11 +1138,7 @@ iframe::-webkit-scrollbar,
 }
 
 /* FORCE NO HORIZONTAL SCROLL ON ALL ELEMENTS */
-*,
-*::before,
-*::after {
-  max-width: 100%;
-}
+/* REMOVED: max-width 100% on all elements - causes layout thrashing */
 
 /* ============================================================================
    TAILWIND CSS FRAMEWORK STYLES

@@ -112,7 +112,6 @@ const FloatingOrb = memo(
   ({ className, delay = 0 }: { className: string; delay?: number }) => {
     const isMobile = useStableMobile();
     const prefersReducedMotion = useReducedMotion();
-    const { metrics } = usePerformanceMonitor();
 
     // Stable animation values that don't change frequently
     const animationValues = useMemo(() => {
@@ -121,10 +120,10 @@ const FloatingOrb = memo(
         x: [0, 10, 0],
         scale: [1, 1.02, 1],
       };
-    }, []); // Empty dependency array for stable animations
+    }, []);
 
-    // Only disable for major issues, not minor FPS fluctuations
-    if (isMobile || prefersReducedMotion || metrics.fps < 25) return null;
+    // Disable on mobile or reduced motion preference
+    if (isMobile || prefersReducedMotion) return null;
 
     return (
       <motion.div
@@ -230,11 +229,6 @@ BackgroundPattern.displayName = "BackgroundPattern";
 const TieredBackground = memo(() => {
   const { experience } = useDeviceCapability();
 
-  // Debug logging for development
-  useEffect(() => {
-    console.log("Device experience tier:", experience);
-  }, [experience]);
-
   switch (experience) {
     case "full":
       return <Hero3DBackground />;
@@ -252,16 +246,14 @@ TieredBackground.displayName = "TieredBackground";
 const PremiumAuroraBackground = memo(() => {
   const isMobile = useStableMobile();
   const prefersReducedMotion = useReducedMotion();
-  const { metrics } = usePerformanceMonitor();
 
   const auroraSettings = useMemo(
     () => ({
-      grain: isMobile ? "opacity-[0.003]" : "opacity-[0.008]", // Reduced grain opacity for performance
-      showAnimated: !isMobile && !prefersReducedMotion && metrics.fps > 40,
-      blurAmount:
-        metrics.quality === "low" ? 40 : metrics.quality === "medium" ? 60 : 80,
+      grain: isMobile ? "opacity-[0.003]" : "opacity-[0.008]",
+      showAnimated: !isMobile && !prefersReducedMotion,
+      blurAmount: 80,
     }),
-    [isMobile, prefersReducedMotion, metrics.fps, metrics.quality],
+    [isMobile, prefersReducedMotion],
   );
 
   return (
@@ -519,51 +511,58 @@ const HeroServiceSelector = memo(() => {
   const iconRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // SCROLL FIX: Throttle tooltip positioning to prevent layout thrashing
   const calculateTooltipPosition = useCallback(
     (buttonElement: HTMLButtonElement) => {
       if (!buttonElement || isMobile) return;
 
-      const rect = buttonElement.getBoundingClientRect();
-      const tooltipWidth = 200;
-      const tooltipHeight = 70;
-      const margin = 16;
+      // Use RAF to batch layout reads
+      requestAnimationFrame(() => {
+        const rect = buttonElement.getBoundingClientRect();
+        const tooltipWidth = 200;
+        const tooltipHeight = 70;
+        const margin = 16;
 
-      let x = rect.left + rect.width / 2 - tooltipWidth / 2;
-      let y = rect.top - tooltipHeight - margin;
+        let x = rect.left + rect.width / 2 - tooltipWidth / 2;
+        let y = rect.top - tooltipHeight - margin;
 
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
 
-      // Horizontal boundary checks
-      if (x < 10) x = 10;
-      if (x + tooltipWidth > viewportWidth - 10)
-        x = viewportWidth - tooltipWidth - 10;
+        // Horizontal boundary checks
+        if (x < 10) x = 10;
+        if (x + tooltipWidth > viewportWidth - 10)
+          x = viewportWidth - tooltipWidth - 10;
 
-      // Vertical boundary checks
-      if (y < 10) {
-        y = rect.bottom + margin;
-      }
+        // Vertical boundary checks
+        if (y < 10) {
+          y = rect.bottom + margin;
+        }
 
-      setTooltipPosition({ x, y, visible: true });
+        setTooltipPosition({ x, y, visible: true });
+      });
     },
     [isMobile],
   );
 
   const handleServiceHover = useCallback(
     (service: (typeof servicePillars)[0], index: number) => {
-      setActiveService(service);
+      // SCROLL FIX: Use requestAnimationFrame to defer layout calculations
+      requestAnimationFrame(() => {
+        setActiveService(service);
 
-      if (!isMobile && iconRefs.current[index]) {
-        calculateTooltipPosition(iconRefs.current[index]!);
-      }
+        if (!isMobile && iconRefs.current[index]) {
+          calculateTooltipPosition(iconRefs.current[index]!);
+        }
 
-      if (!isMobile) {
-        window.dispatchEvent(
-          new CustomEvent("constellation-activate", {
-            detail: { quadrant: service.quadrant },
-          }),
-        );
-      }
+        if (!isMobile) {
+          window.dispatchEvent(
+            new CustomEvent("constellation-activate", {
+              detail: { quadrant: service.quadrant },
+            }),
+          );
+        }
+      });
     },
     [isMobile, calculateTooltipPosition],
   );
@@ -757,10 +756,13 @@ HeroServiceSelector.displayName = "HeroServiceSelector";
 // Main Hero Section Component with Performance Monitoring
 export function HeroSection() {
   const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "0px", amount: 0.05 });
+  const isInView = useInView(ref, {
+    once: true,
+    margin: "-100px",
+    amount: 0.2,
+  });
   const isMobile = useStableMobile();
   const prefersReducedMotion = useReducedMotion();
-  const { metrics } = usePerformanceMonitor();
 
   // Memoized animation variants
   const textReveal: Variants = useMemo(
@@ -791,45 +793,14 @@ export function HeroSection() {
       visible: {
         opacity: 1,
         transition: {
-          staggerChildren: isMobile ? 0.08 : 0.12,
-          delayChildren: 0, // Removed blocking delay for immediate scroll response
+          staggerChildren: isMobile ? 0.04 : 0.06,
+          delayChildren: 0,
+          duration: 0.3,
         },
       },
     }),
     [isMobile],
   );
-
-  // Performance monitoring and memory cleanup - DEVELOPMENT ONLY
-  useEffect(() => {
-    let logInterval: NodeJS.Timeout | undefined;
-
-    // Only log in development and much less frequently
-    if (process.env.NODE_ENV === "development") {
-      logInterval = setInterval(() => {
-        // Only log if there are performance issues
-        if (metrics.fps < 30 || metrics.memoryUsage > 300) {
-          console.log("Hero Performance Warning:", metrics);
-        }
-      }, 10000); // Every 10 seconds instead of 5
-    }
-
-    // Trigger aggressive cleanup if memory usage is very high
-    if (metrics.memoryUsage > 320) {
-      // Import and use WebGL context manager for cleanup
-      import("../../lib/webgl-context-manager").then(
-        ({ WebGLContextManager }) => {
-          const manager = WebGLContextManager.getInstance();
-          manager.forceCleanup();
-        },
-      );
-    }
-
-    return () => {
-      if (logInterval) {
-        clearInterval(logInterval);
-      }
-    };
-  }, [metrics]); // Complete metrics object as dependency
 
   return (
     <section
@@ -838,23 +809,20 @@ export function HeroSection() {
         ${
           isMobile
             ? "min-h-[100dvh] py-24 flex flex-col justify-center"
-            : "min-h-screen flex items-end justify-center pt-24 pb-32 sm:pt-32 sm:pb-40 md:pt-36 md:pb-48 lg:pt-44 lg:pb-56"
+            : "min-h-screen flex items-center justify-center pt-24 pb-32 sm:pt-32 sm:pb-40 md:pt-36 md:pb-48 lg:pt-44 lg:pb-56"
         }
         bg-white dark:bg-black relative
       `}
       style={{
         position: "relative",
-        overflow: "hidden",
+        overflowX: "hidden",
+        overflowY: "visible",
         width: "100%",
         maxWidth: "100%",
         contain: "layout style paint",
         isolation: "isolate",
-        // Mobile viewport handling
         ...(isMobile && {
-          minHeight:
-            "calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom))",
-          paddingTop: "max(6rem, env(safe-area-inset-top) + 5rem)",
-          paddingBottom: "max(6rem, env(safe-area-inset-bottom) + 5rem)",
+          minHeight: "100vh",
         }),
       }}
     >
@@ -863,25 +831,17 @@ export function HeroSection() {
 
       <BackgroundPattern />
 
-      {/* Floating orbs - desktop only, stable memory thresholds */}
-      {!isMobile &&
-        metrics.memoryUsage < 320 && ( // More conservative threshold
-          <>
-            <FloatingOrb className="top-20 left-10 hidden lg:block" delay={0} />
-            {metrics.memoryUsage < 300 && (
-              <FloatingOrb
-                className="bottom-20 right-20 hidden lg:block"
-                delay={3}
-              />
-            )}
-            {metrics.memoryUsage < 280 && (
-              <FloatingOrb
-                className="top-40 right-40 hidden xl:block"
-                delay={6}
-              />
-            )}
-          </>
-        )}
+      {/* Floating orbs - desktop only */}
+      {!isMobile && (
+        <>
+          <FloatingOrb className="top-20 left-10 hidden lg:block" delay={0} />
+          <FloatingOrb
+            className="bottom-20 right-20 hidden lg:block"
+            delay={3}
+          />
+          <FloatingOrb className="top-40 right-40 hidden xl:block" delay={6} />
+        </>
+      )}
 
       <div
         className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"

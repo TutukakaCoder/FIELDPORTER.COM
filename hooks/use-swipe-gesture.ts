@@ -1,4 +1,4 @@
-import { MouseEvent, TouchEvent, useCallback, useRef } from 'react';
+import { MouseEvent, TouchEvent, useCallback, useRef } from "react";
 
 interface SwipeGestureOptions {
   onSwipeLeft?: () => void;
@@ -23,7 +23,9 @@ interface SwipeGestureHandlers {
  * Custom hook for handling swipe gestures on mobile and desktop
  * Provides smooth touch/mouse interaction for carousels and slideshows
  */
-export function useSwipeGesture(options: SwipeGestureOptions): SwipeGestureHandlers {
+export function useSwipeGesture(
+  options: SwipeGestureOptions,
+): SwipeGestureHandlers {
   const {
     onSwipeLeft,
     onSwipeRight,
@@ -45,51 +47,53 @@ export function useSwipeGesture(options: SwipeGestureOptions): SwipeGestureHandl
   }, []);
 
   const handleTouchMove = useCallback((e: TouchEvent) => {
-    if (preventDefaultTouchmoveEvent) {
-      e.preventDefault();
-    }
-  }, [preventDefaultTouchmoveEvent]);
+    // FIXED: Never prevent default to allow native scroll
+    // Only track movement for swipe detection
+  }, []);
 
-  const handleTouchEnd = useCallback((e: TouchEvent) => {
-    if (!touchStartRef.current) return;
+  const handleTouchEnd = useCallback(
+    (e: TouchEvent) => {
+      if (!touchStartRef.current) return;
 
-    const touch = e.changedTouches[0];
-    if (!touch) return;
+      const touch = e.changedTouches[0];
+      if (!touch) return;
 
-    const startX = touchStartRef.current.x;
-    const startY = touchStartRef.current.y;
-    const endX = touch.clientX;
-    const endY = touch.clientY;
+      const startX = touchStartRef.current.x;
+      const startY = touchStartRef.current.y;
+      const endX = touch.clientX;
+      const endY = touch.clientY;
 
-    const deltaX = endX - startX;
-    const deltaY = endY - startY;
+      const deltaX = endX - startX;
+      const deltaY = endY - startY;
 
-    const absDeltaX = Math.abs(deltaX);
-    const absDeltaY = Math.abs(deltaY);
+      const absDeltaX = Math.abs(deltaX);
+      const absDeltaY = Math.abs(deltaY);
 
-    // Determine if the swipe is primarily horizontal or vertical
-    if (absDeltaX > absDeltaY) {
-      // Horizontal swipe
-      if (absDeltaX > threshold) {
-        if (deltaX > 0) {
-          onSwipeRight?.();
-        } else {
-          onSwipeLeft?.();
+      // Determine if the swipe is primarily horizontal or vertical
+      if (absDeltaX > absDeltaY) {
+        // Horizontal swipe
+        if (absDeltaX > threshold) {
+          if (deltaX > 0) {
+            onSwipeRight?.();
+          } else {
+            onSwipeLeft?.();
+          }
+        }
+      } else {
+        // Vertical swipe
+        if (absDeltaY > threshold) {
+          if (deltaY > 0) {
+            onSwipeDown?.();
+          } else {
+            onSwipeUp?.();
+          }
         }
       }
-    } else {
-      // Vertical swipe
-      if (absDeltaY > threshold) {
-        if (deltaY > 0) {
-          onSwipeDown?.();
-        } else {
-          onSwipeUp?.();
-        }
-      }
-    }
 
-    touchStartRef.current = null;
-  }, [threshold, onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown]);
+      touchStartRef.current = null;
+    },
+    [threshold, onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown],
+  );
 
   const handleMouseDown = useCallback((e: MouseEvent) => {
     mouseStartRef.current = { x: e.clientX, y: e.clientY };
@@ -97,54 +101,60 @@ export function useSwipeGesture(options: SwipeGestureOptions): SwipeGestureHandl
   }, []);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
+    // FIXED: Allow default behavior for better compatibility
     if (!isDraggingRef.current) return;
-    e.preventDefault();
   }, []);
 
-  const handleMouseUp = useCallback((e: MouseEvent) => {
-    if (!mouseStartRef.current || !isDraggingRef.current) return;
+  const handleMouseUp = useCallback(
+    (e: MouseEvent) => {
+      if (!mouseStartRef.current || !isDraggingRef.current) return;
 
-    const startX = mouseStartRef.current.x;
-    const startY = mouseStartRef.current.y;
-    const endX = e.clientX;
-    const endY = e.clientY;
+      const startX = mouseStartRef.current.x;
+      const startY = mouseStartRef.current.y;
+      const endX = e.clientX;
+      const endY = e.clientY;
 
-    const deltaX = endX - startX;
-    const deltaY = endY - startY;
+      const deltaX = endX - startX;
+      const deltaY = endY - startY;
 
-    const absDeltaX = Math.abs(deltaX);
-    const absDeltaY = Math.abs(deltaY);
+      const absDeltaX = Math.abs(deltaX);
+      const absDeltaY = Math.abs(deltaY);
 
-    // Determine if the swipe is primarily horizontal or vertical
-    if (absDeltaX > absDeltaY) {
-      // Horizontal swipe
-      if (absDeltaX > threshold) {
-        if (deltaX > 0) {
-          onSwipeRight?.();
-        } else {
-          onSwipeLeft?.();
+      // Determine if the swipe is primarily horizontal or vertical
+      if (absDeltaX > absDeltaY) {
+        // Horizontal swipe
+        if (absDeltaX > threshold) {
+          if (deltaX > 0) {
+            onSwipeRight?.();
+          } else {
+            onSwipeLeft?.();
+          }
+        }
+      } else {
+        // Vertical swipe
+        if (absDeltaY > threshold) {
+          if (deltaY > 0) {
+            onSwipeDown?.();
+          } else {
+            onSwipeUp?.();
+          }
         }
       }
-    } else {
-      // Vertical swipe
-      if (absDeltaY > threshold) {
-        if (deltaY > 0) {
-          onSwipeDown?.();
-        } else {
-          onSwipeUp?.();
-        }
+
+      mouseStartRef.current = null;
+      isDraggingRef.current = false;
+    },
+    [threshold, onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown],
+  );
+
+  const handleMouseLeave = useCallback(
+    (e: MouseEvent) => {
+      if (isDraggingRef.current) {
+        handleMouseUp(e);
       }
-    }
-
-    mouseStartRef.current = null;
-    isDraggingRef.current = false;
-  }, [threshold, onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown]);
-
-  const handleMouseLeave = useCallback((e: MouseEvent) => {
-    if (isDraggingRef.current) {
-      handleMouseUp(e);
-    }
-  }, [handleMouseUp]);
+    },
+    [handleMouseUp],
+  );
 
   return {
     onTouchStart: handleTouchStart,
@@ -159,24 +169,26 @@ export function useSwipeGesture(options: SwipeGestureOptions): SwipeGestureHandl
 
 /**
  * Utility function to create swipe handlers for horizontal carousels
+ * FIXED: Non-blocking version that doesn't interfere with scroll
  */
 export function useHorizontalSwipe(onPrevious: () => void, onNext: () => void) {
   return useSwipeGesture({
     onSwipeLeft: onNext,
     onSwipeRight: onPrevious,
     threshold: 50,
-    preventDefaultTouchmoveEvent: true,
+    preventDefaultTouchmoveEvent: false, // FIXED: Allow native scroll
   });
 }
 
 /**
  * Utility function to create swipe handlers for vertical carousels
+ * FIXED: Non-blocking version that doesn't interfere with scroll
  */
 export function useVerticalSwipe(onUp: () => void, onDown: () => void) {
   return useSwipeGesture({
     onSwipeUp: onUp,
     onSwipeDown: onDown,
     threshold: 50,
-    preventDefaultTouchmoveEvent: true,
+    preventDefaultTouchmoveEvent: false, // FIXED: Allow native scroll
   });
-} 
+}

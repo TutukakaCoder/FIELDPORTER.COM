@@ -1,11 +1,11 @@
 "use client";
 
 import {
-    createContext,
-    ReactNode,
-    useContext,
-    useEffect,
-    useState,
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
 } from "react";
 import { VideoEntrance } from "./video-entrance";
 
@@ -77,10 +77,10 @@ export function EntranceProvider({ children }: EntranceProviderProps) {
   return (
     <EntranceContext.Provider value={{ showEntrance, completeEntrance }}>
       {showEntrance && <VideoEntrance onComplete={completeEntrance} />}
-      
-      {/* FIXED: Use stable positioning to prevent layout reflow */}
+
+      {/* FIXED: Static overflow to prevent scroll freeze */}
       <div
-        className={`transition-opacity duration-1000 ease-in-out ${
+        className={`transition-opacity duration-500 ease-in-out ${
           showEntrance ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
         style={{
@@ -90,8 +90,9 @@ export function EntranceProvider({ children }: EntranceProviderProps) {
           minHeight: "100vh",
           // Prevent interaction during entrance but maintain layout
           pointerEvents: showEntrance ? "none" : "auto",
-          // Ensure no overflow issues
-          overflow: showEntrance ? "hidden" : "visible",
+          // FIXED: Static overflow-x only, never toggle overflow-y
+          overflowX: "hidden",
+          overflowY: "visible",
         }}
       >
         {children}

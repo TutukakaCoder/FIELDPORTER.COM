@@ -61,7 +61,8 @@ function InteractiveSpotlight() {
 
 export function CTASection() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-20%" });
+  // FIXED: Reduced negative margin to prevent overlap
+  const isInView = useInView(ref, { once: true, margin: "-10%" });
 
   // Button refs for magnetic field
   const primaryButtonRef = useRef<HTMLButtonElement>(null);

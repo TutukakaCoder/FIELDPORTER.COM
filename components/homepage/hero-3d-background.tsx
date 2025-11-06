@@ -108,7 +108,7 @@ function useIsMobile() {
 }
 
 // Premium particle system component
-function PremiumParticleSystem() {
+function PremiumParticleSystem({ isScrolling }: { isScrolling: boolean }) {
   const meshRef = useRef<THREE.Points>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const { camera, size } = useThree();
@@ -195,25 +195,51 @@ function PremiumParticleSystem() {
 
   // Enhanced mouse event handlers with proper scaling
   useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      // Convert to world coordinates like the original for better responsiveness
-      const x = (event.clientX / window.innerWidth) * 2 - 1;
-      const y = -(event.clientY / window.innerHeight) * 2 + 1;
+    // SCROLL FIX: Throttle mousemove to avoid blocking scroll
+    let rafId: number | null = null;
+    let pendingMouseUpdate = false;
 
-      // Scale to world space for much more noticeable interaction
-      mouseRef.current.x = x * 50;
-      mouseRef.current.y = y * 50;
+    const handleMouseMove = (event: MouseEvent) => {
+      if (pendingMouseUpdate) return; // Skip if update already queued
+
+      pendingMouseUpdate = true;
+
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+
+      rafId = requestAnimationFrame(() => {
+        // Convert to world coordinates
+        const x = (event.clientX / window.innerWidth) * 2 - 1;
+        const y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        // Scale to world space for noticeable interaction
+        mouseRef.current.x = x * 50;
+        mouseRef.current.y = y * 50;
+
+        pendingMouseUpdate = false;
+      });
     };
 
     const handleTouch = (event: TouchEvent) => {
       if (event.touches.length > 0) {
         const touch = event.touches[0];
-        if (touch) {
-          const x = (touch.clientX / window.innerWidth) * 2 - 1;
-          const y = -(touch.clientY / window.innerHeight) * 2 + 1;
+        if (touch && !pendingMouseUpdate) {
+          pendingMouseUpdate = true;
 
-          mouseRef.current.x = x * 50;
-          mouseRef.current.y = y * 50;
+          if (rafId !== null) {
+            cancelAnimationFrame(rafId);
+          }
+
+          rafId = requestAnimationFrame(() => {
+            const x = (touch.clientX / window.innerWidth) * 2 - 1;
+            const y = -(touch.clientY / window.innerHeight) * 2 + 1;
+
+            mouseRef.current.x = x * 50;
+            mouseRef.current.y = y * 50;
+
+            pendingMouseUpdate = false;
+          });
         }
       }
     };
@@ -224,6 +250,9 @@ function PremiumParticleSystem() {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("touchmove", handleTouch);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
     };
   }, []);
 
@@ -244,32 +273,43 @@ function PremiumParticleSystem() {
     [particleConfig.count],
   );
 
-  // Animation loop
+  // Animation loop with scroll freeze prevention
   useFrame((state) => {
     if (!meshRef.current || !materialRef.current) return;
+
+    // SCROLL FREEZE FIX: Skip heavy operations during active scrolling
+    if (isScrolling) {
+      // Only update time to keep animations in sync when scroll ends
+      const currentTime = state.clock.getElapsedTime();
+      if (materialRef.current.uniforms["uTime"]) {
+        materialRef.current.uniforms["uTime"].value = currentTime;
+      }
+      return;
+    }
 
     // Performance monitoring
     frameCount.current++;
     const currentTime = state.clock.getElapsedTime();
 
-    // Skip frames if performance is poor
-    if (currentTime - lastTime.current < 0.016) return; // Maintain ~60fps
+    // Throttle to 30fps during animations (every other frame)
+    if (frameCount.current % 2 !== 0) return;
+
     lastTime.current = currentTime;
 
     // Refined mouse interpolation for smooth, premium movement
-    const interpolationSpeed = 0.06; // Reduced for smoother, more elegant interaction
+    const interpolationSpeed = 0.06;
     currentMouse.current.x +=
       (mouseRef.current.x - currentMouse.current.x) * interpolationSpeed;
     currentMouse.current.y +=
       (mouseRef.current.y - currentMouse.current.y) * interpolationSpeed;
 
-    // Update shader uniforms with better scaling
+    // Update shader uniforms
     if (materialRef.current.uniforms["uTime"]) {
       materialRef.current.uniforms["uTime"].value = currentTime;
     }
     if (materialRef.current.uniforms["uMouse"]) {
       materialRef.current.uniforms["uMouse"].value.set(
-        currentMouse.current.x, // Direct use of world coordinates for stronger effect
+        currentMouse.current.x,
         currentMouse.current.y,
       );
     }
@@ -298,12 +338,20 @@ function PremiumParticleSystem() {
 }
 
 // Camera controls with enhanced responsiveness
-function EnhancedCameraControls() {
+function EnhancedCameraControls({ isScrolling }: { isScrolling: boolean }) {
   const { camera, mouse } = useThree();
   const isMobile = useIsMobile();
+  const frameCount = useRef(0);
 
   useFrame(() => {
     if (isMobile) return;
+
+    // SCROLL FREEZE FIX: Skip during active scrolling
+    if (isScrolling) return;
+
+    // Throttle to 30fps (every other frame)
+    frameCount.current++;
+    if (frameCount.current % 2 !== 0) return;
 
     // Enhanced camera movement for premium feel
     const targetX = mouse.x * 2.0;
@@ -343,12 +391,32 @@ function EnhancedCameraControls() {
 export function Hero3DBackground() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
   const isMobile = useIsMobile();
 
   // Handle loading state
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100);
     return () => clearTimeout(timer);
+  }, []);
+
+  // SCROLL FREEZE FIX: Detect active scrolling to pause animations
+  useEffect(() => {
+    let scrollTimeout: NodeJS.Timeout;
+
+    const handleScroll = () => {
+      setIsScrolling(true);
+      clearTimeout(scrollTimeout);
+      // Resume animations 100ms after scroll stops
+      scrollTimeout = setTimeout(() => setIsScrolling(false), 100);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(scrollTimeout);
+    };
   }, []);
 
   // ENHANCED: Prevent scrollbar issues with stronger containment
@@ -397,12 +465,13 @@ export function Hero3DBackground() {
           }}
           style={{
             background: "transparent",
-            display: "block", // Prevent layout issues
+            display: "block",
             width: "100%",
             height: "100%",
             maxWidth: "100%",
             maxHeight: "100%",
-            contain: "size layout style paint", // Enhanced containment
+            contain: "size layout style paint",
+            pointerEvents: "none", // SCROLL FIX: Prevent Canvas from capturing scroll
           }}
           onCreated={({ gl }) => {
             // Optimize WebGL context
@@ -410,8 +479,8 @@ export function Hero3DBackground() {
             gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
           }}
         >
-          <EnhancedCameraControls />
-          <PremiumParticleSystem />
+          <EnhancedCameraControls isScrolling={isScrolling} />
+          <PremiumParticleSystem isScrolling={isScrolling} />
         </Canvas>
       </div>
 

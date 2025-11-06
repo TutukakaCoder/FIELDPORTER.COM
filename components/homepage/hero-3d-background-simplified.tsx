@@ -76,7 +76,7 @@ const fragmentShader = `
 `;
 
 // Simplified particle system
-function SimplifiedParticleSystem() {
+function SimplifiedParticleSystem({ isScrolling }: { isScrolling: boolean }) {
   const meshRef = useRef<THREE.Points>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const { camera } = useThree();
@@ -84,6 +84,7 @@ function SimplifiedParticleSystem() {
   // Mouse tracking
   const mouseRef = useRef({ x: 0, y: 0 });
   const currentMouse = useRef({ x: 0, y: 0 });
+  const frameCount = useRef(0);
 
   // Reduced particle count for performance
   const particleCount = 800;
@@ -148,29 +149,53 @@ function SimplifiedParticleSystem() {
 
   // Enhanced mouse event handlers with better scaling
   useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      // Convert to world coordinates for more responsive interaction
-      const x = (event.clientX / window.innerWidth) * 2 - 1;
-      const y = -(event.clientY / window.innerHeight) * 2 + 1;
+    // SCROLL FIX: Throttle mousemove to avoid blocking scroll
+    let rafId: number | null = null;
+    let pendingMouseUpdate = false;
 
-      // Scale to world space for noticeable interaction
-      mouseRef.current = {
-        x: x * 30,
-        y: y * 30,
-      };
+    const handleMouseMove = (event: MouseEvent) => {
+      if (pendingMouseUpdate) return;
+
+      pendingMouseUpdate = true;
+
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+
+      rafId = requestAnimationFrame(() => {
+        const x = (event.clientX / window.innerWidth) * 2 - 1;
+        const y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        mouseRef.current = {
+          x: x * 30,
+          y: y * 30,
+        };
+
+        pendingMouseUpdate = false;
+      });
     };
 
     const handleTouch = (event: TouchEvent) => {
       if (event.touches.length > 0) {
         const touch = event.touches[0];
-        if (touch) {
-          const x = (touch.clientX / window.innerWidth) * 2 - 1;
-          const y = -(touch.clientY / window.innerHeight) * 2 + 1;
+        if (touch && !pendingMouseUpdate) {
+          pendingMouseUpdate = true;
 
-          mouseRef.current = {
-            x: x * 30,
-            y: y * 30,
-          };
+          if (rafId !== null) {
+            cancelAnimationFrame(rafId);
+          }
+
+          rafId = requestAnimationFrame(() => {
+            const x = (touch.clientX / window.innerWidth) * 2 - 1;
+            const y = -(touch.clientY / window.innerHeight) * 2 + 1;
+
+            mouseRef.current = {
+              x: x * 30,
+              y: y * 30,
+            };
+
+            pendingMouseUpdate = false;
+          });
         }
       }
     };
@@ -181,29 +206,45 @@ function SimplifiedParticleSystem() {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("touchmove", handleTouch);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
     };
   }, []);
 
-  // Simplified animation loop
+  // Simplified animation loop with scroll freeze prevention
   useFrame((state) => {
     if (!meshRef.current || !materialRef.current) return;
 
+    // SCROLL FREEZE FIX: Skip heavy operations during active scrolling
+    if (isScrolling) {
+      const currentTime = state.clock.getElapsedTime();
+      if (materialRef.current.uniforms["uTime"]) {
+        materialRef.current.uniforms["uTime"].value = currentTime;
+      }
+      return;
+    }
+
     const currentTime = state.clock.getElapsedTime();
 
+    // Throttle to 30fps (every other frame)
+    frameCount.current++;
+    if (frameCount.current % 2 !== 0) return;
+
     // Premium mouse interpolation for smooth, elegant interaction
-    const interpolationSpeed = 0.05; // Refined for smoother, more premium feel
+    const interpolationSpeed = 0.05;
     currentMouse.current.x +=
       (mouseRef.current.x - currentMouse.current.x) * interpolationSpeed;
     currentMouse.current.y +=
       (mouseRef.current.y - currentMouse.current.y) * interpolationSpeed;
 
-    // Update shader uniforms with direct coordinates for stronger effect
+    // Update shader uniforms
     if (materialRef.current.uniforms["uTime"]) {
       materialRef.current.uniforms["uTime"].value = currentTime;
     }
     if (materialRef.current.uniforms["uMouse"]) {
       materialRef.current.uniforms["uMouse"].value.set(
-        currentMouse.current.x, // Use direct coordinates for better interaction
+        currentMouse.current.x,
         currentMouse.current.y,
       );
     }
@@ -228,17 +269,25 @@ function SimplifiedParticleSystem() {
 }
 
 // Simplified camera controls
-function SimplifiedCameraControls() {
+function SimplifiedCameraControls({ isScrolling }: { isScrolling: boolean }) {
   const { camera, mouse } = useThree();
+  const frameCount = useRef(0);
 
   useFrame(() => {
+    // SCROLL FREEZE FIX: Skip during active scrolling
+    if (isScrolling) return;
+
+    // Throttle to 30fps (every other frame)
+    frameCount.current++;
+    if (frameCount.current % 2 !== 0) return;
+
     // Premium camera movement with smooth, elegant motion
     const targetX = mouse.x * 1.0;
     const targetY = mouse.y * 0.6;
     const targetZ = 25;
 
     // Refined interpolation for premium smoothness
-    const lerpFactor = 0.015; // Reduced for smoother, more elegant movement
+    const lerpFactor = 0.015;
     camera.position.x = THREE.MathUtils.lerp(
       camera.position.x,
       targetX,
@@ -270,11 +319,30 @@ function SimplifiedCameraControls() {
 export function Hero3DBackgroundSimplified() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
 
   // Handle loading state
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100);
     return () => clearTimeout(timer);
+  }, []);
+
+  // SCROLL FREEZE FIX: Detect active scrolling
+  useEffect(() => {
+    let scrollTimeout: NodeJS.Timeout;
+
+    const handleScroll = () => {
+      setIsScrolling(true);
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => setIsScrolling(false), 100);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(scrollTimeout);
+    };
   }, []);
 
   const containerStyles: React.CSSProperties = {
@@ -318,14 +386,15 @@ export function Hero3DBackgroundSimplified() {
             maxWidth: "100%",
             maxHeight: "100%",
             contain: "size layout style paint",
+            pointerEvents: "none", // SCROLL FIX: Prevent Canvas from capturing scroll
           }}
           onCreated={({ gl }) => {
             gl.setClearColor(0x000000, 0);
             gl.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
           }}
         >
-          <SimplifiedCameraControls />
-          <SimplifiedParticleSystem />
+          <SimplifiedCameraControls isScrolling={isScrolling} />
+          <SimplifiedParticleSystem isScrolling={isScrolling} />
         </Canvas>
       </div>
 

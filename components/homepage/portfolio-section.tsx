@@ -459,7 +459,8 @@ ProjectCard.displayName = "ProjectCard";
 
 export function PortfolioSection() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-20%" });
+  // FIXED: Reduced negative margin to prevent overlap
+  const isInView = useInView(ref, { once: true, margin: "-10%" });
 
   return (
     <section

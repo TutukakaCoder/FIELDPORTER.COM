@@ -51,21 +51,29 @@ export function Footer({ className }: FooterProps) {
 
   // Handle scroll events for footer visibility
   useEffect(() => {
-    const handleScroll = () => {
-      // Footer visibility animation
-      const footerElement = document.getElementById("main-footer");
-      if (footerElement) {
-        const footerTop = footerElement.offsetTop;
-        const windowHeight = window.innerHeight;
-        const scrollTop = window.pageYOffset;
+    let ticking = false;
 
-        if (scrollTop + windowHeight > footerTop) {
-          setIsFooterVisible(true);
-        }
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          // Footer visibility animation
+          const footerElement = document.getElementById("main-footer");
+          if (footerElement) {
+            const footerTop = footerElement.offsetTop;
+            const windowHeight = window.innerHeight;
+            const scrollTop = window.pageYOffset;
+
+            if (scrollTop + windowHeight > footerTop) {
+              setIsFooterVisible(true);
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 

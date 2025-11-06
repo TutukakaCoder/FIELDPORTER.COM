@@ -53,6 +53,9 @@ interface Project {
   philosophy?: string;
   deliverables?: string[];
   scope?: string;
+  capabilities?: string[];
+  videoUrl?: string;
+  ctaUrl?: string;
 }
 
 interface PortfolioSection {
@@ -77,6 +80,44 @@ const portfolioSections: PortfolioSection[] = [
     hoverBorderColor: "hover:border-blue-500/25",
     timelineStyle: "live",
     projects: [
+      {
+        title: "Voluntas Intelligence Platform",
+        status: "LIVE • 12+ CLIENTS",
+        category: "Client Intelligence Hub",
+        description:
+          "Built in 3 months to solve information fragmentation for a venture studio. Centralizes intelligence for clients, investors, advisors, and admins—enabling scale to 70+ clients with 3-4 staff instead of 10-12. AI accelerates data collection, extracting 15 business fields from pitch decks in 30-45 seconds with 85%+ accuracy. Humans make strategic decisions. Everyone works from the same source of truth. Businesses looking to grow or raise capital can apply at Voluntas.web.app",
+        capabilities: [
+          "AI Document Processing: 15 fields extracted with 85%+ accuracy",
+          "Structured Client Profiles: 45 fields across 8 categories",
+          "Investor Matching: 10-factor algorithm with confidence scoring",
+          "AI-Powered ICP Generation: 6-section professional documents",
+          "Context-Aware Assistant: Mobile-ready instant answers",
+        ],
+        metrics: [
+          {
+            label: "85% onboarding time saved (hours to minutes)",
+            icon: Clock,
+          },
+          {
+            label: "70+ client scale capacity without proportional headcount",
+            icon: TrendingUp,
+          },
+          {
+            label: "45 structured data fields for comprehensive intelligence",
+            icon: Target,
+          },
+          { label: "12+ live production clients", icon: CheckCircle },
+        ],
+        techStack:
+          "React 18 • TypeScript • Firebase • Google Gemini AI • Multi-tenant Architecture",
+        videoUrl: "/videos/Voluntas-app-run-through.mp4",
+        testimonial: {
+          quote:
+            "This platform has transformed how we operate. What used to take hours now happens in minutes, and our entire team works from a single source of truth. This is the operational leverage that makes scaling possible.",
+          author: "David, Voluntas Managing Partner",
+          rating: 5,
+        },
+      },
       {
         title: "Self-Development Platform",
         status: "LIVE • 8 MONTHS",
@@ -443,7 +484,7 @@ function InteractivePortfolioShowcase() {
               className="relative"
             >
               {/* Desktop Navigation Buttons */}
-              <div className="hidden lg:flex absolute left-8 top-1/2 transform -translate-y-1/2 z-20">
+              <div className="hidden lg:flex absolute -left-20 top-1/2 transform -translate-y-1/2 z-20">
                 <button
                   onClick={goToPrevious}
                   className="w-12 h-12 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-lg hover:bg-gray-900/15 dark:hover:bg-white/15 transition-all duration-500 flex items-center justify-center group hover:scale-105"
@@ -453,7 +494,7 @@ function InteractivePortfolioShowcase() {
                 </button>
               </div>
 
-              <div className="hidden lg:flex absolute right-8 top-1/2 transform -translate-y-1/2 z-20">
+              <div className="hidden lg:flex absolute -right-20 top-1/2 transform -translate-y-1/2 z-20">
                 <button
                   onClick={goToNext}
                   className="w-12 h-12 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-lg hover:bg-gray-900/15 dark:hover:bg-white/15 transition-all duration-500 flex items-center justify-center group hover:scale-105"
@@ -546,6 +587,26 @@ function InteractivePortfolioShowcase() {
                           </div>
                         )}
 
+                        {/* Capabilities */}
+                        {project.capabilities && (
+                          <div className="space-y-4">
+                            <h4 className="text-gray-900 dark:text-white font-semibold text-lg">
+                              Current Capabilities:
+                            </h4>
+                            <ul className="space-y-3">
+                              {project.capabilities.map((capability, idx) => (
+                                <li
+                                  key={idx}
+                                  className="flex items-start gap-3 text-gray-600 dark:text-gray-300"
+                                >
+                                  <CheckCircle className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                                  <span>{capability}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
                         {/* Deliverables */}
                         {project.deliverables && (
                           <div className="space-y-4">
@@ -619,39 +680,102 @@ function InteractivePortfolioShowcase() {
                         )}
                       </div>
 
-                      {/* Testimonial Side (only show for projects that have one) */}
-                      {project.testimonial && (
+                      {/* Testimonial/Video Side (only show for projects that have one) */}
+                      {(project.testimonial || project.videoUrl) && (
                         <div className="relative order-first lg:order-last">
                           <div className="relative">
                             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/5 rounded-3xl blur-xl opacity-60" />
 
-                            <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-8 md:p-12">
-                              <div className="flex items-start gap-4">
-                                <div className="text-blue-400 text-4xl leading-none">
-                                  "
+                            {project.videoUrl ? (
+                              // Video showcase card
+                              <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-4 md:p-6 overflow-hidden">
+                                <div className="relative w-full rounded-3xl overflow-hidden bg-black/50">
+                                  <video
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                    preload="metadata"
+                                    className="w-full h-full rounded-3xl"
+                                    style={{
+                                      willChange: "transform",
+                                      backfaceVisibility: "hidden",
+                                      transform: "translateZ(0)",
+                                      display: "block",
+                                    }}
+                                  >
+                                    <source
+                                      src={project.videoUrl}
+                                      type="video/mp4"
+                                    />
+                                    Your browser does not support the video tag.
+                                  </video>
                                 </div>
-                                <div className="flex-1">
-                                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4 italic text-lg">
-                                    {project.testimonial.quote}
-                                  </p>
-                                  <div className="flex items-center gap-3">
-                                    <div className="flex gap-1">
-                                      {[
-                                        ...Array(project.testimonial.rating),
-                                      ].map((_, i) => (
-                                        <Star
-                                          key={i}
-                                          className="w-4 h-4 text-yellow-400 fill-current"
-                                        />
-                                      ))}
+                                {/* Optional: Add caption below video */}
+                                {project.testimonial && (
+                                  <div className="mt-6">
+                                    <div className="flex items-start gap-4">
+                                      <div className="text-blue-400 text-4xl leading-none">
+                                        "
+                                      </div>
+                                      <div className="flex-1">
+                                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4 italic text-base">
+                                          {project.testimonial.quote}
+                                        </p>
+                                        <div className="flex items-center gap-3">
+                                          <div className="flex gap-1">
+                                            {[
+                                              ...Array(
+                                                project.testimonial.rating,
+                                              ),
+                                            ].map((_, i) => (
+                                              <Star
+                                                key={i}
+                                                className="w-4 h-4 text-yellow-400 fill-current"
+                                              />
+                                            ))}
+                                          </div>
+                                          <span className="text-gray-900 dark:text-white font-medium">
+                                            — {project.testimonial.author}
+                                          </span>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <span className="text-gray-900 dark:text-white font-medium">
-                                      — {project.testimonial.author}
-                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            ) : (
+                              // Testimonial-only card (existing design)
+                              <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-8 md:p-12">
+                                <div className="flex items-start gap-4">
+                                  <div className="text-blue-400 text-4xl leading-none">
+                                    "
+                                  </div>
+                                  <div className="flex-1">
+                                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4 italic text-lg">
+                                      {project.testimonial?.quote}
+                                    </p>
+                                    <div className="flex items-center gap-3">
+                                      <div className="flex gap-1">
+                                        {[
+                                          ...Array(
+                                            project.testimonial?.rating || 0,
+                                          ),
+                                        ].map((_, i) => (
+                                          <Star
+                                            key={i}
+                                            className="w-4 h-4 text-yellow-400 fill-current"
+                                          />
+                                        ))}
+                                      </div>
+                                      <span className="text-gray-900 dark:text-white font-medium">
+                                        — {project.testimonial?.author}
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
+                            )}
                           </div>
                         </div>
                       )}

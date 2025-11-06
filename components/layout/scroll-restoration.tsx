@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { usePathname } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 
 /**
  * ScrollRestoration component ensures proper scroll behavior when navigating between pages
@@ -15,27 +15,25 @@ export function ScrollRestoration() {
 
   useEffect(() => {
     // Only scroll to top if the pathname actually changed (not just hash)
-    const currentBasePath = pathname.split('#')[0];
-    const previousBasePath = previousPathname.current.split('#')[0];
-    
+    const currentBasePath = pathname.split("#")[0];
+    const previousBasePath = previousPathname.current.split("#")[0];
+
     if (currentBasePath !== previousBasePath) {
-      // Scroll to top when navigating to a different page
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (pathname.includes('#')) {
+      // FIXED: Instant scroll to prevent conflict with user scroll
+      window.scrollTo({ top: 0, behavior: "auto" });
+    } else if (pathname.includes("#")) {
       // Handle hash navigation within the same page
-      const hash = pathname.split('#')[1];
+      const hash = pathname.split("#")[1];
       if (hash) {
-        // Small delay to ensure DOM is ready
-        setTimeout(() => {
-          const element = document.getElementById(hash);
-          if (element) {
-            element.scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'start',
-              inline: 'nearest'
-            });
-          }
-        }, 100);
+        // FIXED: Immediate execution without setTimeout
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({
+            behavior: "auto", // FIXED: Instant scroll
+            block: "start",
+            inline: "nearest",
+          });
+        }
       }
     }
 
@@ -51,20 +49,19 @@ export function ScrollRestoration() {
         const hash = window.location.hash.substring(1);
         const element = document.getElementById(hash);
         if (element) {
-          setTimeout(() => {
-            element.scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'start',
-              inline: 'nearest'
-            });
-          }, 100);
+          // FIXED: Instant scroll without delay
+          element.scrollIntoView({
+            behavior: "auto",
+            block: "start",
+            inline: "nearest",
+          });
         }
       }
     };
 
-    window.addEventListener('popstate', handlePopstate);
-    return () => window.removeEventListener('popstate', handlePopstate);
+    window.addEventListener("popstate", handlePopstate);
+    return () => window.removeEventListener("popstate", handlePopstate);
   }, []);
 
   return null; // This component doesn't render anything
-} 
+}

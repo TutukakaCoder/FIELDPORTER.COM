@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useStableMobile } from '@/hooks';
-import { cn } from '@/lib/utils';
-import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronUp } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useStableMobile } from "@/hooks";
+import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronUp } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface BackToTopProps {
   className?: string;
@@ -16,18 +16,26 @@ export function BackToTop({ className, showAfter = 400 }: BackToTopProps) {
   const isMobile = useStableMobile();
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      setIsVisible(window.scrollY > showAfter);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsVisible(window.scrollY > showAfter);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [showAfter]);
 
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
@@ -38,42 +46,39 @@ export function BackToTop({ className, showAfter = 400 }: BackToTopProps) {
           initial={{ opacity: 0, scale: 0.8, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 20 }}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.95 }}
           className={cn(
-            'fixed z-[60] transition-all duration-300',
-            isMobile 
-              ? 'bottom-4 left-4 w-14 h-14' 
-              : 'bottom-6 left-6 w-16 h-16',
-            
+            "fixed z-[60] transition-all duration-300",
+            isMobile
+              ? "bottom-4 left-4 w-14 h-14"
+              : "bottom-6 left-6 w-16 h-16",
+
             // Matching glassmorphism design
-            'bg-black/20 backdrop-blur-xl border border-white/10',
-            'hover:bg-black/30 hover:border-white/20',
-            
+            "bg-black/20 backdrop-blur-xl border border-white/10",
+            "hover:bg-black/30 hover:border-white/20",
+
             // Subtle glow effect
-            'shadow-[0_0_20px_rgba(59,130,246,0.15)]',
-            'hover:shadow-[0_0_30px_rgba(59,130,246,0.25)]',
-            
+            "shadow-[0_0_20px_rgba(59,130,246,0.15)]",
+            "hover:shadow-[0_0_30px_rgba(59,130,246,0.25)]",
+
             // Perfect rounded button
-            'rounded-2xl',
-            
+            "rounded-2xl",
+
             // Center the icon
-            'flex items-center justify-center',
-            
+            "flex items-center justify-center",
+
             // Touch-friendly
-            'touch-manipulation select-none',
-            
-            className
+            "touch-manipulation select-none",
+
+            className,
           )}
           onClick={scrollToTop}
-          aria-label='Back to top'
+          aria-label="Back to top"
         >
-          <ChevronUp 
-            className={cn(
-              isMobile ? 'w-6 h-6' : 'w-7 h-7', 
-              'text-white/90'
-            )}
+          <ChevronUp
+            className={cn(isMobile ? "w-6 h-6" : "w-7 h-7", "text-white/90")}
             strokeWidth={1.5}
           />
         </motion.button>

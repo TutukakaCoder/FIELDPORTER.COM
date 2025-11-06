@@ -14,9 +14,10 @@ export function ConditionalLayout({ children }: ConditionalLayoutProps) {
   // Check if current path is auth or portal pages
   const isAuthPage = pathname?.startsWith("/auth");
   const isPortalPage = pathname?.startsWith("/portal");
+  const isPartnerFlyer = pathname?.startsWith("/think-global-voluntas");
 
   // Don't show header/footer for auth or portal pages
-  const showHeaderFooter = !isAuthPage && !isPortalPage;
+  const showHeaderFooter = !isAuthPage && !isPortalPage && !isPartnerFlyer;
 
   return (
     <>
