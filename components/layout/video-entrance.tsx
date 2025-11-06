@@ -13,7 +13,7 @@ interface VideoEntranceProps {
 
 export function VideoEntrance({
   onComplete,
-  videoSrc = "/videos/new-intro-video.mp4",
+  videoSrc = "/videos/new-intro-video-v2.mp4",
 }: VideoEntranceProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [showSkip, setShowSkip] = useState(false);
