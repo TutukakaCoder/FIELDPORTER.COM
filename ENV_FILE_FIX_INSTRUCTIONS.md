@@ -9,12 +9,12 @@
 Your `.env.local` file has this:
 
 ```
-RESEND_API_KEY=re_5fxi2Y8U_9VGFhhV7or8d8c89DXtuwv72NOTIFICATION_EMAIL=freddy@fieldporter.com
+RESEND_API_KEY=your_resend_api_key_here NOTIFICATION_EMAIL=freddy@fieldporter.com
 ```
 
 **This is ONE LINE with no line break**, which means:
 
-- `RESEND_API_KEY` = `re_5fxi2Y8U_9VGFhhV7or8d8c89DXtuwv72NOTIFICATION_EMAIL=freddy@fieldporter.com` ❌
+- `RESEND_API_KEY` = `your_resend_api_key_here NOTIFICATION_EMAIL=freddy@fieldporter.com` ❌
 - `NOTIFICATION_EMAIL` is NOT SET ❌
 
 ---
@@ -44,7 +44,7 @@ NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=412133715476
 NEXT_PUBLIC_FIREBASE_APP_ID=1:412133715476:web:924be61903196cfbe50101
 
 # Email Notifications
-RESEND_API_KEY=re_5fxi2Y8U_9VGFhhV7or8d8c89DXtuwv72
+RESEND_API_KEY=your_resend_api_key_here
 NOTIFICATION_EMAIL=freddy@fieldporter.com
 
 # Add any other variables you have...
