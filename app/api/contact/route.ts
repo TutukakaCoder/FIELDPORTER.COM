@@ -145,10 +145,13 @@ export async function POST(request: Request) {
       contactData,
     );
 
-    // Send email notification for qualified leads
+    // Send email notification for qualified leads (same as AI chat)
     if (leadScore >= 5) {
       try {
-        await emailService.sendNotificationEmail({
+        console.log(
+          `📧 Contact form - Sending email for lead score: ${leadScore}/10`,
+        );
+        const emailResult = await emailService.sendNotificationEmail({
           subject: `🎯 New Contact Form Submission - Lead Score: ${leadScore}/10 - ${body.name}`,
           type: "contact",
           data: {
@@ -157,8 +160,9 @@ export async function POST(request: Request) {
             leadScoreDetails,
           },
         });
+        console.log("📧 Contact email result:", emailResult);
       } catch (emailError) {
-        console.error("Failed to send email notification:", emailError);
+        console.error("❌ Failed to send email notification:", emailError);
         // Don't fail the form submission if email fails
       }
     }

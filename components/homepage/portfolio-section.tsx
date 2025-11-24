@@ -5,6 +5,7 @@ import { motion, useInView } from "framer-motion";
 import {
   ArrowRight,
   Brain,
+  Building2,
   Code,
   Heart,
   Lightbulb,
@@ -18,8 +19,30 @@ import { memo, useCallback, useRef, useState } from "react";
 
 const projects = [
   {
-    id: "papps-mastery",
+    id: "voluntas-intelligence",
     phase: "01",
+    icon: Building2,
+    title: "Voluntas Intelligence Platform",
+    tagline:
+      "Production AI platform managing 12+ clients for venture studio. Scales to 70+ clients with 3-4 staff instead of 10-12. Built in 3 months.",
+    keyBenefits: [
+      "AI pitch deck extraction: 15 business fields in 30-45 seconds with high accuracy",
+      "10-factor investor matching algorithm with confidence scoring",
+    ],
+
+    timeline: "Live in Production",
+    status: "Live • 12+ Clients",
+    statusColor: "text-green-400",
+    statusBg: "bg-green-500/10 border-green-500/20",
+    iconColor: "text-green-400",
+    glowColor: "bg-green-500/10",
+    hoverGlow: "shadow-[0_0_30px_rgba(34,197,94,0.15)]",
+    gradientFrom: "from-green-500/20",
+    gradientTo: "to-green-500/5",
+  },
+  {
+    id: "papps-mastery",
+    phase: "02",
     icon: Code,
     title: "Self Development Platform",
     tagline:
@@ -38,28 +61,6 @@ const projects = [
     hoverGlow: "shadow-[0_0_30px_rgba(16,185,129,0.15)]",
     gradientFrom: "from-emerald-500/20",
     gradientTo: "to-emerald-500/5",
-  },
-  {
-    id: "process-automation",
-    phase: "02",
-    icon: Brain,
-    title: "Process Automation Suite",
-    tagline:
-      "Multi-AI model integration for automated research processes. Advanced reasoning with comprehensive data validation.",
-    keyBenefits: [
-      "Cross-model validation and intelligent synthesis",
-      "Automated insight discovery, testing with real clients",
-    ],
-
-    timeline: "Active Development",
-    status: "Building",
-    statusColor: "text-blue-400",
-    statusBg: "bg-blue-500/10 border-blue-500/20",
-    iconColor: "text-blue-400",
-    glowColor: "bg-blue-500/10",
-    hoverGlow: "shadow-[0_0_30px_rgba(59,130,246,0.15)]",
-    gradientFrom: "from-blue-500/20",
-    gradientTo: "to-blue-500/5",
   },
   {
     id: "family-care",
@@ -117,6 +118,18 @@ const industries = [
 ];
 
 const testimonials = [
+  {
+    quote:
+      "We wanted to create an AI platform to help run our advisory business, something that could manage clients, streamline admin and help automate our service delivery. Freddy took the time to really understand what we needed and delivered something right on the mark, fast, professional, and great to work with.",
+    author: "Jason Holdsworth",
+    role: "Founding Partner - Voluntas Group",
+    highlight: "Production Platform",
+    accentColor: "text-blue-400",
+    borderColor: "border-blue-500/20",
+    hoverBorderColor: "hover:border-blue-500/30",
+    badgeColor: "bg-blue-500/10 border-blue-500/20 text-blue-400",
+    glowColor: "shadow-[0_0_25px_rgba(59,130,246,0.12)]",
+  },
   {
     quote:
       "Fieldporter combines sharp problem solving with excellent communication and handy technical expertise. Their systematic approach, enthusiasm for learning and actually getting stuck into the complex business challenges set them apart.",
@@ -336,8 +349,8 @@ const ProjectCard = memo(
       });
 
       const sectionMap: { [key: string]: string } = {
+        "voluntas-intelligence": "portfolio-section",
         "papps-mastery": "portfolio-section",
-        "process-automation": "research-section",
         "family-care": "portfolio-section",
       };
 

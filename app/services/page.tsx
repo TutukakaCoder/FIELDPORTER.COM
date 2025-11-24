@@ -38,14 +38,14 @@ const services = [
     icon: TrendingUp,
     title: "Strategic Research & Intelligence",
     description:
-      "Deep research that cuts through the noise to deliver actionable insights for strategic decisions.",
+      "De-risk your next major decision with comprehensive intelligence for strategic clarity.",
     detailedExplanation:
-      "We combine AI models like Claude and Perplexity with human insight to deliver research in hours, not weeks. Our process involves contextualising your challenge, parallel AI analysis across multiple sources, synthesis of findings, and delivery of decision-ready documentation. From market entry analysis to competitor intelligence, we handle complex research requirements with speed and accuracy.",
+      "We provide the comprehensive intelligence and market validation you need to commit capital with confidence. Our process combines AI models like Claude and Perplexity with expert analysis to answer critical questions like 'Is this market viable? What are the hidden risks?' in days, not weeks. From market entry analysis to competitor intelligence, we deliver decision-ready insights that prevent costly missteps.",
     outcomes: [
-      "Decision-relevant insights delivered 5-10x faster than traditional research",
-      "Multi-source analysis reducing information gaps and blind spots",
-      "Clear recommendations with confidence levels and risk assessments",
-      "Comprehensive documentation ready for strategic implementation",
+      "Strategic clarity on viability and risk before you deploy significant resources",
+      "Comprehensive validation preventing costly mistakes and missed opportunities",
+      "Multi-source analysis eliminating blind spots that could derail major investments",
+      "Decision-ready documentation with clear recommendations and confidence levels",
     ],
     investment: "$500-$3,000",
     timeline: "3-5 days",
@@ -60,15 +60,16 @@ const services = [
     id: "rapid-development",
     phase: "02",
     icon: Code,
-    title: "Rapid AI Development & Prototyping",
-    description: "Proof-of-concept to production-ready in weeks, not months.",
+    title: "Rapid AI Development & Integration",
+    description:
+      "Validate your vision with production-ready systems in weeks, not months.",
     detailedExplanation:
-      "We specialise in AI feature prototyping and integration roadmaps. Our sweet spot is proving AI concepts work for your specific use case in 1-3 weeks, then providing clear documentation for your team to implement at scale. From chat systems to workflow automation, we build working prototypes that demonstrate real value before major investment.",
+      "We build fully automated AI applications that prove technical feasibility and user value—eliminating guesswork before major investment. Our focus is validating your concept works for your specific use case in 1-3 weeks, then providing complete documentation for scaling. From intelligent chat systems to workflow automation, we deliver production-ready systems that demonstrate tangible value to stakeholders and investors.",
     outcomes: [
-      "Working prototypes proving technical feasibility within 1-3 weeks",
-      "Clear implementation roadmaps for scaling with your existing team",
-      "Technical documentation enabling seamless handoff",
-      "Risk-free validation before larger development commitments",
+      "Production-ready AI systems proving concept viability within 1-3 weeks",
+      "Technical validation eliminating risk before major development commitments",
+      "Working applications demonstrating tangible value to stakeholders and investors",
+      "Complete documentation enabling immediate scaling with your existing team",
     ],
     investment: "$3,000-$8,000",
     timeline: "1-3 weeks",
@@ -77,7 +78,7 @@ const services = [
     hoverBorderColor: "hover:border-blue-500/25",
     iconColor: "text-blue-400",
     proof:
-      "From manual 15-hour process to 4-hour automated workflow through prototype validation.",
+      "From manual 15-hour process to 4-hour automated workflow through production system validation.",
   },
   {
     id: "workflow-optimisation",
@@ -85,14 +86,14 @@ const services = [
     icon: Building2,
     title: "Process Efficiency & Workflow Optimisation",
     description:
-      "Systematic identification and automation of repetitive tasks to reclaim time for strategic work.",
+      "Reclaim 10+ hours of high-value time weekly for strategic work and growth.",
     detailedExplanation:
-      "We analyse your current workflows to identify automation opportunities, then build solutions that integrate seamlessly with your existing tools. Our approach focuses on high-impact, low-risk improvements that deliver measurable time savings within weeks. From lead generation systems to reporting automation, we optimise processes that actually matter to your business outcomes.",
+      "We automate the repetitive tasks that drain your focus, freeing your team to solve strategic problems, serve clients, and maintain work-life balance. Our approach analyzes your workflows to identify automation opportunities, then builds solutions that integrate seamlessly with your existing tools. From lead generation to reporting automation, we eliminate operational drag so your best people can drive growth instead of managing spreadsheets.",
     outcomes: [
-      "Documented workflow analysis with specific optimisation recommendations",
-      "Automated systems reducing manual work by 60-80% in targeted areas",
-      "Lead generation and outreach system optimisation",
-      "Integration with your existing tools and platforms for minimal disruption",
+      "Your team regains strategic focus instead of managing manual processes",
+      "Automated systems reducing repetitive work by 60-80% in targeted areas",
+      "High-performers spend time on business growth, not operational drag",
+      "Integration with existing tools for minimal disruption and maximum impact",
     ],
     investment: "$2,000-$5,000",
     timeline: "2-4 weeks",
@@ -109,14 +110,14 @@ const services = [
     icon: BookOpen,
     title: "AI Strategy & Team Capability Building",
     description:
-      "Strategic guidance on AI adoption with hands-on training for your team.",
+      "Future-proof your team's competitive edge with systematic AI capability building.",
     detailedExplanation:
-      "Beyond just tools and tactics, we help you develop a strategic approach to AI that aligns with your business objectives. This includes capability assessment, tool selection and optimisation for your workflows, team training sessions, and ongoing strategic guidance. We focus on building internal AI capability rather than creating dependency.",
+      "We build your organization's AI advantage through practical, systematic training that ensures your business remains competitive. Beyond tools and tactics, we help you develop strategic AI adoption that aligns with business objectives. This includes capability assessment, tool optimization for your workflows, hands-on training sessions, and ongoing guidance. We focus on building internal AI capability that reduces dependency on external consultants.",
     outcomes: [
-      "Strategic AI adoption roadmap tailored to your business context",
-      "Team training on AI tools and best practices for your industry",
-      "AI tool selection and optimisation for your workflows",
-      "Internal capability building reducing reliance on external AI consultants",
+      "Your team develops irreplaceable AI capability, not dependency on consultants",
+      "Practical skills driving efficiency and innovation in your specific industry",
+      "Strategic advantage over competitors still treating AI as experimental",
+      "Internal capability building through custom training and ongoing support",
     ],
     investment: "$75-$150 per hour",
     timeline: "Custom sessions",
@@ -219,30 +220,30 @@ const faqData: FAQSectionProps = {
   faqs: [
     {
       question:
-        "Do you build complete production systems or just AI prototypes?",
+        "Do you build complete production systems or just proof-of-concepts?",
       answer:
-        "We specialize in AI feature prototyping and integration roadmaps. Our sweet spot is proving AI concepts work for your specific use case in 1-3 weeks, then providing clear documentation for your team to implement. Think of us as your AI R&D department.",
+        "We build fully automated AI applications and production-ready integrations. Our focus is proving concepts work in 1-3 weeks with systems you can scale immediately. Think of us as your AI R&D team delivering working applications, not experiments.",
     },
     {
-      question: "How quickly can you prototype and deliver AI functionality?",
+      question: "How quickly can you build and deliver AI functionality?",
       answer:
-        "Most AI prototypes are delivered within 1-3 weeks. Week 1: We understand your process. Week 2: AI agents are trained and tested. Week 3: Working prototype with integration documentation. Faster than hiring, more focused than consultants.",
+        "Most production systems are delivered within 1-3 weeks. Week 1: We understand your process. Week 2: AI agents are trained and tested. Week 3: Working system with integration documentation. Faster than hiring, more focused than consultants.",
     },
     {
-      question: "What happens after you deliver the AI prototype?",
+      question: "What happens after you deliver the AI system?",
       answer:
-        "You get: 1) Working prototype code, 2) Integration documentation, 3) Training for your team, 4) 30-day support for questions. Most clients either implement themselves or use our integration roadmap with their existing developers.",
+        "You get: 1) Production-ready application code, 2) Integration documentation, 3) Training for your team, 4) 30-day support for questions. Most clients either implement themselves or use our integration roadmap with their existing developers.",
     },
     {
       question:
         "How do you help us integrate AI into our existing application?",
       answer:
-        "We create working prototypes with clear API documentation. Your developers get commented code, integration guides, and implementation roadmaps. We show exactly how to connect AI features to your existing systems.",
+        "We create production-ready systems with clear API documentation. Your developers get commented code, integration guides, and implementation roadmaps. We show exactly how to connect AI features to your existing systems.",
     },
     {
       question: "What if we need ongoing development beyond the AI features?",
       answer:
-        "We focus on AI innovation, not long-term development. After delivering prototypes and training, most clients either implement themselves or work with their existing dev teams. We are happy to recommend trusted partners for ongoing development.",
+        "We focus on AI innovation, not long-term development. After delivering production systems and training, most clients either implement themselves or work with their existing dev teams. We are happy to recommend trusted partners for ongoing development.",
     },
     {
       question:

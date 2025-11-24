@@ -169,7 +169,8 @@ export class MessageManager {
 
   private async addMessageToFirebase(message: Message): Promise<void> {
     try {
-      if (!this.conversationStarted && message.role === "user") {
+      // Ensure conversation exists before saving any message
+      if (!this.conversationStarted) {
         await this.firebaseService.createConversation(this.sessionId);
         this.conversationStarted = true;
       }
@@ -178,6 +179,25 @@ export class MessageManager {
     } catch (error) {
       if (process.env.NODE_ENV === "development") {
         console.error("Error adding message to Firebase:", error);
+      }
+      // If save fails because conversation doesn't exist, try creating it
+      if (
+        error instanceof Error &&
+        error.message.includes("Conversation does not exist")
+      ) {
+        try {
+          await this.firebaseService.createConversation(this.sessionId);
+          this.conversationStarted = true;
+          // Retry saving the message
+          await this.firebaseService.saveMessage(this.sessionId, message);
+        } catch (retryError) {
+          if (process.env.NODE_ENV === "development") {
+            console.error(
+              "Error retrying message save after conversation creation:",
+              retryError,
+            );
+          }
+        }
       }
     }
   }
@@ -332,6 +352,7 @@ export class MessageManager {
     this.leadScore = 1;
     this.serviceInterest = [];
     this.consultationRequested = false;
+    this.conversationStarted = false; // Reset conversation state
 
     // Clear storage and generate new session
     try {
@@ -353,6 +374,8 @@ export class MessageManager {
 
     // Generate new session ID for fresh start
     this.sessionId = this.generateSessionId();
+    // Create new Firebase service instance with new session ID
+    this.firebaseService = new OptimizedFirebaseChatService(this.sessionId);
     this.saveToStorage();
   }
 

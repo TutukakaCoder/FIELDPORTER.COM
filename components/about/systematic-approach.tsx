@@ -7,21 +7,21 @@ const systematicApproach = [
     number: "01",
     title: "Strategic Research",
     description:
-      "We use AI tools like Claude and Perplexity to analyze markets, competitors, and opportunities. Deep research in days, not weeks.",
+      "I deploy my AI research agents, using tools like Claude and Perplexity, to analyze markets, competitors, and opportunities. I personally synthesize these findings to deliver deep, actionable research in days, not weeks.",
     color: "border-blue-500/30 text-blue-400",
   },
   {
     number: "02",
-    title: "Rapid Prototyping",
+    title: "Rapid Implementation",
     description:
-      "Build working solutions or provide strategic guidance to test assumptions. Whether it's creating functional prototypes with tools like Cursor AI and n8n, or providing consulting and training to validate concepts quickly.",
+      "I build production-ready solutions to validate concepts quickly. I use tools like Cursor AI and n8n to create functional systems, providing strategic guidance and training to accelerate your validation.",
     color: "border-purple-500/30 text-purple-400",
   },
   {
     number: "03",
     title: "Implementation & Optimization",
     description:
-      "Deploy solutions and monitor performance. We provide ongoing optimization based on real usage data and user feedback.",
+      "I deploy the solutions and monitor their performance. I provide ongoing optimization based on real usage data and user feedback to ensure the tools are delivering measurable value.",
     color: "border-green-500/30 text-green-400",
   },
 ];
@@ -39,7 +39,7 @@ export function SystematicApproach() {
           className="text-center mb-12 md:mb-16"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-4 md:mb-6">
-            Our{" "}
+            My{" "}
             <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               Process
             </span>

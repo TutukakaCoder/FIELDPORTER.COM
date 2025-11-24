@@ -20,31 +20,32 @@ export function CompanyFoundation() {
             className="space-y-6"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white leading-tight">
-              AI Implementers Who{" "}
+              Meet the{" "}
               <span className="bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent">
-                Actually Use The Tools
+                Practitioner Behind the Process
               </span>
             </h2>
             <div className="space-y-4 text-gray-700 dark:text-gray-300 text-base md:text-lg leading-relaxed">
               <p>
-                FIELDPORTER provides strategic research and AI implementation
-                services while developing our own AI-powered products. We help
-                SMBs integrate AI effectively, working with VCs, growth-stage
-                companies, and ambitious founders who need to make informed
-                decisions quickly.
+                I&apos;m{" "}
+                <span className="text-gray-900 dark:text-white font-medium">
+                  Freddy Hopkins
+                </span>
+                , the founder of FIELDPORTER. I&apos;ve spent years working
+                hands-on in the AI space, not as a theorist, but as a builder
+                deploying production systems.
               </p>
               <p>
-                Our approach is straightforward: we understand AI tools deeply
-                so we can recommend the best fit for each situation. We test
-                automation workflows in real projects, and share what works.
-                Whether it&apos;s Claude for complex analysis, n8n for workflow
-                automation, or DeepSeek for cost-effective processing, we know
-                these tools because we use them daily.
+                FIELDPORTER is my consulting practice, built on a hybrid-expert
+                model that delivers high-touch strategy with AI-powered
+                execution. My approach is straightforward: I only recommend
+                tools I use daily, and the strategies I teach are the same ones
+                I use to build real solutions.
               </p>
               <p className="text-gray-900 dark:text-white font-medium">
-                Currently focused on consulting and strategic research, with
-                plans to expand our product portfolio as we identify and
-                validate new opportunities.
+                While I continue to take on select consulting projects, my focus
+                is shifting to building products that solve the real problems
+                uncovered through client work.
               </p>
             </div>
           </motion.div>
@@ -62,15 +63,35 @@ export function CompanyFoundation() {
                   <Building2 className="w-6 h-6 text-blue-400" />
                 </div>
                 <h3 className="text-lg md:text-xl font-medium text-gray-900 dark:text-white">
-                  Real Experience, Real Results
+                  The FIELDPORTER Model
                 </h3>
               </div>
-              <p className="text-gray-700 dark:text-gray-300 text-sm md:text-base leading-relaxed">
-                We stay current with the latest AI developments by implementing
-                them in real projects with measurable outcomes. Our consulting
-                work funds innovation, and our product development informs
-                better client solutions.
-              </p>
+              <div className="space-y-3 text-gray-700 dark:text-gray-300 text-sm md:text-base leading-relaxed">
+                <p>
+                  <span className="text-gray-900 dark:text-white font-medium">
+                    Human-First Strategy:
+                  </span>{" "}
+                  Every project is led by me. I bring deep specialist experience
+                  to understand your challenge, architect the solution, and
+                  manage execution from concept to deployment.
+                </p>
+                <p>
+                  <span className="text-gray-900 dark:text-white font-medium">
+                    AI-Powered Execution:
+                  </span>{" "}
+                  I leverage custom-built AI agents to accelerate delivery,
+                  handling research, code generation, and data analysis at
+                  speeds traditional teams can&apos;t match.
+                </p>
+                <p>
+                  <span className="text-gray-900 dark:text-white font-medium">
+                    Expert Network:
+                  </span>{" "}
+                  I maintain a dedicated network of senior advisors who validate
+                  assumptions and ensure every solution is commercially robust
+                  and technically sound.
+                </p>
+              </div>
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent pointer-events-none" />
             </div>
           </motion.div>

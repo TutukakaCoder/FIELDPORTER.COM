@@ -113,8 +113,8 @@ const portfolioSections: PortfolioSection[] = [
         videoUrl: "/videos/Voluntas-app-run-through.mp4",
         testimonial: {
           quote:
-            "This platform has transformed how we operate. What used to take hours now happens in minutes, and our entire team works from a single source of truth. This is the operational leverage that makes scaling possible.",
-          author: "David, Voluntas Managing Partner",
+            "We wanted to create an AI platform to help run our advisory business, something that could manage clients, streamline admin and help automate our service delivery. Freddy took the time to really understand what we needed and delivered something right on the mark, fast, professional, and great to work with.",
+          author: "Jason Holdsworth, Founding Partner - Voluntas Group",
           rating: 5,
         },
       },
@@ -279,78 +279,55 @@ const getTimelineBadgeStyle = (timelineStyle?: string) => {
   }
 };
 
-// Premium Aurora Background matching services
+// Premium Aurora Background - Pure CSS for scroll performance
 function PremiumAuroraBackground() {
-  const { scrollY } = useScroll();
-  const opacity = useTransform(scrollY, [0, 500], [0.6, 0.3]);
-  const scale = useTransform(scrollY, [0, 500], [1, 1.2]);
-
   return (
-    <motion.div
-      className="fixed inset-0 overflow-hidden pointer-events-none"
-      style={{ opacity, scale, willChange: "transform" }}
-    >
-      <motion.div
-        className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-500/20 via-blue-500/10 to-transparent rounded-full blur-3xl"
-        style={{
-          willChange: "transform",
-          backfaceVisibility: "hidden",
-          transform: "translateZ(0)",
-        }}
-        animate={{
-          x: [0, 100, 0],
-          y: [0, 50, 0],
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: "easeInOut",
-          type: "tween",
-        }}
-      />
+    <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-50">
+      <style jsx>{`
+        @keyframes aurora-1 {
+          0%,
+          100% {
+            transform: translate(0, 0) scale(1);
+          }
+          50% {
+            transform: translate(100px, 50px) scale(1.2);
+          }
+        }
+        @keyframes aurora-2 {
+          0%,
+          100% {
+            transform: translate(0, 0) scale(1);
+          }
+          50% {
+            transform: translate(-80px, -60px) scale(1.1);
+          }
+        }
+        @keyframes aurora-3 {
+          0%,
+          100% {
+            transform: translate(0, 0) scale(1);
+          }
+          50% {
+            transform: translate(60px, -40px) scale(0.9);
+          }
+        }
+        .aurora-blob-1 {
+          animation: aurora-1 20s ease-in-out infinite;
+        }
+        .aurora-blob-2 {
+          animation: aurora-2 25s ease-in-out infinite;
+        }
+        .aurora-blob-3 {
+          animation: aurora-3 30s ease-in-out infinite 10s;
+        }
+      `}</style>
 
-      <motion.div
-        className="absolute top-1/2 right-1/4 w-80 h-80 bg-gradient-to-l from-purple-500/15 via-purple-400/8 to-transparent rounded-full blur-3xl"
-        style={{
-          willChange: "transform",
-          backfaceVisibility: "hidden",
-          transform: "translateZ(0)",
-        }}
-        animate={{
-          x: [0, -80, 0],
-          y: [0, -60, 0],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: "easeInOut",
-          type: "tween",
-        }}
-      />
+      <div className="aurora-blob-1 absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-500/20 via-blue-500/10 to-transparent rounded-full blur-3xl" />
 
-      <motion.div
-        className="absolute bottom-1/4 left-1/2 w-72 h-72 bg-gradient-to-t from-emerald-500/10 via-emerald-300/5 to-transparent rounded-full blur-3xl"
-        style={{
-          willChange: "transform",
-          backfaceVisibility: "hidden",
-          transform: "translateZ(0)",
-        }}
-        animate={{
-          x: [0, 60, 0],
-          y: [0, -40, 0],
-          scale: [1, 0.9, 1],
-        }}
-        transition={{
-          duration: 30,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 10,
-          type: "tween",
-        }}
-      />
-    </motion.div>
+      <div className="aurora-blob-2 absolute top-1/2 right-1/4 w-80 h-80 bg-gradient-to-l from-purple-500/15 via-purple-400/8 to-transparent rounded-full blur-3xl" />
+
+      <div className="aurora-blob-3 absolute bottom-1/4 left-1/2 w-72 h-72 bg-gradient-to-t from-emerald-500/10 via-emerald-300/5 to-transparent rounded-full blur-3xl" />
+    </div>
   );
 }
 
@@ -378,26 +355,30 @@ function PortfolioHero() {
           className="space-y-8"
         >
           <div className="flex justify-center">
-            <div className="p-4 rounded-2xl backdrop-blur-xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.015] dark:bg-white/[0.015]">
+            <div className="p-4 rounded-2xl backdrop-blur-xl border border-white/10 bg-white/[0.02]">
               <Code2 className="w-12 h-12 text-blue-400" />
             </div>
           </div>
 
-          <div className="space-y-6">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-900 dark:text-white leading-tight tracking-[-0.02em]">
-              <span className="font-semibold bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
-                FIELDPORTER
-              </span>{" "}
-              - Building Tomorrow's AI Systems{" "}
-              <span className="font-semibold bg-gradient-to-r from-emerald-400 to-emerald-600 bg-clip-text text-transparent">
-                Today
-              </span>
+          <div className="space-y-4">
+            <h1 className="text-5xl md:text-7xl font-light text-white leading-tight">
+              Portfolio
             </h1>
-            <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
-              A collection of real client work and internal ventures. Every
-              project represents hands-on experience we bring to advising your
-              business challenges.
+            <div className="text-xl md:text-2xl text-gray-300 font-light">
+              Real client work and internal ventures
+            </div>
+          </div>
+
+          <div className="max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-400 leading-relaxed">
+              Showcasing hands-on experience building AI systems, automating
+              workflows, and delivering strategic intelligence.
             </p>
+          </div>
+
+          {/* Premium divider */}
+          <div className="flex justify-center pt-8">
+            <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
           </div>
         </motion.div>
       </div>
@@ -408,6 +389,7 @@ function PortfolioHero() {
 // Interactive Portfolio Slideshow
 function InteractivePortfolioShowcase() {
   const [activeSection, setActiveSection] = useState(0);
+  const [direction, setDirection] = useState(0); // -1 for previous, 1 for next
 
   const safeIndex = Math.max(
     0,
@@ -417,12 +399,14 @@ function InteractivePortfolioShowcase() {
 
   // Navigation functions for swipe support
   const goToPrevious = () => {
+    setDirection(-1);
     setActiveSection((prev) =>
       prev > 0 ? prev - 1 : portfolioSections.length - 1,
     );
   };
 
   const goToNext = () => {
+    setDirection(1);
     setActiveSection((prev) =>
       prev < portfolioSections.length - 1 ? prev + 1 : 0,
     );
@@ -477,9 +461,9 @@ function InteractivePortfolioShowcase() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeSection}
-              initial={{ opacity: 0, x: 100 }}
+              initial={{ opacity: 0, x: direction > 0 ? 100 : -100 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
+              exit={{ opacity: 0, x: direction > 0 ? -100 : 100 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
               className="relative"
             >
@@ -691,14 +675,13 @@ function InteractivePortfolioShowcase() {
                               <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-4 md:p-6 overflow-hidden">
                                 <div className="relative w-full rounded-3xl overflow-hidden bg-black/50">
                                   <video
-                                    autoPlay
+                                    controls
                                     loop
-                                    muted
                                     playsInline
                                     preload="metadata"
                                     className="w-full h-full rounded-3xl"
                                     style={{
-                                      willChange: "transform",
+                                      willChange: "auto",
                                       backfaceVisibility: "hidden",
                                       transform: "translateZ(0)",
                                       display: "block",

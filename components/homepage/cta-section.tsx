@@ -6,7 +6,6 @@ import {
   motion,
   useInView,
   useScroll,
-  useSpring,
   useTransform,
 } from "framer-motion";
 import { ArrowRight, MessageSquare } from "lucide-react";
@@ -35,7 +34,7 @@ function InteractiveSpotlight() {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
@@ -86,16 +85,40 @@ export function CTASection() {
     };
 
     checkMobile();
-    window.addEventListener("resize", checkMobile);
+    window.addEventListener("resize", checkMobile, { passive: true });
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Add vertical fade animations like hero section
+  // SCROLL FIX: Disable scroll transforms during active scrolling to prevent lag
+  const [isScrolling, setIsScrolling] = useState(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const handleScrollStart = () => {
+      setIsScrolling(true);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsScrolling(false);
+      }, 150);
+    };
+
+    window.addEventListener("scroll", handleScrollStart, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScrollStart);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // SCROLL FIX: Disable scroll transforms during active scrolling to prevent lag
   const { scrollY } = useScroll();
-  const contentY = useTransform(scrollY, [0, 800], [0, -100]);
-  const opacity = useTransform(scrollY, [300, 700, 1100], [1, 0.9, 0.7]);
-  const springContentY = useSpring(contentY, { damping: 30, stiffness: 100 });
-  const springOpacity = useSpring(opacity, { damping: 30, stiffness: 100 });
+  const contentY = useTransform(scrollY, [0, 800], [0, -30], { clamp: false });
+  const opacity = useTransform(scrollY, [300, 1100], [1, 0.8], {
+    clamp: false,
+  });
 
   const handleContactCTA = () => {
     trackCTA("contact", "Get Started", {
@@ -135,7 +158,7 @@ export function CTASection() {
       )}
 
       <motion.div
-        style={{ y: springContentY, opacity: springOpacity }}
+        style={isScrolling ? {} : { y: contentY, opacity: opacity }}
         className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
       >
         {/* Enhanced Premium CTA Container with perfect spacing */}
@@ -171,8 +194,8 @@ export function CTASection() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed font-light"
             >
-              Discuss your specific challenge and create a practical plan with
-              clear timelines and realistic outcomes.
+              Discuss your specific challenge and create a practical plan
+              focused on measurable outcomes and realistic timelines.
             </motion.p>
 
             {/* Enhanced Premium CTA Buttons with perfect hierarchy */}

@@ -7,7 +7,7 @@ import {
   useTransform,
   Variants,
 } from "framer-motion";
-import { ArrowRight, Layers } from "lucide-react";
+import { ArrowRight, Briefcase } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 interface ServiceHeroProps {
@@ -202,23 +202,17 @@ export function ServiceHero({
           >
             {/* Icon */}
             <motion.div variants={itemVariants} className="flex justify-center">
-              <div className="p-4 rounded-2xl backdrop-blur-xl border border-white/10 bg-white/[0.015]">
-                <Layers className="w-12 h-12 text-blue-400" />
+              <div className="p-4 rounded-2xl backdrop-blur-xl border border-white/10 bg-white/[0.02]">
+                <Briefcase className="w-12 h-12 text-blue-400" />
               </div>
             </motion.div>
 
             {/* Main heading */}
-            <motion.div variants={itemVariants} className="space-y-6">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light text-white leading-tight">
-                <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                  FIELDPORTER
-                </span>{" "}
-                Services{" "}
-                <span className="font-semibold bg-gradient-to-r from-emerald-400 to-emerald-600 bg-clip-text text-transparent"></span>
+            <motion.div variants={itemVariants} className="space-y-4">
+              <h1 className="text-5xl md:text-7xl font-light text-white leading-tight">
+                Services
               </h1>
-
-              {/* SMB AI Focus Subtitle */}
-              <div className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 font-light">
+              <div className="text-xl md:text-2xl text-gray-300 font-light">
                 {subtitle}
               </div>
             </motion.div>

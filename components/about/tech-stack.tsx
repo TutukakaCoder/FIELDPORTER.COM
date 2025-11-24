@@ -24,15 +24,21 @@ const comprehensiveTechStack = [
     category: "AI & Analysis",
     tools: [
       {
-        name: "Claude 4 Opus",
+        name: "Claude Sonnet 4.5",
         icon: Brain,
         description:
-          "Advanced reasoning, complex analysis, and code generation",
+          "State-of-the-art reasoning, analysis, and code generation",
       },
       {
-        name: "GPT-4 Turbo",
+        name: "GPT-4.5 Turbo",
         icon: Cpu,
         description: "Large context reasoning and specialized task automation",
+      },
+      {
+        name: "Grok",
+        icon: Brain,
+        description:
+          "Real-time AI reasoning with live data access and analysis",
       },
       {
         name: "Gemini 2.5 Pro",
@@ -166,14 +172,19 @@ const comprehensiveTechStack = [
         description: "UI/UX design and collaborative prototyping",
       },
       {
-        name: "Midjourney V6",
+        name: "Midjourney V7",
         icon: Palette,
-        description: "AI-powered image generation and creative assets",
+        description: "AI-powered image generation with photorealistic quality",
       },
       {
         name: "DALL-E 3",
         icon: Palette,
         description: "Precise AI image creation and editing",
+      },
+      {
+        name: "Sora",
+        icon: Video,
+        description: "AI video generation from text prompts",
       },
       {
         name: "ElevenLabs",
@@ -233,8 +244,8 @@ export function TechStack() {
             </span>
           </h2>
           <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Tools and frameworks we have extensive experience implementing in
-            production environments
+            Production-tested tools and frameworks delivering real results for
+            clients
           </p>
         </motion.div>
 

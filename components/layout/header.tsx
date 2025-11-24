@@ -20,12 +20,31 @@ export function Header({ className }: HeaderProps) {
   const pathname = usePathname();
 
   useEffect(() => {
+    // SCROLL FIX: Optimize header scroll listener - reduce state updates
     let ticking = false;
+    let lastUpdate = 0;
+    let lastScrollY = 0;
+    const throttleDelay = 150; // Increased throttle delay
 
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > 20);
+          const now = Date.now();
+          const currentScrollY = window.scrollY;
+
+          // Only update if scroll position changed significantly or throttle delay passed
+          if (
+            now - lastUpdate >= throttleDelay ||
+            Math.abs(currentScrollY - lastScrollY) > 50
+          ) {
+            const newIsScrolled = currentScrollY > 20;
+            // Only update state if value actually changed
+            if (newIsScrolled !== isScrolled) {
+              setIsScrolled(newIsScrolled);
+            }
+            lastScrollY = currentScrollY;
+            lastUpdate = now;
+          }
           ticking = false;
         });
         ticking = true;
@@ -34,7 +53,7 @@ export function Header({ className }: HeaderProps) {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isScrolled]);
 
   useEffect(() => {
     setIsMobileMenuOpen(false);

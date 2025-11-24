@@ -277,7 +277,7 @@ export function DesktopChatSidebar({
                         "Get market insights in days vs weeks?",
                         "Turn manual processes into automation?",
                         "Validate your concept quickly?",
-                        "Build working prototypes?",
+                        "Build production AI systems?",
                       ].map((suggestion, idx) => (
                         <motion.button
                           key={idx}

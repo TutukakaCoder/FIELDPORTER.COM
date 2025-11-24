@@ -56,9 +56,9 @@ export function WorkingStyleSection() {
       icon: Zap,
       title: "Rapid Development & Automation",
       description:
-        "Working prototypes and automated workflows built with the same tools we use daily - from concept to deployment.",
+        "Production-ready systems and automated workflows built with the same tools we use daily - from concept to deployment.",
       points: [
-        "Functional prototypes in 1-2 weeks",
+        "Production systems in 1-2 weeks",
         "n8n workflow automation setup",
         "API integrations ready for production",
         "Complete handoff documentation",

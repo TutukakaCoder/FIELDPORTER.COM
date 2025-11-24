@@ -20,8 +20,8 @@ const inter = Inter({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1, // Prevent zoom on input focus
-  userScalable: false, // Disable pinch to zoom for better touch UX
+  maximumScale: 5, // Allow zoom
+  userScalable: true, // Enable user zooming
   viewportFit: "cover",
   themeColor: "#000000",
 };

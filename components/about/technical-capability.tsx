@@ -8,7 +8,7 @@ const aiCapabilities = [
     icon: Brain,
     title: "AI Implementation Training",
     description:
-      "We teach individuals and teams how to effectively integrate AI tools into their daily workflows, moving beyond basic prompting to systematic AI-powered productivity.",
+      "I teach individuals and teams how to effectively integrate AI tools into their daily workflows, moving beyond basic prompting to systematic AI-powered productivity.",
     color: "border-blue-500/20 text-blue-400",
     focus: "Focus: Practical AI adoption strategies",
   },
@@ -16,7 +16,7 @@ const aiCapabilities = [
     icon: Workflow,
     title: "Workflow Optimization",
     description:
-      "We help organizations identify bottlenecks and implement AI solutions that streamline processes, reduce manual work, and improve decision-making speed.",
+      "I help organizations identify bottlenecks and implement AI solutions that streamline processes, reduce manual work, and improve decision-making speed.",
     color: "border-purple-500/20 text-purple-400",
     focus: "Focus: Process automation and efficiency",
   },
@@ -24,7 +24,7 @@ const aiCapabilities = [
     icon: Users,
     title: "Strategic AI Consulting",
     description:
-      "We guide companies through AI transformation, from tool selection and implementation to team training and change management for sustainable AI adoption.",
+      "I guide companies through AI transformation, from tool selection and implementation to team training and change management for sustainable AI adoption.",
     color: "border-green-500/20 text-green-400",
     focus: "Focus: Organizational AI transformation",
   },
@@ -49,8 +49,9 @@ export function TechnicalCapability() {
             </span>
           </h2>
           <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Helping people and organizations integrate AI into their daily
-            workflows effectively
+            Because I am in the trenches building these tools every day, I can
+            teach your team how to move beyond basic prompting to systematic,
+            AI-powered productivity
           </p>
         </motion.div>
 

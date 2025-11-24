@@ -16,12 +16,24 @@ export function BackToTop({ className, showAfter = 400 }: BackToTopProps) {
   const isMobile = useStableMobile();
 
   useEffect(() => {
+    // SCROLL FIX: Optimize back-to-top scroll listener
     let ticking = false;
+    let lastCheck = 0;
+    const throttleDelay = 100; // Throttle state updates
 
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setIsVisible(window.scrollY > showAfter);
+          const now = Date.now();
+          // Only check if throttle delay passed
+          if (now - lastCheck >= throttleDelay) {
+            const newIsVisible = window.scrollY > showAfter;
+            // Only update state if value changed
+            if (newIsVisible !== isVisible) {
+              setIsVisible(newIsVisible);
+            }
+            lastCheck = now;
+          }
           ticking = false;
         });
         ticking = true;
@@ -30,7 +42,7 @@ export function BackToTop({ className, showAfter = 400 }: BackToTopProps) {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [showAfter]);
+  }, [showAfter, isVisible]);
 
   const scrollToTop = () => {
     window.scrollTo({

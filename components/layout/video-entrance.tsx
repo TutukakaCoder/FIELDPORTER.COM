@@ -70,9 +70,15 @@ export function VideoEntrance({
     if (!isVisible) return;
 
     // Add event listeners for various user interactions
-    document.addEventListener("click", handleUserInteraction);
-    document.addEventListener("touchstart", handleUserInteraction);
-    document.addEventListener("keydown", handleUserInteraction);
+    document.addEventListener("click", handleUserInteraction, {
+      passive: true,
+    });
+    document.addEventListener("touchstart", handleUserInteraction, {
+      passive: true,
+    });
+    document.addEventListener("keydown", handleUserInteraction, {
+      passive: true,
+    });
 
     return () => {
       document.removeEventListener("click", handleUserInteraction);

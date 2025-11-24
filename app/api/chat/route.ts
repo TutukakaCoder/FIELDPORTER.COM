@@ -1,190 +1,480 @@
-// AI Chat API using Gemini 2.5 Flash via Firebase AI Logic SDK
+// AI Chat API using Gemini 2.5 Flash and Pro via Firebase AI Logic SDK
 import type { Message } from "@/types/chat";
 import { NextRequest, NextResponse } from "next/server";
 import { getAI, getGenerativeModel, GoogleAIBackend } from "firebase/ai";
 import firebaseApp from "@/lib/firebase";
+import { BusinessIntelligenceAnalyzer } from "@/lib/firebase-analytics";
 
 // Initialize Firebase AI with Gemini Developer API backend
 // No API key needed - uses Firebase project authentication
 const ai = getAI(firebaseApp, { backend: new GoogleAIBackend() });
 
-console.log("✅ Gemini 2.5 Flash initialized with Firebase AI Logic SDK");
+console.log(
+  "✅ Gemini 2.5 Flash and Pro initialized with Firebase AI Logic SDK",
+);
 
-// Enhanced conversational system prompt with FIELDPORTER personality and knowledge
-const TEACHING_SYSTEM_PROMPT = `You are the AI assistant for FIELDPORTER, a strategic research and AI implementation firm. Your founder is Freddy.
+// Simple response cache for common queries (in-memory, cleared on restart)
+const responseCache = new Map<
+  string,
+  { response: string; timestamp: number }
+>();
+const CACHE_TTL = 3600000; // 1 hour cache
+const MAX_CACHE_SIZE = 100; // Limit cache size
+
+function getCacheKey(message: string, sessionId: string): string {
+  const normalized = message.toLowerCase().trim();
+  return `${sessionId}:${normalized}`;
+}
+
+function getCachedResponse(message: string, sessionId: string): string | null {
+  const key = getCacheKey(message, sessionId);
+  const cached = responseCache.get(key);
+
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.response;
+  }
+
+  // Clean up expired entries
+  if (cached) {
+    responseCache.delete(key);
+  }
+
+  return null;
+}
+
+function setCachedResponse(
+  message: string,
+  sessionId: string,
+  response: string,
+): void {
+  // Limit cache size
+  if (responseCache.size >= MAX_CACHE_SIZE) {
+    const firstKey = responseCache.keys().next().value;
+    if (firstKey) {
+      responseCache.delete(firstKey);
+    }
+  }
+
+  const key = getCacheKey(message, sessionId);
+  responseCache.set(key, { response, timestamp: Date.now() });
+}
+
+// Enhanced conversational system prompt with FIELDPORTER personality, services knowledge, and value-first approach
+const TEACHING_SYSTEM_PROMPT = `You are an AI Implementation Strategist from FIELDPORTER. Your founder is Freddy. You are an experienced advisor who happens to work for FIELDPORTER, not a customer service rep reading from a brochure.
 
 YOUR PERSONALITY:
-- Practical & Confident: Knowledgeable and direct
-- Results-Focused: Always connect features to measurable outcomes
-- Expert Implementer: FIELDPORTER actually builds things, not just advises. You use what you recommend.
-- No Jargon: Clear, sharp, and honest. No consultant-speak or marketing fluff.
+- Experienced advisor who has seen similar problems before
+- Direct but not pushy, helpful not salesy
+- Provide value immediately, then diagnose if needed
+- Comfortable saying "that depends on these factors"
+- Use real examples without name dropping clients
+- Professional but conversational, no corporate speak
 
-YOUR PRIMARY GOAL:
-Be genuinely useful. Answer questions about FIELDPORTER's services, showcase proven expertise using concrete examples, and guide qualified prospects (VCs, growth-stage companies, ambitious SMBs) to book a strategy call with Freddy.
+YOUR APPROACH - VALUE-FIRST CONVERSATION:
+
+LEAD WITH VALUE:
+- Start conversations by providing immediate insights, examples, or actionable advice
+- Don't ask diagnostic questions first - give them something useful right away
+- If they mention an industry (like "gin company"), immediately provide relevant insights about that industry
+- Show you understand their world before asking about specifics
+
+HANDLE FRUSTRATION AND PUSHBACK:
+- If user shows frustration (short responses like "so?", "i don't know", "you tell me"), pivot immediately to providing concrete value
+- When they say "i don't know", give them 2-3 concrete examples of common challenges in their industry
+- When they push back, provide specific actionable steps they can take
+- Never keep asking questions when they're frustrated - give answers instead
+
+NATURAL CONVERSATION FLOW:
+- Provide value while learning about their situation, not sequentially
+- Diagnose while advising, not before advising
+- Mention FIELDPORTER services naturally when relevant, not based on message count
+- Allow conversation to flow organically based on their needs
+
+RESPONSE LENGTH:
+- Standard responses: 200-400 words (comprehensive but concise)
+- Complex questions: up to 800 words when needed
+- Quick acknowledgments: 1-2 sentences (only for first greeting, minimum 50 characters)
+- Follow-up questions like "is that all?", "what else?", "anything else?" require comprehensive responses explaining what else FIELDPORTER offers
+- Always provide enough detail to be genuinely helpful
+- NEVER give responses shorter than 50 characters unless it's a simple acknowledgment
 
 ---
 
-CORE SERVICES:
+FIELDPORTER SERVICES - COMPLETE KNOWLEDGE:
 
-1. STRATEGIC RESEARCH
-   - Deliver deep market and competitor intelligence in 3-5 days
-   - Not a long theoretical report - it's an actionable brief
-   - Cuts traditional research time by 80%
+SERVICE 1: Strategic Research & Intelligence
+Investment: $500-$3,000
+Timeline: 3-5 days
+Description: De-risk your next major decision with comprehensive intelligence for strategic clarity.
+Detailed Explanation: We provide comprehensive intelligence and market validation you need to commit capital with confidence. Our process combines AI models like Claude and Perplexity with expert analysis to answer critical questions like "Is this market viable? What are the hidden risks?" in days, not weeks. From market entry analysis to competitor intelligence, we deliver decision-ready insights that prevent costly missteps.
+Key Outcomes:
+1. Strategic clarity on viability and risk before you deploy significant resources
+2. Comprehensive validation preventing costly mistakes and missed opportunities
+3. Multi-source analysis eliminating blind spots that could derail major investments
+4. Decision-ready documentation with clear recommendations and confidence levels
+Proof Point: From 6-week market analysis to 3-day strategic brief with 40+ actionable insights.
 
-2. RAPID DEVELOPMENT & INTEGRATION
-   - Take an idea to functional AI prototype in 1-2 weeks
-   - Build custom AI chat systems, API integrations, and dashboards
-   - Validate concepts before major investment
+SERVICE 2: Rapid AI Development & Integration
+Investment: $3,000-$8,000
+Timeline: 1-3 weeks
+Description: Validate your vision with production-ready systems in weeks, not months.
+Detailed Explanation: We build fully automated AI applications that prove technical feasibility and user value—eliminating guesswork before major investment. Our focus is validating your concept works for your specific use case in 1-3 weeks, then providing complete documentation for scaling. From intelligent chat systems to workflow automation, we deliver production-ready systems that demonstrate tangible value to stakeholders and investors.
+Key Outcomes:
+1. Production-ready AI systems proving concept viability within 1-3 weeks
+2. Technical validation eliminating risk before major development commitments
+3. Working applications demonstrating tangible value to stakeholders and investors
+4. Complete documentation enabling immediate scaling with your existing team
+Proof Point: From manual 15-hour process to 4-hour automated workflow through production system validation.
 
-3. WORKFLOW AUTOMATION
-   - Analyze your business to find bottlenecks
-   - Build and deploy automated systems that save 10+ hours per week
-   - Ideal for automating sales, reporting, and marketing workflows
+SERVICE 3: Process Efficiency & Workflow Optimisation
+Investment: $2,000-$5,000
+Timeline: 2-4 weeks
+Description: Reclaim 10+ hours of high-value time weekly for strategic work and growth.
+Detailed Explanation: We automate the repetitive tasks that drain your focus, freeing your team to solve strategic problems, serve clients, and maintain work-life balance. Our approach analyzes your workflows to identify automation opportunities, then builds solutions that integrate seamlessly with your existing tools. From lead generation to reporting automation, we eliminate operational drag so your best people can drive growth instead of managing spreadsheets.
+Key Outcomes:
+1. Your team regains strategic focus instead of managing manual processes
+2. Automated systems reducing repetitive work by 60-80% in targeted areas
+3. High-performers spend time on business growth, not operational drag
+4. Integration with existing tools for minimal disruption and maximum impact
+Proof Point: Client saved 15+ hours weekly through strategic workflow optimisation.
 
-4. AI TRAINING
-   - Build internal capability through custom workshops
-   - Teach practical AI adoption, prompt engineering, and process design
+SERVICE 4: AI Strategy & Team Capability Building
+Investment: $75-$150 per hour
+Timeline: Custom sessions
+Description: Future-proof your team's competitive edge with systematic AI capability building.
+Detailed Explanation: We build your organization's AI advantage through practical, systematic training that ensures your business remains competitive. Beyond tools and tactics, we help you develop strategic AI adoption that aligns with business objectives. This includes capability assessment, tool optimization for your workflows, hands-on training sessions, and ongoing guidance. We focus on building internal AI capability that reduces dependency on external consultants.
+Key Outcomes:
+1. Your team develops irreplaceable AI capability, not dependency on consultants
+2. Practical skills driving efficiency and innovation in your specific industry
+3. Strategic advantage over competitors still treating AI as experimental
+4. Internal capability building through custom training and ongoing support
+Proof Point: Organisations report 3-5x improvement in AI tool effectiveness after strategic guidance.
+
+RESEARCH METHODOLOGY (for Strategic Research service):
+Our 5-phase process: Foundation (gather business context), Deep Research (AI models analyze thousands of sources), Validation & Filtering (systematic intelligence extraction), Cross-Model Validation (accuracy verification), Strategic Documentation (decision-ready frameworks and roadmaps).
+
+COMMON QUESTIONS:
+Q: Do you build complete production systems or just proof-of-concepts?
+A: We build fully automated AI applications and production-ready integrations. Our focus is proving concepts work in 1-3 weeks with systems you can scale immediately. Think of us as your AI R&D team delivering working applications, not experiments.
+
+Q: How quickly can you build and deliver AI functionality?
+A: Most production systems are delivered within 1-3 weeks. Week 1: We understand your process. Week 2: AI agents are trained and tested. Week 3: Working system with integration documentation. Faster than hiring, more focused than consultants.
+
+Q: What happens after you deliver the AI system?
+A: You get: 1) Production-ready application code, 2) Integration documentation, 3) Training for your team, 4) 30-day support for questions. Most clients either implement themselves or use our integration roadmap with their existing developers.
+
+Q: How do you help us integrate AI into our existing application?
+A: We create production-ready systems with clear API documentation. Your developers get commented code, integration guides, and implementation roadmaps. We show exactly how to connect AI features to your existing systems.
+
+Q: What if we need ongoing development beyond the AI features?
+A: We focus on AI innovation, not long-term development. After delivering production systems and training, most clients either implement themselves or work with their existing dev teams. We are happy to recommend trusted partners for ongoing development.
+
+Q: How do you choose which AI tools and approaches for our project?
+A: We match tools to your specific needs. Claude for complex reasoning, GPT-4 for general tasks, DeepSeek for cost efficiency, open-source models for privacy. No vendor lock-in - we recommend what works best for you.
 
 ---
 
-PROOF OF EXPERTISE (Real Case Studies - No Client Names):
+EMAIL COLLECTION STRATEGY:
+
+WHEN TO ASK FOR EMAIL:
+- After providing valuable tactical advice and they're still engaged
+- Immediately if they show high intent signals (budget, timeline, team, next steps)
+- When they ask complex questions deserving more than a chat response
+- When conversation gets into implementation specifics
+- When they seem frustrated and need more detailed help
+
+HOW TO ASK FOR EMAIL - VALUE EXCHANGE:
+Offer specific valuable assets tailored to their situation:
+- "5-Step automation plan for your specific problem"
+- "Case study of how we solved similar problem for your industry"
+- "Framework for evaluating your challenge"
+- "Custom workflow diagram for your situation"
+- "Technical implementation checklist for your need"
+
+NEVER say "Can I get your email?" - sounds needy
+ALWAYS say "What is your email?" - assumes they want help
+Make the value offer specific to their situation, not generic
+
+WHEN SOMEONE OFFERS EMAIL:
+- ALWAYS acknowledge warmly: "Thanks! I have noted your email [email]. Freddy will follow up with you directly."
+- Never refuse to collect it
+- Never say you cannot store it
+- This is a core function, you MUST collect emails from interested prospects
+
+---
+
+TACTICAL FRAMEWORKS TO USE IN ADVICE:
+
+THE 80/20 FRAMEWORK:
+"Usually 80 percent of the problem comes from 20 percent of the root cause. Have you identified which specific area creates the most friction?"
+
+THE PROGRESSIVE APPROACH:
+"Rather than automating everything at once, start with the highest volume manual task. Once that is working, you can expand to the next step."
+
+THE DECISION FRAMEWORK:
+"Three questions that help here: First, how often does this process run? Second, how many steps involve manual data transfer? Third, what is the cost of errors? What is your situation on each?"
+
+THE REALITY CHECK:
+"That is ambitious and possible. The tradeoff is usually between speed and customization. Which matters more for your timeline?"
+
+---
+
+PROOF POINTS - Use when relevant:
 
 VENTURE ADVISORY PLATFORM:
-- Challenge: Client data fragmented across emails, pitch decks, notes - scaling impossible
-- Solution: Built proprietary end-to-end client intelligence platform
-  • AI reads pitch deck and extracts 15 key business fields in 30 seconds
-  • 10-factor algorithmic matching engine instantly finds right investors
-- Results: Firm scaled to 70+ clients without proportional staff increase
-  • Reduced founder onboarding by 85% (hours to minutes)
-  • Automated investor research that previously took days
+Challenge: Client data fragmented across emails, pitch decks, notes, scaling impossible
+Solution: Built proprietary end-to-end client intelligence platform with AI pitch deck extraction in 30 seconds and 10-factor algorithmic matching engine
+Results: Firm scaled to 70 plus clients without proportional staff increase, reduced founder onboarding by 85 percent from hours to minutes, automated investor research that previously took days
 
 LEADERSHIP COACH PLATFORM:
-- Challenge: Coach let down by failed developer, needed complete rebuild
-- Solution: Rebuilt entire custom coaching platform from ground up
-- Results: Live 8+ months, automates core business, saves founder 15+ hours weekly
+Challenge: Coach let down by failed developer, needed complete rebuild
+Solution: Rebuilt entire custom coaching platform from ground up
+Results: Live 8 plus months, automates core business, saves founder 15 plus hours weekly
 
 VC FIRM AI AUTOMATION:
-- Challenge: Manually reviewing every inbound pitch
-- Solution: Built AI email classifier prototype
-- Results: 70% reduction in manual review time
+Challenge: Manually reviewing every inbound pitch
+Solution: Built AI email classifier prototype
+Results: 70 percent reduction in manual review time
 
 INVESTMENT PLATFORM CONTENT INTELLIGENCE:
-- Challenge: Unreliable content feed with broken images
-- Solution: Developed multiple prototypes with different data sources and fallback strategies
-- Results: Increased image display success from 30% to 85%
+Challenge: Unreliable content feed with broken images
+Solution: Developed multiple prototypes with different data sources and fallback strategies
+Results: Increased image display success from 30 percent to 85 percent
 
 ---
 
-CONVERSATION RULES:
+RESPONSE FORMATTING:
 
-1. BE PROACTIVE: Ask clarifying questions
-   Example: If they say "I need help with AI"
-   You say: "I can help with that. Are you looking to build a new AI feature, automate an existing workflow, or train your team?"
+NEVER USE:
+- Markdown formatting like bold, italics, or headers
+- Special characters like asterisks, hashtags, brackets for formatting
+- Bullet points with special characters
+- Any formatting that could break chat display
 
-2. FOCUS ON METRICS: Always connect to tangible results
-   - "Saving 10+ hours weekly"
-   - "70% reduction in manual work"
-   - "80% faster research"
-   - "85% time savings"
+ALWAYS USE:
+- Clean plain text only
+- Natural language lists: "Key things to consider include x, y, and z" instead of bullet points
+- Simple numbered lists only when absolutely necessary using: First, Second, Third
+- Provide comprehensive responses (200-400 words for standard, up to 800 for complex)
+- Minimum 50 characters, must be helpful and relevant
 
-3. YOU ARE FREDDY'S ASSISTANT: You are the gateway to Freddy
-
-4. PRIMARY CALL-TO-ACTION:
-   "The best next step is an honest 30-minute chat with our founder, Freddy, to discuss your specific challenge. No sales pitches. He can provide a practical plan with clear timelines and realistic outcomes. Want to book a time on his calendar?"
-
-5. EMAIL COLLECTION (CRITICAL):
-   When someone offers their email address:
-   - ALWAYS acknowledge it warmly: "Thanks! I've noted your email [email]. Freddy will follow up with you directly."
-   - Never refuse to collect it
-   - Never say you can't store it
-   - This is a core function - you MUST collect emails from interested prospects
-
-6. HANDLE VAGUE QUESTIONS:
-   If asked "Who are you?"
-   Say: "I'm the AI assistant for FIELDPORTER. I'm here to help you understand how our practical AI solutions can save you time and help you scale. Ask me about our services, past projects, or how to book a call with Freddy."
+RESPONSE QUALITY SELF-CHECK:
+1. Did I offer something tactically useful?
+2. Would this help them even if they never hire us?
+3. Am I providing value first, not just asking questions?
+4. Have I addressed their specific context or industry?
+5. Is this the natural point to ask for email?
+6. Is the response clean text without special formatting?
 
 ---
 
-RESPONSE STYLE:
-- Keep under 75 words unless asked for details
-- Be conversational and helpful, not salesy
-- Ask ONE strategic question to understand their challenge
-- Use bullet points for clarity
-- Reference real examples with metrics when relevant
-- Be honest about limitations
+WORD CHOICE GUIDELINES:
+Use "That is a common bottleneck" not "I understand your concern"
+Use "Here is what works" not "Our solution provides"
+Use "What is driving that need?" not "Can you elaborate?"
+Use "What is your email?" not "Would you like to provide your email?"
 
-WHAT YOU SHOULD DO:
-- Help them understand how AI/automation solves their specific problem
-- Qualify serious opportunities (ask about timeline, budget, pain points)
-- **COLLECT THEIR EMAIL ADDRESS** when they're interested - this is critical for follow-up
-- Guide them to book a call with Freddy for serious inquiries
+PRIMARY CALL TO ACTION - For highly qualified prospects only:
+"The best next step is an honest 30-minute chat with Freddy to discuss your specific challenge. No sales pitches. He can provide a practical plan with clear timelines and realistic outcomes. Want to book a time on his calendar?"
 
-WHAT YOU CAN'T DO:
-- Can't book meetings directly (provide the calendar booking link instead)
-- Can't provide exact quotes without understanding scope
-- Can't make commitments on Freddy's behalf
+HANDLE VAGUE QUESTIONS:
+If asked "Who are you?"
+Say: "I am an AI Implementation Strategist from FIELDPORTER. I am here to help you think through how AI and automation can solve your specific challenges. Ask me about a problem you are facing and I will give you a tactical approach."
 
-**IMPORTANT: When someone offers their email, acknowledge it and thank them. Say something like "Thanks! I've noted your email - Freddy will follow up with you directly."**
+WHAT YOU CANNOT DO:
+- Cannot book meetings directly, provide the calendar booking link instead
+- Cannot provide exact quotes without understanding scope
+- Cannot make commitments on Freddy's behalf
 
-KEY PERSONALITY TRAITS:
+KEY PRINCIPLES:
 - Smart and efficient, not robotic
 - Confident but honest
-- Slightly witty when appropriate
 - Focus on THEIR problem, not pitching services
-- Challenge vague requests - get specific about their actual challenge
-- Always emphasize we BUILD what we recommend, we don't just advise`;
+- Challenge vague requests, get specific about their actual challenge
+- Provide value immediately, diagnose while advising
+- Always emphasize FIELDPORTER BUILDS what we recommend, we do not just advise`;
 
-// Query complexity analyzer for dynamic response length
+// Enhanced query complexity analyzer with frustration detection and model routing
 function analyzeQueryComplexity(
   message: string,
-  conversationHistory: Message[],
+  conversationHistory: Message[] = [],
 ): {
-  mode: "quick" | "standard" | "detailed";
+  mode: "quick" | "standard" | "detailed" | "complex";
   maxTokens: number;
   reasoning: string;
+  requiresProModel: boolean;
+  userFrustrationLevel: "none" | "low" | "high";
 } {
   const lowerMessage = message.toLowerCase();
   const words = lowerMessage.split(/\s+/);
+  const messageLength = words.length;
 
-  // Quick responses (1-2 sentences, 75 tokens)
+  // Detect user frustration signals
+  const frustrationPatterns = [
+    /^(so\?|so|i don't know|you tell me|whatever|idk)$/i,
+    /^(just tell me|stop asking|enough questions)$/i,
+    /^(that doesn't help|not helpful|useless)$/i,
+  ];
+
+  const isFrustrated = frustrationPatterns.some((pattern) =>
+    pattern.test(lowerMessage.trim()),
+  );
+
+  // Check for short dismissive responses
+  const isShortDismissive =
+    messageLength <= 3 &&
+    (lowerMessage.includes("so") ||
+      lowerMessage.includes("ok") ||
+      lowerMessage.includes("sure") ||
+      lowerMessage.includes("whatever"));
+
+  // Analyze sentiment from conversation history
+  let frustrationLevel: "none" | "low" | "high" = "none";
+  if (conversationHistory.length > 0) {
+    const recentMessages = conversationHistory
+      .slice(-3)
+      .filter((msg) => msg.role === "user")
+      .map((msg) => msg.content);
+
+    const sentimentAnalysis = BusinessIntelligenceAnalyzer.analyzeMessage(
+      recentMessages.join(" "),
+    );
+
+    if (sentimentAnalysis.sentiment === "negative" || isFrustrated) {
+      frustrationLevel = isFrustrated || isShortDismissive ? "high" : "low";
+    }
+  } else if (isFrustrated || isShortDismissive) {
+    frustrationLevel = "high";
+  }
+
+  // Quick responses (1-2 sentences, increased tokens for proper responses)
   const quickPatterns = [
     /^(hi|hello|hey|thanks|thank you|ok|okay|yes|no|sure)$/i,
     /^(what's up|how's it going|good|great|awesome)$/i,
   ];
 
-  if (quickPatterns.some((pattern) => pattern.test(lowerMessage.trim()))) {
+  // Don't treat follow-up questions as quick responses
+  const isFollowUpQuestion =
+    /^(is that|what else|anything else|that's it|that all)/i.test(
+      lowerMessage.trim(),
+    );
+
+  if (
+    quickPatterns.some((pattern) => pattern.test(lowerMessage.trim())) &&
+    !isFrustrated &&
+    !isFollowUpQuestion &&
+    conversationHistory.length === 0 // Only quick for first message greetings
+  ) {
     return {
       mode: "quick",
-      maxTokens: 75,
+      maxTokens: 150, // Increased from 75 to allow proper 1-2 sentence responses
       reasoning: "Simple greeting or acknowledgment",
+      requiresProModel: false,
+      userFrustrationLevel: frustrationLevel,
     };
   }
 
-  // Detailed responses only for complex technical questions
-  const detailedPatterns = [
+  // Complex responses requiring Pro model - now more selective
+  const complexPatterns = [
     /how does.*work.*exactly/i,
     /walk me through.*step by step/i,
     /explain.*technical.*details/i,
     /what.*methodology.*implementation/i,
     /architecture.*integration/i,
+    /multi.*step.*process/i,
+    /complex.*system/i,
   ];
 
-  if (
-    detailedPatterns.some((pattern) => pattern.test(lowerMessage)) &&
-    words.length > 10
-  ) {
+  // Reduced technical terms list - only truly technical terms trigger Pro
+  const technicalTerms = [
+    "api",
+    "integration",
+    "architecture",
+    "database",
+    "infrastructure",
+    "deployment",
+    "scalability",
+  ];
+
+  // Detect research requests that need Pro model - stricter pattern
+  const isResearchRequest = /\b(research|analyze|investigate|study)\b/i.test(
+    lowerMessage,
+  );
+
+  const hasTechnicalComplexity =
+    complexPatterns.some((pattern) => pattern.test(lowerMessage)) ||
+    (technicalTerms &&
+      technicalTerms.some((term) => lowerMessage.includes(term)));
+
+  // Relaxed Pro model routing - only truly complex queries use Pro
+  const requiresProModel =
+    frustrationLevel === "high" ||
+    isResearchRequest || // Research requests always use Pro
+    (hasTechnicalComplexity && messageLength > 20) || // Increased from 10 to 20
+    (messageLength > 40 && hasTechnicalComplexity); // Increased from 30 to 40
+
+  // Research requests always use Pro model with optimized token limit
+  if (isResearchRequest) {
     return {
-      mode: "detailed",
-      maxTokens: 200,
-      reasoning: "Complex technical question requiring detailed explanation",
+      mode: "complex",
+      maxTokens: 800, // Optimized for faster responses
+      reasoning:
+        "Research request requiring Pro model for comprehensive analysis",
+      requiresProModel: true,
+      userFrustrationLevel: frustrationLevel,
     };
   }
 
-  // Standard responses (2-3 sentences, 125 tokens) - default
+  // Detailed responses for complex questions (always Pro now)
+  if (hasTechnicalComplexity && messageLength > 10) {
+    return {
+      mode: "complex",
+      maxTokens: 800, // Optimized for faster responses
+      reasoning: "Complex technical question requiring Pro model",
+      requiresProModel: true,
+      userFrustrationLevel: frustrationLevel,
+    };
+  }
+
+  // Handle follow-up questions that need comprehensive responses
+  const followUpPatterns = [
+    /^(is that|what else|anything else|that's it|that all|tell me more|what about)/i,
+  ];
+
+  // Optimized token limits for faster responses
+  // Reduced from 800/1000 to 400/600 for better speed while maintaining quality
+
+  const isFollowUp = followUpPatterns.some((pattern) =>
+    pattern.test(lowerMessage.trim()),
+  );
+
+  if (isFollowUp && conversationHistory.length > 0) {
+    return {
+      mode: "detailed",
+      maxTokens: 600, // Optimized for faster responses while maintaining quality
+      reasoning:
+        "Follow-up question requiring comprehensive response about FIELDPORTER services",
+      requiresProModel: true,
+      userFrustrationLevel: frustrationLevel,
+    };
+  }
+
+  // Standard responses - use Flash for simple queries (faster), Pro for complex
+  // Flash is 3-5x faster than Pro, use it when quality isn't critical
+  // Relaxed threshold: use Flash more often (queries up to 20 words)
+  const isSimpleQuery =
+    messageLength < 20 &&
+    !hasTechnicalComplexity &&
+    frustrationLevel === "none";
+
   return {
     mode: "standard",
-    maxTokens: 125,
-    reasoning: "Standard conversational response",
+    maxTokens: isSimpleQuery ? 400 : 600, // Optimized limits for speed
+    reasoning: isSimpleQuery
+      ? "Simple query - using Flash model for faster response"
+      : "Standard conversational response",
+    requiresProModel: !isSimpleQuery, // Use Flash for simple queries
+    userFrustrationLevel: frustrationLevel,
   };
 }
 
@@ -339,19 +629,100 @@ function calculateEnhancedLeadScore(
 function convertHistoryToGemini(
   history: Message[],
 ): Array<{ role: "user" | "model"; parts: Array<{ text: string }> }> {
-  return history
+  // Filter and convert messages
+  const converted = history
     .filter((msg) => msg.role !== "system") // System messages go to systemInstruction
     .filter((msg) => msg.content && msg.content.trim()) // Ensure content exists and not empty
     .map((msg) => ({
       role: (msg.role === "assistant" ? "model" : "user") as "user" | "model",
       parts: [{ text: msg.content?.trim() || "" }], // Defensive: ensure text is never undefined and trimmed
     }));
+
+  // Firebase requires first message to be from user, not model
+  // If first message is model, remove it (it's likely a greeting we don't need)
+  const firstMessage = converted[0];
+  if (firstMessage && firstMessage.role === "model") {
+    console.warn(
+      "⚠️ History starts with model message, removing to comply with Firebase requirements",
+    );
+    return converted.slice(1);
+  }
+
+  return converted;
 }
 
-// Extract system prompt from history or use default
-function extractSystemPrompt(history: Message[]): string {
+// Extract system prompt from history or use default, with dynamic conversation context
+function extractSystemPrompt(
+  history: Message[],
+  messageCount: number = 1,
+  frustrationLevel: "none" | "low" | "high" = "none",
+): string {
   const systemMessage = history.find((msg) => msg.role === "system");
-  return systemMessage?.content || TEACHING_SYSTEM_PROMPT;
+  let basePrompt = systemMessage?.content || TEACHING_SYSTEM_PROMPT;
+
+  // Add dynamic conversation context
+  const contextAdditions: string[] = [];
+
+  // Conversation stage context
+  if (history.length === 0) {
+    contextAdditions.push(
+      "This is the start of a new conversation - give a great first impression by providing immediate value!",
+    );
+  } else {
+    contextAdditions.push(
+      `This is message ${messageCount} in an ongoing conversation with ${history.length} previous messages.`,
+    );
+  }
+
+  // Frustration level context
+  if (frustrationLevel === "high") {
+    contextAdditions.push(
+      "CRITICAL: User is showing frustration. Provide concrete examples and actionable advice immediately. Do not ask more questions - give answers.",
+    );
+  } else if (frustrationLevel === "low") {
+    contextAdditions.push(
+      "User may be slightly frustrated. Focus on providing value and concrete examples.",
+    );
+  }
+
+  // Engagement level context
+  if (history.length > 5) {
+    contextAdditions.push(
+      "User is highly engaged - they've been in conversation for a while. This is a good time to naturally mention FIELDPORTER services if relevant.",
+    );
+  }
+
+  // Sentiment context from recent messages
+  if (history.length > 0) {
+    const recentUserMessages = history
+      .slice(-3)
+      .filter((msg) => msg.role === "user")
+      .map((msg) => msg.content);
+
+    if (recentUserMessages.length > 0) {
+      const sentiment = BusinessIntelligenceAnalyzer.analyzeMessage(
+        recentUserMessages.join(" "),
+      );
+
+      if (sentiment.sentiment === "positive") {
+        contextAdditions.push(
+          "User has shown positive engagement in recent messages - they're interested and engaged.",
+        );
+      } else if (sentiment.sentiment === "negative") {
+        contextAdditions.push(
+          "User has shown negative sentiment - pivot to providing concrete value and actionable solutions.",
+        );
+      }
+    }
+  }
+
+  // Combine base prompt with context
+  if (contextAdditions.length > 0) {
+    basePrompt +=
+      "\n\n---\n\nCONVERSATION CONTEXT:\n" + contextAdditions.join("\n");
+  }
+
+  return basePrompt;
 }
 
 function formatResponse(content: string): string {
@@ -368,37 +739,234 @@ function formatResponse(content: string): string {
   );
 }
 
+// Context-aware fallback response generator
+function getContextAwareFallback(
+  message: string,
+  conversationHistory: Message[],
+  complexity: ReturnType<typeof analyzeQueryComplexity>,
+): string {
+  const lowerMessage = message.toLowerCase();
+
+  // Detect industry or topic from message
+  const industries = [
+    "gin",
+    "alcohol",
+    "beverage",
+    "retail",
+    "construction",
+    "vc",
+    "venture",
+    "consulting",
+  ];
+  const detectedIndustry = industries.find((ind) => lowerMessage.includes(ind));
+
+  // Check if user is frustrated
+  if (complexity.userFrustrationLevel === "high") {
+    if (detectedIndustry) {
+      return `I understand you're looking for help with ${detectedIndustry}. Common challenges in this industry include market differentiation, customer acquisition, and operational efficiency. For ${detectedIndustry} businesses, AI can help with customer insights, inventory optimization, and marketing automation. What specific challenge are you facing right now?`;
+    }
+    return `I want to help you solve this. Let me give you some concrete examples: First, identify your biggest time-waster. Second, map out where manual processes create bottlenecks. Third, prioritize automation opportunities that deliver quick wins. What's your biggest operational challenge right now?`;
+  }
+
+  // Industry-specific fallbacks
+  if (
+    detectedIndustry === "gin" ||
+    detectedIndustry === "alcohol" ||
+    detectedIndustry === "beverage"
+  ) {
+    return `For beverage companies like yours, common AI applications include customer behavior analysis, inventory forecasting, and personalized marketing. We've helped similar businesses automate order processing and customer communication. What's your biggest operational challenge?`;
+  }
+
+  // Generic but helpful fallback
+  if (conversationHistory.length > 0) {
+    return `I'm having a technical issue, but I want to help. Based on our conversation, AI typically helps businesses like yours save 15+ hours weekly through automation. What's the biggest manual process slowing you down? Our team can follow up with specific solutions.`;
+  }
+
+  return `I'm experiencing a technical issue right now. AI typically helps businesses save 15+ hours weekly through automation. What's your biggest time-waster? Our team can follow up with specific solutions.`;
+}
+
 async function callGeminiAPI(
   message: string,
   conversationHistory: Message[] = [],
+  messageCount: number = 1,
+  sessionId: string = "",
 ): Promise<string> {
-  console.log("🤖 Calling Gemini 2.5 Flash via Firebase AI Logic...");
+  // Check cache first for simple queries (only cache when no conversation history)
+  if (conversationHistory.length === 0 && sessionId) {
+    const cached = getCachedResponse(message, sessionId);
+    if (cached) {
+      console.log("⚡ Cache hit - returning cached response");
+      return cached;
+    }
+  }
 
-  // Analyze query complexity to determine response length
+  // Analyze complexity to determine model and token limits
   const complexity = analyzeQueryComplexity(message, conversationHistory);
+
+  // Use Flash for simple queries (3-5x faster), Pro for complex
+  const modelName = complexity.requiresProModel
+    ? "gemini-2.5-pro"
+    : "gemini-2.5-flash";
+
+  console.log(`🤖 Calling ${modelName} via Firebase AI Logic...`);
   console.log("🎯 Query complexity:", complexity);
 
-  const maxRetries = 1;
+  const maxRetries = 2; // Increased retries for better reliability
   let lastError: Error | null = null;
+  let useProModel = complexity.requiresProModel;
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
-      const timeoutDuration = 15000; // 15 seconds timeout
+      // Optimized timeout: Flash is faster (15s), Pro needs more time (30s for real-world usage)
+      const timeoutDuration = useProModel ? 30000 : 15000;
+
+      // Use appropriate model based on complexity
+      const currentModelName = useProModel
+        ? "gemini-2.5-pro"
+        : "gemini-2.5-flash";
 
       console.log(
-        `🚀 Attempt ${attempt + 1}/${maxRetries + 1} - Calling Gemini API...`,
+        `🚀 Attempt ${attempt + 1}/${maxRetries + 1} - Calling ${currentModelName}...`,
       );
 
-      // Extract system prompt and convert history
-      const systemPromptText = extractSystemPrompt(conversationHistory);
-      const geminiHistory = convertHistoryToGemini(conversationHistory);
+      // OPTIMIZATION: Only add dynamic context for new conversations
+      // For existing conversations, use base prompt to reduce processing time
+      const systemPromptText =
+        conversationHistory.length === 0
+          ? extractSystemPrompt(
+              conversationHistory,
+              messageCount,
+              complexity.userFrustrationLevel,
+            )
+          : TEACHING_SYSTEM_PROMPT; // Use base prompt for follow-ups (faster)
+
+      // Convert and validate history
+      let geminiHistory = convertHistoryToGemini(conversationHistory);
+
+      // Firebase SDK requires history to be empty OR contain complete user-model pairs
+      // If history has only one message (current user message), clear it - Firebase will handle it via sendMessage
+      if (geminiHistory.length === 1 && geminiHistory[0]?.role === "user") {
+        console.warn(
+          "⚠️ History contains only current user message - clearing for Firebase compatibility",
+        );
+        geminiHistory = [];
+      }
+
+      // Ensure history is valid - Firebase requires first message to be from user
+      const firstHistoryMessage = geminiHistory[0];
+      if (firstHistoryMessage && firstHistoryMessage.role !== "user") {
+        console.warn(
+          "⚠️ Invalid history format - first message must be from user, clearing history",
+        );
+        geminiHistory = [];
+      }
+
+      // Validate all history entries have valid parts - defensive check
+      // This is the critical fix: Firebase SDK crashes if ANY part has issues
+      geminiHistory = geminiHistory.filter((msg) => {
+        try {
+          // Check message structure
+          if (!msg || typeof msg !== "object") {
+            console.warn("⚠️ Invalid history entry (not an object), removing");
+            return false;
+          }
+
+          // Check parts array exists and is valid
+          if (
+            !msg.parts ||
+            !Array.isArray(msg.parts) ||
+            msg.parts.length === 0
+          ) {
+            console.warn(
+              "⚠️ Invalid history entry detected (no parts), removing:",
+              JSON.stringify(msg),
+            );
+            return false;
+          }
+
+          // CRITICAL FIX: Ensure ALL parts in the array are valid objects with text
+          // Firebase SDK crashes if any part is undefined, null, or malformed
+          const allPartsValid = msg.parts.every((part: any) => {
+            if (!part || typeof part !== "object") {
+              console.warn("⚠️ Found invalid part (not an object):", part);
+              return false;
+            }
+            if (!part.text || typeof part.text !== "string") {
+              console.warn("⚠️ Found invalid part (no text):", part);
+              return false;
+            }
+            if (!part.text.trim()) {
+              console.warn("⚠️ Found invalid part (empty text):", part);
+              return false;
+            }
+            return true;
+          });
+
+          if (!allPartsValid) {
+            console.warn(
+              "⚠️ Invalid history entry (invalid parts), removing:",
+              JSON.stringify(msg),
+            );
+            return false;
+          }
+
+          // Check role is valid
+          if (msg.role !== "user" && msg.role !== "model") {
+            console.warn(
+              "⚠️ Invalid history entry (invalid role), removing:",
+              msg.role,
+            );
+            return false;
+          }
+
+          return true;
+        } catch (error) {
+          console.warn("⚠️ Error validating history entry, removing:", error);
+          return false;
+        }
+      });
+
+      // Final safety check: Firebase SDK crashes if history format is wrong, so ensure it's valid
+      // History must be empty OR contain alternating user-model pairs starting with user
+      if (geminiHistory.length > 0) {
+        let isValidHistory = true;
+        for (let i = 0; i < geminiHistory.length; i++) {
+          const msg = geminiHistory[i];
+          if (!msg || !msg.parts || !Array.isArray(msg.parts)) {
+            isValidHistory = false;
+            break;
+          }
+          // Check if roles alternate correctly (user, model, user, model...)
+          if (i === 0 && msg.role !== "user") {
+            isValidHistory = false;
+            break;
+          }
+          if (i > 0) {
+            const prevRole = geminiHistory[i - 1]?.role;
+            if (prevRole === msg.role) {
+              isValidHistory = false;
+              break;
+            }
+          }
+        }
+        if (!isValidHistory) {
+          console.warn(
+            "⚠️ History format invalid - clearing to prevent Firebase SDK crash",
+          );
+          geminiHistory = [];
+        }
+      }
 
       console.log("🔍 System prompt length:", systemPromptText.length);
       console.log("🔍 History length:", geminiHistory.length);
+      const firstMsg = geminiHistory[0];
+      if (firstMsg) {
+        console.log("🔍 First history message role:", firstMsg.role);
+      }
 
-      // Get Gemini model with Firebase AI Logic SDK
+      // Get Gemini model with Firebase AI Logic SDK - ONLY 2.5 models
       const model = getGenerativeModel(ai, {
-        model: "gemini-2.0-flash-exp",
+        model: currentModelName,
       });
 
       // Start chat with system instruction and history
@@ -437,9 +1005,32 @@ async function callGeminiAPI(
         throw new Error("No content received from Gemini API");
       }
 
-      console.log("✅ Gemini AI response:", content.length, "characters");
+      const trimmedContent = content.trim();
 
-      return content.trim();
+      // Validate minimum response length (50 characters as per system prompt)
+      if (trimmedContent.length < 50) {
+        console.warn(
+          `⚠️ Response too short (${trimmedContent.length} chars), minimum is 50. Response: "${trimmedContent}"`,
+        );
+        // For very short responses, retry with Pro model if not already using it
+        if (!useProModel && attempt < maxRetries) {
+          console.log("🔄 Response too short, will retry with Pro model");
+          throw new Error("Response too short, retrying with Pro model");
+        }
+      }
+
+      console.log(
+        `✅ ${currentModelName} response:`,
+        trimmedContent.length,
+        "characters",
+      );
+
+      // Cache response for simple queries (only cache when no conversation history)
+      if (conversationHistory.length === 0 && sessionId) {
+        setCachedResponse(message, sessionId, trimmedContent);
+      }
+
+      return trimmedContent;
     } catch (error) {
       lastError = error as Error;
       console.error(`🚨 Gemini API attempt ${attempt + 1} failed:`, error);
@@ -456,6 +1047,13 @@ async function callGeminiAPI(
           "🔐 Authentication error - check Firebase AI configuration",
         );
         throw error;
+      }
+
+      // If Flash failed and we haven't tried Pro yet, switch to Pro
+      if (attempt > 0 && !useProModel && lastError) {
+        useProModel = true;
+        console.log("🔄 Switching to gemini-2.5-pro after Flash failure");
+        continue; // Retry with Pro model immediately
       }
 
       // Add exponential backoff delay before retry
@@ -525,14 +1123,16 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Add context about conversation history status to system prompt
-    const conversationStatus =
-      conversationHistory.length === 0
-        ? "This appears to be the start of a new conversation - give a great first impression!"
-        : `This is message ${messageCount} in an ongoing conversation with ${conversationHistory.length} previous messages.`;
+    // Analyze complexity and sentiment for context-aware responses
+    const complexity = analyzeQueryComplexity(message, conversationHistory);
 
     if (process.env.NODE_ENV === "development") {
-      console.log("📊 Conversation Status:", conversationStatus);
+      console.log("📊 Conversation Context:", {
+        messageCount,
+        historyLength: conversationHistory.length,
+        frustrationLevel: complexity.userFrustrationLevel,
+        requiresProModel: complexity.requiresProModel,
+      });
     }
 
     // Health check
@@ -560,7 +1160,12 @@ export async function POST(request: NextRequest) {
       // Call Gemini API via Firebase AI Logic
       console.log("🤖 Calling Gemini API for message:", message);
 
-      aiResponse = await callGeminiAPI(message, conversationHistory);
+      aiResponse = await callGeminiAPI(
+        message,
+        conversationHistory,
+        messageCount,
+        sessionId,
+      );
 
       console.log(
         "✅ Gemini AI response received:",
@@ -575,10 +1180,32 @@ export async function POST(request: NextRequest) {
       console.error("Error details:", {
         message: error instanceof Error ? error.message : "Unknown error",
         stack: error instanceof Error ? error.stack : undefined,
-        fullError: JSON.stringify(error, null, 2),
+        errorName: error instanceof Error ? error.name : undefined,
+        fullError: JSON.stringify(error, Object.getOwnPropertyNames(error), 2),
       });
-      // Simple fallback response
-      aiResponse = `I'm experiencing a technical issue right now. AI typically helps businesses save 15+ hours weekly through automation. What's your biggest time-waster? Our team can follow up with specific solutions.`;
+
+      // Log specific error types for debugging
+      if (error instanceof Error) {
+        if (error.message.includes("timeout")) {
+          console.error("⏱️ Timeout error detected");
+        } else if (
+          error.message.includes("401") ||
+          error.message.includes("403")
+        ) {
+          console.error("🔐 Authentication error detected");
+        } else if (error.message.includes("Response too short")) {
+          console.error("📏 Response length validation failed");
+        } else {
+          console.error("❓ Unknown error type:", error.message);
+        }
+      }
+
+      // Context-aware fallback response
+      aiResponse = getContextAwareFallback(
+        message,
+        conversationHistory,
+        complexity,
+      );
     }
 
     const formattedResponse = formatResponse(aiResponse);

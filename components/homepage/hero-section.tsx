@@ -60,7 +60,7 @@ const servicePillars = [
   {
     icon: Zap,
     title: "Rapid AI Builds",
-    description: "Working prototypes in days",
+    description: "Production AI systems in days",
     iconColor: "text-blue-400",
     gradientFrom: "blue-500",
     gradientTo: "indigo-500",
@@ -930,7 +930,7 @@ export function HeroSection() {
                     willChange: "background-position",
                   }}
                 >
-                  Modernise your operations
+                  De-risk transformation
                 </motion.span>
                 .
               </p>

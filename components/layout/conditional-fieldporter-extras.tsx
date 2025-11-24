@@ -163,25 +163,25 @@ export function ConditionalFieldporterExtras() {
                   trailCursor.style.opacity = trailOpacity;
                 }
                 
-                // Mouse event handlers with performance optimization
+                // Mouse event handlers with performance optimization - SCROLL FIX: Add passive: true
                 let mouseMoveThrottle = 0;
                 document.addEventListener('mousemove', (e) => {
                   mouseX = e.clientX;
                   mouseY = e.clientY;
-                  
+
                   // Throttle zone updates for performance
                   if (Date.now() - mouseMoveThrottle > 50) {
                     updateCursorZones();
                     mouseMoveThrottle = Date.now();
                   }
-                  
+
                   if (!isVisible) {
                     isVisible = true;
                     primaryCursor.style.opacity = '0.8';
                     trailCursor.style.opacity = '0.4';
                     updateCursors();
                   }
-                });
+                }, { passive: true });
                 
                 // Hide cursors when mouse leaves window
                 document.addEventListener('mouseleave', () => {
@@ -191,8 +191,8 @@ export function ConditionalFieldporterExtras() {
                   if (animationId) {
                     cancelAnimationFrame(animationId);
                   }
-                });
-                
+                }, { passive: true });
+
                 // Show cursors when mouse enters window
                 document.addEventListener('mouseenter', () => {
                   if (isVisible) {
@@ -200,7 +200,7 @@ export function ConditionalFieldporterExtras() {
                     trailCursor.style.opacity = '0.4';
                     updateCursors();
                   }
-                });
+                }, { passive: true });
                 
                 // Cleanup function for page unload
                 window.addEventListener('beforeunload', () => {

@@ -1,4 +1,5 @@
 import {
+  AIAuditSection,
   CTASection,
   HeroSection,
   PortfolioSection,
@@ -56,7 +57,7 @@ export const metadata: Metadata = {
     absolute: "FIELDPORTER - Build Your Own AI Advantage | AI Integration",
   },
   description:
-    "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. We specialize in Claude API, n8n, and Cursor development.",
+    "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. De-risk decisions, validate concepts, and reclaim high-value time with production-ready AI systems.",
   keywords: [
     "FIELDPORTER",
     "AI integration consultant",
@@ -72,7 +73,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "FIELDPORTER - Build Your Own AI Advantage",
     description:
-      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders.",
+      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. De-risk decisions, validate concepts, and reclaim high-value time.",
     type: "website",
     url: "https://fieldporter.com",
     siteName: "FIELDPORTER",
@@ -89,7 +90,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "FIELDPORTER - Build Your Own AI Advantage",
     description:
-      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders.",
+      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. De-risk decisions, validate concepts, and reclaim high-value time.",
     images: ["/opengraph-image"],
     creator: "@fieldporter",
   },
@@ -121,6 +122,7 @@ export default function Home() {
       <UnifiedAuroraBackground />
       <div className="relative z-10">
         <HeroSection />
+        <AIAuditSection />
         <ServicesSection />
         <TrustIndicatorBar />
         <PortfolioSection />

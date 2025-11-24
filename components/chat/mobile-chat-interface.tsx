@@ -109,10 +109,12 @@ export function MobileChatInterface({
     };
 
     if (window.visualViewport) {
-      window.visualViewport.addEventListener("resize", handleViewportChange);
+      window.visualViewport.addEventListener("resize", handleViewportChange, {
+        passive: true,
+      });
       handleResize();
     } else {
-      window.addEventListener("resize", handleResize);
+      window.addEventListener("resize", handleResize, { passive: true });
     }
 
     return () => {
@@ -313,7 +315,7 @@ export function MobileChatInterface({
                   "Get market insights in days vs weeks?",
                   "Turn manual processes into automation?",
                   "Validate your concept quickly?",
-                  "Build working prototypes?",
+                  "Build production AI systems?",
                 ].map((suggestion, idx) => (
                   <motion.button
                     key={idx}

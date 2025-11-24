@@ -4,7 +4,7 @@ import type { Message } from "@/types/chat";
 
 // Enhanced API configuration
 const CHAT_API_ENDPOINT = "/api/chat";
-const REQUEST_TIMEOUT = 15000; // 15 seconds
+const REQUEST_TIMEOUT = 35000; // 35 seconds - matches server timeout + buffer
 const MAX_RETRY_ATTEMPTS = 2;
 const RETRY_DELAY_BASE = 500;
 
