@@ -16,9 +16,9 @@ function UnifiedAuroraBackground() {
       {/* Base gradient - theme aware */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-gray-100 to-white dark:from-black dark:via-gray-950 dark:to-gray-900" />
 
-      {/* Static aurora blobs */}
+      {/* Animated aurora blobs - subtle drift animation */}
       <div
-        className="absolute -top-1/2 -left-1/3 w-[800px] h-[800px] rounded-full opacity-20 blur-[120px]"
+        className="absolute -top-1/2 -left-1/3 w-[800px] h-[800px] rounded-full opacity-20 blur-[120px] animate-aurora-drift-1"
         style={{
           background:
             "linear-gradient(45deg, rgba(59, 130, 246, 0.3), rgba(16, 185, 129, 0.2))",
@@ -26,7 +26,7 @@ function UnifiedAuroraBackground() {
       />
 
       <div
-        className="absolute top-1/3 -right-1/4 w-[600px] h-[600px] rounded-full opacity-15 blur-[100px]"
+        className="absolute top-1/3 -right-1/4 w-[600px] h-[600px] rounded-full opacity-15 blur-[100px] animate-aurora-drift-2"
         style={{
           background:
             "linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(249, 115, 22, 0.2))",
@@ -34,7 +34,7 @@ function UnifiedAuroraBackground() {
       />
 
       <div
-        className="absolute bottom-1/4 left-1/4 w-[700px] h-[700px] rounded-full opacity-12 blur-[140px]"
+        className="absolute bottom-1/4 left-1/4 w-[700px] h-[700px] rounded-full opacity-12 blur-[140px] animate-aurora-drift-3"
         style={{
           background:
             "linear-gradient(225deg, rgba(59, 130, 246, 0.25), rgba(16, 185, 129, 0.15))",
