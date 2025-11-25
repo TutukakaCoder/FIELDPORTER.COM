@@ -90,7 +90,8 @@ export default function AIOSPage() {
           viewport={{ once: true, margin: "-100px" }}
           variants={fadeInUp}
           transition={{ duration: 0.6 }}
-          className="mb-24 bg-gray-50 dark:bg-gray-900/30 rounded-3xl p-8 md:p-12 border border-gray-200 dark:border-gray-800"
+          whileHover={{ scale: 1.01, y: -4 }}
+          className="mb-24 bg-gray-50 dark:bg-gray-900/30 rounded-3xl p-8 md:p-12 border border-gray-200 dark:border-gray-800 hover:border-blue-200 dark:hover:border-blue-800/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500"
         >
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
@@ -134,15 +135,16 @@ export default function AIOSPage() {
                 <motion.div
                   key={index}
                   variants={fadeInUp}
-                  transition={{ duration: 0.5 }}
-                  className="relative p-8 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group focus-within:ring-2 focus-within:ring-blue-500/50 focus-within:ring-offset-2"
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  className="relative p-8 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 hover:border-blue-300/50 dark:hover:border-blue-700/50 transition-all duration-500 group focus-within:ring-2 focus-within:ring-blue-500/50 focus-within:ring-offset-2"
                 >
                   <div
-                    className={`w-12 h-12 ${step.iconBg} rounded-xl flex items-center justify-center ${step.iconColor} mb-6 group-hover:scale-110 transition-transform duration-300`}
+                    className={`w-12 h-12 ${step.iconBg} rounded-xl flex items-center justify-center ${step.iconColor} mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 group-hover:shadow-lg`}
                   >
-                    <StepIcon className="w-6 h-6" />
+                    <StepIcon className="w-6 h-6 transition-transform duration-500 group-hover:scale-110" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 transition-colors duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400">
                     {step.title}
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
@@ -161,7 +163,8 @@ export default function AIOSPage() {
           viewport={{ once: true, margin: "-100px" }}
           variants={fadeInUp}
           transition={{ duration: 0.6 }}
-          className="max-w-4xl mx-auto mb-24 p-8 md:p-12 bg-blue-50 dark:bg-blue-900/10 rounded-3xl border border-blue-100 dark:border-blue-800/30 text-center"
+          whileHover={{ scale: 1.02, y: -4 }}
+          className="max-w-4xl mx-auto mb-24 p-8 md:p-12 bg-blue-50 dark:bg-blue-900/10 rounded-3xl border border-blue-100 dark:border-blue-800/30 text-center hover:border-blue-300 dark:hover:border-blue-600/50 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-500"
         >
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
             An Independent Assessment

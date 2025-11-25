@@ -415,9 +415,9 @@ function InteractiveServiceShowcase() {
                   </p>
 
                   <details className="group mt-6 md:mt-8">
-                    <summary className="flex items-center justify-between cursor-pointer text-gray-900 dark:text-white font-medium text-base md:text-lg hover:text-blue-400 transition-colors duration-200 list-none touch-manipulation">
+                    <summary className="flex items-center justify-between cursor-pointer text-gray-900 dark:text-white font-medium text-base md:text-lg hover:text-blue-400 transition-all duration-300 list-none touch-manipulation hover:pl-2">
                       <span>How This Works</span>
-                      <ChevronDown className="w-5 h-5 md:w-6 md:h-6 transition-transform duration-300 group-open:rotate-180" />
+                      <ChevronDown className="w-5 h-5 md:w-6 md:h-6 transition-transform duration-300 group-open:rotate-180 group-hover:text-blue-400" />
                     </summary>
                     <div className="mt-4 md:mt-6 space-y-4 md:space-y-6">
                       <p className="text-base md:text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
@@ -469,9 +469,10 @@ function InteractiveServiceShowcase() {
                 <div
                   className={`
                   relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border ${currentService.borderColor} 
-                  rounded-3xl p-8 md:p-12 lg:p-16 xl:p-20 transition-all duration-700
+                  rounded-3xl p-8 md:p-12 lg:p-16 xl:p-20 transition-all duration-500
                   hover:bg-gray-900/[0.04] dark:hover:bg-white/[0.04] ${currentService.hoverBorderColor}
-                  shadow-[0_20px_40px_rgba(0,0,0,0.3)]
+                  shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_60px_rgba(59,130,246,0.15)]
+                  hover:-translate-y-2 group/card
                 `}
                 >
                   <div
@@ -481,14 +482,14 @@ function InteractiveServiceShowcase() {
                   </div>
 
                   <div
-                    className={`w-16 h-16 md:w-24 md:h-24 rounded-2xl bg-gray-900/5 dark:bg-white/5 border ${currentService.borderColor} flex items-center justify-center mb-6 md:mb-8 backdrop-blur-sm`}
+                    className={`w-16 h-16 md:w-24 md:h-24 rounded-2xl bg-gray-900/5 dark:bg-white/5 border ${currentService.borderColor} flex items-center justify-center mb-6 md:mb-8 backdrop-blur-sm transition-all duration-500 group-hover/card:scale-110 group-hover/card:rotate-3`}
                   >
                     {React.createElement(currentService.icon, {
-                      className: `w-8 h-8 md:w-12 md:h-12 ${currentService.iconColor}`,
+                      className: `w-8 h-8 md:w-12 md:h-12 ${currentService.iconColor} transition-transform duration-500 group-hover/card:scale-110`,
                     })}
                   </div>
 
-                  <blockquote className="text-lg md:text-xl text-gray-600 dark:text-gray-300 italic leading-relaxed border-l-4 border-blue-500/30 pl-4 md:pl-6">
+                  <blockquote className="text-lg md:text-xl text-gray-600 dark:text-gray-300 italic leading-relaxed border-l-4 border-blue-500/30 pl-4 md:pl-6 transition-colors duration-500 group-hover/card:text-gray-800 dark:group-hover/card:text-gray-200 group-hover/card:border-blue-500/50">
                     &ldquo;{currentService.proof}&rdquo;
                   </blockquote>
                 </div>

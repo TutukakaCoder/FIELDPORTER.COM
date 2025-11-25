@@ -519,10 +519,15 @@ function InteractivePortfolioShowcase() {
                 {currentSection.projects.map((project, projectIndex) => (
                   <motion.div
                     key={projectIndex}
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: projectIndex * 0.1 }}
-                    className="relative"
+                    transition={{
+                      duration: 0.7,
+                      delay: projectIndex * 0.15,
+                      ease: [0.4, 0, 0.2, 1],
+                    }}
+                    whileHover={{ y: -4 }}
+                    className="relative group/project"
                   >
                     <div
                       className={`grid gap-8 md:gap-12 lg:gap-16 items-start ${project.testimonial ? "lg:grid-cols-2" : "lg:grid-cols-1 max-w-4xl mx-auto"}`}
@@ -540,7 +545,7 @@ function InteractivePortfolioShowcase() {
                             </span>
                           </div>
 
-                          <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white leading-tight">
+                          <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white leading-tight transition-colors duration-300 group-hover/project:text-blue-600 dark:group-hover/project:text-blue-400">
                             {project.title}
                           </h3>
 
@@ -639,7 +644,7 @@ function InteractivePortfolioShowcase() {
 
                         {/* Tech Stack */}
                         {project.techStack && (
-                          <div className="bg-gray-100/50 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-300/30 dark:border-gray-700/30">
+                          <div className="bg-gray-100/50 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-300/30 dark:border-gray-700/30 transition-all duration-300 hover:border-blue-400/30 hover:bg-gray-100/70 dark:hover:bg-gray-900/70">
                             <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
                               Technical Stack
                             </div>
@@ -676,7 +681,7 @@ function InteractivePortfolioShowcase() {
 
                             {project.videoUrl ? (
                               // Video showcase card
-                              <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-4 md:p-6 overflow-hidden">
+                              <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-4 md:p-6 overflow-hidden transition-all duration-500 hover:border-gray-900/20 dark:hover:border-white/20 hover:shadow-2xl hover:shadow-blue-500/10">
                                 <div className="relative w-full rounded-3xl overflow-hidden bg-black/50">
                                   <video
                                     controls
@@ -733,13 +738,13 @@ function InteractivePortfolioShowcase() {
                               </div>
                             ) : (
                               // Testimonial-only card (existing design)
-                              <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-8 md:p-12">
-                                <div className="flex items-start gap-4">
-                                  <div className="text-blue-400 text-4xl leading-none">
+                              <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-8 md:p-12 transition-all duration-500 hover:border-gray-900/20 dark:hover:border-white/20 hover:shadow-2xl hover:shadow-blue-500/10">
+                                <div className="flex items-start gap-4 group/quote">
+                                  <div className="text-blue-400 text-4xl leading-none group-hover/quote:scale-110 transition-transform duration-500">
                                     "
                                   </div>
                                   <div className="flex-1">
-                                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4 italic text-lg">
+                                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4 italic text-lg group-hover/quote:text-gray-800 dark:group-hover/quote:text-gray-200 transition-colors duration-500">
                                       {project.testimonial?.quote}
                                     </p>
                                     <div className="flex items-center gap-3">

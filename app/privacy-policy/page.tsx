@@ -211,10 +211,10 @@ export default function PrivacyPolicyPage() {
                 <motion.div key={section.id} variants={itemVariants}>
                   <Link
                     href={`#${section.id}`}
-                    className="flex items-center space-x-3 p-4 rounded-lg glass-dark border border-white/10 hover:border-fieldporter-blue/30 hover:bg-white/[0.02] transition-all duration-300 group hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/5"
+                    className="flex items-center space-x-3 p-4 rounded-lg glass-dark border border-white/10 hover:border-fieldporter-blue/40 hover:bg-white/[0.04] transition-all duration-500 group hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/10"
                   >
-                    <section.icon className="w-5 h-5 text-fieldporter-blue group-hover:text-white group-hover:scale-110 transition-all duration-300" />
-                    <span className="text-fieldporter-gray group-hover:text-white transition-colors duration-300">
+                    <section.icon className="w-5 h-5 text-fieldporter-blue group-hover:text-white group-hover:scale-110 group-hover:rotate-6 transition-all duration-500" />
+                    <span className="text-fieldporter-gray group-hover:text-white transition-colors duration-500">
                       {index + 1}. {section.title}
                     </span>
                   </Link>
