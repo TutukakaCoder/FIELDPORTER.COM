@@ -1,8 +1,8 @@
 # FIELDPORTER.COM Improvement Log v2
 
 > Last Updated: Nov 25, 2025
-> Current Batch: 1
-> Overall Progress: 6/135 files
+> Current Batch: 2
+> Overall Progress: 12/135 files
 
 ---
 
@@ -25,9 +25,9 @@
 | 3   | [x]    | `app/globals.css`         | Scroll optimizations in place     |
 | 4   | [x]    | `app/loading.tsx`         | IMPROVED - Premium pulsing loader |
 | 5   | [x]    | `app/error.tsx`           | Error colors valid                |
-| 6   | [ ]    | `app/sitemap.ts`          |                                   |
-| 7   | [ ]    | `app/opengraph-image.tsx` |                                   |
-| 8   | [ ]    | `app/twitter-image.tsx`   |                                   |
+| 6   | [x]    | `app/sitemap.ts`          | Added missing aios page           |
+| 7   | [x]    | `app/opengraph-image.tsx` | Fixed brand blue (#3B82F6)        |
+| 8   | [x]    | `app/twitter-image.tsx`   | Re-export only - clean            |
 
 ---
 
@@ -105,10 +105,10 @@
 | 48  | [ ]    | `components/homepage/portfolio-section.tsx`              |                                                      |
 | 49  | [ ]    | `components/homepage/ai-audit-section.tsx`               |                                                      |
 | 50  | [ ]    | `components/homepage/cta-section.tsx`                    |                                                      |
-| 51  | [ ]    | `components/homepage/cta-premium-background.tsx`         | SCROLL SUSPECT                                       |
-| 52  | [ ]    | `components/homepage/cta-magnetic-field-3d.tsx`          | SCROLL SUSPECT                                       |
+| 51  | [x]    | `components/homepage/cta-premium-background.tsx`         | SAFE - Added camera frame throttle                   |
+| 52  | [x]    | `components/homepage/cta-magnetic-field-3d.tsx`          | SAFE - CSS fallback only, no 3D                      |
 | 53  | [ ]    | `components/homepage/trust-indicator-bar.tsx`            |                                                      |
-| 54  | [ ]    | `components/homepage/trust-particles-3d.tsx`             | SCROLL SUSPECT                                       |
+| 54  | [x]    | `components/homepage/trust-particles-3d.tsx`             | SAFE - Ref-based, delta-time, proper cleanup         |
 | 55  | [ ]    | `components/homepage/technical-circuit-background.tsx`   |                                                      |
 | 56  | [ ]    | `components/homepage/subtle-ai-portfolio-background.tsx` |                                                      |
 | 57  | [ ]    | `components/homepage/index.ts`                           |                                                      |
@@ -275,6 +275,18 @@
   - loading.tsx: Upgraded from basic spinner to premium pulsing loader
 - Build: PASS
 - Commit: 43991a7
+
+### Session 2 - Nov 25, 2025
+
+- Date: Nov 25, 2025
+- Files: sitemap.ts, opengraph-image.tsx, twitter-image.tsx, cta-premium-background.tsx, cta-magnetic-field-3d.tsx, trust-particles-3d.tsx
+- Changes:
+  - sitemap.ts: Added missing /aios page to sitemap
+  - opengraph-image.tsx: Fixed brand blue from #0969DA to #3B82F6
+  - cta-premium-background.tsx: Added frame throttle to CTACameraControls
+  - SCROLL SUSPECTS CLEARED: cta-premium-background (ref-based), cta-magnetic-field-3d (CSS only), trust-particles-3d (ref-based, delta-time)
+- Build: PASS
+- Commit: pending
 
 ---
 

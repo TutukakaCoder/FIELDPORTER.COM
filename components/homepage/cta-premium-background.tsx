@@ -1,8 +1,8 @@
 "use client";
 
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import * as THREE from 'three';
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import * as THREE from "three";
 
 // Premium particle shaders - CTA version with warmer colors
 const vertexShader = `
@@ -78,12 +78,15 @@ function useIsMobile() {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 1024);
+      setIsMobile(
+        /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
+          window.innerWidth < 1024,
+      );
     };
-    
+
     checkMobile();
-    window.addEventListener('resize', checkMobile, { passive: true });
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile, { passive: true });
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   return isMobile;
@@ -95,30 +98,36 @@ function CTAParticleSystem() {
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const { camera, size } = useThree();
   const isMobile = useIsMobile();
-  
+
   // Mouse tracking with elegant interpolation
   const mouseRef = useRef({ x: 0, y: 0 });
   const currentMouse = useRef({ x: 0, y: 0 });
-  
+
   // Performance tracking
   const frameCount = useRef(0);
   const lastTime = useRef(0);
-  
+
   // Particle configuration - fewer particles for CTA section
-  const particleConfig = useMemo(() => ({
-    count: isMobile ? 1000 : 2000,
-    sizeMultiplier: isMobile ? 1.8 : 1.2,
-    spread: isMobile ? 35 : 50,
-  }), [isMobile]);
+  const particleConfig = useMemo(
+    () => ({
+      count: isMobile ? 1000 : 2000,
+      sizeMultiplier: isMobile ? 1.8 : 1.2,
+      spread: isMobile ? 35 : 50,
+    }),
+    [isMobile],
+  );
 
   // Warmer color palette for CTA section
-  const colorPalette = useMemo(() => [
-    new THREE.Color(0x3B82F6), // Blue
-    new THREE.Color(0x8B5CF6), // Purple
-    new THREE.Color(0x10B981), // Emerald
-    new THREE.Color(0xF59E0B), // Amber accent
-    new THREE.Color(0xEF4444), // Red accent for warmth
-  ], []);
+  const colorPalette = useMemo(
+    () => [
+      new THREE.Color(0x3b82f6), // Blue
+      new THREE.Color(0x8b5cf6), // Purple
+      new THREE.Color(0x10b981), // Emerald
+      new THREE.Color(0xf59e0b), // Amber accent
+      new THREE.Color(0xef4444), // Red accent for warmth
+    ],
+    [],
+  );
 
   // Initialize particle geometry and material
   const { geometry, material } = useMemo(() => {
@@ -130,26 +139,26 @@ function CTAParticleSystem() {
     // Generate particles in a cloud formation
     for (let i = 0; i < particleConfig.count; i++) {
       const i3 = i * 3;
-      
+
       // Position particles in a more compact cloud for CTA
       positions[i3] = (Math.random() - 0.5) * particleConfig.spread;
       positions[i3 + 1] = (Math.random() - 0.5) * particleConfig.spread;
       positions[i3 + 2] = (Math.random() - 0.5) * particleConfig.spread;
-      
+
       // Random colors from warmer palette
       const colorIndex = Math.floor(Math.random() * colorPalette.length);
-      const color = colorPalette[colorIndex] || new THREE.Color(0x3B82F6);
+      const color = colorPalette[colorIndex] || new THREE.Color(0x3b82f6);
       colors[i3] = color.r;
       colors[i3 + 1] = color.g;
       colors[i3 + 2] = color.b;
-      
+
       // Slightly larger particles for CTA visibility
       sizes[i] = (Math.random() * 1.4 + 0.5) * particleConfig.sizeMultiplier;
     }
 
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute('customColor', new THREE.BufferAttribute(colors, 3));
-    geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute("customColor", new THREE.BufferAttribute(colors, 3));
+    geo.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
 
     const mat = new THREE.ShaderMaterial({
       uniforms: {
@@ -157,7 +166,7 @@ function CTAParticleSystem() {
         uMouse: { value: new THREE.Vector2(0, 0) },
         uMouseInfluence: { value: 1.0 },
         uOpacity: { value: 0.9 }, // Slightly more visible for CTA
-        uGlowColor: { value: new THREE.Color(0xF59E0B) }, // Amber glow for warmth
+        uGlowColor: { value: new THREE.Color(0xf59e0b) }, // Amber glow for warmth
       },
       vertexShader,
       fragmentShader,
@@ -186,27 +195,30 @@ function CTAParticleSystem() {
       }
     };
 
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    window.addEventListener('touchmove', handleTouch, { passive: true });
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("touchmove", handleTouch, { passive: true });
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('touchmove', handleTouch);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouch);
     };
   }, [size]);
 
   // LOD system for CTA section
-  const updateLOD = useCallback((camera: THREE.Camera, mesh: THREE.Points) => {
-    const distance = camera.position.length();
-    
-    if (distance > 80) {
-      mesh.geometry.setDrawRange(0, Math.floor(particleConfig.count * 0.6));
-    } else if (distance > 40) {
-      mesh.geometry.setDrawRange(0, Math.floor(particleConfig.count * 0.8));
-    } else {
-      mesh.geometry.setDrawRange(0, particleConfig.count);
-    }
-  }, [particleConfig.count]);
+  const updateLOD = useCallback(
+    (camera: THREE.Camera, mesh: THREE.Points) => {
+      const distance = camera.position.length();
+
+      if (distance > 80) {
+        mesh.geometry.setDrawRange(0, Math.floor(particleConfig.count * 0.6));
+      } else if (distance > 40) {
+        mesh.geometry.setDrawRange(0, Math.floor(particleConfig.count * 0.8));
+      } else {
+        mesh.geometry.setDrawRange(0, particleConfig.count);
+      }
+    },
+    [particleConfig.count],
+  );
 
   // Animation loop - slower and more elegant for CTA
   useFrame((state) => {
@@ -214,23 +226,25 @@ function CTAParticleSystem() {
 
     frameCount.current++;
     const currentTime = state.clock.getElapsedTime();
-    
+
     if (currentTime - lastTime.current < 0.02) return; // ~50fps for CTA
     lastTime.current = currentTime;
 
     // Premium mouse interpolation for refined CTA movement
     const interpolationSpeed = 0.025; // Reduced from 0.04 for smoother, more elegant movement
-    currentMouse.current.x += (mouseRef.current.x - currentMouse.current.x) * interpolationSpeed;
-    currentMouse.current.y += (mouseRef.current.y - currentMouse.current.y) * interpolationSpeed;
+    currentMouse.current.x +=
+      (mouseRef.current.x - currentMouse.current.x) * interpolationSpeed;
+    currentMouse.current.y +=
+      (mouseRef.current.y - currentMouse.current.y) * interpolationSpeed;
 
     // Update shader uniforms
-    if (materialRef.current.uniforms['uTime']) {
-      materialRef.current.uniforms['uTime'].value = currentTime;
+    if (materialRef.current.uniforms["uTime"]) {
+      materialRef.current.uniforms["uTime"].value = currentTime;
     }
-    if (materialRef.current.uniforms['uMouse']) {
-      materialRef.current.uniforms['uMouse'].value.set(
-        currentMouse.current.x * 25, 
-        currentMouse.current.y * 25
+    if (materialRef.current.uniforms["uMouse"]) {
+      materialRef.current.uniforms["uMouse"].value.set(
+        currentMouse.current.x * 25,
+        currentMouse.current.y * 25,
       );
     }
 
@@ -260,23 +274,45 @@ function CTAParticleSystem() {
 function CTACameraControls() {
   const { camera, mouse } = useThree();
   const isMobile = useIsMobile();
+  const lastCameraUpdate = useRef(0);
 
-  useFrame(() => {
+  useFrame((state) => {
     if (isMobile) return;
+
+    // Frame throttle to match particle system (~50fps)
+    const currentTime = state.clock.getElapsedTime();
+    if (currentTime - lastCameraUpdate.current < 0.02) return;
+    lastCameraUpdate.current = currentTime;
 
     // Premium, refined camera movement for CTA section
     const targetX = mouse.x * 1.0;
     const targetY = mouse.y * 0.5;
     const targetZ = 25;
-    
+
     // Much slower interpolation for premium elegance
-    const lerpFactor = 0.008; // Reduced from 0.015 for smoother, more premium feel
-    camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetX, lerpFactor);
-    camera.position.y = THREE.MathUtils.lerp(camera.position.y, 3 + targetY, lerpFactor);
-    camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, lerpFactor);
-    
+    const lerpFactor = 0.008;
+    camera.position.x = THREE.MathUtils.lerp(
+      camera.position.x,
+      targetX,
+      lerpFactor,
+    );
+    camera.position.y = THREE.MathUtils.lerp(
+      camera.position.y,
+      3 + targetY,
+      lerpFactor,
+    );
+    camera.position.z = THREE.MathUtils.lerp(
+      camera.position.z,
+      targetZ,
+      lerpFactor,
+    );
+
     // Extremely subtle rotation for premium sophistication
-    camera.rotation.y = THREE.MathUtils.lerp(camera.rotation.y, mouse.x * 0.005, lerpFactor);
+    camera.rotation.y = THREE.MathUtils.lerp(
+      camera.rotation.y,
+      mouse.x * 0.005,
+      lerpFactor,
+    );
   });
 
   return null;
@@ -296,25 +332,32 @@ export function CTAPremiumBackground() {
 
   // Container styles to prevent scrollbar issues
   const containerStyles: React.CSSProperties = {
-    position: 'absolute',
+    position: "absolute",
     inset: 0,
-    width: '100%',
-    height: '100%',
-    overflow: 'hidden',
+    width: "100%",
+    height: "100%",
+    overflow: "hidden",
     opacity: isLoaded ? 1 : 0,
-    transition: 'opacity 2s ease-out',
-    pointerEvents: 'none',
+    transition: "opacity 2s ease-out",
+    pointerEvents: "none",
   };
 
   // Skip 3D on very low-end mobile devices
-  if (isMobile && navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) {
+  if (
+    isMobile &&
+    navigator.hardwareConcurrency &&
+    navigator.hardwareConcurrency < 4
+  ) {
     return (
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        background: 'radial-gradient(circle at center, rgba(59, 130, 246, 0.05) 0%, transparent 70%)',
-        opacity: 0.6,
-      }} />
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "radial-gradient(circle at center, rgba(59, 130, 246, 0.05) 0%, transparent 70%)",
+          opacity: 0.6,
+        }}
+      />
     );
   }
 
@@ -323,23 +366,23 @@ export function CTAPremiumBackground() {
       {/* Canvas container */}
       <div ref={containerRef} style={containerStyles}>
         <Canvas
-          camera={{ 
-            position: [0, 3, 25], 
+          camera={{
+            position: [0, 3, 25],
             fov: 60,
             near: 0.1,
-            far: 150
+            far: 150,
           }}
           dpr={Math.min(window.devicePixelRatio, 2)}
-          gl={{ 
+          gl={{
             antialias: false,
             alpha: true,
             powerPreference: "high-performance",
             stencil: false,
             depth: false,
           }}
-          style={{ 
-            background: 'transparent',
-            display: 'block',
+          style={{
+            background: "transparent",
+            display: "block",
           }}
           onCreated={({ gl }) => {
             gl.setClearColor(0x000000, 0);
@@ -352,16 +395,17 @@ export function CTAPremiumBackground() {
       </div>
 
       {/* Enhanced gradient overlay for CTA warmth */}
-      <div 
+      <div
         style={{
-          position: 'absolute',
+          position: "absolute",
           inset: 0,
-          background: 'radial-gradient(circle at 30% 70%, rgba(59, 130, 246, 0.08) 0%, transparent 50%), radial-gradient(circle at 70% 30%, rgba(245, 158, 11, 0.06) 0%, transparent 50%)',
-          pointerEvents: 'none',
+          background:
+            "radial-gradient(circle at 30% 70%, rgba(59, 130, 246, 0.08) 0%, transparent 50%), radial-gradient(circle at 70% 30%, rgba(245, 158, 11, 0.06) 0%, transparent 50%)",
+          pointerEvents: "none",
           opacity: isLoaded ? 0.8 : 0,
-          transition: 'opacity 2s ease-out',
+          transition: "opacity 2s ease-out",
         }}
       />
     </>
   );
-} 
+}
