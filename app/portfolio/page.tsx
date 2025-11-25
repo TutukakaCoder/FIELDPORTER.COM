@@ -469,23 +469,27 @@ function InteractivePortfolioShowcase() {
             >
               {/* Desktop Navigation Buttons */}
               <div className="hidden lg:flex absolute -left-20 top-1/2 transform -translate-y-1/2 z-20">
-                <button
+                <motion.button
                   onClick={goToPrevious}
-                  className="w-12 h-12 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-lg hover:bg-gray-900/15 dark:hover:bg-white/15 transition-all duration-500 flex items-center justify-center group hover:scale-105"
+                  whileHover={{ scale: 1.1, x: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-12 h-12 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-lg hover:bg-gray-900/15 dark:hover:bg-white/15 hover:border-gray-900/30 dark:hover:border-white/30 transition-all duration-300 flex items-center justify-center group"
                   aria-label="Previous section"
                 >
-                  <ChevronLeft className="w-6 h-6 text-gray-900 dark:text-white group-hover:text-blue-300 transition-colors duration-500" />
-                </button>
+                  <ChevronLeft className="w-6 h-6 text-gray-900 dark:text-white group-hover:text-blue-400 transition-colors duration-300" />
+                </motion.button>
               </div>
 
               <div className="hidden lg:flex absolute -right-20 top-1/2 transform -translate-y-1/2 z-20">
-                <button
+                <motion.button
                   onClick={goToNext}
-                  className="w-12 h-12 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-lg hover:bg-gray-900/15 dark:hover:bg-white/15 transition-all duration-500 flex items-center justify-center group hover:scale-105"
+                  whileHover={{ scale: 1.1, x: 2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-12 h-12 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-lg hover:bg-gray-900/15 dark:hover:bg-white/15 hover:border-gray-900/30 dark:hover:border-white/30 transition-all duration-300 flex items-center justify-center group"
                   aria-label="Next section"
                 >
-                  <ChevronRight className="w-6 h-6 text-gray-900 dark:text-white group-hover:text-blue-300 transition-colors duration-500" />
-                </button>
+                  <ChevronRight className="w-6 h-6 text-gray-900 dark:text-white group-hover:text-blue-400 transition-colors duration-300" />
+                </motion.button>
               </div>
               {/* Section Header */}
               <div className="text-center mb-16 md:mb-20">

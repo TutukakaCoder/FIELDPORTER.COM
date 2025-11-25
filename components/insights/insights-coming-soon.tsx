@@ -394,8 +394,8 @@ export function InsightsComingSoon() {
               viewport={{ once: true }}
               className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"
             >
-              <div className="group relative p-6 rounded-2xl backdrop-blur-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-500">
-                <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4">
+              <div className="group relative p-6 rounded-2xl backdrop-blur-xl border border-white/10 bg-white/[0.02] article-card-hover cursor-pointer">
+                <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                   <TrendingUp className="w-6 h-6 text-blue-400" />
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">
@@ -406,8 +406,8 @@ export function InsightsComingSoon() {
                 </p>
               </div>
 
-              <div className="group relative p-6 rounded-2xl backdrop-blur-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-500">
-                <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4">
+              <div className="group relative p-6 rounded-2xl backdrop-blur-xl border border-white/10 bg-white/[0.02] article-card-hover cursor-pointer">
+                <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                   <Zap className="w-6 h-6 text-purple-400" />
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">
@@ -418,8 +418,8 @@ export function InsightsComingSoon() {
                 </p>
               </div>
 
-              <div className="group relative p-6 rounded-2xl backdrop-blur-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-500 md:col-span-2 lg:col-span-1">
-                <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-4">
+              <div className="group relative p-6 rounded-2xl backdrop-blur-xl border border-white/10 bg-white/[0.02] article-card-hover cursor-pointer md:col-span-2 lg:col-span-1">
+                <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                   <Lightbulb className="w-6 h-6 text-emerald-400" />
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">

@@ -4,6 +4,22 @@ import { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 
+// Premium loading component
+const LoadingSpinner = () => (
+  <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
+    <div className="text-center animate-fade-in">
+      <div className="relative w-12 h-12 mx-auto mb-6">
+        <div className="absolute inset-0 rounded-full border-2 border-blue-500/20"></div>
+        <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-blue-500 animate-spin"></div>
+        <div className="absolute inset-2 rounded-full bg-blue-500/10 animate-pulse"></div>
+      </div>
+      <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+        Loading contact form...
+      </p>
+    </div>
+  </div>
+);
+
 // Dynamic import for heavy contact form
 const SimpleContactForm = dynamic(
   () =>
@@ -11,16 +27,7 @@ const SimpleContactForm = dynamic(
       default: mod.SimpleContactForm,
     })),
   {
-    loading: () => (
-      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-500 dark:text-gray-400">
-            Loading contact form...
-          </p>
-        </div>
-      </div>
-    ),
+    loading: () => <LoadingSpinner />,
     ssr: false,
   },
 );
@@ -69,18 +76,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <PageWrapper>
-      <Suspense
-        fallback={
-          <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-              <p className="text-gray-500 dark:text-gray-400">
-                Loading contact form...
-              </p>
-            </div>
-          </div>
-        }
-      >
+      <Suspense fallback={<LoadingSpinner />}>
         <SimpleContactForm />
       </Suspense>
       <ContactMethods />

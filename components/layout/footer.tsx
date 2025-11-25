@@ -97,7 +97,7 @@ export function Footer({ className }: FooterProps) {
                 href="https://linkedin.com/company/fieldporter"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 hover:scale-110"
                 aria-label="Follow FIELDPORTER on LinkedIn"
               >
                 <Linkedin className="w-5 h-5" />
@@ -114,9 +114,9 @@ export function Footer({ className }: FooterProps) {
               </h3>
               <Link
                 href="/aios"
-                className="group inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-lg transition-all hover:translate-x-1"
+                className="group inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-lg transition-all duration-200 hover:translate-x-1"
               >
-                <Sparkles className="w-5 h-5 group-hover:text-yellow-400 transition-colors" />
+                <Sparkles className="w-5 h-5 group-hover:text-yellow-400 group-hover:scale-110 transition-all duration-200" />
                 The AIOS
               </Link>
             </div>

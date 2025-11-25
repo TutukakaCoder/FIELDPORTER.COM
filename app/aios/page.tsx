@@ -1,28 +1,64 @@
+"use client";
+
 import { PageWrapper } from "@/components/layout";
 import { ArrowRight, Phone, Search, ShieldCheck } from "lucide-react";
-import { Metadata } from "next";
+import { motion } from "framer-motion";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "AI Operating System (AIOS) | FIELDPORTER",
-  description:
-    "A strategic diagnostic framework to identify high-ROI AI opportunities. Get a scored roadmap and expert consultation.",
-  keywords: ["AI Operating System", "AIOS", "AI Audit", "Automation Roadmap"],
-  openGraph: {
-    title: "AI Operating System (AIOS) | FIELDPORTER",
-    description:
-      "A strategic diagnostic framework to identify high-ROI AI opportunities. Get a scored roadmap and expert consultation.",
-    type: "website",
-    url: "https://fieldporter.com/aios",
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+    },
   },
 };
+
+const steps = [
+  {
+    icon: ShieldCheck,
+    title: "1. Secure Collection",
+    description:
+      "We gather detailed data through our secure portal to get a complete picture of your current operations.",
+    iconBg: "bg-blue-100 dark:bg-blue-900/30",
+    iconColor: "text-blue-600 dark:text-blue-400",
+  },
+  {
+    icon: Search,
+    title: "2. Deep Analysis",
+    description:
+      "We spend two days analyzing your data, researching your market, and consulting our advisor network to validate findings.",
+    iconBg: "bg-purple-100 dark:bg-purple-900/30",
+    iconColor: "text-purple-600 dark:text-purple-400",
+  },
+  {
+    icon: Phone,
+    title: "3. Delivery & Certainty",
+    description:
+      "You receive a written Assessment Report and two consultation calls with AI expert Freddy Hopkins to discuss the roadmap.",
+    iconBg: "bg-emerald-100 dark:bg-emerald-900/30",
+    iconColor: "text-emerald-600 dark:text-emerald-400",
+  },
+];
 
 export default function AIOSPage() {
   return (
     <PageWrapper className="pt-32 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
-        <div className="max-w-3xl mx-auto text-center mb-24">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+          transition={{ duration: 0.6 }}
+          className="max-w-3xl mx-auto text-center mb-24"
+        >
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
             Find the Right AI for <br className="hidden md:block" /> Your
             Business
@@ -32,18 +68,30 @@ export default function AIOSPage() {
             automation strategy and move forward with certainty.
           </p>
           <div className="flex justify-center">
-            <Link
-              href="/auth/signin"
-              className="inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-200 shadow-lg shadow-blue-600/20 hover:shadow-blue-600/30 active:scale-95"
+            <motion.div
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
             >
-              Start Your Assessment
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Link>
+              <Link
+                href="/auth/signin"
+                className="group inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/20 hover:shadow-xl hover:shadow-blue-600/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900 active:scale-[0.98]"
+              >
+                Start Your Assessment
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+              </Link>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
 
         {/* The Problem Section */}
-        <div className="mb-24 bg-gray-50 dark:bg-gray-900/30 rounded-3xl p-8 md:p-12 border border-gray-200 dark:border-gray-800">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          transition={{ duration: 0.6 }}
+          className="mb-24 bg-gray-50 dark:bg-gray-900/30 rounded-3xl p-8 md:p-12 border border-gray-200 dark:border-gray-800"
+        >
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
               Unsure where to start?
@@ -58,61 +106,63 @@ export default function AIOSPage() {
               your specific operations.
             </p>
           </div>
-        </div>
+        </motion.div>
 
         {/* The Framework / Process Section */}
         <div className="mb-24">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-white mb-16">
+          <motion.h2
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+            transition={{ duration: 0.6 }}
+            className="text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-white mb-16"
+          >
             How It Works
-          </h2>
+          </motion.h2>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Step 1 */}
-            <div className="relative p-8 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                1. Secure Collection
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                We gather detailed data through our secure portal to get a
-                complete picture of your current operations.
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div className="relative p-8 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6">
-                <Search className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                2. Deep Analysis
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                We spend two days analyzing your data, researching your market,
-                and consulting our advisor network to validate findings.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="relative p-8 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6">
-                <Phone className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                3. Delivery & Certainty
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                You receive a written Assessment Report and two consultation
-                calls with AI expert Freddy Hopkins to discuss the roadmap.
-              </p>
-            </div>
-          </div>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="grid md:grid-cols-3 gap-8"
+          >
+            {steps.map((step, index) => {
+              const StepIcon = step.icon;
+              return (
+                <motion.div
+                  key={index}
+                  variants={fadeInUp}
+                  transition={{ duration: 0.5 }}
+                  className="relative p-8 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group focus-within:ring-2 focus-within:ring-blue-500/50 focus-within:ring-offset-2"
+                >
+                  <div
+                    className={`w-12 h-12 ${step.iconBg} rounded-xl flex items-center justify-center ${step.iconColor} mb-6 group-hover:scale-110 transition-transform duration-300`}
+                  >
+                    <StepIcon className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                    {step.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                    {step.description}
+                  </p>
+                </motion.div>
+              );
+            })}
+          </motion.div>
         </div>
 
         {/* Non-Sales Pitch Section */}
-        <div className="max-w-4xl mx-auto mb-24 p-8 md:p-12 bg-blue-50 dark:bg-blue-900/10 rounded-3xl border border-blue-100 dark:border-blue-800/30 text-center">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          transition={{ duration: 0.6 }}
+          className="max-w-4xl mx-auto mb-24 p-8 md:p-12 bg-blue-50 dark:bg-blue-900/10 rounded-3xl border border-blue-100 dark:border-blue-800/30 text-center"
+        >
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
             An Independent Assessment
           </h3>
@@ -127,21 +177,33 @@ export default function AIOSPage() {
               strategic roadmap and no obligation.
             </p>
           </div>
-        </div>
+        </motion.div>
 
         {/* Final CTA */}
-        <div className="text-center">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          transition={{ duration: 0.6 }}
+          className="text-center"
+        >
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
             Ready to get clarity?
           </h2>
-          <Link
-            href="/auth/signin"
-            className="inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-200 shadow-lg shadow-blue-600/20 hover:shadow-blue-600/30 active:scale-95"
+          <motion.div
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
           >
-            Start Your Assessment
-            <ArrowRight className="w-5 h-5 ml-2" />
-          </Link>
-        </div>
+            <Link
+              href="/auth/signin"
+              className="group inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/20 hover:shadow-xl hover:shadow-blue-600/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900 active:scale-[0.98]"
+            >
+              Start Your Assessment
+              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+            </Link>
+          </motion.div>
+        </motion.div>
       </div>
     </PageWrapper>
   );

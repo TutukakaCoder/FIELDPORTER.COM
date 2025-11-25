@@ -1094,6 +1094,64 @@
     animation: icon-pulse 2s ease-in-out infinite;
   }
 
+  /* Article card hover - lift with border glow */
+  .article-card-hover {
+    transition:
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.3s ease,
+      border-color 0.3s ease,
+      background-color 0.3s ease;
+  }
+
+  .article-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 12px 24px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+
+  /* Article CTA button - scale and glow */
+  .btn-article-cta {
+    transition:
+      transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .btn-article-cta:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(9, 105, 218, 0.3);
+  }
+
+  .btn-article-cta:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  /* Table row hover highlight */
+  .table-row-hover {
+    transition: background-color 0.2s ease;
+  }
+
+  .table-row-hover:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  /* Step card with number indicator */
+  .step-card-hover {
+    transition:
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  .step-card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    border-color: rgba(9, 105, 218, 0.3);
+  }
+
   /* Enhanced Responsive Design */
   @media (max-width: 768px) {
     .text-display-lg {

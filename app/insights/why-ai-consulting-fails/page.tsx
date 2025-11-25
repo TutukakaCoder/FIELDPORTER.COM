@@ -90,7 +90,7 @@ export default function WhyAIConsultingFailsPage() {
           even reached production.
         </p>
 
-        <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8">
+        <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8 article-card-hover">
           <h3 className="text-heading-lg font-semibold text-fieldporter-blue mb-4">
             Key Statistics
           </h3>
@@ -186,7 +186,7 @@ export default function WhyAIConsultingFailsPage() {
           provide a real-world blueprint for success.
         </p>
 
-        <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8">
+        <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8 article-card-hover">
           <h3 className="text-heading-lg font-semibold text-fieldporter-blue mb-4">
             Family Care AI: Key Learnings
           </h3>
@@ -238,7 +238,7 @@ export default function WhyAIConsultingFailsPage() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-fieldporter-blue mb-3">
               Deep Business Understanding
             </h4>
@@ -249,7 +249,7 @@ export default function WhyAIConsultingFailsPage() {
             </p>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-fieldporter-blue mb-3">
               Proven Technical Expertise
             </h4>
@@ -260,7 +260,7 @@ export default function WhyAIConsultingFailsPage() {
             </p>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-green-500 mb-3">
               Industry Experience
             </h4>
@@ -270,7 +270,7 @@ export default function WhyAIConsultingFailsPage() {
             </p>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-yellow-500 mb-3">
               Transparent Methodology
             </h4>
@@ -287,44 +287,44 @@ export default function WhyAIConsultingFailsPage() {
           Your Actionable Checklist for Business Leaders
         </h2>
 
-        <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8">
+        <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8 step-card-hover">
           <h3 className="text-heading-lg font-semibold text-fieldporter-blue mb-4">
             Before You Start
           </h3>
           <ul className="space-y-3 text-fieldporter-gray">
-            <li>✓ Define clear business objectives & success metrics</li>
-            <li>✓ Secure executive sponsorship & internal alignment</li>
-            <li>✓ Assess your data readiness honestly</li>
-            <li>✓ Establish coherent data and AI strategy</li>
+            <li>+ Define clear business objectives & success metrics</li>
+            <li>+ Secure executive sponsorship & internal alignment</li>
+            <li>+ Assess your data readiness honestly</li>
+            <li>+ Establish coherent data and AI strategy</li>
           </ul>
         </div>
 
-        <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8">
+        <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8 step-card-hover">
           <h3 className="text-heading-lg font-semibold text-fieldporter-blue mb-4">
             During Selection
           </h3>
           <ul className="space-y-3 text-fieldporter-gray">
             <li>
-              ✓ Thoroughly vet potential consultants using structured framework
+              + Thoroughly vet potential consultants using structured framework
             </li>
-            <li>✓ Start small & demand proof of concept or pilot</li>
+            <li>+ Start small & demand proof of concept or pilot</li>
             <li>
-              ✓ Prioritize data governance, security, and ethics from day one
+              + Prioritize data governance, security, and ethics from day one
             </li>
-            <li>✓ Plan for change management & user adoption</li>
+            <li>+ Plan for change management & user adoption</li>
           </ul>
         </div>
 
-        <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-6 my-8">
+        <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-6 my-8 step-card-hover">
           <h3 className="text-heading-lg font-semibold text-green-500 mb-4">
             During Implementation
           </h3>
           <ul className="space-y-3 text-fieldporter-gray">
-            <li>✓ Foster collaboration & maintain open communication</li>
-            <li>✓ Monitor progress against defined KPIs</li>
-            <li>✓ Ensure transparent reporting and regular updates</li>
+            <li>+ Foster collaboration & maintain open communication</li>
+            <li>+ Monitor progress against defined KPIs</li>
+            <li>+ Ensure transparent reporting and regular updates</li>
             <li>
-              ✓ Maintain focus on business value, not just technical metrics
+              + Maintain focus on business value, not just technical metrics
             </li>
           </ul>
         </div>
@@ -372,13 +372,13 @@ export default function WhyAIConsultingFailsPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="/contact"
-              className="inline-flex items-center justify-center px-6 py-3 bg-fieldporter-blue hover:bg-fieldporter-blue/80 text-white font-medium rounded-lg transition-colors"
+              className="inline-flex items-center justify-center px-6 py-3 bg-fieldporter-blue hover:bg-fieldporter-blue/80 text-white font-medium rounded-lg btn-article-cta"
             >
               Schedule Consultation
             </a>
             <a
               href="/services"
-              className="inline-flex items-center justify-center px-6 py-3 border border-fieldporter-blue text-fieldporter-blue hover:bg-fieldporter-blue/10 font-medium rounded-lg transition-colors"
+              className="inline-flex items-center justify-center px-6 py-3 border border-fieldporter-blue text-fieldporter-blue hover:bg-fieldporter-blue/10 font-medium rounded-lg btn-article-cta"
             >
               Our Services
             </a>

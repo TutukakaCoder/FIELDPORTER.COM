@@ -86,7 +86,7 @@ export default function VCPortfolioOptimizationPage() {
           demonstrable operational efficiency.
         </p>
 
-        <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-6 my-8">
+        <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-6 my-8 article-card-hover">
           <h3 className="text-heading-lg font-semibold text-green-500 mb-4">
             The Evolution of VC Value Creation
           </h3>
@@ -144,7 +144,7 @@ export default function VCPortfolioOptimizationPage() {
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-fieldporter-blue mb-3">
               1. Core Business Functions Analysis
             </h4>
@@ -153,14 +153,14 @@ export default function VCPortfolioOptimizationPage() {
               and time-consuming tasks.
             </p>
             <ul className="text-fieldporter-gray text-xs space-y-1">
-              <li>• Sales & Marketing automation</li>
-              <li>• Operations optimization</li>
-              <li>• HR process streamlining</li>
-              <li>• Finance & accounting efficiency</li>
+              <li>* Sales & Marketing automation</li>
+              <li>* Operations optimization</li>
+              <li>* HR process streamlining</li>
+              <li>* Finance & accounting efficiency</li>
             </ul>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-fieldporter-blue mb-3">
               2. Data-Intensive Process Evaluation
             </h4>
@@ -169,14 +169,14 @@ export default function VCPortfolioOptimizationPage() {
               data for competitive advantage.
             </p>
             <ul className="text-fieldporter-gray text-xs space-y-1">
-              <li>• Customer analytics & churn prediction</li>
-              <li>• Financial forecasting</li>
-              <li>• Marketing spend optimization</li>
-              <li>• Operational intelligence</li>
+              <li>* Customer analytics & churn prediction</li>
+              <li>* Financial forecasting</li>
+              <li>* Marketing spend optimization</li>
+              <li>* Operational intelligence</li>
             </ul>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-green-500 mb-3">
               3. Scalability Bottleneck Assessment
             </h4>
@@ -185,14 +185,14 @@ export default function VCPortfolioOptimizationPage() {
               companies scale.
             </p>
             <ul className="text-fieldporter-gray text-xs space-y-1">
-              <li>• Customer onboarding workflows</li>
-              <li>• Order fulfillment processes</li>
-              <li>• Support ticket handling</li>
-              <li>• Quality assurance procedures</li>
+              <li>* Customer onboarding workflows</li>
+              <li>* Order fulfillment processes</li>
+              <li>* Support ticket handling</li>
+              <li>* Quality assurance procedures</li>
             </ul>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-yellow-500 mb-3">
               4. Digital Maturity Review
             </h4>
@@ -201,14 +201,14 @@ export default function VCPortfolioOptimizationPage() {
               capabilities and limitations.
             </p>
             <ul className="text-fieldporter-gray text-xs space-y-1">
-              <li>• Data infrastructure readiness</li>
-              <li>• Existing tech stack assessment</li>
-              <li>• Team technical capabilities</li>
-              <li>• Change management capacity</li>
+              <li>* Data infrastructure readiness</li>
+              <li>* Existing tech stack assessment</li>
+              <li>* Team technical capabilities</li>
+              <li>* Change management capacity</li>
             </ul>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-fieldporter-blue mb-3">
               5. Information Flow Mapping
             </h4>
@@ -217,14 +217,14 @@ export default function VCPortfolioOptimizationPage() {
               and automation.
             </p>
             <ul className="text-fieldporter-gray text-xs space-y-1">
-              <li>• Cross-departmental data silos</li>
-              <li>• Manual transfer processes</li>
-              <li>• Reporting inefficiencies</li>
-              <li>• Communication bottlenecks</li>
+              <li>* Cross-departmental data silos</li>
+              <li>* Manual transfer processes</li>
+              <li>* Reporting inefficiencies</li>
+              <li>* Communication bottlenecks</li>
             </ul>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-fieldporter-blue mb-3">
               6. Repeatable Use Case Identification
             </h4>
@@ -233,15 +233,15 @@ export default function VCPortfolioOptimizationPage() {
               multiple portfolio companies.
             </p>
             <ul className="text-fieldporter-gray text-xs space-y-1">
-              <li>• Shared technology platforms</li>
-              <li>• Common process templates</li>
-              <li>• Preferred vendor relationships</li>
-              <li>• Best practice frameworks</li>
+              <li>* Shared technology platforms</li>
+              <li>* Common process templates</li>
+              <li>* Preferred vendor relationships</li>
+              <li>* Best practice frameworks</li>
             </ul>
           </div>
         </div>
 
-        <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-6 my-8">
+        <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-6 my-8 article-card-hover">
           <h4 className="text-heading-md font-semibold text-yellow-500 mb-3">
             Critical Consideration: Digital Maturity Assessment
           </h4>
@@ -281,42 +281,42 @@ export default function VCPortfolioOptimizationPage() {
                 </tr>
               </thead>
               <tbody className="text-fieldporter-gray">
-                <tr className="border-b border-white/10">
+                <tr className="border-b border-white/10 table-row-hover">
                   <td className="py-3 font-medium">Sales</td>
                   <td className="py-3">
                     AI-powered lead scoring, automated CRM updates, sales
                     forecasting, follow-up sequences
                   </td>
                 </tr>
-                <tr className="border-b border-white/10">
+                <tr className="border-b border-white/10 table-row-hover">
                   <td className="py-3 font-medium">Marketing</td>
                   <td className="py-3">
                     Personalized campaigns, AI content generation, social media
                     automation, churn prediction
                   </td>
                 </tr>
-                <tr className="border-b border-white/10">
+                <tr className="border-b border-white/10 table-row-hover">
                   <td className="py-3 font-medium">Operations</td>
                   <td className="py-3">
                     Supply chain optimization, inventory management, predictive
                     maintenance, workflow automation
                   </td>
                 </tr>
-                <tr className="border-b border-white/10">
+                <tr className="border-b border-white/10 table-row-hover">
                   <td className="py-3 font-medium">Human Resources</td>
                   <td className="py-3">
                     Resume screening, candidate sourcing, employee chatbots,
                     onboarding automation
                   </td>
                 </tr>
-                <tr className="border-b border-white/10">
+                <tr className="border-b border-white/10 table-row-hover">
                   <td className="py-3 font-medium">Finance</td>
                   <td className="py-3">
                     Invoice processing automation, fraud detection, automated
                     reporting, risk management
                   </td>
                 </tr>
-                <tr>
+                <tr className="table-row-hover">
                   <td className="py-3 font-medium">Customer Service</td>
                   <td className="py-3">
                     AI chatbots, automated ticket routing, sentiment analysis,
@@ -342,7 +342,7 @@ export default function VCPortfolioOptimizationPage() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
-          <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6">
+          <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-fieldporter-blue mb-3">
               Enhanced Data Analysis & Decision Making
             </h4>
@@ -354,7 +354,7 @@ export default function VCPortfolioOptimizationPage() {
             </p>
           </div>
 
-          <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6">
+          <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-fieldporter-blue mb-3">
               Personalization at Scale
             </h4>
@@ -365,7 +365,7 @@ export default function VCPortfolioOptimizationPage() {
             </p>
           </div>
 
-          <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-6">
+          <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-green-500 mb-3">
               Optimized Product Development
             </h4>
@@ -376,7 +376,7 @@ export default function VCPortfolioOptimizationPage() {
             </p>
           </div>
 
-          <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-6">
+          <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-yellow-500 mb-3">
               Intelligent Customer Service
             </h4>
@@ -388,7 +388,7 @@ export default function VCPortfolioOptimizationPage() {
           </div>
         </div>
 
-        <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8">
+        <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8 article-card-hover">
           <h3 className="text-heading-lg font-semibold text-fieldporter-blue mb-4">
             AI's Impact on Profitability
           </h3>
@@ -574,26 +574,26 @@ export default function VCPortfolioOptimizationPage() {
                 </tr>
               </thead>
               <tbody className="text-fieldporter-gray">
-                <tr className="border-b border-white/10">
+                <tr className="border-b border-white/10 table-row-hover">
                   <td className="py-3 font-medium">Financial Health</td>
                   <td className="py-3">Monthly Net Burn Rate</td>
                   <td className="py-3">
                     Indicates cash consumption rate and runway
                   </td>
                 </tr>
-                <tr className="border-b border-white/10">
+                <tr className="border-b border-white/10 table-row-hover">
                   <td className="py-3 font-medium">Operational Efficiency</td>
                   <td className="py-3">Customer Acquisition Cost (CAC)</td>
                   <td className="py-3">
                     Efficiency of acquiring new customers
                   </td>
                 </tr>
-                <tr className="border-b border-white/10">
+                <tr className="border-b border-white/10 table-row-hover">
                   <td className="py-3 font-medium">Customer Metrics</td>
                   <td className="py-3">Net Promoter Score (NPS)</td>
                   <td className="py-3">Customer loyalty and satisfaction</td>
                 </tr>
-                <tr>
+                <tr className="table-row-hover">
                   <td className="py-3 font-medium">Automation Impact</td>
                   <td className="py-3">Productivity Hours Reclaimed</td>
                   <td className="py-3">
@@ -617,7 +617,7 @@ export default function VCPortfolioOptimizationPage() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-8">
-          <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6">
+          <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 article-card-hover">
             <h3 className="text-heading-lg font-semibold text-fieldporter-blue mb-4">
               For Venture Capital Firms
             </h3>
@@ -657,7 +657,7 @@ export default function VCPortfolioOptimizationPage() {
             </ul>
           </div>
 
-          <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6">
+          <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 article-card-hover">
             <h3 className="text-heading-lg font-semibold text-fieldporter-blue mb-4">
               For Portfolio Company Operators
             </h3>
@@ -743,13 +743,13 @@ export default function VCPortfolioOptimizationPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="/contact"
-              className="inline-flex items-center justify-center px-6 py-3 bg-green-500 hover:bg-green-500/80 text-white font-medium rounded-lg transition-colors"
+              className="inline-flex items-center justify-center px-6 py-3 bg-green-500 hover:bg-green-500/80 text-white font-medium rounded-lg btn-article-cta"
             >
               Schedule Strategic Consultation
             </a>
             <a
               href="/services"
-              className="inline-flex items-center justify-center px-6 py-3 border border-green-500 text-green-500 hover:bg-green-500/10 font-medium rounded-lg transition-colors"
+              className="inline-flex items-center justify-center px-6 py-3 border border-green-500 text-green-500 hover:bg-green-500/10 font-medium rounded-lg btn-article-cta"
             >
               Portfolio Optimization Services
             </a>

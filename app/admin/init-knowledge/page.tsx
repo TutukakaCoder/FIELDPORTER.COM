@@ -409,22 +409,22 @@ export default function InitKnowledgePage() {
   } | null>(null);
 
   const clearKnowledgeBase = async () => {
-    setStatus("🗑️ Clearing existing knowledge base...");
+    setStatus("Clearing existing knowledge base...");
     const knowledgeRef = collection(db, "ai_knowledge_base");
     const existingDocs = await getDocs(knowledgeRef);
 
     if (!existingDocs.empty) {
       const deletePromises = existingDocs.docs.map((doc) => deleteDoc(doc.ref));
       await Promise.all(deletePromises);
-      setStatus(`🗑️ Cleared ${existingDocs.docs.length} existing entries`);
+      setStatus(`Cleared ${existingDocs.docs.length} existing entries`);
     } else {
-      setStatus("📝 Knowledge base is already empty");
+      setStatus("Knowledge base is already empty");
     }
   };
 
   const initializeKnowledgeBase = async () => {
     setIsLoading(true);
-    setStatus("🚀 Starting FIELDPORTER Knowledge Base initialization...");
+    setStatus("Starting FIELDPORTER Knowledge Base initialization...");
 
     try {
       // Clear existing knowledge base first
@@ -433,7 +433,7 @@ export default function InitKnowledgePage() {
       const knowledgeRef = collection(db, "ai_knowledge_base");
 
       // Add knowledge base items
-      setStatus("📝 Adding new knowledge base entries...");
+      setStatus("Adding new knowledge base entries...");
       let addedCount = 0;
 
       for (const item of FIELDPORTER_KNOWLEDGE_BASE) {
@@ -444,20 +444,20 @@ export default function InitKnowledgePage() {
             updated_at: serverTimestamp(),
           });
           addedCount++;
-          setStatus(`✅ Added: ${item.title}`);
+          setStatus(`Added: ${item.title}`);
         } catch (error) {
-          console.error(`❌ Failed to add ${item.title}:`, error);
+          console.error(`Failed to add ${item.title}:`, error);
         }
       }
 
       setResults({ addedCount, skippedCount: 0 });
       setStatus(
-        `🎉 Successfully initialized ${addedCount} knowledge base entries!`,
+        `Successfully initialized ${addedCount} knowledge base entries!`,
       );
     } catch (error) {
-      console.error("❌ Error initializing knowledge base:", error);
+      console.error("Error initializing knowledge base:", error);
       setStatus(
-        `❌ Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+        `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     }
 
@@ -466,50 +466,87 @@ export default function InitKnowledgePage() {
 
   return (
     <div className="min-h-screen bg-black text-white p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">
-          🧠 FIELDPORTER Knowledge Base Initialization
+      {/* Background gradient */}
+      <div className="fixed inset-0 bg-gradient-to-br from-blue-950/20 via-black to-purple-950/20 pointer-events-none" />
+
+      <div className="max-w-4xl mx-auto relative z-10">
+        <h1 className="text-3xl font-bold mb-8 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+          FIELDPORTER Knowledge Base Initialization
         </h1>
 
-        <div className="bg-gray-900 p-6 rounded-lg mb-6">
-          <h2 className="text-xl font-semibold mb-4">Knowledge Base Stats</h2>
-          <p className="mb-2">
-            📚 Total Entries: {FIELDPORTER_KNOWLEDGE_BASE.length}
+        {/* Stats Card with hover effect */}
+        <div className="bg-white/5 backdrop-blur-sm p-6 rounded-xl mb-6 border border-white/10 transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:shadow-lg hover:shadow-blue-500/10">
+          <h2 className="text-xl font-semibold mb-4 text-blue-400">
+            Knowledge Base Stats
+          </h2>
+          <p className="mb-2 text-gray-300">
+            Total Entries:{" "}
+            <span className="text-white font-medium">
+              {FIELDPORTER_KNOWLEDGE_BASE.length}
+            </span>
           </p>
-          <p className="mb-2">
-            🏷️ Categories:{" "}
-            {[
-              ...new Set(
-                FIELDPORTER_KNOWLEDGE_BASE.map((item) => item.category),
-              ),
-            ].join(", ")}
+          <p className="mb-2 text-gray-300">
+            Categories:{" "}
+            <span className="text-white font-medium">
+              {[
+                ...new Set(
+                  FIELDPORTER_KNOWLEDGE_BASE.map((item) => item.category),
+                ),
+              ].join(", ")}
+            </span>
           </p>
-          <p className="text-gray-400">
+          <p className="text-gray-500 text-sm mt-4">
             This will replace all existing knowledge base entries with fresh,
             comprehensive content.
           </p>
         </div>
 
+        {/* Initialize Button with press feedback */}
         <Button
           onClick={initializeKnowledgeBase}
           disabled={isLoading}
-          className="mb-6 bg-blue-600 hover:bg-blue-700"
+          className="mb-6 bg-blue-600 hover:bg-blue-500 active:scale-95 transition-all duration-200 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
         >
-          {isLoading ? "Initializing..." : "🚀 Initialize Knowledge Base"}
+          {isLoading ? (
+            <span className="flex items-center gap-2">
+              <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              Initializing...
+            </span>
+          ) : (
+            "Initialize Knowledge Base"
+          )}
         </Button>
 
+        {/* Status with animation */}
         {status && (
-          <div className="bg-gray-900 p-4 rounded-lg mb-4">
-            <p className="font-mono">{status}</p>
+          <div className="bg-white/5 backdrop-blur-sm p-4 rounded-xl mb-4 border border-white/10 animate-fade-in">
+            <p className="font-mono text-sm text-gray-300">{status}</p>
           </div>
         )}
 
+        {/* Results with success styling */}
         {results && (
-          <div className="bg-green-900 p-4 rounded-lg">
-            <h3 className="font-semibold mb-2">✅ Initialization Complete!</h3>
-            <p>Added: {results.addedCount} entries</p>
-            <p>Skipped: {results.skippedCount} entries</p>
-            <p className="mt-2 text-green-300">
+          <div className="bg-green-500/10 backdrop-blur-sm p-6 rounded-xl border border-green-500/30 animate-fade-in">
+            <h3 className="font-semibold mb-3 text-green-400 text-lg">
+              Initialization Complete!
+            </h3>
+            <div className="space-y-1 text-gray-300">
+              <p>
+                Added:{" "}
+                <span className="text-white font-medium">
+                  {results.addedCount}
+                </span>{" "}
+                entries
+              </p>
+              <p>
+                Skipped:{" "}
+                <span className="text-white font-medium">
+                  {results.skippedCount}
+                </span>{" "}
+                entries
+              </p>
+            </div>
+            <p className="mt-4 text-green-300 text-sm">
               Your knowledge base is now ready for the AI chatbot!
             </p>
           </div>

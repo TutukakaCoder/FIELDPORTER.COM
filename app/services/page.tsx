@@ -326,15 +326,37 @@ function InteractiveServiceShowcase() {
           </p>
         </div>
 
-        <div className="flex justify-center gap-2 md:gap-3 lg:gap-6 mb-16 md:mb-20 lg:mb-32 flex-wrap px-4">
+        <motion.div
+          className="flex justify-center gap-2 md:gap-3 lg:gap-6 mb-16 md:mb-20 lg:mb-32 flex-wrap px-4"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+            },
+          }}
+        >
           {services.map((service, index) => {
             const ServiceIcon = service.icon;
             return (
-              <button
+              <motion.button
                 key={service.id}
                 onClick={() => setActiveService(index)}
+                variants={{
+                  hidden: { opacity: 0, y: 20, scale: 0.95 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    transition: { duration: 0.4 },
+                  },
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
                 className={`
-                  px-3 md:px-4 lg:px-8 py-2 md:py-3 lg:py-4 rounded-xl md:rounded-2xl transition-all duration-500 backdrop-blur-xl border font-medium text-xs md:text-sm lg:text-lg hover:scale-105 transform will-change-transform touch-manipulation
+                  px-3 md:px-4 lg:px-8 py-2 md:py-3 lg:py-4 rounded-xl md:rounded-2xl transition-all duration-500 backdrop-blur-xl border font-medium text-xs md:text-sm lg:text-lg will-change-transform touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black
                   ${
                     activeService === index
                       ? "bg-blue-500/20 border-blue-500/40 text-gray-900 dark:text-white shadow-[0_0_30px_rgba(59,130,246,0.3)]"
@@ -344,7 +366,7 @@ function InteractiveServiceShowcase() {
               >
                 <span className="flex items-center gap-1 md:gap-2 lg:gap-3">
                   <ServiceIcon
-                    className={`w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 ${activeService === index ? service.iconColor : "text-gray-500"}`}
+                    className={`w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 transition-colors duration-300 ${activeService === index ? service.iconColor : "text-gray-500"}`}
                   />
                   <span className="hidden lg:inline">{service.title}</span>
                   <span className="hidden sm:inline lg:hidden">
@@ -354,10 +376,10 @@ function InteractiveServiceShowcase() {
                     {service.title.split(" ")[0]}
                   </span>
                 </span>
-              </button>
+              </motion.button>
             );
           })}
-        </div>
+        </motion.div>
 
         <AnimatePresence mode="wait">
           <motion.div
@@ -408,15 +430,18 @@ function InteractiveServiceShowcase() {
                         </h4>
                         <ul className="space-y-2 md:space-y-3">
                           {currentService.outcomes.map((outcome, index) => (
-                            <li
+                            <motion.li
                               key={index}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ duration: 0.3, delay: index * 0.1 }}
                               className="flex items-start space-x-3 md:space-x-4 text-base md:text-lg text-gray-800 dark:text-gray-100"
                             >
                               <CheckCircle
                                 className={`w-5 h-5 md:w-6 md:h-6 ${currentService.iconColor} flex-shrink-0 mt-0.5 md:mt-1`}
                               />
                               <span>{outcome}</span>
-                            </li>
+                            </motion.li>
                           ))}
                         </ul>
                       </div>
@@ -471,26 +496,30 @@ function InteractiveServiceShowcase() {
             </div>
 
             <div className="flex justify-center gap-4 md:gap-6 mt-16">
-              <button
+              <motion.button
                 onClick={() =>
                   setActiveService(
                     activeService > 0 ? activeService - 1 : services.length - 1,
                   )
                 }
-                className="p-3 md:p-4 rounded-full bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 hover:bg-gray-900/10 dark:hover:bg-white/10 transition-all duration-300 backdrop-blur-xl touch-manipulation"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-3 md:p-4 rounded-full bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 hover:bg-gray-900/10 dark:hover:bg-white/10 hover:border-gray-900/20 dark:hover:border-white/20 transition-all duration-300 backdrop-blur-xl touch-manipulation group"
               >
-                <ArrowLeft className="w-5 h-5 md:w-6 md:h-6 text-gray-900 dark:text-white" />
-              </button>
-              <button
+                <ArrowLeft className="w-5 h-5 md:w-6 md:h-6 text-gray-900 dark:text-white group-hover:-translate-x-0.5 transition-transform duration-200" />
+              </motion.button>
+              <motion.button
                 onClick={() =>
                   setActiveService(
                     activeService < services.length - 1 ? activeService + 1 : 0,
                   )
                 }
-                className="p-3 md:p-4 rounded-full bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 hover:bg-gray-900/10 dark:hover:bg-white/10 transition-all duration-300 backdrop-blur-xl touch-manipulation"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-3 md:p-4 rounded-full bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 hover:bg-gray-900/10 dark:hover:bg-white/10 hover:border-gray-900/20 dark:hover:border-white/20 transition-all duration-300 backdrop-blur-xl touch-manipulation group"
               >
-                <ArrowRight className="w-5 h-5 md:w-6 md:h-6 text-gray-900 dark:text-white" />
-              </button>
+                <ArrowRight className="w-5 h-5 md:w-6 md:h-6 text-gray-900 dark:text-white group-hover:translate-x-0.5 transition-transform duration-200" />
+              </motion.button>
             </div>
           </motion.div>
         </AnimatePresence>

@@ -114,7 +114,7 @@ export default function RealCostNotAutomatingPage() {
           a task often exacerbated by manual systems.
         </p>
 
-        <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8">
+        <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8 article-card-hover">
           <h4 className="text-heading-md font-semibold text-fieldporter-blue mb-4">
             Time Waste Examples
           </h4>
@@ -213,7 +213,7 @@ export default function RealCostNotAutomatingPage() {
                 </tr>
               </thead>
               <tbody className="text-fieldporter-gray">
-                <tr className="border-b border-white/10">
+                <tr className="border-b border-white/10 table-row-hover">
                   <td className="py-3 font-medium">
                     Time Waste & Lost Productivity
                   </td>
@@ -224,14 +224,14 @@ export default function RealCostNotAutomatingPage() {
                     $15,000+ per year from admin time alone
                   </td>
                 </tr>
-                <tr className="border-b border-white/10">
+                <tr className="border-b border-white/10 table-row-hover">
                   <td className="py-3 font-medium">Error Rates & Rework</td>
                   <td className="py-3">1-5% manual data entry error rate</td>
                   <td className="py-3 text-fieldporter-white">
-                    $3,000–$10,000+ in rework costs
+                    $3,000-$10,000+ in rework costs
                   </td>
                 </tr>
-                <tr className="border-b border-white/10">
+                <tr className="border-b border-white/10 table-row-hover">
                   <td className="py-3 font-medium">Opportunity Costs</td>
                   <td className="py-3">
                     Inability to scale due to capacity constraints
@@ -240,7 +240,7 @@ export default function RealCostNotAutomatingPage() {
                     $25,000-$50,000+ in lost growth
                   </td>
                 </tr>
-                <tr>
+                <tr className="table-row-hover">
                   <td className="py-3 font-medium">
                     Employee Morale & Burnout
                   </td>
@@ -248,7 +248,7 @@ export default function RealCostNotAutomatingPage() {
                     $7.8 trillion globally in disengagement (Gallup)
                   </td>
                   <td className="py-3 text-fieldporter-white">
-                    $5,000–$15,000 in turnover costs
+                    $5,000-$15,000 in turnover costs
                   </td>
                 </tr>
               </tbody>
@@ -268,12 +268,12 @@ export default function RealCostNotAutomatingPage() {
           straightforward:
         </p>
 
-        <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8 text-center">
+        <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8 text-center article-card-hover">
           <h4 className="text-heading-md font-semibold text-fieldporter-blue mb-4">
             ROI Formula
           </h4>
           <p className="text-xl font-mono text-fieldporter-white">
-            ROI = ((Net Return - Cost of Investment) / Cost of Investment) × 100
+            ROI = ((Net Return - Cost of Investment) / Cost of Investment) x 100
           </p>
         </div>
 
@@ -287,39 +287,39 @@ export default function RealCostNotAutomatingPage() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-fieldporter-blue mb-3">
               1. Identify Candidates
             </h4>
             <ul className="text-fieldporter-gray text-sm space-y-2">
-              <li>• Repetitive, rule-based tasks</li>
-              <li>• High-volume processes</li>
-              <li>• Time-sensitive operations</li>
-              <li>• Error-prone manual work</li>
+              <li>* Repetitive, rule-based tasks</li>
+              <li>* High-volume processes</li>
+              <li>* Time-sensitive operations</li>
+              <li>* Error-prone manual work</li>
             </ul>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-fieldporter-blue mb-3">
               2. Assess Efficiency
             </h4>
             <ul className="text-fieldporter-gray text-sm space-y-2">
-              <li>• Analyze current workflows</li>
-              <li>• Identify bottlenecks</li>
-              <li>• Map process delays</li>
-              <li>• Document pain points</li>
+              <li>* Analyze current workflows</li>
+              <li>* Identify bottlenecks</li>
+              <li>* Map process delays</li>
+              <li>* Document pain points</li>
             </ul>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 article-card-hover">
             <h4 className="text-heading-md font-semibold text-green-500 mb-3">
               3. Evaluate Readiness
             </h4>
             <ul className="text-fieldporter-gray text-sm space-y-2">
-              <li>• Employee mindset & skills</li>
-              <li>• Process standardization</li>
-              <li>• Technology infrastructure</li>
-              <li>• Data quality & structure</li>
+              <li>* Employee mindset & skills</li>
+              <li>* Process standardization</li>
+              <li>* Technology infrastructure</li>
+              <li>* Data quality & structure</li>
             </ul>
           </div>
         </div>
@@ -336,7 +336,7 @@ export default function RealCostNotAutomatingPage() {
           transformative power of strategic automation.
         </p>
 
-        <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8">
+        <div className="bg-fieldporter-blue/10 border border-fieldporter-blue/20 rounded-lg p-6 my-8 article-card-hover">
           <h3 className="text-heading-lg font-semibold text-fieldporter-blue mb-4">
             Client Onboarding Automation Case Study
           </h3>
@@ -406,7 +406,7 @@ export default function RealCostNotAutomatingPage() {
         </p>
 
         <div className="space-y-6 my-8">
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 step-card-hover">
             <h4 className="text-heading-md font-semibold text-fieldporter-blue mb-3">
               Step 1: Identify Pain Points & Manual Bottlenecks
             </h4>
@@ -418,7 +418,7 @@ export default function RealCostNotAutomatingPage() {
             </p>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 step-card-hover">
             <h4 className="text-heading-md font-semibold text-fieldporter-blue mb-3">
               Step 2: Map Current Key Processes
             </h4>
@@ -430,7 +430,7 @@ export default function RealCostNotAutomatingPage() {
             </p>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 step-card-hover">
             <h4 className="text-heading-md font-semibold text-green-500 mb-3">
               Step 3: Quantify the "Cost of Inaction"
             </h4>
@@ -442,7 +442,7 @@ export default function RealCostNotAutomatingPage() {
             </p>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 step-card-hover">
             <h4 className="text-heading-md font-semibold text-yellow-500 mb-3">
               Step 4: Prioritize Automation Candidates
             </h4>
@@ -454,7 +454,7 @@ export default function RealCostNotAutomatingPage() {
             </p>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 step-card-hover">
             <h4 className="text-heading-md font-semibold text-fieldporter-blue mb-3">
               Step 5: Define Clear Goals & Success Metrics
             </h4>
@@ -465,7 +465,7 @@ export default function RealCostNotAutomatingPage() {
             </p>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 step-card-hover">
             <h4 className="text-heading-md font-semibold text-fieldporter-blue mb-3">
               Step 6: Explore Solutions & Calculate ROI
             </h4>
@@ -476,7 +476,7 @@ export default function RealCostNotAutomatingPage() {
             </p>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 step-card-hover">
             <h4 className="text-heading-md font-semibold text-green-500 mb-3">
               Step 7: Start with a Pilot Project
             </h4>
@@ -487,7 +487,7 @@ export default function RealCostNotAutomatingPage() {
             </p>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 step-card-hover">
             <h4 className="text-heading-md font-semibold text-yellow-500 mb-3">
               Step 8: Monitor, Iterate, and Optimize
             </h4>
@@ -541,13 +541,13 @@ export default function RealCostNotAutomatingPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="/contact"
-              className="inline-flex items-center justify-center px-6 py-3 bg-fieldporter-blue hover:bg-fieldporter-blue/80 text-white font-medium rounded-lg transition-colors"
+              className="inline-flex items-center justify-center px-6 py-3 bg-fieldporter-blue hover:bg-fieldporter-blue/80 text-white font-medium rounded-lg btn-article-cta"
             >
               Book Free Assessment
             </a>
             <a
               href="/services"
-              className="inline-flex items-center justify-center px-6 py-3 border border-fieldporter-blue text-fieldporter-blue hover:bg-fieldporter-blue/10 font-medium rounded-lg transition-colors"
+              className="inline-flex items-center justify-center px-6 py-3 border border-fieldporter-blue text-fieldporter-blue hover:bg-fieldporter-blue/10 font-medium rounded-lg btn-article-cta"
             >
               Our Automation Services
             </a>
