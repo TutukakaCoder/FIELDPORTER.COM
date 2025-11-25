@@ -61,8 +61,8 @@ export default function OpengraphImage() {
               width: 10,
               height: 10,
               borderRadius: 9999,
-              background: "#3B82F6",
-              boxShadow: "0 0 24px rgba(59,130,246,0.6)",
+              background: "#0969DA",
+              boxShadow: "0 0 24px rgba(9,105,218,0.6)",
             }}
           />
           <div style={{ fontSize: 26, color: "#9ca3af" }}>fieldporter.com</div>

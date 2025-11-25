@@ -2,21 +2,24 @@
 
 export default function Loading() {
   return (
-    <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
-      <div className="flex flex-col items-center gap-4">
-        {/* Premium pulsing logo mark */}
+    <div className="fixed inset-0 bg-black flex items-center justify-center z-50 animate-fade-in">
+      {/* Subtle background glow */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-32 h-32 rounded-full bg-fieldporter-blue/10 blur-3xl animate-pulse-slow" />
+      </div>
+
+      {/* Loading spinner with brand styling */}
+      <div className="relative flex flex-col items-center gap-4">
         <div className="relative">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-fieldporter-blue/20 to-fieldporter-blue/5 animate-pulse-slow" />
-          <div
-            className="absolute inset-0 w-12 h-12 border border-fieldporter-blue/30 rounded-xl"
-            style={{ animation: "spin 3s linear infinite" }}
-          />
-          {/* Inner glow */}
-          <div className="absolute inset-2 rounded-lg bg-fieldporter-blue/10 animate-pulse" />
+          {/* Outer ring */}
+          <div className="w-10 h-10 border-2 border-white/10 rounded-full" />
+          {/* Spinning accent */}
+          <div className="absolute inset-0 w-10 h-10 border-2 border-transparent border-t-fieldporter-blue rounded-full animate-spin" />
         </div>
-        {/* Subtle loading text */}
-        <span className="text-white/40 text-sm font-medium tracking-wider uppercase">
-          Loading
+
+        {/* FIELDPORTER text */}
+        <span className="text-white/40 text-sm font-medium tracking-wider">
+          FIELDPORTER
         </span>
       </div>
     </div>

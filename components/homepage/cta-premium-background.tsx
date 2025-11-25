@@ -93,7 +93,7 @@ function useIsMobile() {
 }
 
 // CTA-specific particle system with warmer, more inviting colors
-function CTAParticleSystem() {
+function CTAParticleSystem({ isScrolling }: { isScrolling: boolean }) {
   const meshRef = useRef<THREE.Points>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const { camera, size } = useThree();
@@ -224,6 +224,16 @@ function CTAParticleSystem() {
   useFrame((state) => {
     if (!meshRef.current || !materialRef.current) return;
 
+    // SCROLL FREEZE FIX: Skip heavy operations during active scrolling
+    if (isScrolling) {
+      // Only update time to keep animations in sync when scroll ends
+      const currentTime = state.clock.getElapsedTime();
+      if (materialRef.current.uniforms["uTime"]) {
+        materialRef.current.uniforms["uTime"].value = currentTime;
+      }
+      return;
+    }
+
     frameCount.current++;
     const currentTime = state.clock.getElapsedTime();
 
@@ -271,18 +281,15 @@ function CTAParticleSystem() {
 }
 
 // Premium camera controls for CTA section with refined movement
-function CTACameraControls() {
+function CTACameraControls({ isScrolling }: { isScrolling: boolean }) {
   const { camera, mouse } = useThree();
   const isMobile = useIsMobile();
-  const lastCameraUpdate = useRef(0);
 
-  useFrame((state) => {
+  useFrame(() => {
     if (isMobile) return;
 
-    // Frame throttle to match particle system (~50fps)
-    const currentTime = state.clock.getElapsedTime();
-    if (currentTime - lastCameraUpdate.current < 0.02) return;
-    lastCameraUpdate.current = currentTime;
+    // SCROLL FREEZE FIX: Skip during active scrolling
+    if (isScrolling) return;
 
     // Premium, refined camera movement for CTA section
     const targetX = mouse.x * 1.0;
@@ -290,7 +297,7 @@ function CTACameraControls() {
     const targetZ = 25;
 
     // Much slower interpolation for premium elegance
-    const lerpFactor = 0.008;
+    const lerpFactor = 0.008; // Reduced from 0.015 for smoother, more premium feel
     camera.position.x = THREE.MathUtils.lerp(
       camera.position.x,
       targetX,
@@ -322,12 +329,32 @@ function CTACameraControls() {
 export function CTAPremiumBackground() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
   const isMobile = useIsMobile();
 
   // Handle loading state
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 200);
     return () => clearTimeout(timer);
+  }, []);
+
+  // SCROLL FREEZE FIX: Detect active scrolling to pause animations
+  useEffect(() => {
+    let scrollTimeout: NodeJS.Timeout;
+
+    const handleScroll = () => {
+      setIsScrolling(true);
+      clearTimeout(scrollTimeout);
+      // Resume animations 100ms after scroll stops
+      scrollTimeout = setTimeout(() => setIsScrolling(false), 100);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(scrollTimeout);
+    };
   }, []);
 
   // Container styles to prevent scrollbar issues
@@ -389,8 +416,8 @@ export function CTAPremiumBackground() {
             gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
           }}
         >
-          <CTACameraControls />
-          <CTAParticleSystem />
+          <CTACameraControls isScrolling={isScrolling} />
+          <CTAParticleSystem isScrolling={isScrolling} />
         </Canvas>
       </div>
 

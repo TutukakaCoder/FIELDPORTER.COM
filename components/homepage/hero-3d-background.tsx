@@ -108,11 +108,7 @@ function useIsMobile() {
 }
 
 // Premium particle system component
-function PremiumParticleSystem({
-  isScrollingRef,
-}: {
-  isScrollingRef: React.RefObject<boolean>;
-}) {
+function PremiumParticleSystem({ isScrolling }: { isScrolling: boolean }) {
   const meshRef = useRef<THREE.Points>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const { camera, size } = useThree();
@@ -281,8 +277,8 @@ function PremiumParticleSystem({
   useFrame((state) => {
     if (!meshRef.current || !materialRef.current) return;
 
-    // SCROLL FREEZE FIX v2: Read ref directly - no re-render overhead
-    if (isScrollingRef.current) {
+    // SCROLL FREEZE FIX: Skip heavy operations during active scrolling
+    if (isScrolling) {
       // Only update time to keep animations in sync when scroll ends
       const currentTime = state.clock.getElapsedTime();
       if (materialRef.current.uniforms["uTime"]) {
@@ -342,11 +338,7 @@ function PremiumParticleSystem({
 }
 
 // Camera controls with enhanced responsiveness
-function EnhancedCameraControls({
-  isScrollingRef,
-}: {
-  isScrollingRef: React.RefObject<boolean>;
-}) {
+function EnhancedCameraControls({ isScrolling }: { isScrolling: boolean }) {
   const { camera, mouse } = useThree();
   const isMobile = useIsMobile();
   const frameCount = useRef(0);
@@ -354,8 +346,8 @@ function EnhancedCameraControls({
   useFrame(() => {
     if (isMobile) return;
 
-    // SCROLL FREEZE FIX v2: Read ref directly - zero re-render overhead
-    if (isScrollingRef.current) return;
+    // SCROLL FREEZE FIX: Skip during active scrolling
+    if (isScrolling) return;
 
     // Throttle to 30fps (every other frame)
     frameCount.current++;
@@ -399,9 +391,7 @@ function EnhancedCameraControls({
 export function Hero3DBackground() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  // SCROLL FREEZE FIX v2: Use ref instead of state to avoid re-renders during scroll
-  const isScrollingRef = useRef(false);
-  const [, forceUpdate] = useState(0); // Only for initial mount
+  const [isScrolling, setIsScrolling] = useState(false);
   const isMobile = useIsMobile();
 
   // Handle loading state
@@ -410,25 +400,15 @@ export function Hero3DBackground() {
     return () => clearTimeout(timer);
   }, []);
 
-  // SCROLL FREEZE FIX v2: Ref-based scroll detection - ZERO re-renders
+  // SCROLL FREEZE FIX: Detect active scrolling to pause animations
   useEffect(() => {
     let scrollTimeout: NodeJS.Timeout;
-    let ticking = false;
 
     const handleScroll = () => {
-      if (!ticking) {
-        ticking = true;
-        // Use RAF to batch scroll handling
-        requestAnimationFrame(() => {
-          isScrollingRef.current = true;
-          clearTimeout(scrollTimeout);
-          // Faster resume - 50ms after scroll stops
-          scrollTimeout = setTimeout(() => {
-            isScrollingRef.current = false;
-          }, 50);
-          ticking = false;
-        });
-      }
+      setIsScrolling(true);
+      clearTimeout(scrollTimeout);
+      // Resume animations 100ms after scroll stops
+      scrollTimeout = setTimeout(() => setIsScrolling(false), 100);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -499,8 +479,8 @@ export function Hero3DBackground() {
             gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
           }}
         >
-          <EnhancedCameraControls isScrollingRef={isScrollingRef} />
-          <PremiumParticleSystem isScrollingRef={isScrollingRef} />
+          <EnhancedCameraControls isScrolling={isScrolling} />
+          <PremiumParticleSystem isScrolling={isScrolling} />
         </Canvas>
       </div>
 
