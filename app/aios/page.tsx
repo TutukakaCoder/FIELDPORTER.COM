@@ -73,7 +73,7 @@ export default function AIOSPage() {
               whileTap={{ scale: 0.98 }}
             >
               <Link
-                href="/auth/signin"
+                href="/contact"
                 className="group inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/20 hover:shadow-xl hover:shadow-blue-600/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900 active:scale-[0.98]"
               >
                 Start Your Assessment
@@ -199,7 +199,7 @@ export default function AIOSPage() {
             whileTap={{ scale: 0.98 }}
           >
             <Link
-              href="/auth/signin"
+              href="/contact"
               className="group inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/20 hover:shadow-xl hover:shadow-blue-600/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900 active:scale-[0.98]"
             >
               Start Your Assessment

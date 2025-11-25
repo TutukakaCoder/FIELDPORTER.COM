@@ -13,9 +13,10 @@ export function AboutCTA() {
         <motion.div
           initial={{ opacity: 0, y: 40, scale: 0.95 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          whileHover={{ y: -4 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ delay: 0, duration: 0.8 }}
-          className="relative p-12 rounded-2xl backdrop-blur-xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02]"
+          className="relative p-12 rounded-2xl backdrop-blur-xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02] hover:border-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 group/card"
         >
           <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent pointer-events-none" />
 
@@ -43,14 +44,9 @@ export function AboutCTA() {
                   <Button className="group relative px-8 py-4 rounded-2xl backdrop-blur-xl border border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/20 transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] text-gray-900 dark:text-white font-medium min-w-[200px]">
                     <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/5 to-purple-500/5" />
                     <div className="relative z-10 flex items-center justify-center space-x-3">
-                      <Package className="w-5 h-5" />
+                      <Package className="w-5 h-5 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300" />
                       <span>Explore Our Products</span>
-                      <motion.div
-                        whileHover={{ x: 4 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <ArrowRight className="w-5 h-5" />
-                      </motion.div>
+                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                     </div>
                   </Button>
                 </Link>
@@ -65,14 +61,9 @@ export function AboutCTA() {
                   <Button className="group relative px-8 py-4 rounded-2xl backdrop-blur-xl border border-gray-900/20 dark:border-white/20 bg-gray-900/5 dark:bg-white/5 hover:bg-gray-900/10 dark:hover:bg-white/10 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] text-gray-900 dark:text-white font-medium min-w-[200px]">
                     <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-gray-900/[0.02] dark:from-white/[0.02] to-gray-900/[0.01] dark:to-white/[0.01]" />
                     <div className="relative z-10 flex items-center justify-center space-x-3">
-                      <Settings className="w-5 h-5" />
+                      <Settings className="w-5 h-5 group-hover:scale-110 group-hover:rotate-90 transition-transform duration-500" />
                       <span>Current Services</span>
-                      <motion.div
-                        whileHover={{ x: 4 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <ArrowRight className="w-5 h-5" />
-                      </motion.div>
+                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                     </div>
                   </Button>
                 </Link>

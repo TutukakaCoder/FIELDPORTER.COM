@@ -834,8 +834,7 @@ function PortfolioCTA() {
 export default function PortfolioPage() {
   return (
     <PageWrapper>
-      <PremiumAuroraBackground />
-
+      {/* Aurora background is rendered inside PortfolioHero - no duplicate needed */}
       <div className="relative z-10 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:via-gray-950 dark:to-black min-h-screen">
         <PortfolioHero />
         <InteractivePortfolioShowcase />

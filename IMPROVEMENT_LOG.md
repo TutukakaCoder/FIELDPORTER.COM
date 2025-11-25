@@ -1,7 +1,8 @@
 # FIELDPORTER.COM Improvement Log
 
-> Progress: 56/135 files (Batch 7 in progress)
-> Current: Continue Batch 7 - About components
+> Progress: 58/135 files (Batch 7 complete)
+> Current: Ready for Batch 8 - Services components
+> TGV Issues: Entrance animation FIXED, content/footer issues need deployment verification
 
 ---
 
@@ -118,11 +119,11 @@
 | #   | Status | File                                        | Verified | Notes                                          |
 | --- | ------ | ------------------------------------------- | -------- | ---------------------------------------------- |
 | 58  | [x]    | `components/about/about-hero.tsx`           | YES      | Premium aurora, parallax scroll, floating dots |
-| 59  | [ ]    | `components/about/about-cta.tsx`            |          |                                                |
+| 59  | [x]    | `components/about/about-cta.tsx`            | YES      | Card hover lift+glow, icon animations          |
 | 60  | [x]    | `components/about/company-foundation.tsx`   | YES      | Added hover lift + glow to model card          |
 | 61  | [x]    | `components/about/systematic-approach.tsx`  | YES      | Already has whileHover on cards                |
 | 62  | [x]    | `components/about/tech-stack.tsx`           | YES      | Already has whileHover on tool cards           |
-| 63  | [ ]    | `components/about/technical-capability.tsx` |          |                                                |
+| 63  | [x]    | `components/about/technical-capability.tsx` | YES      | Card shadow, icon scale/rotate, title color    |
 | 64  | [S]    | `components/about/index.ts`                 | -        |                                                |
 
 ---
@@ -390,3 +391,16 @@ Priority files to investigate for scroll freeze:
   - portfolio/page.tsx: Added whileHover y:-4 to project cards, testimonial card hover shadow+border, title color transition, tech stack card hover
   - aios/page.tsx: Enhanced step card border hover to blue, icon shadow on hover, title color transition to blue
 - Verified: Build PASS, Visual PASS
+
+### Session 10
+
+- Date: Nov 25, 2025
+- Files: 6 fixed/enhanced (Bug fixes + TGV isolation + Batch 7 completion)
+- Changes:
+  - portfolio/page.tsx: Removed duplicate PremiumAuroraBackground (was rendered twice)
+  - aios/page.tsx: Fixed broken links from /auth/signin to /contact (auth route doesn't exist)
+  - entrance-provider.tsx: Added path-aware logic to skip FIELDPORTER entrance for TGV page, neutral loading state for isolated pages
+  - about-cta.tsx: Added card hover lift+glow, icon scale/rotate animations on buttons
+  - technical-capability.tsx: Added card shadow on hover, icon scale/rotate, title color transition
+- Issues Fixed: TGV entrance animation, duplicate background, broken auth links
+- Verified: Build PASS

@@ -67,21 +67,21 @@ export function TechnicalCapability() {
               className="relative group"
             >
               <div
-                className={`relative p-8 rounded-2xl backdrop-blur-xl border ${capability.color.split(" ")[0]} bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-500`}
+                className={`relative p-8 rounded-2xl backdrop-blur-xl border ${capability.color.split(" ")[0]} bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-blue-500/10`}
               >
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent pointer-events-none" />
 
                 <div className="relative z-10 space-y-6">
                   <div className="flex items-center justify-between">
                     <div
-                      className={`p-4 rounded-xl bg-current/10 border border-current/20 ${capability.color.split(" ")[1]}`}
+                      className={`p-4 rounded-xl bg-current/10 border border-current/20 ${capability.color.split(" ")[1]} group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 group-hover:shadow-lg`}
                     >
-                      <capability.icon className="w-8 h-8" />
+                      <capability.icon className="w-8 h-8 group-hover:scale-105 transition-transform duration-300" />
                     </div>
                   </div>
 
                   <div>
-                    <h3 className="text-2xl font-medium text-gray-900 dark:text-white mb-4">
+                    <h3 className="text-2xl font-medium text-gray-900 dark:text-white mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                       {capability.title}
                     </h3>
                     <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
