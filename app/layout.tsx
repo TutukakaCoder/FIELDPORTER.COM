@@ -6,7 +6,6 @@ import {
   ScrollRestoration,
 } from "@/components/layout";
 import { PageTransition } from "@/components/ui/page-transition";
-import { AuthProvider } from "@/contexts/auth-context";
 import { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import type React from "react";
@@ -178,18 +177,16 @@ export default function RootLayout({
       <body
         className={`${inter.className} bg-white dark:bg-black transition-colors duration-300`}
       >
-        <AuthProvider>
-          <EntranceProvider>
-            <ScrollRestoration />
-            <ConditionalLayout>
-              <PageTransition>
-                <main className="flex-1">{children}</main>
-              </PageTransition>
-            </ConditionalLayout>
-            <BackToTop />
-            <ConditionalFieldporterExtras />
-          </EntranceProvider>
-        </AuthProvider>
+        <EntranceProvider>
+          <ScrollRestoration />
+          <ConditionalLayout>
+            <PageTransition>
+              <main className="flex-1">{children}</main>
+            </PageTransition>
+          </ConditionalLayout>
+          <BackToTop />
+          <ConditionalFieldporterExtras />
+        </EntranceProvider>
       </body>
     </html>
   );
