@@ -94,11 +94,11 @@ export function Footer({ className }: FooterProps) {
             {/* Social Links - Minimal */}
             <div className="flex pt-2">
               <a
-                href="https://linkedin.com/company/fieldporter"
+                href="https://www.linkedin.com/in/freddyjhopkins/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 hover:scale-110"
-                aria-label="Follow FIELDPORTER on LinkedIn"
+                aria-label="Connect with Freddy Hopkins on LinkedIn"
               >
                 <Linkedin className="w-5 h-5" />
               </a>

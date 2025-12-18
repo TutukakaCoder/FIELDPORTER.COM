@@ -89,7 +89,17 @@ function calculateNewsletterLeadScore(
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    // Validate request body
+    let body;
+    try {
+      body = await request.json();
+    } catch (parseError) {
+      return NextResponse.json(
+        { error: "Invalid request body" },
+        { status: 400 },
+      );
+    }
+
     const { email, source = "homepage" }: NewsletterSignupData = body;
 
     // Validate email
@@ -99,11 +109,20 @@ export async function POST(request: Request) {
     }
 
     // Check if already subscribed
-    const existingQuery = query(
-      collection(db, "newsletter_subscriptions"),
-      where("email", "==", email.toLowerCase()),
-    );
-    const existingDocs = await getDocs(existingQuery);
+    let existingDocs;
+    try {
+      const existingQuery = query(
+        collection(db, "newsletter_subscriptions"),
+        where("email", "==", email.toLowerCase()),
+      );
+      existingDocs = await getDocs(existingQuery);
+    } catch (dbError) {
+      console.error("Firebase query error:", dbError);
+      return NextResponse.json(
+        { error: "Database error. Please try again." },
+        { status: 500 },
+      );
+    }
 
     if (!existingDocs.empty) {
       return NextResponse.json({
@@ -135,10 +154,19 @@ export async function POST(request: Request) {
     };
 
     // Save to Firebase
-    const docRef = await addDoc(
-      collection(db, "newsletter_subscriptions"),
-      subscriptionData,
-    );
+    let docRef;
+    try {
+      docRef = await addDoc(
+        collection(db, "newsletter_subscriptions"),
+        subscriptionData,
+      );
+    } catch (dbError) {
+      console.error("Firebase save error:", dbError);
+      return NextResponse.json(
+        { error: "Failed to save subscription. Please try again." },
+        { status: 500 },
+      );
+    }
 
     // Send email notification for qualified signups
     if (leadScore >= 4) {
@@ -161,9 +189,11 @@ export async function POST(request: Request) {
     }
 
     // Track conversion analytics
-    console.log(
-      `📧 Newsletter signup - Lead Score: ${leadScore}/10 - ${email} - Source: ${source}`,
-    );
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        `Newsletter signup - Lead Score: ${leadScore}/10 - ${email} - Source: ${source}`,
+      );
+    }
 
     return NextResponse.json({
       success: true,

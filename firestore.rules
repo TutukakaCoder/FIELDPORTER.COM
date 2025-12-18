@@ -76,10 +76,10 @@ service cloud.firestore {
       allow write: if false; // Only admins via backend
     }
     
-    // Newsletter subscriptions - public write, no read access
+    // Newsletter subscriptions - public write, read allowed for duplicate checking
     match /newsletter_subscriptions/{document=**} {
       allow write: if true;
-      allow read: if false;
+      allow read: if true; // Allow read for duplicate email checking
     }
     
     // Contact form submissions - public write, no read access

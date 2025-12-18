@@ -24,30 +24,30 @@ const comprehensiveTechStack = [
     category: "AI & Analysis",
     tools: [
       {
-        name: "Claude Sonnet 4.5",
+        name: "Claude Opus 4.5",
         icon: Brain,
         description:
           "State-of-the-art reasoning, analysis, and code generation",
       },
       {
-        name: "GPT-4.5 Turbo",
+        name: "GPT-5.2",
         icon: Cpu,
         description: "Large context reasoning and specialized task automation",
       },
       {
-        name: "Grok",
+        name: "Grok 4",
         icon: Brain,
         description:
           "Real-time AI reasoning with live data access and analysis",
       },
       {
-        name: "Gemini 2.5 Pro",
+        name: "Gemini 3.0 Pro",
         icon: Globe,
         description:
           "Multimodal processing and comprehensive document analysis",
       },
       {
-        name: "DeepSeek V3",
+        name: "DeepSeek V3.2",
         icon: Brain,
         description: "Cost-effective reasoning for production implementations",
       },

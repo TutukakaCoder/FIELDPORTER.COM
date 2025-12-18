@@ -1,5 +1,6 @@
 "use client";
 
+import { useIsScrolling } from "@/hooks";
 import { MeshTransmissionMaterial } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -47,21 +48,9 @@ function EnhancedCameraControls({
 }) {
   const { camera, mouse, viewport } = useThree();
   const isMobile = useIsMobile();
+  // SCROLL FREEZE FIX: Removed redundant scroll listener - using centralized state
   const scrollProgress = useRef(0);
   const mousePosition3D = useRef(new THREE.Vector3());
-
-  // Track scroll position for subtle depth movement
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrolled = window.scrollY;
-      const maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight;
-      scrollProgress.current = Math.min(scrolled / (maxScroll || 1), 1);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useFrame((state) => {
     if (isMobile || !enabled) return;
@@ -221,7 +210,8 @@ export function SectionBackground3D({
   const [mounted, setMounted] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [contextLost, setContextLost] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
+  // SCROLL FREEZE FIX: Use centralized scroll state (reduces listener count)
+  const isScrolling = useIsScrolling();
   const mousePosition3D = useRef(new THREE.Vector3());
   const contextLossTimeoutRef = useRef<NodeJS.Timeout>();
 
@@ -242,25 +232,6 @@ export function SectionBackground3D({
 
     mediaQuery.addEventListener("change", handleChange);
     return () => mediaQuery.removeEventListener("change", handleChange);
-  }, []);
-
-  // SCROLL FREEZE FIX: Detect active scrolling to pause animations
-  useEffect(() => {
-    let scrollTimeout: NodeJS.Timeout;
-
-    const handleScroll = () => {
-      setIsScrolling(true);
-      clearTimeout(scrollTimeout);
-      // Resume animations 100ms after scroll stops
-      scrollTimeout = setTimeout(() => setIsScrolling(false), 100);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      clearTimeout(scrollTimeout);
-    };
   }, []);
 
   // WebGL context loss recovery system
@@ -311,6 +282,9 @@ export function SectionBackground3D({
           precision: "highp",
           logarithmicDepthBuffer: true,
         }}
+        // SCROLL FIX: Disable R3F's internal event system completely
+        events={() => ({ enabled: false, priority: 0, compute: () => null })}
+        style={{ pointerEvents: "none", touchAction: "auto" }}
         dpr={Math.min(window.devicePixelRatio, 2)}
         frameloop="always"
         performance={{ min: 0.7, max: 1, debounce: 150 }} // Better performance
@@ -403,21 +377,9 @@ function ConfigurableGridWithConnections({
   isScrolling?: boolean;
 }) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
+  // SCROLL FREEZE FIX: Removed redundant scroll listener - using centralized state
   const scrollProgress = useRef(0);
   const isMobile = useIsMobile();
-
-  // Track scroll for wave animation
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrolled = window.scrollY;
-      const maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight;
-      scrollProgress.current = Math.min(scrolled / (maxScroll || 1), 1);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   // Create responsive grid with enhanced performance
   const { positions, count } = useMemo(() => {

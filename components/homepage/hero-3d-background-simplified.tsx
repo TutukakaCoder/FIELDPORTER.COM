@@ -1,5 +1,6 @@
 "use client";
 
+import { useIsScrolling } from "@/hooks";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
@@ -319,30 +320,13 @@ function SimplifiedCameraControls({ isScrolling }: { isScrolling: boolean }) {
 export function Hero3DBackgroundSimplified() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
+  // SCROLL FREEZE FIX: Use centralized scroll state (reduces listener count)
+  const isScrolling = useIsScrolling();
 
   // Handle loading state
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100);
     return () => clearTimeout(timer);
-  }, []);
-
-  // SCROLL FREEZE FIX: Detect active scrolling
-  useEffect(() => {
-    let scrollTimeout: NodeJS.Timeout;
-
-    const handleScroll = () => {
-      setIsScrolling(true);
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => setIsScrolling(false), 100);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      clearTimeout(scrollTimeout);
-    };
   }, []);
 
   const containerStyles: React.CSSProperties = {
@@ -378,6 +362,8 @@ export function Hero3DBackgroundSimplified() {
             stencil: false,
             depth: false,
           }}
+          // SCROLL FIX: Disable R3F's internal event system completely
+          events={() => ({ enabled: false, priority: 0, compute: () => null })}
           style={{
             background: "transparent",
             display: "block",
@@ -386,7 +372,8 @@ export function Hero3DBackgroundSimplified() {
             maxWidth: "100%",
             maxHeight: "100%",
             contain: "size layout style paint",
-            pointerEvents: "none", // SCROLL FIX: Prevent Canvas from capturing scroll
+            pointerEvents: "none",
+            touchAction: "auto",
           }}
           onCreated={({ gl }) => {
             gl.setClearColor(0x000000, 0);

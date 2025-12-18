@@ -75,10 +75,29 @@ export function NewsletterSignup() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
           >
-            <GlassCard className="p-8 md:p-12 text-center">
-              <div className="w-16 h-16 rounded-2xl bg-green-500/20 flex items-center justify-center mx-auto mb-6">
-                <CheckCircle className="w-8 h-8 text-green-400" />
-              </div>
+            <GlassCard className="p-8 md:p-12 text-center hover:border-green-500/30 transition-all duration-300">
+              <motion.div
+                className="w-16 h-16 rounded-2xl bg-green-500/20 flex items-center justify-center mx-auto mb-6 border border-green-500/30"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 15,
+                  delay: 0.2,
+                }}
+              >
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <CheckCircle className="w-8 h-8 text-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.4)]" />
+                </motion.div>
+              </motion.div>
 
               <h3 className="text-heading-xl font-semibold text-fieldporter-white mb-4">
                 Welcome to Our Community!
@@ -90,32 +109,42 @@ export function NewsletterSignup() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  variant="primary"
-                  size="enterprise"
-                  className="group"
-                  onClick={() => {
-                    // Scroll back to blog grid
-                    document
-                      .getElementById("blog-grid")
-                      ?.scrollIntoView({ behavior: "smooth" });
-                  }}
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  Explore Articles
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                  <Button
+                    variant="primary"
+                    size="enterprise"
+                    className="group focus-visible:ring-2 focus-visible:ring-fieldporter-blue"
+                    onClick={() => {
+                      // Scroll back to blog grid
+                      document
+                        .getElementById("blog-grid")
+                        ?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                  >
+                    Explore Articles
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />
+                  </Button>
+                </motion.div>
 
-                <Button
-                  variant="fieldporter-secondary"
-                  size="enterprise"
-                  className="group"
-                  onClick={() => {
-                    window.location.href = "/contact";
-                  }}
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  Get Consultation
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                  <Button
+                    variant="fieldporter-secondary"
+                    size="enterprise"
+                    className="group focus-visible:ring-2 focus-visible:ring-white/50"
+                    onClick={() => {
+                      window.location.href = "/contact";
+                    }}
+                  >
+                    Get Consultation
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />
+                  </Button>
+                </motion.div>
               </div>
             </GlassCard>
           </motion.div>
@@ -139,9 +168,13 @@ export function NewsletterSignup() {
           <GlassCard className="card-spacing-lg">
             <div className="text-center component-spacing">
               {/* Icon */}
-              <div className="w-16 h-16 rounded-2xl bg-fieldporter-blue/20 border border-fieldporter-blue/30 p-4 mx-auto">
-                <Mail className="w-8 h-8 text-fieldporter-blue" />
-              </div>
+              <motion.div
+                className="w-16 h-16 rounded-2xl bg-fieldporter-blue/20 border border-fieldporter-blue/30 p-4 mx-auto"
+                whileHover={{ scale: 1.1, rotate: [0, -5, 5, 0] }}
+                transition={{ duration: 0.6 }}
+              >
+                <Mail className="w-8 h-8 text-fieldporter-blue drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]" />
+              </motion.div>
 
               {/* Header */}
               <div className="text-spacing">
@@ -163,10 +196,14 @@ export function NewsletterSignup() {
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.4, delay: 0.2 + index * 0.1 }}
                     viewport={{ once: true }}
-                    className="flex items-center space-x-3 text-left"
+                    whileHover={{ x: 4, scale: 1.02 }}
+                    className="flex items-center space-x-3 text-left p-2 rounded-lg hover:bg-white/5 transition-colors duration-300 cursor-default"
                   >
-                    <div className="w-2 h-2 rounded-full bg-fieldporter-blue flex-shrink-0" />
-                    <span className="text-body-sm text-fieldporter-gray">
+                    <motion.div
+                      className="w-2 h-2 rounded-full bg-fieldporter-blue flex-shrink-0"
+                      whileHover={{ scale: 1.5 }}
+                    />
+                    <span className="text-body-sm text-fieldporter-gray hover:text-white transition-colors duration-300">
                       {benefit}
                     </span>
                   </motion.div>
@@ -184,33 +221,42 @@ export function NewsletterSignup() {
                       placeholder="Enter your email address"
                       required
                       disabled={isSubmitting}
-                      className="w-full px-4 py-4 rounded-lg bg-white/10 border border-white/20 text-fieldporter-white placeholder-fieldporter-gray focus:outline-none focus:ring-2 focus:ring-fieldporter-blue focus:border-transparent transition-all duration-200 disabled:opacity-50 min-h-[48px] touch-manipulation"
+                      className="w-full px-4 py-4 rounded-lg bg-white/10 border border-white/20 text-fieldporter-white placeholder-fieldporter-gray focus:outline-none focus:ring-2 focus:ring-fieldporter-blue focus:border-transparent focus:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all duration-300 disabled:opacity-50 min-h-[48px] touch-manipulation hover:border-white/30 hover:bg-white/[0.12]"
                     />
                     {error && (
-                      <p className="text-red-400 text-sm mt-2 text-left">
+                      <motion.p
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-red-400 text-sm mt-2 text-left"
+                      >
                         {error}
-                      </p>
+                      </motion.p>
                     )}
                   </div>
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    size="enterprise"
-                    disabled={isSubmitting || !email.trim()}
-                    className="group whitespace-nowrap"
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Subscribing...
-                      </>
-                    ) : (
-                      <>
-                        Get Insights
-                        <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                      </>
-                    )}
-                  </Button>
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      size="enterprise"
+                      disabled={isSubmitting || !email.trim()}
+                      className="group whitespace-nowrap focus-visible:ring-2 focus-visible:ring-fieldporter-blue focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                          Subscribing...
+                        </>
+                      ) : (
+                        <>
+                          Get Insights
+                          <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />
+                        </>
+                      )}
+                    </Button>
+                  </motion.div>
                 </div>
               </form>
 

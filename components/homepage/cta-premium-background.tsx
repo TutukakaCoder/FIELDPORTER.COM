@@ -1,5 +1,6 @@
 "use client";
 
+import { useIsScrolling } from "@/hooks";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
@@ -329,32 +330,14 @@ function CTACameraControls({ isScrolling }: { isScrolling: boolean }) {
 export function CTAPremiumBackground() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
+  // SCROLL FREEZE FIX: Use centralized scroll state (reduces listener count)
+  const isScrolling = useIsScrolling();
   const isMobile = useIsMobile();
 
   // Handle loading state
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 200);
     return () => clearTimeout(timer);
-  }, []);
-
-  // SCROLL FREEZE FIX: Detect active scrolling to pause animations
-  useEffect(() => {
-    let scrollTimeout: NodeJS.Timeout;
-
-    const handleScroll = () => {
-      setIsScrolling(true);
-      clearTimeout(scrollTimeout);
-      // Resume animations 100ms after scroll stops
-      scrollTimeout = setTimeout(() => setIsScrolling(false), 100);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      clearTimeout(scrollTimeout);
-    };
   }, []);
 
   // Container styles to prevent scrollbar issues
@@ -407,9 +390,13 @@ export function CTAPremiumBackground() {
             stencil: false,
             depth: false,
           }}
+          // SCROLL FIX: Disable R3F's internal event system completely
+          events={() => ({ enabled: false, priority: 0, compute: () => null })}
           style={{
             background: "transparent",
             display: "block",
+            pointerEvents: "none",
+            touchAction: "auto",
           }}
           onCreated={({ gl }) => {
             gl.setClearColor(0x000000, 0);

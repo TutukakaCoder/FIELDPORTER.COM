@@ -109,14 +109,14 @@ export function VideoEntrance({
 
             if (process.env.NODE_ENV === "development") {
               console.log(
-                "🎯 FIELDPORTER: Video playing successfully (muted) - Starting resource preloading",
+                "FIELDPORTER: Video playing successfully (muted) - Starting resource preloading",
               );
             }
           }
         }
       } catch (error) {
         if (process.env.NODE_ENV === "development") {
-          console.error("🎯 FIELDPORTER: Video play error:", error);
+          console.error("FIELDPORTER: Video play error:", error);
         }
         // Implement fallback - show static content or complete entrance
         setTimeout(() => completeEntrance(), 1000);
@@ -140,7 +140,7 @@ export function VideoEntrance({
 
     const handleError = (error: Event) => {
       if (process.env.NODE_ENV === "development") {
-        console.error("🎯 FIELDPORTER: Video error:", error);
+        console.error("FIELDPORTER: Video error:", error);
       }
       // Fallback: complete entrance after short delay
       setTimeout(() => completeEntrance(), 1000);

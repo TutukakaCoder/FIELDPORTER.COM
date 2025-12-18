@@ -177,11 +177,13 @@ const InteractivePhaseCard = ({
             animate={
               isExpanded ? { scale: 1.1, rotate: 5 } : { scale: 1, rotate: 0 }
             }
+            whileHover={{ scale: 1.15, rotate: 8 }}
             transition={{ duration: 0.3 }}
             className="mb-6"
           >
             <div
-              className={`w-16 h-16 rounded-xl bg-gradient-to-br ${phase.color} flex items-center justify-center shadow-lg`}
+              className={`w-16 h-16 rounded-xl bg-gradient-to-br ${phase.color} flex items-center justify-center shadow-lg transition-shadow duration-300 hover:shadow-xl`}
+              style={{ boxShadow: `0 10px 30px rgba(${phase.colorRgb}, 0.3)` }}
             >
               <phase.icon className="w-8 h-8 text-white" />
             </div>
@@ -451,11 +453,14 @@ export function MethodologySection({
         .methodology-card {
           transition:
             transform 0.3s ease,
-            box-shadow 0.3s ease;
+            box-shadow 0.3s ease,
+            border-color 0.3s ease;
         }
         .methodology-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+          transform: translateY(-8px);
+          box-shadow:
+            0 25px 50px rgba(0, 0, 0, 0.4),
+            0 0 30px rgba(59, 130, 246, 0.15);
         }
         .scrollbar-hide {
           -ms-overflow-style: none;

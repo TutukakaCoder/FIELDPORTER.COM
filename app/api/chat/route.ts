@@ -808,8 +808,10 @@ async function callGeminiAPI(
     ? "gemini-2.5-pro"
     : "gemini-2.5-flash";
 
-  console.log(`🤖 Calling ${modelName} via Firebase AI Logic...`);
-  console.log("🎯 Query complexity:", complexity);
+  if (process.env.NODE_ENV === "development") {
+    console.log(`Calling ${modelName} via Firebase AI Logic...`);
+    console.log("Query complexity:", complexity);
+  }
 
   const maxRetries = 2; // Increased retries for better reliability
   let lastError: Error | null = null;
@@ -825,9 +827,11 @@ async function callGeminiAPI(
         ? "gemini-2.5-pro"
         : "gemini-2.5-flash";
 
-      console.log(
-        `🚀 Attempt ${attempt + 1}/${maxRetries + 1} - Calling ${currentModelName}...`,
-      );
+      if (process.env.NODE_ENV === "development") {
+        console.log(
+          `Attempt ${attempt + 1}/${maxRetries + 1} - Calling ${currentModelName}...`,
+        );
+      }
 
       // OPTIMIZATION: Only add dynamic context for new conversations
       // For existing conversations, use base prompt to reduce processing time
@@ -996,9 +1000,49 @@ async function callGeminiAPI(
         ),
       ]);
 
-      // Extract text from result
-      const response = (result as any).response;
-      const content = response.text();
+      // CRITICAL FIX: Defensive handling for empty/malformed responses
+      // Firebase SDK crashes when response.candidates is undefined
+      const response = (result as any)?.response;
+      if (!response) {
+        console.error("🚨 No response object from Gemini API");
+        throw new Error("No response object from Gemini API");
+      }
+
+      // Check candidates exist before calling text()
+      const candidates = response.candidates;
+      if (
+        !candidates ||
+        !Array.isArray(candidates) ||
+        candidates.length === 0
+      ) {
+        console.error(
+          "🚨 No candidates in Gemini response - likely empty response",
+        );
+        throw new Error("Empty response from Gemini API");
+      }
+
+      // Check first candidate has content
+      const firstCandidate = candidates[0];
+      if (
+        !firstCandidate?.content?.parts ||
+        firstCandidate.content.parts.length === 0
+      ) {
+        console.error("🚨 No content parts in Gemini response");
+        throw new Error("No content in Gemini API response");
+      }
+
+      // Now safe to call text()
+      let content: string;
+      try {
+        content = response.text();
+      } catch (textError) {
+        console.error("🚨 Error extracting text from response:", textError);
+        // Fallback: manually extract text from parts
+        content = firstCandidate.content.parts
+          .filter((part: any) => part?.text)
+          .map((part: any) => part.text)
+          .join("");
+      }
 
       if (!content?.trim()) {
         console.error("🚨 No content received from Gemini API");
@@ -1158,7 +1202,9 @@ export async function POST(request: NextRequest) {
 
     try {
       // Call Gemini API via Firebase AI Logic
-      console.log("🤖 Calling Gemini API for message:", message);
+      if (process.env.NODE_ENV === "development") {
+        console.log("Calling Gemini API for message:", message);
+      }
 
       aiResponse = await callGeminiAPI(
         message,
@@ -1167,16 +1213,18 @@ export async function POST(request: NextRequest) {
         sessionId,
       );
 
-      console.log(
-        "✅ Gemini AI response received:",
-        aiResponse.substring(0, 100) + "...",
-      );
-      console.log(
-        "🎯 Final AI response after validation:",
-        aiResponse.substring(0, 100) + "...",
-      );
+      if (process.env.NODE_ENV === "development") {
+        console.log(
+          "Gemini AI response received:",
+          aiResponse.substring(0, 100) + "...",
+        );
+        console.log(
+          "Final AI response after validation:",
+          aiResponse.substring(0, 100) + "...",
+        );
+      }
     } catch (error) {
-      console.error("🚨 Gemini API error:", error);
+      console.error("Gemini API error:", error);
       console.error("Error details:", {
         message: error instanceof Error ? error.message : "Unknown error",
         stack: error instanceof Error ? error.stack : undefined,
@@ -1260,19 +1308,21 @@ export async function POST(request: NextRequest) {
       },
     };
 
-    console.log(
-      "✅ Chat response:",
-      responseTime + "ms",
-      "Lead Score:",
-      leadData.score,
-    );
-    if (leadData.signals.length > 0) {
-      console.log("🎯 Qualification signals:", leadData.signals);
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        "Chat response:",
+        responseTime + "ms",
+        "Lead Score:",
+        leadData.score,
+      );
+      if (leadData.signals.length > 0) {
+        console.log("Qualification signals:", leadData.signals);
+      }
     }
 
     return NextResponse.json(enhancedResponse);
   } catch (error) {
-    console.error("🚨 Chat API Error:", error);
+    console.error("Chat API Error:", error);
 
     return NextResponse.json(
       {

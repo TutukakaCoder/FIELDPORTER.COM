@@ -54,9 +54,7 @@ export class EnhancedChatService {
   private lastRequestTime: Date | null = null;
 
   constructor() {
-    if (process.env.NODE_ENV === "development") {
-      console.log("🚀 Enhanced Chat Service initialized");
-    }
+    // Service initialized silently
   }
 
   static getInstance(): EnhancedChatService {
@@ -200,11 +198,11 @@ export class EnhancedChatService {
 
       if (process.env.NODE_ENV === "development") {
         console.log(
-          `✅ Chat response: ${responseTime}ms, Lead Score: ${apiResponse.leadScore}`,
+          `Chat response: ${responseTime}ms, Lead Score: ${apiResponse.leadScore}`,
         );
         if (apiResponse.metadata.qualificationSignals.length > 0) {
           console.log(
-            "🎯 Qualification signals:",
+            "Qualification signals:",
             apiResponse.metadata.qualificationSignals,
           );
         }

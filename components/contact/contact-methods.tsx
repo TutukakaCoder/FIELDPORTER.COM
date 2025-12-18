@@ -96,8 +96,9 @@ export function ContactMethods() {
               variants={itemVariants}
               initial="hidden"
               animate={isLoaded ? "visible" : "hidden"}
-              transition={{ delay: index * 0.1 }}
-              className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-8 md:p-10 hover:bg-gray-900/[0.04] dark:hover:bg-white/[0.04] transition-all duration-300 group text-center"
+              whileHover={{ y: -6, scale: 1.01 }}
+              transition={{ delay: index * 0.1, duration: 0.3 }}
+              className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-8 md:p-10 hover:bg-gray-900/[0.04] dark:hover:bg-white/[0.04] transition-all duration-300 group text-center hover:shadow-[0_20px_50px_rgba(59,130,246,0.1)] hover:border-blue-500/20"
             >
               {/* Step Number */}
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
@@ -107,12 +108,12 @@ export function ContactMethods() {
               </div>
 
               {/* Icon */}
-              <div className="w-16 h-16 rounded-2xl bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 flex items-center justify-center mb-6 backdrop-blur-sm group-hover:scale-105 transition-transform duration-300 mx-auto">
+              <div className="w-16 h-16 rounded-2xl bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 flex items-center justify-center mb-6 backdrop-blur-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 mx-auto group-hover:shadow-[0_0_25px_rgba(59,130,246,0.3)]">
                 <step.icon className={`w-8 h-8 ${step.color}`} />
               </div>
 
               <div className="space-y-4">
-                <h3 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white leading-tight">
+                <h3 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white leading-tight group-hover:text-blue-400 transition-colors duration-300">
                   {step.title}
                 </h3>
 

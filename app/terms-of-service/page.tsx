@@ -144,14 +144,22 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.08,
+      staggerChildren: 0.06,
+      delayChildren: 0.1,
     },
   },
 };
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.4,
+      ease: "easeOut" as const,
+    },
+  },
 };
 
 export default function TermsOfServicePage() {
@@ -215,7 +223,7 @@ export default function TermsOfServicePage() {
                 <motion.div key={section.id} variants={itemVariants}>
                   <Link
                     href={`#${section.id}`}
-                    className="flex items-center space-x-3 p-4 rounded-lg glass-dark border border-white/10 hover:border-fieldporter-blue/40 hover:bg-white/[0.04] transition-all duration-500 group hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/10"
+                    className="flex items-center space-x-3 p-4 rounded-lg glass-dark border border-white/10 hover:border-fieldporter-blue/40 hover:bg-white/[0.04] transition-all duration-500 group hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fieldporter-blue/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-[0.98]"
                   >
                     <section.icon className="w-5 h-5 text-fieldporter-blue group-hover:text-white group-hover:scale-110 group-hover:rotate-6 transition-all duration-500" />
                     <span className="text-fieldporter-gray group-hover:text-white transition-colors duration-500">
@@ -277,7 +285,7 @@ export default function TermsOfServicePage() {
             viewport={{ once: true }}
             className="max-w-4xl"
           >
-            <div className="p-8 rounded-lg glass-dark border border-white/10">
+            <div className="p-8 rounded-lg glass-dark border border-white/10 hover:border-fieldporter-blue/30 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-500">
               <h3 className="text-2xl font-bold text-white mb-4">
                 Ready to Begin Your AI Transformation?
               </h3>
@@ -318,7 +326,7 @@ export default function TermsOfServicePage() {
             viewport={{ once: true }}
             className="max-w-4xl"
           >
-            <div className="p-6 rounded-lg bg-fieldporter-blue/5 border border-fieldporter-blue/20">
+            <div className="p-6 rounded-lg bg-fieldporter-blue/5 border border-fieldporter-blue/20 hover:border-fieldporter-blue/40 transition-all duration-300">
               <div className="flex items-start space-x-3">
                 <CheckCircle className="w-6 h-6 text-fieldporter-blue flex-shrink-0 mt-1" />
                 <div>

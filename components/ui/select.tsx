@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import * as SelectPrimitive from '@radix-ui/react-select';
-import { Check, ChevronDown, ChevronUp } from 'lucide-react';
-import * as React from 'react';
+import * as SelectPrimitive from "@radix-ui/react-select";
+import { motion } from "framer-motion";
+import { Check, ChevronDown, ChevronUp } from "lucide-react";
+import * as React from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 const Select = SelectPrimitive.Root;
 
@@ -19,21 +20,29 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      'flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+      "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
       // FIELDPORTER Premium Styling
-      'bg-bg-fieldporter-tertiary border-fieldporter-gray/30 text-fieldporter-white',
-      'focus:border-fieldporter-blue focus:ring-fieldporter-blue/20',
-      'hover:border-fieldporter-gray/50 transition-all duration-200 ease-out',
-      'backdrop-blur-sm font-inter',
+      "bg-bg-fieldporter-tertiary border-fieldporter-gray/30 text-fieldporter-white",
+      "focus:border-fieldporter-blue focus:ring-fieldporter-blue/20",
+      "focus:shadow-[0_0_0_3px_rgba(59,130,246,0.1)]",
+      "hover:border-fieldporter-gray/50 transition-all duration-200 ease-out",
+      "backdrop-blur-sm font-inter",
       // Mobile optimizations
-      'min-h-[44px] touch-manipulation text-base sm:text-sm',
-      className
+      "min-h-[44px] touch-manipulation text-base sm:text-sm",
+      // Data state animations
+      "data-[state=open]:border-fieldporter-blue data-[state=open]:ring-fieldporter-blue/20",
+      className,
     )}
     {...props}
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDown className='h-4 w-4 opacity-50' />
+      <motion.div
+        animate={{ rotate: 0 }}
+        className="data-[state=open]:rotate-180 transition-transform duration-200"
+      >
+        <ChevronDown className="h-4 w-4 opacity-50 transition-opacity group-hover:opacity-100" />
+      </motion.div>
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
@@ -46,12 +55,12 @@ const SelectScrollUpButton = React.forwardRef<
   <SelectPrimitive.ScrollUpButton
     ref={ref}
     className={cn(
-      'flex cursor-default items-center justify-center py-2 min-h-[44px] touch-manipulation',
-      className
+      "flex cursor-default items-center justify-center py-2 min-h-[44px] touch-manipulation",
+      className,
     )}
     {...props}
   >
-    <ChevronUp className='h-4 w-4' />
+    <ChevronUp className="h-4 w-4" />
   </SelectPrimitive.ScrollUpButton>
 ));
 SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName;
@@ -63,31 +72,32 @@ const SelectScrollDownButton = React.forwardRef<
   <SelectPrimitive.ScrollDownButton
     ref={ref}
     className={cn(
-      'flex cursor-default items-center justify-center py-2 min-h-[44px] touch-manipulation',
-      className
+      "flex cursor-default items-center justify-center py-2 min-h-[44px] touch-manipulation",
+      className,
     )}
     {...props}
   >
-    <ChevronDown className='h-4 w-4' />
+    <ChevronDown className="h-4 w-4" />
   </SelectPrimitive.ScrollDownButton>
 ));
-SelectScrollDownButton.displayName = SelectPrimitive.ScrollDownButton.displayName;
+SelectScrollDownButton.displayName =
+  SelectPrimitive.ScrollDownButton.displayName;
 
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
->(({ className, children, position = 'popper', ...props }, ref) => (
+>(({ className, children, position = "popper", ...props }, ref) => (
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        'relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+        "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
         // FIELDPORTER Premium Styling
-        'bg-bg-fieldporter-secondary border-fieldporter-gray/30 backdrop-blur-md',
-        'shadow-xl shadow-black/20',
-        position === 'popper' &&
-          'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
-        className
+        "bg-bg-fieldporter-secondary border-fieldporter-gray/30 backdrop-blur-md",
+        "shadow-xl shadow-black/20",
+        position === "popper" &&
+          "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
+        className,
       )}
       position={position}
       {...props}
@@ -95,9 +105,9 @@ const SelectContent = React.forwardRef<
       <SelectScrollUpButton />
       <SelectPrimitive.Viewport
         className={cn(
-          'p-1',
-          position === 'popper' &&
-            'h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]'
+          "p-1",
+          position === "popper" &&
+            "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]",
         )}
       >
         {children}
@@ -115,9 +125,9 @@ const SelectLabel = React.forwardRef<
   <SelectPrimitive.Label
     ref={ref}
     className={cn(
-      'py-2 pl-8 pr-2 text-sm font-semibold min-h-[44px] flex items-center',
-      'text-fieldporter-gray font-inter',
-      className
+      "py-2 pl-8 pr-2 text-sm font-semibold min-h-[44px] flex items-center",
+      "text-fieldporter-gray font-inter",
+      className,
     )}
     {...props}
   />
@@ -131,20 +141,27 @@ const SelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex w-full cursor-default select-none items-center rounded-sm py-3 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      "relative flex w-full cursor-default select-none items-center rounded-sm py-3 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       // FIELDPORTER Premium Styling
-      'text-fieldporter-white font-inter',
-      'focus:bg-fieldporter-blue/20 focus:text-fieldporter-white',
-      'hover:bg-fieldporter-gray/10 transition-colors duration-150',
+      "text-fieldporter-white font-inter",
+      "focus:bg-fieldporter-blue/20 focus:text-fieldporter-white",
+      "hover:bg-fieldporter-gray/10 hover:translate-x-0.5 transition-all duration-150",
+      "data-[highlighted]:bg-fieldporter-blue/10",
       // Mobile optimizations
-      'min-h-[44px] touch-manipulation text-base sm:text-sm',
-      className
+      "min-h-[44px] touch-manipulation text-base sm:text-sm",
+      className,
     )}
     {...props}
   >
-    <span className='absolute left-2 flex h-3.5 w-3.5 items-center justify-center'>
+    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <SelectPrimitive.ItemIndicator>
-        <Check className='h-4 w-4 text-fieldporter-blue' />
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 500, damping: 25 }}
+        >
+          <Check className="h-4 w-4 text-fieldporter-blue" />
+        </motion.div>
       </SelectPrimitive.ItemIndicator>
     </span>
 
@@ -159,7 +176,11 @@ const SelectSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Separator
     ref={ref}
-    className={cn('-mx-1 my-1 h-px bg-muted', 'bg-fieldporter-gray/20', className)}
+    className={cn(
+      "-mx-1 my-1 h-px bg-muted",
+      "bg-fieldporter-gray/20",
+      className,
+    )}
     {...props}
   />
 ));

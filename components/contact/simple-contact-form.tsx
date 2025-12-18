@@ -578,25 +578,30 @@ export function SimpleContactForm() {
 
               {/* Submit Button */}
               <div className="pt-6">
-                <Button
-                  type="submit"
-                  disabled={!isFormValid || isSubmitting}
-                  variant="primary"
-                  size="enterprise"
-                  className="w-full group"
+                <motion.div
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                      Submitting...
-                    </>
-                  ) : (
-                    <>
-                      Start the Conversation
-                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" />
-                    </>
-                  )}
-                </Button>
+                  <Button
+                    type="submit"
+                    disabled={!isFormValid || isSubmitting}
+                    variant="primary"
+                    size="enterprise"
+                    className="w-full group focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        Start the Conversation
+                        <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" />
+                      </>
+                    )}
+                  </Button>
+                </motion.div>
               </div>
             </div>
           </motion.form>

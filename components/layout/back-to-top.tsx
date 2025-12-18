@@ -1,10 +1,9 @@
 "use client";
 
-import { useStableMobile } from "@/hooks";
+import { useScrollState, useStableMobile } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronUp } from "lucide-react";
-import { useEffect, useState } from "react";
 
 interface BackToTopProps {
   className?: string;
@@ -12,37 +11,10 @@ interface BackToTopProps {
 }
 
 export function BackToTop({ className, showAfter = 400 }: BackToTopProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  // SCROLL FREEZE FIX: Use centralized scroll state (reduces listener count)
+  const { scrollY } = useScrollState();
+  const isVisible = scrollY > showAfter;
   const isMobile = useStableMobile();
-
-  useEffect(() => {
-    // SCROLL FIX: Optimize back-to-top scroll listener
-    let ticking = false;
-    let lastCheck = 0;
-    const throttleDelay = 100; // Throttle state updates
-
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const now = Date.now();
-          // Only check if throttle delay passed
-          if (now - lastCheck >= throttleDelay) {
-            const newIsVisible = window.scrollY > showAfter;
-            // Only update state if value changed
-            if (newIsVisible !== isVisible) {
-              setIsVisible(newIsVisible);
-            }
-            lastCheck = now;
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [showAfter, isVisible]);
 
   const scrollToTop = () => {
     window.scrollTo({

@@ -1,7 +1,10 @@
 "use client";
 
+import { motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+
+import { cn } from "@/lib/utils";
 
 interface OptimizedImageProps {
   src: string;
@@ -13,6 +16,7 @@ interface OptimizedImageProps {
   quality?: number;
   placeholder?: "blur" | "empty";
   blurDataURL?: string;
+  enableHover?: boolean;
 }
 
 export function OptimizedImage({
@@ -25,6 +29,7 @@ export function OptimizedImage({
   quality = 85,
   placeholder = "empty",
   blurDataURL,
+  enableHover = false,
   ...props
 }: OptimizedImageProps) {
   const [isLoading, setIsLoading] = useState(true);
@@ -45,10 +50,10 @@ export function OptimizedImage({
           observer.disconnect();
         }
       },
-      { 
+      {
         rootMargin: "50px", // Load images 50px before they come into view
-        threshold: 0.1 
-      }
+        threshold: 0.1,
+      },
     );
 
     if (imgRef.current) {
@@ -58,31 +63,52 @@ export function OptimizedImage({
     return () => observer.disconnect();
   }, [priority]);
 
+  const imageContent = isIntersecting ? (
+    <Image
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      quality={quality}
+      priority={priority}
+      loading={priority ? "eager" : "lazy"}
+      placeholder={placeholder}
+      blurDataURL={blurDataURL}
+      onLoad={() => setIsLoading(false)}
+      className={cn(
+        "transition-all duration-300",
+        isLoading ? "opacity-0 scale-105" : "opacity-100 scale-100",
+      )}
+      {...props}
+    />
+  ) : (
+    <div
+      className="animate-pulse bg-fieldporter-gray/20 rounded-lg"
+      style={{ width, height }}
+    />
+  );
+
+  if (enableHover) {
+    return (
+      <motion.div
+        ref={imgRef}
+        className={cn("overflow-hidden", className)}
+        whileHover={{ scale: 1.02 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          {imageContent}
+        </motion.div>
+      </motion.div>
+    );
+  }
+
   return (
     <div ref={imgRef} className={className}>
-      {isIntersecting ? (
-        <Image
-          src={src}
-          alt={alt}
-          width={width}
-          height={height}
-          quality={quality}
-          priority={priority}
-          loading={priority ? "eager" : "lazy"}
-          placeholder={placeholder}
-          blurDataURL={blurDataURL}
-          onLoad={() => setIsLoading(false)}
-          className={`transition-opacity duration-300 ${
-            isLoading ? "opacity-0" : "opacity-100"
-          }`}
-          {...props}
-        />
-      ) : (
-        <div 
-          className="animate-pulse bg-gray-800 rounded-lg"
-          style={{ width, height }}
-        />
-      )}
+      {imageContent}
     </div>
   );
-} 
+}

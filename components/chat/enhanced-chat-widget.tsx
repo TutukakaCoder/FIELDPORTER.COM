@@ -524,7 +524,7 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
 
     try {
       if (process.env.NODE_ENV === "development") {
-        console.log("🚀 Starting AI request for message:", userInput);
+        console.log("Starting AI request for message:", userInput);
       }
 
       // Single API call - all processing happens server-side now
@@ -536,7 +536,7 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
       );
 
       if (process.env.NODE_ENV === "development") {
-        console.log("📥 AI Response received:", {
+        console.log("AI Response received:", {
           responseLength: aiResponse.response.length,
           hasError: !!aiResponse.error,
         });

@@ -1,5 +1,6 @@
 "use client";
 
+import { useIsScrolling } from "@/hooks";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
@@ -391,32 +392,14 @@ function EnhancedCameraControls({ isScrolling }: { isScrolling: boolean }) {
 export function Hero3DBackground() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
+  // SCROLL FREEZE FIX: Use centralized scroll state (reduces listener count)
+  const isScrolling = useIsScrolling();
   const isMobile = useIsMobile();
 
   // Handle loading state
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100);
     return () => clearTimeout(timer);
-  }, []);
-
-  // SCROLL FREEZE FIX: Detect active scrolling to pause animations
-  useEffect(() => {
-    let scrollTimeout: NodeJS.Timeout;
-
-    const handleScroll = () => {
-      setIsScrolling(true);
-      clearTimeout(scrollTimeout);
-      // Resume animations 100ms after scroll stops
-      scrollTimeout = setTimeout(() => setIsScrolling(false), 100);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      clearTimeout(scrollTimeout);
-    };
   }, []);
 
   // ENHANCED: Prevent scrollbar issues with stronger containment
@@ -463,6 +446,9 @@ export function Hero3DBackground() {
             stencil: false,
             depth: false,
           }}
+          // SCROLL FIX: Disable R3F's internal event system completely
+          // This prevents Canvas from capturing wheel/touch events
+          events={() => ({ enabled: false, priority: 0, compute: () => null })}
           style={{
             background: "transparent",
             display: "block",
@@ -471,7 +457,9 @@ export function Hero3DBackground() {
             maxWidth: "100%",
             maxHeight: "100%",
             contain: "size layout style paint",
-            pointerEvents: "none", // SCROLL FIX: Prevent Canvas from capturing scroll
+            pointerEvents: "none",
+            // SCROLL FIX: Prevent touch events from being captured
+            touchAction: "auto",
           }}
           onCreated={({ gl }) => {
             // Optimize WebGL context

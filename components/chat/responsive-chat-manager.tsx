@@ -105,6 +105,9 @@ export function ResponsiveChatManager({
 
             // Touch-friendly
             "touch-manipulation select-none",
+
+            // Focus state
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fieldporter-blue focus-visible:ring-offset-2 focus-visible:ring-offset-black",
           )}
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.95 }}
@@ -112,10 +115,15 @@ export function ResponsiveChatManager({
           onClick={onToggle}
           aria-label="Open FIELDPORTER Agent"
         >
-          <MessageSquare
-            className={cn(isMobile ? "w-6 h-6" : "w-7 h-7", "text-white/90")}
-            strokeWidth={1.5}
-          />
+          <motion.div
+            whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <MessageSquare
+              className={cn(isMobile ? "w-6 h-6" : "w-7 h-7", "text-white/90")}
+              strokeWidth={1.5}
+            />
+          </motion.div>
         </motion.button>
       )}
 

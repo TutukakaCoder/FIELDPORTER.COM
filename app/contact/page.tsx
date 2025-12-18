@@ -8,12 +8,19 @@ import { Suspense } from "react";
 const LoadingSpinner = () => (
   <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
     <div className="text-center animate-fade-in">
-      <div className="relative w-12 h-12 mx-auto mb-6">
+      <div className="relative w-14 h-14 mx-auto mb-6">
         <div className="absolute inset-0 rounded-full border-2 border-blue-500/20"></div>
-        <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-blue-500 animate-spin"></div>
-        <div className="absolute inset-2 rounded-full bg-blue-500/10 animate-pulse"></div>
+        <div
+          className="absolute inset-0 rounded-full border-2 border-transparent border-t-blue-500 animate-spin"
+          style={{ animationDuration: "0.8s" }}
+        ></div>
+        <div
+          className="absolute inset-1 rounded-full border-2 border-transparent border-b-blue-400/50 animate-spin"
+          style={{ animationDuration: "1.2s", animationDirection: "reverse" }}
+        ></div>
+        <div className="absolute inset-3 rounded-full bg-blue-500/10 animate-pulse"></div>
       </div>
-      <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+      <p className="text-gray-500 dark:text-gray-400 text-sm font-medium tracking-wide">
         Loading contact form...
       </p>
     </div>

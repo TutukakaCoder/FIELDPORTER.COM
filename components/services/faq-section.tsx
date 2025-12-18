@@ -52,24 +52,35 @@ export function FAQSection({ title, subtitle, faqs }: FAQSectionProps) {
               transition={{ duration: 0.4, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <div
-                className="
+              <motion.div
+                className={`
                 bg-gray-900/[0.01] dark:bg-white/[0.01] backdrop-blur-sm border border-gray-900/10 dark:border-white/10 rounded-2xl
                 hover:bg-gray-900/[0.02] dark:hover:bg-white/[0.02] hover:border-gray-900/20 dark:hover:border-white/20 transition-all duration-300
-                overflow-hidden
-              "
+                overflow-hidden focus-within:ring-2 focus-within:ring-blue-500/50
+                ${openIndex === index ? "shadow-[0_0_30px_rgba(59,130,246,0.15)] border-blue-400/30" : ""}
+              `}
+                whileHover={{ y: -2, scale: 1.005 }}
+                transition={{ duration: 0.2 }}
               >
                 <button
                   onClick={() => toggleFAQ(index)}
-                  className="w-full p-6 md:p-8 text-left flex items-center justify-between hover:bg-gray-900/[0.01] dark:hover:bg-white/[0.01] transition-colors duration-200"
+                  className="w-full p-6 md:p-8 text-left flex items-center justify-between hover:bg-gray-900/[0.01] dark:hover:bg-white/[0.01] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-inset rounded-2xl"
                   aria-expanded={openIndex === index}
                 >
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white pr-4 leading-relaxed">
+                  <h3
+                    className={`text-lg font-medium pr-4 leading-relaxed transition-colors duration-300 ${
+                      openIndex === index
+                        ? "text-blue-400"
+                        : "text-gray-900 dark:text-white"
+                    }`}
+                  >
                     {faq.question}
                   </h3>
                   <ChevronDown
-                    className={`w-5 h-5 text-gray-500 dark:text-gray-400 transition-all duration-300 flex-shrink-0 ${
-                      openIndex === index ? "rotate-180 text-blue-400" : ""
+                    className={`w-5 h-5 transition-all duration-300 flex-shrink-0 ${
+                      openIndex === index
+                        ? "rotate-180 text-blue-400"
+                        : "text-gray-500 dark:text-gray-400"
                     }`}
                   />
                 </button>
@@ -95,7 +106,7 @@ export function FAQSection({ title, subtitle, faqs }: FAQSectionProps) {
                     </div>
                   </div>
                 </motion.div>
-              </div>
+              </motion.div>
             </motion.div>
           ))}
         </div>

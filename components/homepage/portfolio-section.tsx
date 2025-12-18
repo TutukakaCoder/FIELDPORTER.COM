@@ -1,7 +1,8 @@
 "use client";
 
 import { trackServiceInterest } from "@/lib/firebase-analytics";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import {
   ArrowRight,
   Brain,
@@ -14,8 +15,10 @@ import {
   Target,
   TrendingUp,
   Zap,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
-import { memo, useCallback, useRef, useState } from "react";
+import { memo, useCallback, useRef, useState, useEffect } from "react";
 
 const projects = [
   {
@@ -39,6 +42,8 @@ const projects = [
     hoverGlow: "shadow-[0_0_30px_rgba(34,197,94,0.15)]",
     gradientFrom: "from-green-500/20",
     gradientTo: "to-green-500/5",
+    clientImage: "/images/Jason H Profile image.jpg",
+    clientName: "Jason Holdsworth",
   },
   {
     id: "papps-mastery",
@@ -88,30 +93,41 @@ const projects = [
 
 const industries = [
   {
-    title: "Manufacturing & Automation",
-    description: "Process optimization and intelligent systems",
-    icon: Zap,
-    iconColor: "text-amber-400",
-    glowColor: "bg-amber-500/10",
-  },
-  {
-    title: "Environmental Solutions",
-    description: "Monitoring and sustainability tools",
-    icon: Target,
-    iconColor: "text-emerald-400",
-    glowColor: "bg-emerald-500/10",
-  },
-  {
-    title: "Startup Growth",
-    description: "Technical strategy for scaling businesses",
+    title: "Venture Capital & Private Equity",
+    description: "Automating deal flow triage and portfolio due diligence.",
+    stats: "70% reduction in manual review time",
+    techStack: "Interests: DeepSeek V3, Firebase, Custom API Triage",
     icon: TrendingUp,
     iconColor: "text-blue-400",
     glowColor: "bg-blue-500/10",
   },
   {
-    title: "AI Implementation",
-    description: "Practical training and adoption support",
-    icon: Lightbulb,
+    title: "Smart Manufacturing",
+    description:
+      "Predictive maintenance and edge automation for the factory floor.",
+    stats: "30% Productivity Gain Target",
+    techStack: "Interests: Process Automation, Real-time Data",
+    icon: Zap,
+    iconColor: "text-amber-400",
+    glowColor: "bg-amber-500/10",
+  },
+  {
+    title: "Environmental & ESG Intelligence",
+    description:
+      "Automating carbon management and regulatory compliance workflows.",
+    stats: "Strategic mapping in days, not weeks",
+    techStack: "Interests: Public Datasets, Automated Reporting",
+    icon: Target,
+    iconColor: "text-emerald-400",
+    glowColor: "bg-emerald-500/10",
+  },
+  {
+    title: "High-Growth Mid-Market ($2M+ ARR)",
+    description:
+      "Scaling technical operations and removing bottlenecks for established companies.",
+    stats: "Reclaim 40+ hours monthly",
+    techStack: "Interests: n8n, Custom Integrations, Process Mining",
+    icon: Building2,
     iconColor: "text-purple-400",
     glowColor: "bg-purple-500/10",
   },
@@ -119,6 +135,7 @@ const industries = [
 
 const testimonials = [
   {
+    id: "jason",
     quote:
       "We wanted to create an AI platform to help run our advisory business, something that could manage clients, streamline admin and help automate our service delivery. Freddy took the time to really understand what we needed and delivered something right on the mark, fast, professional, and great to work with.",
     author: "Jason Holdsworth",
@@ -129,8 +146,10 @@ const testimonials = [
     hoverBorderColor: "hover:border-blue-500/30",
     badgeColor: "bg-blue-500/10 border-blue-500/20 text-blue-400",
     glowColor: "shadow-[0_0_25px_rgba(59,130,246,0.12)]",
+    image: "/images/Jason H Profile image.jpg",
   },
   {
+    id: "seb",
     quote:
       "Fieldporter combines sharp problem solving with excellent communication and handy technical expertise. Their systematic approach, enthusiasm for learning and actually getting stuck into the complex business challenges set them apart.",
     author: "Seb Lindner",
@@ -141,8 +160,10 @@ const testimonials = [
     hoverBorderColor: "hover:border-emerald-500/30",
     badgeColor: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400",
     glowColor: "shadow-[0_0_25px_rgba(16,185,129,0.12)]",
+    image: "/images/Seb Lindner Profile Pic.jpg",
   },
   {
+    id: "steve",
     quote:
       "We had a rare find. After a previous development company failed to deliver, Freddy stepped in and completely rebuilt our coaching platform from the ground up. His integrity and professionalism exceeded expectations.",
     author: "Steve Papps",
@@ -153,8 +174,10 @@ const testimonials = [
     hoverBorderColor: "hover:border-blue-500/30",
     badgeColor: "bg-blue-500/10 border-blue-500/20 text-blue-400",
     glowColor: "shadow-[0_0_25px_rgba(59,130,246,0.12)]",
+    image: "/images/Steve P Profile image.jpg",
   },
   {
+    id: "paul",
     quote:
       "Freddy was an asset to our team. He demonstrated a deep understanding of AI, including the latest tools, and an exceptional ability to get up the learning curve fast on new industries or topics. Showed experience and maturity beyond his years.",
     author: "Paul Rataul",
@@ -165,6 +188,7 @@ const testimonials = [
     hoverBorderColor: "hover:border-purple-500/30",
     badgeColor: "bg-purple-500/10 border-purple-500/20 text-purple-400",
     glowColor: "shadow-[0_0_25px_rgba(168,85,247,0.12)]",
+    image: "/images/Paul R Profile Image.jpg",
   },
 ];
 
@@ -210,6 +234,8 @@ const IndustryCard = memo(
   ({
     title,
     description,
+    stats,
+    techStack,
     icon: Icon,
     iconColor,
     glowColor,
@@ -218,6 +244,8 @@ const IndustryCard = memo(
   }: {
     title: string;
     description: string;
+    stats: string;
+    techStack: string;
     icon: React.ElementType;
     iconColor: string;
     glowColor: string;
@@ -231,24 +259,52 @@ const IndustryCard = memo(
         transition={{ delay, duration: 0.4, ease: "easeOut" }}
         className="group relative h-full"
       >
-        <div className="relative p-6 lg:p-8 rounded-2xl bg-white/20 dark:bg-black/20 backdrop-blur-sm border border-gray-900/10 dark:border-white/10 hover:bg-white/30 dark:hover:bg-black/30 hover:border-gray-900/20 dark:hover:border-white/20 transition-all duration-300 h-full flex flex-col min-h-[140px] lg:min-h-[160px]">
+        <div className="relative p-6 lg:p-8 rounded-2xl bg-white/20 dark:bg-black/20 backdrop-blur-sm border border-gray-900/10 dark:border-white/10 hover:bg-white/30 dark:hover:bg-black/30 hover:border-gray-900/20 dark:hover:border-white/20 transition-all duration-300 h-full flex flex-col min-h-[200px] lg:min-h-[220px] overflow-hidden">
           {/* Subtle gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent rounded-2xl" />
 
+          {/* Border Glow Effect */}
+          <div
+            className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r ${glowColor.replace("bg-", "from-").replace("/10", "/20")} to-transparent pointer-events-none p-[1px] -z-10`}
+            style={{
+              mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+            }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent to-transparent" />
+          </div>
+
           <div className="relative z-10 flex flex-col h-full items-center text-center">
             <div
-              className={`w-10 h-10 lg:w-12 lg:h-12 mb-4 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-sm flex items-center justify-center group-hover:${glowColor} transition-all duration-300`}
+              className={`w-10 h-10 lg:w-12 lg:h-12 mb-4 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-sm flex items-center justify-center group-hover:${glowColor} transition-all duration-300 group-hover:scale-110`}
             >
               <Icon className={`w-5 h-5 lg:w-6 lg:h-6 ${iconColor}`} />
             </div>
 
-            <div className="flex-1 space-y-2">
+            <div className="flex-1 space-y-2 w-full">
               <h4 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-300 transition-colors duration-300 leading-tight">
                 {title}
               </h4>
-              <p className="text-gray-500 dark:text-gray-400 leading-relaxed text-sm">
-                {description}
-              </p>
+
+              <div className="relative min-h-[60px] flex items-center justify-center">
+                {/* Description - Fades out on hover */}
+                <p className="text-gray-500 dark:text-gray-400 leading-relaxed text-sm absolute inset-0 transition-opacity duration-300 group-hover:opacity-0 flex items-center justify-center">
+                  {description}
+                </p>
+
+                {/* Tech Stack - Fades in on hover */}
+                <div className="text-gray-600 dark:text-gray-300 leading-relaxed text-xs lg:text-sm font-medium absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <span className="bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent">
+                    {techStack}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Micro-Stats */}
+            <div className="mt-4 pt-4 border-t border-gray-900/5 dark:border-white/5 w-full">
+              <span className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider group-hover:text-blue-400/80 transition-colors duration-300">
+                {stats}
+              </span>
             </div>
           </div>
         </div>
@@ -264,9 +320,11 @@ const TestimonialCard = memo(
   ({
     testimonial,
     index,
+    isFeatured = false,
   }: {
     testimonial: (typeof testimonials)[0];
     index: number;
+    isFeatured?: boolean;
   }) => {
     return (
       <motion.div
@@ -278,7 +336,7 @@ const TestimonialCard = memo(
           duration: 0.6,
           ease: "easeOut",
         }}
-        className="group relative h-full"
+        className={`group relative h-full ${isFeatured ? "h-full" : ""}`}
       >
         {/* Subtle glow on hover */}
         <div
@@ -298,34 +356,48 @@ const TestimonialCard = memo(
           <div className="absolute inset-0 bg-gradient-to-t from-white/10 dark:from-black/10 to-transparent rounded-3xl" />
 
           <div className="relative z-10 flex flex-col h-full">
-            <Quote
-              className={`w-8 h-8 ${testimonial.accentColor} opacity-70 mb-6`}
-            />
+            <div className="flex items-start justify-between mb-8">
+              <div className="flex items-center gap-4">
+                <div className="relative w-14 h-14 rounded-full overflow-hidden border border-white/10 shadow-lg">
+                  <Image
+                    src={testimonial.image}
+                    alt={testimonial.author}
+                    fill
+                    className="object-cover"
+                    sizes="56px"
+                  />
+                </div>
+                <div>
+                  <div className="text-gray-900 dark:text-white font-semibold text-lg tracking-[-0.01em]">
+                    {testimonial.author}
+                  </div>
+                  <div
+                    className={`${testimonial.accentColor} text-sm font-normal`}
+                  >
+                    {testimonial.role}
+                  </div>
+                </div>
+              </div>
+              <Quote
+                className={`w-8 h-8 ${testimonial.accentColor} opacity-50`}
+              />
+            </div>
 
-            <blockquote className="text-gray-800 dark:text-gray-100 leading-relaxed text-lg lg:text-xl font-light mb-8 flex-1 tracking-[-0.01em]">
+            <blockquote
+              className={`text-gray-800 dark:text-gray-100 leading-relaxed font-light mb-8 flex-1 tracking-[-0.01em] ${
+                isFeatured ? "text-xl lg:text-2xl" : "text-lg lg:text-xl"
+              }`}
+            >
               &ldquo;{testimonial.quote}&rdquo;
             </blockquote>
 
-            <div className="space-y-4">
-              <div className="space-y-3">
-                <div className="text-gray-900 dark:text-white font-semibold text-xl tracking-[-0.01em]">
-                  {testimonial.author}
-                </div>
-                <div
-                  className={`${testimonial.accentColor} text-base font-normal`}
-                >
-                  {testimonial.role}
-                </div>
-              </div>
-
-              <div className="flex justify-start">
-                <div
-                  className={`px-4 py-2 rounded-xl ${testimonial.badgeColor} backdrop-blur-sm`}
-                >
-                  <span className="text-sm font-medium">
-                    {testimonial.highlight}
-                  </span>
-                </div>
+            <div className="flex justify-start mt-auto">
+              <div
+                className={`px-4 py-2 rounded-xl ${testimonial.badgeColor} backdrop-blur-sm`}
+              >
+                <span className="text-sm font-medium">
+                  {testimonial.highlight}
+                </span>
               </div>
             </div>
           </div>
@@ -337,9 +409,137 @@ const TestimonialCard = memo(
 
 TestimonialCard.displayName = "TestimonialCard";
 
+// Slideshow component for secondary testimonials
+const TestimonialSlider = ({ items }: { items: typeof testimonials }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 100 : -100,
+      opacity: 0,
+      scale: 0.95,
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+      scale: 1,
+    },
+    exit: (direction: number) => ({
+      zIndex: 0,
+      x: direction < 0 ? 100 : -100,
+      opacity: 0,
+      scale: 0.95,
+    }),
+  };
+
+  const swipeConfidenceThreshold = 10000;
+  const swipePower = (offset: number, velocity: number) => {
+    return Math.abs(offset) * velocity;
+  };
+
+  const paginate = useCallback(
+    (newDirection: number) => {
+      setDirection(newDirection);
+      setCurrentIndex((prev) => {
+        let nextIndex = prev + newDirection;
+        if (nextIndex < 0) nextIndex = items.length - 1;
+        if (nextIndex >= items.length) nextIndex = 0;
+        return nextIndex;
+      });
+    },
+    [items.length],
+  );
+
+  const currentItem = items[currentIndex];
+
+  if (!currentItem) return null;
+
+  return (
+    <div className="relative h-full flex flex-col justify-center min-h-[400px]">
+      <div className="relative h-full w-full">
+        <AnimatePresence initial={false} custom={direction} mode="wait">
+          <motion.div
+            key={currentIndex}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 },
+            }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={1}
+            onDragEnd={(e, { offset, velocity }) => {
+              const swipe = swipePower(offset.x, velocity.x);
+
+              if (swipe < -swipeConfidenceThreshold) {
+                paginate(1);
+              } else if (swipe > swipeConfidenceThreshold) {
+                paginate(-1);
+              }
+            }}
+            className="absolute inset-0"
+          >
+            <TestimonialCard testimonial={currentItem} index={currentIndex} />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Controls */}
+      <div className="flex items-center justify-center gap-4 mt-8 absolute -bottom-12 left-0 right-0 z-20">
+        <button
+          onClick={() => paginate(-1)}
+          className="p-2 rounded-full bg-white/10 hover:bg-white/20 dark:bg-white/5 dark:hover:bg-white/10 transition-colors backdrop-blur-sm border border-white/10"
+          aria-label="Previous testimonial"
+        >
+          <ChevronLeft className="w-5 h-5 text-gray-900 dark:text-white" />
+        </button>
+        <div className="flex gap-2">
+          {items.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                setDirection(idx > currentIndex ? 1 : -1);
+                setCurrentIndex(idx);
+              }}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                idx === currentIndex
+                  ? "bg-blue-500 w-6"
+                  : "bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600"
+              }`}
+              aria-label={`Go to testimonial ${idx + 1}`}
+            />
+          ))}
+        </div>
+        <button
+          onClick={() => paginate(1)}
+          className="p-2 rounded-full bg-white/10 hover:bg-white/20 dark:bg-white/5 dark:hover:bg-white/10 transition-colors backdrop-blur-sm border border-white/10"
+          aria-label="Next testimonial"
+        >
+          <ChevronRight className="w-5 h-5 text-gray-900 dark:text-white" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
 // Enhanced project card with premium effects
 const ProjectCard = memo(
-  ({ project, index }: { project: (typeof projects)[0]; index: number }) => {
+  ({
+    project,
+    index,
+  }: {
+    project: (typeof projects)[0] & {
+      clientImage?: string;
+      clientName?: string;
+    };
+    index: number;
+  }) => {
     const [isHovered, setIsHovered] = useState(false);
 
     const handleClick = useCallback(() => {
@@ -400,10 +600,22 @@ const ProjectCard = memo(
           <div className="relative z-10 h-full flex flex-col">
             {/* Header */}
             <div className="flex items-start justify-between mb-6 lg:mb-8">
-              <div className="p-4 lg:p-5 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-sm group-hover:bg-gray-900/15 dark:group-hover:bg-white/15 transition-all duration-300">
-                <project.icon
-                  className={`w-7 h-7 lg:w-8 lg:h-8 ${project.iconColor}`}
-                />
+              <div className="flex items-center gap-3">
+                <div className="p-4 lg:p-5 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-sm group-hover:bg-gray-900/15 dark:group-hover:bg-white/15 transition-all duration-300">
+                  <project.icon
+                    className={`w-7 h-7 lg:w-8 lg:h-8 ${project.iconColor}`}
+                  />
+                </div>
+                {project.clientImage && (
+                  <div className="relative w-12 h-12 rounded-full overflow-hidden border border-white/10 shadow-sm">
+                    <Image
+                      src={project.clientImage}
+                      alt={project.clientName || "Client"}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                )}
               </div>
 
               <div
@@ -512,19 +724,28 @@ export function PortfolioSection() {
         {/* Industries Section */}
         <div className="mb-32 md:mb-36 lg:mb-40">
           <div className="text-center mb-24 md:mb-28 lg:mb-32">
+            {/* Filter Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 text-xs font-medium tracking-wide mb-6 uppercase">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+              </span>
+              Optimized for Companies with $2M+ ARR
+            </div>
+
             <h3 className="text-3xl sm:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-8 leading-tight tracking-[-0.02em]">
-              Industries We&apos;re{" "}
+              Deep Domain{" "}
               <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                Exploring
+                Specialization
               </span>
             </h3>
             <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
-              Areas where we&apos;re developing practical solutions and gaining
-              expertise.
+              We focus on high-value sectors where process complexity meets
+              budget capacity.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
             {industries.map((industry, index) => (
               <IndustryCard
                 key={index}
@@ -550,14 +771,22 @@ export function PortfolioSection() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-            {testimonials.map((testimonial, index) => (
-              <TestimonialCard
-                key={index}
-                testimonial={testimonial}
-                index={index}
-              />
-            ))}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+            {/* Featured Testimonial (Jason) */}
+            <div className="h-full min-h-[400px]">
+              {testimonials[0] && (
+                <TestimonialCard
+                  testimonial={testimonials[0]}
+                  index={0}
+                  isFeatured={true}
+                />
+              )}
+            </div>
+
+            {/* Rotating Testimonials */}
+            <div className="h-full min-h-[400px] mt-8 lg:mt-0 pb-16 lg:pb-0">
+              <TestimonialSlider items={testimonials.slice(1)} />
+            </div>
           </div>
         </div>
       </div>

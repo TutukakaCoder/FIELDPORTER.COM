@@ -52,7 +52,7 @@ export function EntranceProvider({ children }: EntranceProviderProps) {
 
     if (process.env.NODE_ENV === "development") {
       console.log(
-        "🎯 FIELDPORTER: Session check -",
+        "FIELDPORTER: Session check -",
         hasSeenInSession ? "SEEN" : "NOT SEEN",
       );
     }
@@ -66,7 +66,7 @@ export function EntranceProvider({ children }: EntranceProviderProps) {
 
   const completeEntrance = () => {
     if (process.env.NODE_ENV === "development") {
-      console.log("🎯 FIELDPORTER: Entrance completed, revealing main content");
+      console.log("FIELDPORTER: Entrance completed, revealing main content");
     }
     sessionStorage.setItem("fieldporter-video-seen-session", "true");
     setShowEntrance(false);
@@ -110,21 +110,15 @@ export function EntranceProvider({ children }: EntranceProviderProps) {
     <EntranceContext.Provider value={{ showEntrance, completeEntrance }}>
       {showEntrance && <VideoEntrance onComplete={completeEntrance} />}
 
-      {/* FIXED: Static overflow to prevent scroll freeze */}
+      {/* NUCLEAR FIX: No wrapper div at all - just render children directly */}
+      {/* Previous wrapper with minHeight/overflow styles was creating scroll context issues */}
       <div
-        className={`transition-opacity duration-500 ease-in-out ${
+        className={
           showEntrance ? "opacity-0 pointer-events-none" : "opacity-100"
-        }`}
+        }
         style={{
-          // Use stable positioning - NO dynamic position changes
-          position: "relative",
-          width: "100%",
-          minHeight: "100vh",
-          // Prevent interaction during entrance but maintain layout
-          pointerEvents: showEntrance ? "none" : "auto",
-          // FIXED: Static overflow-x only, never toggle overflow-y
-          overflowX: "hidden",
-          overflowY: "visible",
+          // Minimal styling - no scroll-affecting properties
+          transition: "opacity 0.5s ease-in-out",
         }}
       >
         {children}

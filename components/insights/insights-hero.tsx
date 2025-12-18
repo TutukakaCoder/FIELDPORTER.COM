@@ -300,7 +300,7 @@ export function InsightsHero() {
                     const element = document.getElementById("latest-insights");
                     element?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="group relative px-8 py-4 bg-gradient-to-r from-fieldporter-blue to-blue-600 hover:from-blue-600 hover:to-fieldporter-blue text-white font-medium rounded-xl transition-all duration-300 overflow-hidden shadow-lg shadow-fieldporter-blue/25 hover:shadow-xl hover:shadow-fieldporter-blue/40 min-w-[200px]"
+                  className="group relative px-8 py-4 bg-gradient-to-r from-fieldporter-blue to-blue-600 hover:from-blue-600 hover:to-fieldporter-blue text-white font-medium rounded-xl transition-all duration-300 overflow-hidden shadow-lg shadow-fieldporter-blue/25 hover:shadow-xl hover:shadow-fieldporter-blue/40 min-w-[200px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fieldporter-blue focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-95"
                 >
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full"

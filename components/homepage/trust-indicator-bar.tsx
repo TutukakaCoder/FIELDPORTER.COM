@@ -40,7 +40,7 @@ export function TrustIndicatorBar() {
 
   return (
     <section className="relative py-16 sm:py-20 md:py-24 overflow-hidden">
-      {/* Ultra-subtle 3D confidence particles - desktop only */}
+      {/* 3D confidence particles - R3F events disabled to prevent scroll capture */}
       <TrustParticles3D hoveredMetricIndex={hoveredIndex ?? -1} />
 
       <motion.div

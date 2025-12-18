@@ -202,9 +202,13 @@ export function ServiceHero({
           >
             {/* Icon */}
             <motion.div variants={itemVariants} className="flex justify-center">
-              <div className="p-4 rounded-2xl backdrop-blur-xl border border-white/10 bg-white/[0.02]">
-                <Briefcase className="w-12 h-12 text-blue-400" />
-              </div>
+              <motion.div
+                className="p-4 rounded-2xl backdrop-blur-xl border border-white/10 bg-white/[0.02] transition-all duration-300 hover:border-blue-400/40 hover:bg-white/[0.04] hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Briefcase className="w-12 h-12 text-blue-400 transition-transform duration-300 group-hover:rotate-3" />
+              </motion.div>
             </motion.div>
 
             {/* Main heading */}

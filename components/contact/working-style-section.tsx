@@ -128,8 +128,9 @@ export function WorkingStyleSection() {
               className={`
                 relative bg-white/[0.02] backdrop-blur-xl border ${principle.borderColor} 
                 rounded-3xl p-8 md:p-10 hover:bg-white/[0.04] ${principle.hoverBorderColor}
-                transition-all duration-300 group
+                transition-all duration-300 group hover:shadow-[0_20px_50px_rgba(59,130,246,0.1)]
               `}
+              whileHover={{ y: -6, scale: 1.01 }}
             >
               {/* Icon */}
               <div
@@ -189,14 +190,18 @@ export function WorkingStyleSection() {
                 { label: "Research Delivery", value: "3-5 days" },
                 { label: "Prototype Delivery", value: "1-2 weeks" },
               ].map((stat, index) => (
-                <div key={stat.label} className="space-y-2">
+                <motion.div
+                  key={stat.label}
+                  className="space-y-2 p-4 rounded-xl hover:bg-white/5 transition-all duration-300"
+                  whileHover={{ scale: 1.05, y: -4 }}
+                >
                   <div className="text-2xl md:text-3xl font-bold text-blue-400">
                     {stat.value}
                   </div>
                   <div className="text-sm text-gray-400 font-medium">
                     {stat.label}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>

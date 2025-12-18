@@ -434,7 +434,7 @@ function InteractivePortfolioShowcase() {
                 data-section-id={section.id}
                 onClick={() => setActiveSection(index)}
                 className={`
-                  px-4 md:px-8 py-3 md:py-4 rounded-2xl transition-all duration-500 backdrop-blur-xl border font-medium text-sm md:text-lg hover:scale-105 transform will-change-transform touch-manipulation
+                  px-4 md:px-8 py-3 md:py-4 rounded-2xl transition-all duration-500 backdrop-blur-xl border font-medium text-sm md:text-lg hover:scale-105 transform will-change-transform touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black
                   ${
                     activeSection === index
                       ? `bg-gray-900/[0.08] dark:bg-white/[0.08] ${section.borderColor.replace("/15", "/40")} text-gray-900 dark:text-white shadow-[0_0_30px_rgba(59,130,246,0.3)]`
@@ -473,7 +473,7 @@ function InteractivePortfolioShowcase() {
                   onClick={goToPrevious}
                   whileHover={{ scale: 1.1, x: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-12 h-12 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-lg hover:bg-gray-900/15 dark:hover:bg-white/15 hover:border-gray-900/30 dark:hover:border-white/30 transition-all duration-300 flex items-center justify-center group"
+                  className="w-12 h-12 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-lg hover:bg-gray-900/15 dark:hover:bg-white/15 hover:border-gray-900/30 dark:hover:border-white/30 transition-all duration-300 flex items-center justify-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black"
                   aria-label="Previous section"
                 >
                   <ChevronLeft className="w-6 h-6 text-gray-900 dark:text-white group-hover:text-blue-400 transition-colors duration-300" />
@@ -485,7 +485,7 @@ function InteractivePortfolioShowcase() {
                   onClick={goToNext}
                   whileHover={{ scale: 1.1, x: 2 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-12 h-12 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-lg hover:bg-gray-900/15 dark:hover:bg-white/15 hover:border-gray-900/30 dark:hover:border-white/30 transition-all duration-300 flex items-center justify-center group"
+                  className="w-12 h-12 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-lg hover:bg-gray-900/15 dark:hover:bg-white/15 hover:border-gray-900/30 dark:hover:border-white/30 transition-all duration-300 flex items-center justify-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black"
                   aria-label="Next section"
                 >
                   <ChevronRight className="w-6 h-6 text-gray-900 dark:text-white group-hover:text-blue-400 transition-colors duration-300" />
@@ -628,15 +628,21 @@ function InteractivePortfolioShowcase() {
                             </h4>
                             <div className="space-y-3">
                               {project.metrics.map((metric, idx) => (
-                                <div
+                                <motion.div
                                   key={idx}
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{
+                                    duration: 0.4,
+                                    delay: idx * 0.1,
+                                  }}
                                   className="flex items-start gap-3 text-gray-600 dark:text-gray-300"
                                 >
                                   {React.createElement(metric.icon, {
                                     className: `w-5 h-5 ${currentSection.iconColor} flex-shrink-0 mt-0.5`,
                                   })}
                                   <span>{metric.label}</span>
-                                </div>
+                                </motion.div>
                               ))}
                             </div>
                           </div>

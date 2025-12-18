@@ -226,6 +226,7 @@ const BackgroundPattern = memo(() => {
 BackgroundPattern.displayName = "BackgroundPattern";
 
 // Tiered Background System Component
+// SCROLL FIX: R3F events disabled in Canvas components to prevent scroll capture
 const TieredBackground = memo(() => {
   const { experience } = useDeviceCapability();
 
@@ -930,7 +931,7 @@ export function HeroSection() {
                     willChange: "background-position",
                   }}
                 >
-                  De-risk transformation
+                  Protect your margins
                 </motion.span>
                 .
               </p>

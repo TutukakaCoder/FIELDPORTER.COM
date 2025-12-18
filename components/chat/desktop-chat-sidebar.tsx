@@ -403,8 +403,11 @@ export function DesktopChatSidebar({
                       "w-full resize-none bg-fieldporter-gray/10 border border-fieldporter-gray/20 rounded-2xl px-3 py-2",
                       "text-fieldporter-white placeholder:text-fieldporter-gray/70",
                       "focus:outline-none focus:ring-2 focus:ring-fieldporter-blue/50 focus:border-fieldporter-blue/50",
+                      "focus:shadow-[0_0_15px_rgba(59,130,246,0.2)]",
                       "text-sm leading-relaxed",
                       "max-h-[120px] min-h-[40px] scrollbar-hide",
+                      "transition-all duration-300",
+                      "hover:border-fieldporter-gray/30 hover:bg-fieldporter-gray/15",
                     )}
                     maxLength={1000}
                     disabled={isLoading}

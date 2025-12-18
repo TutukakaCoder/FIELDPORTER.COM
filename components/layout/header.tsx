@@ -3,6 +3,7 @@
 import { OptimizedLink } from "@/components/ui/optimized-link";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { BRAND, MAIN_NAVIGATION } from "@/config/constants";
+import { useIsScrolled, useScrollState } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Menu, X } from "lucide-react";
@@ -15,45 +16,11 @@ interface HeaderProps {
 }
 
 export function Header({ className }: HeaderProps) {
-  const [isScrolled, setIsScrolled] = useState(false);
+  // SCROLL FREEZE FIX: Use centralized scroll state (reduces listener count)
+  const isScrolled = useIsScrolled();
+  const { isScrolling } = useScrollState();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-
-  useEffect(() => {
-    // SCROLL FIX: Optimize header scroll listener - reduce state updates
-    let ticking = false;
-    let lastUpdate = 0;
-    let lastScrollY = 0;
-    const throttleDelay = 150; // Increased throttle delay
-
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const now = Date.now();
-          const currentScrollY = window.scrollY;
-
-          // Only update if scroll position changed significantly or throttle delay passed
-          if (
-            now - lastUpdate >= throttleDelay ||
-            Math.abs(currentScrollY - lastScrollY) > 50
-          ) {
-            const newIsScrolled = currentScrollY > 20;
-            // Only update state if value actually changed
-            if (newIsScrolled !== isScrolled) {
-              setIsScrolled(newIsScrolled);
-            }
-            lastScrollY = currentScrollY;
-            lastUpdate = now;
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isScrolled]);
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -72,15 +39,26 @@ export function Header({ className }: HeaderProps) {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
         className={cn(
-          "fixed z-50 transition-all duration-500 ease-out",
+          "fixed z-50 ease-out",
+          // SCROLL FREEZE FIX: Disable transitions during scroll to prevent jank
+          isScrolling ? "transition-none" : "transition-all duration-300",
           isScrolled ? "top-3 left-4 right-4" : "top-6 left-6 right-6",
           className,
         )}
+        style={{
+          // GPU acceleration hints
+          willChange: isScrolling ? "auto" : "transform",
+          contain: "layout style",
+        }}
       >
         {/* Main Floating Navigation Bar */}
         <nav
           className={cn(
-            "relative mx-auto max-w-7xl rounded-2xl backdrop-blur-xl transition-all duration-500 ease-out shadow-2xl",
+            "relative mx-auto max-w-7xl rounded-2xl backdrop-blur-xl shadow-2xl",
+            // SCROLL FREEZE FIX: Disable transitions during scroll
+            isScrolling
+              ? "transition-none"
+              : "transition-all duration-300 ease-out",
             isScrolled
               ? "bg-white/95 dark:bg-black/95 border border-gray-900/[0.12] dark:border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
               : "bg-white/90 dark:bg-black/90 border border-gray-900/[0.08] dark:border-white/[0.08] shadow-[0_4px_24px_rgba(0,0,0,0.4)]",
