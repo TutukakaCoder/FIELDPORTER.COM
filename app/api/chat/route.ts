@@ -411,7 +411,8 @@ function analyzeQueryComplexity(
     frustrationLevel === "high" ||
     isResearchRequest || // Research requests always use Pro
     (hasTechnicalComplexity && messageLength > 20) || // Increased from 10 to 20
-    (messageLength > 40 && hasTechnicalComplexity); // Increased from 30 to 40
+    (messageLength > 40 && hasTechnicalComplexity) ||
+    true; // FIELDPORTER QUALITY RULE: Always use Pro model for better reasoning and completeness
 
   // Research requests always use Pro model with optimized token limit
   if (isResearchRequest) {
@@ -462,18 +463,15 @@ function analyzeQueryComplexity(
   // Standard responses - use Flash for simple queries (faster), Pro for complex
   // Flash is 3-5x faster than Pro, use it when quality isn't critical
   // Relaxed threshold: use Flash more often (queries up to 20 words)
-  const isSimpleQuery =
-    messageLength < 20 &&
-    !hasTechnicalComplexity &&
-    frustrationLevel === "none";
+  const isSimpleQuery = false; // FIELDPORTER QUALITY RULE: Disable simple query mode to force Pro model
 
   return {
     mode: "standard",
-    maxTokens: isSimpleQuery ? 400 : 600, // Optimized limits for speed
+    maxTokens: isSimpleQuery ? 1000 : 2000, // Increased limits for completeness (was 400/600)
     reasoning: isSimpleQuery
       ? "Simple query - using Flash model for faster response"
-      : "Standard conversational response",
-    requiresProModel: !isSimpleQuery, // Use Flash for simple queries
+      : "Standard conversational response - using Pro model for quality",
+    requiresProModel: !isSimpleQuery, // Use Pro for everything
     userFrustrationLevel: frustrationLevel,
   };
 }
@@ -733,8 +731,6 @@ function formatResponse(content: string): string {
       .replace(/\s{2,}/g, " ")
       // Standardize bullet points
       .replace(/[●◦▪▫]/g, "•")
-      // Remove incomplete sentences at the end to prevent cutoffs
-      .replace(/\.\s*[A-Z][^.]*$/, ".")
       .trim()
   );
 }

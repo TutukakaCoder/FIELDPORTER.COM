@@ -88,9 +88,9 @@ export function CTASection() {
                   group relative px-8 py-4 rounded-xl backdrop-blur-xl border border-blue-500/20 transition-all duration-300
                   bg-gradient-to-r from-blue-600/20 to-blue-500/20 hover:from-blue-500/30 hover:to-blue-400/30 
                   hover:border-blue-400/40 hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]
-                  font-medium text-gray-900 dark:text-white
-                  min-w-[200px] text-center
-                "
+      font-medium text-gray-900 dark:text-white
+      w-full sm:w-auto min-w-[200px] text-center
+    "
               >
                 {/* Glassmorphism layers */}
                 <div className="absolute inset-0 bg-blue-500/[0.05] backdrop-blur-xl rounded-xl" />
@@ -116,9 +116,9 @@ export function CTASection() {
                   group relative px-8 py-4 rounded-xl backdrop-blur-xl border border-gray-900/20 dark:border-white/20 transition-all duration-300
                   bg-gray-900/5 dark:bg-white/5 hover:bg-gray-900/10 dark:hover:bg-white/10 hover:border-purple-400/40
                   hover:shadow-[0_0_30px_rgba(168,85,247,0.4)]
-                  font-medium text-gray-900 dark:text-white
-                  min-w-[200px] text-center
-                "
+      font-medium text-gray-900 dark:text-white
+      w-full sm:w-auto min-w-[200px] text-center
+    "
               >
                 {/* Glassmorphism layers */}
                 <div className="absolute inset-0 bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl rounded-xl" />

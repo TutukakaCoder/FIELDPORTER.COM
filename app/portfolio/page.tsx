@@ -110,7 +110,7 @@ const portfolioSections: PortfolioSection[] = [
         ],
         techStack:
           "React 18 • TypeScript • Firebase • Google Gemini AI • Multi-tenant Architecture",
-        videoUrl: "/videos/Voluntas-app-run-through.mp4",
+        videoUrl: "/videos/Voluntas-application-run-through.mp4",
         testimonial: {
           quote:
             "We wanted to create an AI platform to help run our advisory business, something that could manage clients, streamline admin and help automate our service delivery. Freddy took the time to really understand what we needed and delivered something right on the mark, fast, professional, and great to work with.",

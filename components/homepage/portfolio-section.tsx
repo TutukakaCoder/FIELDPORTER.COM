@@ -42,7 +42,7 @@ const projects = [
     hoverGlow: "shadow-[0_0_30px_rgba(34,197,94,0.15)]",
     gradientFrom: "from-green-500/20",
     gradientTo: "to-green-500/5",
-    clientImage: "/images/Jason H Profile image.jpg",
+    clientImage: "/images/jason-h-profile.jpg",
     clientName: "Jason Holdsworth",
   },
   {
@@ -146,7 +146,7 @@ const testimonials = [
     hoverBorderColor: "hover:border-blue-500/30",
     badgeColor: "bg-blue-500/10 border-blue-500/20 text-blue-400",
     glowColor: "shadow-[0_0_25px_rgba(59,130,246,0.12)]",
-    image: "/images/Jason H Profile image.jpg",
+    image: "/images/jason-h-profile.jpg",
   },
   {
     id: "seb",
@@ -160,7 +160,7 @@ const testimonials = [
     hoverBorderColor: "hover:border-emerald-500/30",
     badgeColor: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400",
     glowColor: "shadow-[0_0_25px_rgba(16,185,129,0.12)]",
-    image: "/images/Seb Lindner Profile Pic.jpg",
+    image: "/images/seb-lindner-profile.jpg",
   },
   {
     id: "steve",
@@ -174,7 +174,7 @@ const testimonials = [
     hoverBorderColor: "hover:border-blue-500/30",
     badgeColor: "bg-blue-500/10 border-blue-500/20 text-blue-400",
     glowColor: "shadow-[0_0_25px_rgba(59,130,246,0.12)]",
-    image: "/images/Steve P Profile image.jpg",
+    image: "/images/steve-p-profile.jpg",
   },
   {
     id: "paul",
@@ -188,7 +188,7 @@ const testimonials = [
     hoverBorderColor: "hover:border-purple-500/30",
     badgeColor: "bg-purple-500/10 border-purple-500/20 text-purple-400",
     glowColor: "shadow-[0_0_25px_rgba(168,85,247,0.12)]",
-    image: "/images/Paul R Profile Image.jpg",
+    image: "/images/paul-r-profile.jpg",
   },
 ];
 
@@ -285,14 +285,14 @@ const IndustryCard = memo(
                 {title}
               </h4>
 
-              <div className="relative min-h-[60px] flex items-center justify-center">
+              <div className="relative grid place-items-center min-h-[60px]">
                 {/* Description - Fades out on hover */}
-                <p className="text-gray-500 dark:text-gray-400 leading-relaxed text-sm absolute inset-0 transition-opacity duration-300 group-hover:opacity-0 flex items-center justify-center">
+                <p className="text-gray-500 dark:text-gray-400 leading-relaxed text-sm transition-opacity duration-300 group-hover:opacity-0 col-start-1 row-start-1">
                   {description}
                 </p>
 
                 {/* Tech Stack - Fades in on hover */}
-                <div className="text-gray-600 dark:text-gray-300 leading-relaxed text-xs lg:text-sm font-medium absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <div className="text-gray-600 dark:text-gray-300 leading-relaxed text-xs lg:text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 col-start-1 row-start-1">
                   <span className="bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent">
                     {techStack}
                   </span>

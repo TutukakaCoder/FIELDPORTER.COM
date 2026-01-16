@@ -119,7 +119,7 @@ export function Header({ className }: HeaderProps) {
             <div className="hidden lg:flex items-center gap-4 pr-4">
               <ThemeToggle />
               <OptimizedLink
-                href="/auth/signin"
+                href="/contact"
                 className="group flex items-center gap-2 px-6 py-2.5 text-sm font-medium text-gray-900 dark:text-white bg-gradient-to-r from-[#0969DA]/30 to-[#1E40AF]/30 hover:from-[#0969DA]/50 hover:to-[#1E40AF]/50 backdrop-blur-sm rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30 border border-blue-500/20"
               >
                 Client Portal
@@ -215,7 +215,7 @@ export function Header({ className }: HeaderProps) {
                   </div>
 
                   <OptimizedLink
-                    href="/auth/signin"
+                    href="/contact"
                     className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-medium text-gray-900 dark:text-white bg-gradient-to-r from-[#0969DA]/30 to-[#1E40AF]/30 hover:from-[#0969DA]/50 hover:to-[#1E40AF]/50 backdrop-blur-sm rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/20"
                   >
                     Client Portal

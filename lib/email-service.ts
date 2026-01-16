@@ -193,7 +193,7 @@ class EmailService {
                 <p style="color: rgba(255,255,255,0.9); margin: 0 0 20px 0; font-size: 14px;">
                   Sign in anytime to check the status of your portal setup
                 </p>
-                <a href="https://fieldporter.com/auth/signin" 
+                <a href="https://fieldporter.com/contact" 
                    style="display: inline-block; background: white; color: #0969da; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px;">
                   Sign In to Portal
                 </a>
@@ -255,7 +255,7 @@ What's Next?
 
 Access Your Portal:
 Sign in anytime to check the status of your portal setup
-https://fieldporter.com/auth/signin
+https://fieldporter.com/contact
 
 Need Assistance?
 Email Support: freddy@fieldporter.com
