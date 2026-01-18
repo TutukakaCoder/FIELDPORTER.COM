@@ -20,32 +20,31 @@ export function CompanyFoundation() {
             className="space-y-6"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white leading-tight">
-              Meet the{" "}
+              The Engine{" "}
               <span className="bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent">
-                Practitioner Behind the Process
+                Behind The Results
               </span>
             </h2>
             <div className="space-y-4 text-gray-700 dark:text-gray-300 text-base md:text-lg leading-relaxed">
               <p>
-                I&apos;m{" "}
+                FIELDPORTER is a specialized network led by{" "}
                 <span className="text-gray-900 dark:text-white font-medium">
                   Freddy Hopkins
                 </span>
-                , the founder of FIELDPORTER. I&apos;ve spent years working
-                hands-on in the AI space, not as a theorist, but as a builder
-                deploying production systems.
+                . I built this practice to solve a specific problem: most
+                companies need more than just &quot;consulting&quot;&mdash;they
+                need execution.
               </p>
               <p>
-                FIELDPORTER is my consulting practice, built on a hybrid-expert
-                model that delivers high-touch strategy with AI-powered
-                execution. My approach is straightforward: I only recommend
-                tools I use daily, and the strategies I teach are the same ones
-                I use to build real solutions.
+                We operate as a hybrid team. I lead the strategy and
+                architecture, while our network of specialized developers and AI
+                agents handles the heavy lifting. This allows us to move faster
+                than traditional agencies while maintaining the personal
+                attention of a boutique partner.
               </p>
               <p className="text-gray-900 dark:text-white font-medium">
-                While I continue to take on select consulting projects, my focus
-                is shifting to building products that solve the real problems
-                uncovered through client work.
+                We don&apos;t just advise. We build, deploy, and train your team
+                to take over.
               </p>
             </div>
           </motion.div>

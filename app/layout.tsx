@@ -29,12 +29,13 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://fieldporter.com"),
   title: {
     template: "FIELDPORTER | %s",
-    default: "FIELDPORTER - Build Your Own AI Advantage",
+    default:
+      "FIELDPORTER - Build Your Own AI Advantage | AI Integration & Automation",
   },
   description:
-    "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. We specialize in Claude API, n8n, and Cursor development.",
+    "AI integration and automation consulting that protects your margins. Build production AI systems in weeks. Save 15+ hours weekly through workflow automation. Strategic research for founders.",
   keywords:
-    "AI automation, LLM integration, strategic research, workflow automation, FIELDPORTER, AI consulting",
+    "AI integration, automation consulting, margin protection, workflow automation, AI systems, business automation, FIELDPORTER, AI consulting, production AI",
   authors: [{ name: "FIELDPORTER" }],
   creator: "FIELDPORTER",
   publisher: "FIELDPORTER",
@@ -132,24 +133,24 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://fieldporter.com",
-    title: "FIELDPORTER - Build Your Own AI Advantage",
+    title: "FIELDPORTER - AI Integration & Automation Consulting",
     description:
-      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders.",
+      "Build production AI systems in weeks. Save 15+ hours weekly. Protect your margins with automation that works.",
     siteName: "FIELDPORTER",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "FIELDPORTER - Build Your Own AI Advantage",
+        alt: "FIELDPORTER - AI Integration & Automation Consulting",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "FIELDPORTER - Build Your Own AI Advantage",
+    title: "FIELDPORTER - AI Integration & Automation Consulting",
     description:
-      "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders.",
+      "Build production AI systems in weeks. Save 15+ hours weekly. Protect your margins with automation that works.",
     creator: "@fieldporter",
     images: ["/opengraph-image"],
   },

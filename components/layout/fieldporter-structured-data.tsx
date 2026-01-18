@@ -15,7 +15,7 @@ export function FieldporterStructuredData() {
           url: "https://fieldporter.com",
           logo: "https://fieldporter.com/favicon-dark.png",
           description:
-            "AI integration and automation consulting for ambitious founders",
+            "AI integration and automation consulting that protects your margins. Build production AI systems in weeks.",
           email: "hello@fieldporter.com",
           foundingDate: "2023",
           founders: [

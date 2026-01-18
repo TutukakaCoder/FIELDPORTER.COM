@@ -197,7 +197,7 @@ const PremiumBackground = memo(() => {
   return (
     <div className="absolute inset-0 overflow-hidden">
       {/* Sophisticated gradient base */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-gray-100 to-white dark:from-gray-950 dark:via-gray-900 dark:to-black" />
+      <div className="absolute inset-0 bg-transparent" />
 
       {/* Subtle floating orbs */}
       <div className="absolute inset-0 opacity-40">
@@ -613,6 +613,7 @@ const ProjectCard = memo(
                       alt={project.clientName || "Client"}
                       fill
                       className="object-cover"
+                      sizes="48px"
                     />
                   </div>
                 )}
@@ -691,7 +692,7 @@ export function PortfolioSection() {
     <section
       ref={ref}
       id="portfolio"
-      className="relative pt-32 md:pt-36 lg:pt-44 pb-32 md:pb-36 lg:pb-44 overflow-hidden"
+      className="relative pt-24 md:pt-32 pb-24 md:pb-32 overflow-hidden bg-transparent"
     >
       <PremiumBackground />
 

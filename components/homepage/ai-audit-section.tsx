@@ -18,7 +18,7 @@ export function AIAuditSection() {
   return (
     <section
       ref={ref}
-      className="relative py-12 md:py-16 overflow-hidden bg-gray-50 dark:bg-black/20"
+      className="relative py-12 md:py-24 overflow-hidden bg-transparent"
     >
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-gray-900/60 border border-gray-200 dark:border-white/10 shadow-xl backdrop-blur-xl">

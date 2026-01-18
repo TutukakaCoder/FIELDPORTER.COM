@@ -1,17 +1,18 @@
-// AI Chat API using Gemini 2.5 Flash and Pro via Firebase AI Logic SDK
+// AI Chat API using Gemini 3.0 Pro Preview via Firebase AI Logic SDK
 import type { Message } from "@/types/chat";
 import { NextRequest, NextResponse } from "next/server";
 import { getAI, getGenerativeModel, GoogleAIBackend } from "firebase/ai";
 import firebaseApp from "@/lib/firebase";
 import { BusinessIntelligenceAnalyzer } from "@/lib/firebase-analytics";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 // Initialize Firebase AI with Gemini Developer API backend
 // No API key needed - uses Firebase project authentication
 const ai = getAI(firebaseApp, { backend: new GoogleAIBackend() });
 
-console.log(
-  "✅ Gemini 2.5 Flash and Pro initialized with Firebase AI Logic SDK",
-);
+console.log("✅ Gemini 3.0 Pro Preview initialized with Firebase AI Logic SDK");
 
 // Simple response cache for common queries (in-memory, cleared on restart)
 const responseCache = new Map<
@@ -90,13 +91,13 @@ NATURAL CONVERSATION FLOW:
 - Mention FIELDPORTER services naturally when relevant, not based on message count
 - Allow conversation to flow organically based on their needs
 
-RESPONSE LENGTH:
-- Standard responses: 200-400 words (comprehensive but concise)
-- Complex questions: up to 800 words when needed
-- Quick acknowledgments: 1-2 sentences (only for first greeting, minimum 50 characters)
-- Follow-up questions like "is that all?", "what else?", "anything else?" require comprehensive responses explaining what else FIELDPORTER offers
-- Always provide enough detail to be genuinely helpful
-- NEVER give responses shorter than 50 characters unless it's a simple acknowledgment
+RESPONSE LENGTH - BE CONCISE LIKE A REAL HUMAN EXPERT:
+- Standard responses: 40-80 words MAX. Talk like a human, not a brochure.
+- Complex questions: up to 120 words only when truly needed
+- Quick acknowledgments: 1-2 sentences
+- NEVER give walls of text. If you can say it in 3 sentences, do that.
+- End with ONE short question to keep conversation going
+- Think: "How would a busy expert reply in a chat?" - short, helpful, human
 
 ---
 
@@ -406,32 +407,27 @@ function analyzeQueryComplexity(
     (technicalTerms &&
       technicalTerms.some((term) => lowerMessage.includes(term)));
 
-  // Relaxed Pro model routing - only truly complex queries use Pro
-  const requiresProModel =
-    frustrationLevel === "high" ||
-    isResearchRequest || // Research requests always use Pro
-    (hasTechnicalComplexity && messageLength > 20) || // Increased from 10 to 20
-    (messageLength > 40 && hasTechnicalComplexity) ||
-    true; // FIELDPORTER QUALITY RULE: Always use Pro model for better reasoning and completeness
+  // TEMPORARILY DISABLED: Pro model has Firebase SDK bug (TypeError: Cannot read properties of undefined)
+  // Will re-enable when Firebase SDK is updated to fix 2.5-pro response parsing
+  const requiresProModel = true; // Use 3.0 Pro for all queries
 
-  // Research requests always use Pro model with optimized token limit
+  // Research requests - use Flash with higher tokens (Pro has SDK bug)
   if (isResearchRequest) {
     return {
       mode: "complex",
-      maxTokens: 800, // Optimized for faster responses
-      reasoning:
-        "Research request requiring Pro model for comprehensive analysis",
+      maxTokens: 800, // Gemini 3.0 uses ~150 thinking tokens, need extra for complex response
+      reasoning: "Research request requiring comprehensive analysis",
       requiresProModel: true,
       userFrustrationLevel: frustrationLevel,
     };
   }
 
-  // Detailed responses for complex questions (always Pro now)
+  // Detailed responses for complex questions - use Flash (Pro has SDK bug)
   if (hasTechnicalComplexity && messageLength > 10) {
     return {
       mode: "complex",
-      maxTokens: 800, // Optimized for faster responses
-      reasoning: "Complex technical question requiring Pro model",
+      maxTokens: 800, // Gemini 3.0 uses ~150 thinking tokens, need extra for complex response
+      reasoning: "Complex technical question",
       requiresProModel: true,
       userFrustrationLevel: frustrationLevel,
     };
@@ -452,26 +448,20 @@ function analyzeQueryComplexity(
   if (isFollowUp && conversationHistory.length > 0) {
     return {
       mode: "detailed",
-      maxTokens: 600, // Optimized for faster responses while maintaining quality
+      maxTokens: 600, // Gemini 3.0 uses ~150 thinking tokens, need 600 for proper response
       reasoning:
-        "Follow-up question requiring comprehensive response about FIELDPORTER services",
+        "Follow-up question requiring response about FIELDPORTER services",
       requiresProModel: true,
       userFrustrationLevel: frustrationLevel,
     };
   }
 
-  // Standard responses - use Flash for simple queries (faster), Pro for complex
-  // Flash is 3-5x faster than Pro, use it when quality isn't critical
-  // Relaxed threshold: use Flash more often (queries up to 20 words)
-  const isSimpleQuery = false; // FIELDPORTER QUALITY RULE: Disable simple query mode to force Pro model
-
+  // Standard responses - use Flash (Pro has SDK bug)
   return {
     mode: "standard",
-    maxTokens: isSimpleQuery ? 1000 : 2000, // Increased limits for completeness (was 400/600)
-    reasoning: isSimpleQuery
-      ? "Simple query - using Flash model for faster response"
-      : "Standard conversational response - using Pro model for quality",
-    requiresProModel: !isSimpleQuery, // Use Pro for everything
+    maxTokens: 600, // Gemini 3.0 uses ~150 thinking tokens, need 600 for proper response
+    reasoning: "Standard conversational response - concise and human",
+    requiresProModel: true,
     userFrustrationLevel: frustrationLevel,
   };
 }
@@ -799,35 +789,27 @@ async function callGeminiAPI(
   // Analyze complexity to determine model and token limits
   const complexity = analyzeQueryComplexity(message, conversationHistory);
 
-  // Use Flash for simple queries (3-5x faster), Pro for complex
-  const modelName = complexity.requiresProModel
-    ? "gemini-2.5-pro"
-    : "gemini-2.5-flash";
+  // Use Gemini 3.0 Pro for all queries
+  const modelName = "gemini-3-pro-preview";
 
-  if (process.env.NODE_ENV === "development") {
-    console.log(`Calling ${modelName} via Firebase AI Logic...`);
-    console.log("Query complexity:", complexity);
-  }
+  // Always log which model is being used
+  console.log(`🤖 Calling ${modelName} via Firebase AI Logic...`);
+  console.log("🎯 Query complexity:", complexity);
 
   const maxRetries = 2; // Increased retries for better reliability
   let lastError: Error | null = null;
-  let useProModel = complexity.requiresProModel;
+
+  // We strictly use 3.0, so no model switching logic needed anymore
+  const useProModel = true;
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
-      // Optimized timeout: Flash is faster (15s), Pro needs more time (30s for real-world usage)
-      const timeoutDuration = useProModel ? 30000 : 15000;
+      // Optimized timeout: 3.0 might be slower or faster, let's give it 30s
+      const timeoutDuration = 30000;
 
-      // Use appropriate model based on complexity
-      const currentModelName = useProModel
-        ? "gemini-2.5-pro"
-        : "gemini-2.5-flash";
-
-      if (process.env.NODE_ENV === "development") {
-        console.log(
-          `Attempt ${attempt + 1}/${maxRetries + 1} - Calling ${currentModelName}...`,
-        );
-      }
+      console.log(
+        `🚀 Attempt ${attempt + 1}/${maxRetries + 1} - Calling ${modelName}...`,
+      );
 
       // OPTIMIZATION: Only add dynamic context for new conversations
       // For existing conversations, use base prompt to reduce processing time
@@ -952,6 +934,7 @@ async function callGeminiAPI(
         if (!isValidHistory) {
           console.warn(
             "⚠️ History format invalid - clearing to prevent Firebase SDK crash",
+            "gemini-3.0-pro-preview",
           );
           geminiHistory = [];
         }
@@ -964,9 +947,9 @@ async function callGeminiAPI(
         console.log("🔍 First history message role:", firstMsg.role);
       }
 
-      // Get Gemini model with Firebase AI Logic SDK - ONLY 2.5 models
+      // Get Gemini model with Firebase AI Logic SDK - ONLY 3.0 models
       const model = getGenerativeModel(ai, {
-        model: currentModelName,
+        model: modelName,
       });
 
       // Start chat with system instruction and history
@@ -1006,6 +989,7 @@ async function callGeminiAPI(
 
       // Check candidates exist before calling text()
       const candidates = response.candidates;
+
       if (
         !candidates ||
         !Array.isArray(candidates) ||
@@ -1052,15 +1036,16 @@ async function callGeminiAPI(
         console.warn(
           `⚠️ Response too short (${trimmedContent.length} chars), minimum is 50. Response: "${trimmedContent}"`,
         );
-        // For very short responses, retry with Pro model if not already using it
-        if (!useProModel && attempt < maxRetries) {
-          console.log("🔄 Response too short, will retry with Pro model");
-          throw new Error("Response too short, retrying with Pro model");
+        // For very short responses, we might want to retry, but let's just accept it for now to avoid loops
+        // unless it's REALLY short
+        if (trimmedContent.length < 10 && attempt < maxRetries) {
+          console.log("🔄 Response too short (<10 chars), retrying");
+          throw new Error("Response too short");
         }
       }
 
       console.log(
-        `✅ ${currentModelName} response:`,
+        `✅ ${modelName} response:`,
         trimmedContent.length,
         "characters",
       );
@@ -1087,13 +1072,6 @@ async function callGeminiAPI(
           "🔐 Authentication error - check Firebase AI configuration",
         );
         throw error;
-      }
-
-      // If Flash failed and we haven't tried Pro yet, switch to Pro
-      if (attempt > 0 && !useProModel && lastError) {
-        useProModel = true;
-        console.log("🔄 Switching to gemini-2.5-pro after Flash failure");
-        continue; // Retry with Pro model immediately
       }
 
       // Add exponential backoff delay before retry

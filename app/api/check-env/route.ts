@@ -3,6 +3,9 @@
 
 import { emailConfig } from "@/lib/env";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 export async function GET() {
   // Check all possible sources
   const sources = {

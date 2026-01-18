@@ -346,18 +346,20 @@ export function MobileChatInterface({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
             className={cn(
-              "flex gap-3 max-w-[85%]",
-              message.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto",
+              "flex gap-2",
+              message.role === "user"
+                ? "ml-auto flex-row-reverse max-w-[85%]"
+                : "mr-auto w-full",
             )}
           >
-            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+            <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
               {message.role === "user" ? (
                 <div className="w-full h-full rounded-full bg-fieldporter-gray/20 flex items-center justify-center">
-                  <User className="w-4 h-4 text-fieldporter-gray" />
+                  <User className="w-3.5 h-3.5 text-fieldporter-gray" />
                 </div>
               ) : (
                 <div className="w-full h-full rounded-full bg-fieldporter-blue/20 flex items-center justify-center">
-                  <Bot className="w-4 h-4 text-fieldporter-blue" />
+                  <Bot className="w-3.5 h-3.5 text-fieldporter-blue" />
                 </div>
               )}
             </div>
@@ -365,18 +367,18 @@ export function MobileChatInterface({
             <div className="flex-1 min-w-0">
               <div
                 className={cn(
-                  "rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap",
+                  "text-[13px] leading-[1.6] whitespace-pre-wrap",
                   message.role === "user"
-                    ? "bg-fieldporter-blue text-fieldporter-white rounded-br-md"
-                    : "bg-fieldporter-gray/10 text-fieldporter-white border border-fieldporter-gray/20 rounded-bl-md",
+                    ? "rounded-2xl rounded-br-md px-4 py-2.5 bg-fieldporter-blue text-fieldporter-white"
+                    : "text-fieldporter-white/90 py-1",
                 )}
               >
                 {formatMessage(message.content)}
               </div>
               <div
                 className={cn(
-                  "text-xs text-fieldporter-gray/60 mt-1 px-2",
-                  message.role === "user" ? "text-right" : "text-left",
+                  "text-[10px] text-fieldporter-gray/50 mt-1",
+                  message.role === "user" ? "text-right pr-1" : "text-left",
                 )}
               >
                 {message.timestamp.toLocaleTimeString([], {
@@ -430,6 +432,8 @@ export function MobileChatInterface({
         <div className="flex items-end gap-3">
           <div className="flex-1 min-w-0">
             <textarea
+              id="mobile-chat-input"
+              name="mobile-chat-input"
               ref={inputRef}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}

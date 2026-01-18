@@ -16,13 +16,13 @@ const services = [
     id: "strategic-research",
     phase: "01",
     icon: TrendingUp,
-    title: "Strategic Research",
-    tagline: "De-risk decisions with comprehensive intelligence",
-    impact: "Strategic clarity before capital deployment",
+    title: "Stop Guessing.",
+    tagline: "Market intelligence that kills risk before you spend.",
+    impact: "Know your market in 5 days",
     benefits: [
-      "Multi-source research preventing costly missteps and blind spots",
-      "Strategic insights answering critical viability and risk questions",
-      "Regulatory landscape analysis with clear implementation guidance",
+      "Multi-source research preventing costly missteps",
+      "Strategic insights answering critical viability questions",
+      "Clear implementation guidance, not just theory",
     ],
     examples: [
       "Market sizing",
@@ -43,13 +43,13 @@ const services = [
     id: "rapid-development",
     phase: "02",
     icon: Code,
-    title: "Rapid Development & Integration",
-    tagline: "Validate your vision with working systems",
-    impact: "From concept to production system",
+    title: "Validate Instantly.",
+    tagline: "Turn 'good ideas' into working products. Fast.",
+    impact: "Launch MVP in 2 weeks",
     benefits: [
-      "Production-ready AI applications and seamless integrations",
-      "API integrations connecting your existing workflows",
-      "Complete technical documentation and team handoff",
+      "Production-ready AI applications",
+      "Seamless API integrations with existing tools",
+      "Complete technical documentation and handoff",
     ],
     examples: [
       "AI chat systems",
@@ -70,13 +70,13 @@ const services = [
     id: "workflow-optimisation",
     phase: "03",
     icon: Building2,
-    title: "Workflow Automation",
-    tagline: "Reclaim high-value time for strategic work",
-    impact: "10+ hours weekly for growth activities",
+    title: "Cut the Bloat.",
+    tagline: "Replace expensive admin hours with reliable code.",
+    impact: "Save 20+ hours/week",
     benefits: [
-      "Business process analysis eliminating operational drag",
-      "Automated workflows freeing your team for strategic focus",
-      "Marketing automation including lead generation and sequences",
+      "Eliminate operational drag and manual data entry",
+      "Automate complex workflows end-to-end",
+      "Scale your output without scaling headcount",
     ],
     examples: [
       "Sales workflows",
@@ -97,13 +97,13 @@ const services = [
     id: "ai-training",
     phase: "04",
     icon: BookOpen,
-    title: "AI Training",
-    tagline: "Future-proof your team's competitive capability",
-    impact: "Build irreplaceable AI advantage",
+    title: "Own the Tech.",
+    tagline: "Don't rent your advantage. Build internal capability.",
+    impact: "Build a self-sufficient team",
     benefits: [
-      "Industry-specific AI strategy ensuring competitive relevance",
-      "Custom knowledge systems using your business data",
-      "Team workshops building internal capability, not dependency",
+      "Industry-specific AI strategy workshops",
+      "Custom knowledge systems on your own data",
+      "Train your team to fish, not just eat",
     ],
     examples: [
       "Team workshops",
@@ -127,7 +127,7 @@ const PremiumBackground = memo(() => {
   return (
     <div className="absolute inset-0 overflow-hidden">
       {/* Simple gradient base */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-black dark:to-gray-950" />
+      <div className="absolute inset-0 bg-transparent" />
 
       {/* Mobile-optimized floating orbs - much smaller and simpler */}
       <div className="absolute inset-0 opacity-20">
@@ -330,7 +330,7 @@ export function ServicesSection() {
     <section
       ref={ref}
       id="services"
-      className="relative pt-32 md:pt-36 lg:pt-44 pb-32 md:pb-36 lg:pb-44 overflow-hidden"
+      className="relative pt-24 md:pt-32 pb-24 md:pb-32 overflow-hidden bg-transparent"
     >
       <PremiumBackground />
 
@@ -338,10 +338,10 @@ export function ServicesSection() {
         {/* Enhanced Section Header */}
         <div className="text-center mb-24 md:mb-28 lg:mb-32">
           <h2 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-light text-gray-900 dark:text-white mb-8 lg:mb-12 leading-tight tracking-[-0.02em]">
-            Four Things We{" "}
+            Stop Lagging.{" "}
             <span className="relative">
               <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                Do
+                Start Leading.
               </span>
               {/* Subtle glow effect - disabled on mobile for performance */}
               <div className="absolute -inset-x-4 -inset-y-2 bg-blue-500/20 blur-2xl opacity-30 hidden md:block" />
@@ -349,8 +349,8 @@ export function ServicesSection() {
           </h2>
 
           <p className="text-xl lg:text-2xl text-gray-700/70 dark:text-white/70 max-w-4xl mx-auto leading-relaxed font-light">
-            Four practical ways we help businesses integrate AI into their
-            operations.
+            We don't sell &quot;AI&quot;. We sell outcomes. Here is how we
+            remove bottlenecks and drive growth.
           </p>
         </div>
 
