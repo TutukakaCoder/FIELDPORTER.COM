@@ -214,10 +214,15 @@ export function HeroSection() {
   return (
     <section
       ref={ref}
-      className="relative min-h-[90vh] flex items-center justify-center pt-32 pb-20 overflow-hidden bg-transparent"
+      className="relative min-h-screen flex items-center justify-center pt-20 pb-24 overflow-hidden bg-transparent"
     >
-      <TieredBackground />
-      <BackgroundPattern />
+      <div className="absolute inset-0 z-0">
+        <TieredBackground />
+        <BackgroundPattern />
+      </div>
+
+      {/* Bottom gradient fade for smooth transition */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 z-[1] bg-gradient-to-t from-gray-50 via-gray-50/80 to-transparent dark:from-gray-950 dark:via-gray-950/80 dark:to-transparent pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div

@@ -1,7 +1,13 @@
 // AI Chat API using Gemini 3.0 Pro Preview via Firebase AI Logic SDK
 import type { Message } from "@/types/chat";
 import { NextRequest, NextResponse } from "next/server";
-import { getAI, getGenerativeModel, GoogleAIBackend } from "firebase/ai";
+import {
+  getAI,
+  getGenerativeModel,
+  GoogleAIBackend,
+  HarmCategory,
+  HarmBlockThreshold,
+} from "firebase/ai";
 import firebaseApp from "@/lib/firebase";
 import { BusinessIntelligenceAnalyzer } from "@/lib/firebase-analytics";
 
@@ -12,7 +18,7 @@ export const runtime = "nodejs";
 // No API key needed - uses Firebase project authentication
 const ai = getAI(firebaseApp, { backend: new GoogleAIBackend() });
 
-console.log("✅ Gemini 3.0 Pro Preview initialized with Firebase AI Logic SDK");
+console.log("✅ Gemini 2.0 Flash initialized with Firebase AI Logic SDK");
 
 // Simple response cache for common queries (in-memory, cleared on restart)
 const responseCache = new Map<
@@ -789,303 +795,376 @@ async function callGeminiAPI(
   // Analyze complexity to determine model and token limits
   const complexity = analyzeQueryComplexity(message, conversationHistory);
 
-  // Use Gemini 3.0 Pro for all queries
-  const modelName = "gemini-3-pro-preview";
+  // Model priority: gemini-3-pro-preview has known empty response bug (Jan 2026)
+  // Using gemini-2.0-flash as primary (stable) with gemini-1.5-flash as fallback
+  // See: https://discuss.ai.google.dev/t/gemini-3-0-pro-preview-with-empty-response-text/109818
+  const primaryModel = "gemini-2.0-flash";
+  const fallbackModel = "gemini-1.5-flash";
 
-  // Always log which model is being used
-  console.log(`🤖 Calling ${modelName} via Firebase AI Logic...`);
-  console.log("🎯 Query complexity:", complexity);
-
-  const maxRetries = 2; // Increased retries for better reliability
+  const maxRetries = 2;
   let lastError: Error | null = null;
 
-  // We strictly use 3.0, so no model switching logic needed anymore
-  const useProModel = true;
+  // Try primary model first, then fallback if needed
+  const modelsToTry = [primaryModel, fallbackModel];
 
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    try {
-      // Optimized timeout: 3.0 might be slower or faster, let's give it 30s
-      const timeoutDuration = 30000;
+  for (const modelName of modelsToTry) {
+    console.log(`🤖 Trying ${modelName} via Firebase AI Logic...`);
+    console.log("🎯 Query complexity:", complexity);
 
-      console.log(
-        `🚀 Attempt ${attempt + 1}/${maxRetries + 1} - Calling ${modelName}...`,
-      );
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        // Optimized timeout: 3.0 might be slower or faster, let's give it 30s
+        const timeoutDuration = 30000;
 
-      // OPTIMIZATION: Only add dynamic context for new conversations
-      // For existing conversations, use base prompt to reduce processing time
-      const systemPromptText =
-        conversationHistory.length === 0
-          ? extractSystemPrompt(
-              conversationHistory,
-              messageCount,
-              complexity.userFrustrationLevel,
-            )
-          : TEACHING_SYSTEM_PROMPT; // Use base prompt for follow-ups (faster)
-
-      // Convert and validate history
-      let geminiHistory = convertHistoryToGemini(conversationHistory);
-
-      // Firebase SDK requires history to be empty OR contain complete user-model pairs
-      // If history has only one message (current user message), clear it - Firebase will handle it via sendMessage
-      if (geminiHistory.length === 1 && geminiHistory[0]?.role === "user") {
-        console.warn(
-          "⚠️ History contains only current user message - clearing for Firebase compatibility",
+        console.log(
+          `🚀 Attempt ${attempt + 1}/${maxRetries + 1} - Calling ${modelName}...`,
         );
-        geminiHistory = [];
-      }
 
-      // Ensure history is valid - Firebase requires first message to be from user
-      const firstHistoryMessage = geminiHistory[0];
-      if (firstHistoryMessage && firstHistoryMessage.role !== "user") {
-        console.warn(
-          "⚠️ Invalid history format - first message must be from user, clearing history",
-        );
-        geminiHistory = [];
-      }
+        // OPTIMIZATION: Only add dynamic context for new conversations
+        // For existing conversations, use base prompt to reduce processing time
+        const systemPromptText =
+          conversationHistory.length === 0
+            ? extractSystemPrompt(
+                conversationHistory,
+                messageCount,
+                complexity.userFrustrationLevel,
+              )
+            : TEACHING_SYSTEM_PROMPT; // Use base prompt for follow-ups (faster)
 
-      // Validate all history entries have valid parts - defensive check
-      // This is the critical fix: Firebase SDK crashes if ANY part has issues
-      geminiHistory = geminiHistory.filter((msg) => {
-        try {
-          // Check message structure
-          if (!msg || typeof msg !== "object") {
-            console.warn("⚠️ Invalid history entry (not an object), removing");
-            return false;
-          }
+        // Convert and validate history
+        let geminiHistory = convertHistoryToGemini(conversationHistory);
 
-          // Check parts array exists and is valid
-          if (
-            !msg.parts ||
-            !Array.isArray(msg.parts) ||
-            msg.parts.length === 0
-          ) {
-            console.warn(
-              "⚠️ Invalid history entry detected (no parts), removing:",
-              JSON.stringify(msg),
-            );
-            return false;
-          }
-
-          // CRITICAL FIX: Ensure ALL parts in the array are valid objects with text
-          // Firebase SDK crashes if any part is undefined, null, or malformed
-          const allPartsValid = msg.parts.every((part: any) => {
-            if (!part || typeof part !== "object") {
-              console.warn("⚠️ Found invalid part (not an object):", part);
-              return false;
-            }
-            if (!part.text || typeof part.text !== "string") {
-              console.warn("⚠️ Found invalid part (no text):", part);
-              return false;
-            }
-            if (!part.text.trim()) {
-              console.warn("⚠️ Found invalid part (empty text):", part);
-              return false;
-            }
-            return true;
-          });
-
-          if (!allPartsValid) {
-            console.warn(
-              "⚠️ Invalid history entry (invalid parts), removing:",
-              JSON.stringify(msg),
-            );
-            return false;
-          }
-
-          // Check role is valid
-          if (msg.role !== "user" && msg.role !== "model") {
-            console.warn(
-              "⚠️ Invalid history entry (invalid role), removing:",
-              msg.role,
-            );
-            return false;
-          }
-
-          return true;
-        } catch (error) {
-          console.warn("⚠️ Error validating history entry, removing:", error);
-          return false;
-        }
-      });
-
-      // Final safety check: Firebase SDK crashes if history format is wrong, so ensure it's valid
-      // History must be empty OR contain alternating user-model pairs starting with user
-      if (geminiHistory.length > 0) {
-        let isValidHistory = true;
-        for (let i = 0; i < geminiHistory.length; i++) {
-          const msg = geminiHistory[i];
-          if (!msg || !msg.parts || !Array.isArray(msg.parts)) {
-            isValidHistory = false;
-            break;
-          }
-          // Check if roles alternate correctly (user, model, user, model...)
-          if (i === 0 && msg.role !== "user") {
-            isValidHistory = false;
-            break;
-          }
-          if (i > 0) {
-            const prevRole = geminiHistory[i - 1]?.role;
-            if (prevRole === msg.role) {
-              isValidHistory = false;
-              break;
-            }
-          }
-        }
-        if (!isValidHistory) {
+        // Firebase SDK requires history to be empty OR contain complete user-model pairs
+        // If history has only one message (current user message), clear it - Firebase will handle it via sendMessage
+        if (geminiHistory.length === 1 && geminiHistory[0]?.role === "user") {
           console.warn(
-            "⚠️ History format invalid - clearing to prevent Firebase SDK crash",
-            "gemini-3.0-pro-preview",
+            "⚠️ History contains only current user message - clearing for Firebase compatibility",
           );
           geminiHistory = [];
         }
-      }
 
-      console.log("🔍 System prompt length:", systemPromptText.length);
-      console.log("🔍 History length:", geminiHistory.length);
-      const firstMsg = geminiHistory[0];
-      if (firstMsg) {
-        console.log("🔍 First history message role:", firstMsg.role);
-      }
+        // Ensure history is valid - Firebase requires first message to be from user
+        const firstHistoryMessage = geminiHistory[0];
+        if (firstHistoryMessage && firstHistoryMessage.role !== "user") {
+          console.warn(
+            "⚠️ Invalid history format - first message must be from user, clearing history",
+          );
+          geminiHistory = [];
+        }
 
-      // Get Gemini model with Firebase AI Logic SDK - ONLY 3.0 models
-      const model = getGenerativeModel(ai, {
-        model: modelName,
-      });
+        // Validate all history entries have valid parts - defensive check
+        // This is the critical fix: Firebase SDK crashes if ANY part has issues
+        geminiHistory = geminiHistory.filter((msg) => {
+          try {
+            // Check message structure
+            if (!msg || typeof msg !== "object") {
+              console.warn(
+                "⚠️ Invalid history entry (not an object), removing",
+              );
+              return false;
+            }
 
-      // Start chat with system instruction and history
-      const chat = model.startChat({
-        systemInstruction: {
-          role: "system",
-          parts: [{ text: systemPromptText }],
-        },
-        history: geminiHistory,
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: complexity.maxTokens,
-          topP: 0.95,
-        },
-      });
+            // Check parts array exists and is valid
+            if (
+              !msg.parts ||
+              !Array.isArray(msg.parts) ||
+              msg.parts.length === 0
+            ) {
+              console.warn(
+                "⚠️ Invalid history entry detected (no parts), removing:",
+                JSON.stringify(msg),
+              );
+              return false;
+            }
 
-      console.log("✅ Chat session created, sending message...");
+            // CRITICAL FIX: Ensure ALL parts in the array are valid objects with text
+            // Firebase SDK crashes if any part is undefined, null, or malformed
+            const allPartsValid = msg.parts.every((part: any) => {
+              if (!part || typeof part !== "object") {
+                console.warn("⚠️ Found invalid part (not an object):", part);
+                return false;
+              }
+              if (!part.text || typeof part.text !== "string") {
+                console.warn("⚠️ Found invalid part (no text):", part);
+                return false;
+              }
+              if (!part.text.trim()) {
+                console.warn("⚠️ Found invalid part (empty text):", part);
+                return false;
+              }
+              return true;
+            });
 
-      // Send message with timeout protection
-      const result = await Promise.race([
-        chat.sendMessage(message),
-        new Promise((_, reject) =>
-          setTimeout(
-            () => reject(new Error("Request timeout")),
-            timeoutDuration,
+            if (!allPartsValid) {
+              console.warn(
+                "⚠️ Invalid history entry (invalid parts), removing:",
+                JSON.stringify(msg),
+              );
+              return false;
+            }
+
+            // Check role is valid
+            if (msg.role !== "user" && msg.role !== "model") {
+              console.warn(
+                "⚠️ Invalid history entry (invalid role), removing:",
+                msg.role,
+              );
+              return false;
+            }
+
+            return true;
+          } catch (error) {
+            console.warn("⚠️ Error validating history entry, removing:", error);
+            return false;
+          }
+        });
+
+        // Final safety check: Firebase SDK crashes if history format is wrong, so ensure it's valid
+        // History must be empty OR contain alternating user-model pairs starting with user
+        if (geminiHistory.length > 0) {
+          let isValidHistory = true;
+          for (let i = 0; i < geminiHistory.length; i++) {
+            const msg = geminiHistory[i];
+            if (!msg || !msg.parts || !Array.isArray(msg.parts)) {
+              isValidHistory = false;
+              break;
+            }
+            // Check if roles alternate correctly (user, model, user, model...)
+            if (i === 0 && msg.role !== "user") {
+              isValidHistory = false;
+              break;
+            }
+            if (i > 0) {
+              const prevRole = geminiHistory[i - 1]?.role;
+              if (prevRole === msg.role) {
+                isValidHistory = false;
+                break;
+              }
+            }
+          }
+          if (!isValidHistory) {
+            console.warn(
+              "⚠️ History format invalid - clearing to prevent Firebase SDK crash",
+              "gemini-3.0-pro-preview",
+            );
+            geminiHistory = [];
+          }
+        }
+
+        console.log("🔍 System prompt length:", systemPromptText.length);
+        console.log("🔍 History length:", geminiHistory.length);
+        const firstMsg = geminiHistory[0];
+        if (firstMsg) {
+          console.log("🔍 First history message role:", firstMsg.role);
+        }
+
+        // Get Gemini model with Firebase AI Logic SDK - ONLY 3.0 models
+        // Include safety settings to prevent empty responses due to overly strict filtering
+        const model = getGenerativeModel(ai, {
+          model: modelName,
+          safetySettings: [
+            {
+              category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+              threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+            },
+            {
+              category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+              threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+            },
+            {
+              category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+              threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+            },
+            {
+              category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+              threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+            },
+          ],
+        });
+
+        // Start chat with system instruction and history
+        const chat = model.startChat({
+          systemInstruction: {
+            role: "system",
+            parts: [{ text: systemPromptText }],
+          },
+          history: geminiHistory,
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: complexity.maxTokens,
+            topP: 0.95,
+          },
+        });
+
+        console.log("✅ Chat session created, sending message...");
+
+        // Send message with timeout protection
+        const result = await Promise.race([
+          chat.sendMessage(message),
+          new Promise((_, reject) =>
+            setTimeout(
+              () => reject(new Error("Request timeout")),
+              timeoutDuration,
+            ),
           ),
-        ),
-      ]);
+        ]);
 
-      // CRITICAL FIX: Defensive handling for empty/malformed responses
-      // Firebase SDK crashes when response.candidates is undefined
-      const response = (result as any)?.response;
-      if (!response) {
-        console.error("🚨 No response object from Gemini API");
-        throw new Error("No response object from Gemini API");
-      }
+        // CRITICAL FIX: Defensive handling for empty/malformed responses
+        // Firebase SDK crashes when response.candidates is undefined
+        const response = (result as any)?.response;
+        if (!response) {
+          console.error("🚨 No response object from Gemini API");
+          console.error(
+            "🔍 Full result object:",
+            JSON.stringify(result, null, 2),
+          );
+          throw new Error("No response object from Gemini API");
+        }
 
-      // Check candidates exist before calling text()
-      const candidates = response.candidates;
+        // Log raw response for debugging
+        console.log("🔍 Raw Gemini response keys:", Object.keys(response));
 
-      if (
-        !candidates ||
-        !Array.isArray(candidates) ||
-        candidates.length === 0
-      ) {
+        // Check for prompt feedback (safety blocking)
+        const promptFeedback = response.promptFeedback;
+        if (promptFeedback) {
+          console.log(
+            "🔍 Prompt feedback:",
+            JSON.stringify(promptFeedback, null, 2),
+          );
+          if (promptFeedback.blockReason) {
+            console.error(
+              "🚨 Prompt blocked by safety filter:",
+              promptFeedback.blockReason,
+            );
+            throw new Error(`Prompt blocked: ${promptFeedback.blockReason}`);
+          }
+        }
+
+        // Check candidates exist before calling text()
+        const candidates = response.candidates;
+        console.log("🔍 Candidates count:", candidates?.length || 0);
+
+        if (
+          !candidates ||
+          !Array.isArray(candidates) ||
+          candidates.length === 0
+        ) {
+          console.error(
+            "🚨 No candidates in Gemini response - likely empty response",
+          );
+          console.error("🔍 Full response:", JSON.stringify(response, null, 2));
+          throw new Error("Empty response from Gemini API");
+        }
+
+        // Check first candidate has content
+        const firstCandidate = candidates[0];
+        console.log(
+          "🔍 First candidate finishReason:",
+          firstCandidate?.finishReason,
+        );
+
+        // Check for safety ratings that might indicate blocking
+        if (firstCandidate?.safetyRatings) {
+          console.log(
+            "🔍 Safety ratings:",
+            JSON.stringify(firstCandidate.safetyRatings, null, 2),
+          );
+        }
+
+        if (
+          !firstCandidate?.content?.parts ||
+          firstCandidate.content.parts.length === 0
+        ) {
+          console.error("🚨 No content parts in Gemini response");
+          console.error(
+            "🔍 First candidate:",
+            JSON.stringify(firstCandidate, null, 2),
+          );
+          throw new Error("No content in Gemini API response");
+        }
+
+        // Now safe to call text()
+        let content: string;
+        try {
+          content = response.text();
+        } catch (textError) {
+          console.error("🚨 Error extracting text from response:", textError);
+          // Fallback: manually extract text from parts
+          content = firstCandidate.content.parts
+            .filter((part: any) => part?.text)
+            .map((part: any) => part.text)
+            .join("");
+        }
+
+        if (!content?.trim()) {
+          console.error("🚨 No content received from Gemini API");
+          throw new Error("No content received from Gemini API");
+        }
+
+        const trimmedContent = content.trim();
+
+        // Validate minimum response length (50 characters as per system prompt)
+        if (trimmedContent.length < 50) {
+          console.warn(
+            `⚠️ Response too short (${trimmedContent.length} chars), minimum is 50. Response: "${trimmedContent}"`,
+          );
+          // For very short responses, we might want to retry, but let's just accept it for now to avoid loops
+          // unless it's REALLY short
+          if (trimmedContent.length < 10 && attempt < maxRetries) {
+            console.log("🔄 Response too short (<10 chars), retrying");
+            throw new Error("Response too short");
+          }
+        }
+
+        console.log(
+          `✅ ${modelName} response:`,
+          trimmedContent.length,
+          "characters",
+        );
+
+        // Cache response for simple queries (only cache when no conversation history)
+        if (conversationHistory.length === 0 && sessionId) {
+          setCachedResponse(message, sessionId, trimmedContent);
+        }
+
+        return trimmedContent;
+      } catch (error) {
+        lastError = error as Error;
         console.error(
-          "🚨 No candidates in Gemini response - likely empty response",
+          `🚨 Gemini API attempt ${attempt + 1} with ${modelName} failed:`,
+          error,
         );
-        throw new Error("Empty response from Gemini API");
-      }
 
-      // Check first candidate has content
-      const firstCandidate = candidates[0];
-      if (
-        !firstCandidate?.content?.parts ||
-        firstCandidate.content.parts.length === 0
-      ) {
-        console.error("🚨 No content parts in Gemini response");
-        throw new Error("No content in Gemini API response");
-      }
+        // Don't retry on authentication errors
+        if (
+          error instanceof Error &&
+          (error.message.includes("401") ||
+            error.message.includes("403") ||
+            error.message.includes("API_KEY") ||
+            error.message.includes("permission"))
+        ) {
+          console.error(
+            "🔐 Authentication error - check Firebase AI configuration",
+          );
+          throw error;
+        }
 
-      // Now safe to call text()
-      let content: string;
-      try {
-        content = response.text();
-      } catch (textError) {
-        console.error("🚨 Error extracting text from response:", textError);
-        // Fallback: manually extract text from parts
-        content = firstCandidate.content.parts
-          .filter((part: any) => part?.text)
-          .map((part: any) => part.text)
-          .join("");
-      }
-
-      if (!content?.trim()) {
-        console.error("🚨 No content received from Gemini API");
-        throw new Error("No content received from Gemini API");
-      }
-
-      const trimmedContent = content.trim();
-
-      // Validate minimum response length (50 characters as per system prompt)
-      if (trimmedContent.length < 50) {
-        console.warn(
-          `⚠️ Response too short (${trimmedContent.length} chars), minimum is 50. Response: "${trimmedContent}"`,
-        );
-        // For very short responses, we might want to retry, but let's just accept it for now to avoid loops
-        // unless it's REALLY short
-        if (trimmedContent.length < 10 && attempt < maxRetries) {
-          console.log("🔄 Response too short (<10 chars), retrying");
-          throw new Error("Response too short");
+        // Add exponential backoff delay before retry
+        if (attempt < maxRetries) {
+          const delay = 1000 * Math.pow(2, attempt);
+          console.log(`⏱️ Waiting ${delay}ms before retry...`);
+          await new Promise((resolve) => setTimeout(resolve, delay));
         }
       }
-
-      console.log(
-        `✅ ${modelName} response:`,
-        trimmedContent.length,
-        "characters",
-      );
-
-      // Cache response for simple queries (only cache when no conversation history)
-      if (conversationHistory.length === 0 && sessionId) {
-        setCachedResponse(message, sessionId, trimmedContent);
-      }
-
-      return trimmedContent;
-    } catch (error) {
-      lastError = error as Error;
-      console.error(`🚨 Gemini API attempt ${attempt + 1} failed:`, error);
-
-      // Don't retry on authentication errors
-      if (
-        error instanceof Error &&
-        (error.message.includes("401") ||
-          error.message.includes("403") ||
-          error.message.includes("API_KEY") ||
-          error.message.includes("permission"))
-      ) {
-        console.error(
-          "🔐 Authentication error - check Firebase AI configuration",
-        );
-        throw error;
-      }
-
-      // Add exponential backoff delay before retry
-      if (attempt < maxRetries) {
-        const delay = 1000 * Math.pow(2, attempt);
-        console.log(`⏱️ Waiting ${delay}ms before retry...`);
-        await new Promise((resolve) => setTimeout(resolve, delay));
-      }
     }
+
+    // If this model failed all retries, log and try the next model
+    console.log(`🔄 ${modelName} failed all attempts, trying next model...`);
   }
 
-  // If all retries failed, throw the last error
-  console.error("🚨 All Gemini API attempts failed");
-  throw lastError || new Error("Gemini API failed after retries");
+  // If all models and retries failed, throw the last error
+  console.error("🚨 All Gemini models and attempts failed");
+  throw lastError || new Error("Gemini API failed after all retries");
 }
 
 export async function POST(request: NextRequest) {

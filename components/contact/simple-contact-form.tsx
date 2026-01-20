@@ -29,8 +29,8 @@ interface EnhancedContactFormData extends ContactFormData {
 
 const WHAT_BRINGS_YOU_OPTIONS = [
   "I know what I want to automate",
-  "I need help identifying opportunities",
-  "Just exploring AI possibilities",
+  "Help me find opportunities",
+  "Just exploring AI",
 ];
 
 const FIELD_CONFIGS = {
@@ -40,14 +40,14 @@ const FIELD_CONFIGS = {
       "Describe your automation idea, workflow challenges, or AI integration needs...",
     helperText: "The more specific, the better we can help",
   },
-  "I need help identifying opportunities": {
+  "Help me find opportunities": {
     label: "Current situation",
     placeholder:
       "Tell us about your work, daily tasks, or processes that take too much time...",
     helperText:
       "We'll analyze your workflow and suggest automation opportunities",
   },
-  "Just exploring AI possibilities": {
+  "Just exploring AI": {
     label: "Areas of interest",
     placeholder:
       "What aspects of AI interest you? Research, automation, development, or something else?",
@@ -167,9 +167,9 @@ export function SimpleContactForm() {
     switch (option) {
       case "I know what I want to automate":
         return <Target className="h-4 w-4 text-blue-400" />;
-      case "I need help identifying opportunities":
+      case "Help me find opportunities":
         return <Activity className="h-4 w-4 text-blue-400" />;
-      case "Just exploring AI possibilities":
+      case "Just exploring AI":
         return <Lightbulb className="h-4 w-4 text-blue-400" />;
       default:
         return null;
@@ -338,7 +338,7 @@ export function SimpleContactForm() {
           <motion.form
             variants={itemVariants}
             onSubmit={handleSubmit}
-            className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-8 md:p-12 hover:bg-gray-900/[0.04] dark:hover:bg-white/[0.04] transition-all duration-300"
+            className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-6 md:p-12 hover:bg-gray-900/[0.04] dark:hover:bg-white/[0.04] transition-all duration-300"
           >
             {/* Error Messages */}
             <AnimatePresence>
@@ -432,14 +432,14 @@ export function SimpleContactForm() {
                         // Reset challenge description when switching options
                         updateFormData("challengeDescription", "");
                       }}
-                      className="w-full px-4 py-4 bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 appearance-none min-h-[48px] touch-manipulation"
+                      className="w-full px-4 py-4 bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 appearance-none min-h-[48px] touch-manipulation text-sm md:text-base pr-10"
                       required
                     >
                       <option
                         value=""
                         className="bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-300"
                       >
-                        Choose what describes you best...
+                        What describes you best...
                       </option>
                       {WHAT_BRINGS_YOU_OPTIONS.map((option) => (
                         <option
