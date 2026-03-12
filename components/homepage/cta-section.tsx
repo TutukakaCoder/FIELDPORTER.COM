@@ -64,16 +64,16 @@ export function CTASection() {
           <div className="relative z-10 space-y-8 md:space-y-10">
             {/* Headline */}
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-light text-gray-900 dark:text-white leading-tight tracking-[-0.02em]">
-              Let&apos;s{" "}
+              Get a{" "}
               <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                Explore Your Options
+                Clear Plan for Your Next Step
               </span>
             </h2>
 
             {/* Description */}
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed font-light">
-              Discuss your specific challenge and create a practical plan
-              focused on measurable outcomes and realistic timelines.
+              One call to scope your challenge, agree on outcomes, and decide if
+              we’re a fit.
             </p>
 
             {/* CTA Buttons */}
@@ -101,7 +101,7 @@ export function CTASection() {
 
                 <div className="relative z-10 flex items-center justify-center space-x-2">
                   <MessageSquare className="w-5 h-5" />
-                  <span className="text-base md:text-lg">Contact Us</span>
+                  <span className="text-base md:text-lg">Book a Call</span>
                   <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
                 </div>
               </motion.button>
@@ -128,7 +128,7 @@ export function CTASection() {
                 <div className="absolute -inset-1 rounded-xl bg-purple-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
 
                 <div className="relative z-10 flex items-center justify-center space-x-2">
-                  <span className="text-base md:text-lg">View Our Work</span>
+                  <span className="text-base md:text-lg">See Our Work</span>
                   <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
                 </div>
               </motion.button>

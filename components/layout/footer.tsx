@@ -14,8 +14,8 @@ interface FooterProps {
 const services = [
   { label: "Strategic Intelligence", href: "/services#strategic-research" },
   { label: "Rapid Development", href: "/services#rapid-development" },
-  { label: "Workflow Optimization", href: "/services#workflow-optimization" },
-  { label: "AI Training", href: "/services#ai-training" },
+  { label: "Workflow Optimisation", href: "/services#workflow-optimisation" },
+  { label: "AI Strategy & Training", href: "/services#ai-strategy" },
 ];
 
 const company = [

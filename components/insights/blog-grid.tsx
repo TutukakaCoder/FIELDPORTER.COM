@@ -74,7 +74,7 @@ export function BlogGrid() {
   };
 
   return (
-    <section id="blog-grid" className="py-20 lg:py-28 relative">
+    <section id="latest-insights" className="py-20 lg:py-28 relative">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-bg-fieldporter-secondary to-bg-fieldporter-primary" />
 
@@ -235,7 +235,7 @@ export function BlogGrid() {
           </div>
         </div>
 
-        {/* Load More / Coming Soon */}
+        {/* Newsletter CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -248,11 +248,11 @@ export function BlogGrid() {
             whileHover={{ y: -4, scale: 1.01 }}
           >
             <h3 className="text-heading-lg font-semibold text-fieldporter-white mb-4">
-              More Insights Coming Soon
+              Get New Articles in Your Inbox
             </h3>
             <p className="text-body-md text-fieldporter-gray mb-6">
-              We&apos;re constantly sharing new insights from our AI
-              implementations and business building experiences.
+              We publish insights from our AI implementations and business
+              building. Subscribe to be notified of new articles.
             </p>
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button

@@ -181,7 +181,7 @@ const AnimatedCTA = memo(() => {
         `}
       >
         <span className="flex items-center gap-2">
-          <span>Start Building</span>
+          <span>Book a Call</span>
           <ArrowRight className="w-4 h-4" />
         </span>
       </Link>
@@ -248,10 +248,8 @@ export function HeroSection() {
               variants={textReveal}
               className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-normal leading-relaxed"
             >
-              Master the tools. Automate the workflows.{" "}
-              <span className="text-gray-900 dark:text-white font-medium">
-                Protect your margins.
-              </span>
+              AI integration and automation for clearer decisions, faster
+              delivery, and stronger margins.
             </motion.p>
           </div>
 

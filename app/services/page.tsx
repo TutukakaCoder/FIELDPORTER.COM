@@ -27,7 +27,7 @@ const heroData = {
   description:
     "We combine systematic research methodology with hands-on development. Building agents, knowledge bases and preparing business professionals with the modern tools to compete.",
   stats: [],
-  ctaText: "Schedule Strategy Discussion",
+  ctaText: "Book a Call",
   ctaHref: "/contact",
 };
 

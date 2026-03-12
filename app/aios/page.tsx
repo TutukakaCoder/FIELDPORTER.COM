@@ -46,7 +46,7 @@ const steps = [
     icon: ShieldCheck,
     title: "1. Secure Collection",
     description:
-      "We gather detailed data through our secure portal to get a complete picture of your current operations.",
+      "We gather detailed data about your operations to get a complete picture of your current setup.",
     iconBg: "bg-blue-100 dark:bg-blue-900/30",
     iconColor: "text-blue-600 dark:text-blue-400",
   },

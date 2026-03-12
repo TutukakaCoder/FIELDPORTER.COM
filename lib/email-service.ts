@@ -180,22 +180,20 @@ class EmailService {
               <div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 12px; padding: 24px; margin-bottom: 32px; border-left: 4px solid #0969da;">
                 <h3 style="margin: 0 0 16px 0; color: #1e293b; font-size: 20px;">What's Next?</h3>
                 <ul style="margin: 0; padding-left: 20px; color: #475569; font-size: 16px; line-height: 1.6;">
-                  <li style="margin-bottom: 8px;">We're currently setting up your personalized client portal</li>
-                  <li style="margin-bottom: 8px;">You'll receive an email notification once it's ready</li>
-                  <li style="margin-bottom: 8px;">Your portal will include project details, documents, and secure communication</li>
-                  <li>Our AI assistant is available 24/7 for immediate support</li>
+                  <li style="margin-bottom: 8px;">We'll review your message and get back to you within 1-2 business days</li>
+                  <li style="margin-bottom: 8px;">If we're a good fit, we'll schedule a call to discuss your project</li>
+                  <li>Our AI assistant is available on the website 24/7 for quick questions</li>
                 </ul>
               </div>
 
-              <!-- Portal Access -->
               <div style="background: #0969da; border-radius: 8px; padding: 24px; text-align: center; margin-bottom: 24px;">
-                <h3 style="color: white; margin: 0 0 12px 0; font-size: 18px;">Access Your Portal</h3>
+                <h3 style="color: white; margin: 0 0 12px 0; font-size: 18px;">Need to reach us?</h3>
                 <p style="color: rgba(255,255,255,0.9); margin: 0 0 20px 0; font-size: 14px;">
-                  Sign in anytime to check the status of your portal setup
+                  Reply to this email or book a call anytime.
                 </p>
                 <a href="https://fieldporter.com/contact" 
                    style="display: inline-block; background: white; color: #0969da; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px;">
-                  Sign In to Portal
+                  Book a Call
                 </a>
               </div>
 
@@ -248,14 +246,11 @@ Welcome to FIELDPORTER, ${data.displayName}!
 Thank you for joining FIELDPORTER. We're excited to have you as part of our premium client community.
 
 What's Next?
-- We're currently setting up your personalized client portal
-- You'll receive an email notification once it's ready
-- Your portal will include project details, documents, and secure communication
-- Our AI assistant is available 24/7 for immediate support
+- We'll review your message and get back to you within 1-2 business days
+- If we're a good fit, we'll schedule a call to discuss your project
+- Our AI assistant is available on the website 24/7 for quick questions
 
-Access Your Portal:
-Sign in anytime to check the status of your portal setup
-https://fieldporter.com/contact
+Book a call: https://fieldporter.com/contact
 
 Need Assistance?
 Email Support: freddy@fieldporter.com

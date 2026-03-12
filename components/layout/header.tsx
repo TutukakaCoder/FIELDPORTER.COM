@@ -122,7 +122,7 @@ export function Header({ className }: HeaderProps) {
                 href="/contact"
                 className="group flex items-center gap-2 px-6 py-2.5 text-sm font-medium text-gray-900 dark:text-white bg-gradient-to-r from-[#0969DA]/30 to-[#1E40AF]/30 hover:from-[#0969DA]/50 hover:to-[#1E40AF]/50 backdrop-blur-sm rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30 border border-blue-500/20"
               >
-                Client Portal
+                Book a Call
                 <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </OptimizedLink>
             </div>
@@ -218,7 +218,7 @@ export function Header({ className }: HeaderProps) {
                     href="/contact"
                     className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-medium text-gray-900 dark:text-white bg-gradient-to-r from-[#0969DA]/30 to-[#1E40AF]/30 hover:from-[#0969DA]/50 hover:to-[#1E40AF]/50 backdrop-blur-sm rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/20"
                   >
-                    Client Portal
+                    Book a Call
                     <ArrowRight className="w-4 h-4" />
                   </OptimizedLink>
                 </motion.div>

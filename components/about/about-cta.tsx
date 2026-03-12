@@ -23,14 +23,14 @@ export function AboutCTA() {
           <div className="relative z-10 space-y-8">
             <div className="space-y-6">
               <h2 className="text-3xl md:text-4xl font-light text-gray-900 dark:text-white leading-tight">
-                We&apos;re in{" "}
+                Ready to{" "}
                 <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  Transition
+                  Work Together
                 </span>
               </h2>
               <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed max-w-2xl mx-auto">
-                While we still take on select consulting projects, our focus is
-                shifting to building products that solve real problems.
+                We combine strategic research, rapid AI development, and
+                workflow automation. Book a call to discuss your project.
               </p>
             </div>
 

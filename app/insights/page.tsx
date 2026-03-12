@@ -1,25 +1,27 @@
-import { InsightsComingSoon } from "@/components/insights";
+import {
+  BlogGrid,
+  InsightsHero,
+  NewsletterSignup,
+} from "@/components/insights";
 import { PageWrapper } from "@/components/layout";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "AI Strategy Insights - Coming Soon | FIELDPORTER",
+  title: "Insights | FIELDPORTER",
   description:
-    "Advanced AI strategy insights and business intelligence platform coming soon. Join our newsletter for early access to cutting-edge research, implementation frameworks, and strategic intelligence.",
+    "AI strategy, business automation, and implementation insights from FIELDPORTER. Practical frameworks and thought leadership for AI adoption.",
   keywords: [
-    "AI strategy insights coming soon",
-    "business intelligence platform",
-    "strategic research early access",
-    "AI implementation frameworks",
-    "technology consulting insights",
-    "AI thought leadership",
-    "early access newsletter",
+    "AI strategy insights",
+    "business automation",
+    "AI implementation",
+    "strategic research",
+    "workflow automation",
   ],
   openGraph: {
-    title: "AI Strategy Insights - Coming Soon | FIELDPORTER",
+    title: "Insights | FIELDPORTER",
     description:
-      "Advanced AI strategy insights platform in development. Join our newsletter for early access to strategic research and implementation frameworks.",
+      "AI strategy and implementation insights from FIELDPORTER. Practical frameworks for AI adoption.",
     type: "website",
     url: "https://fieldporter.com/insights",
     images: [
@@ -27,17 +29,12 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "FIELDPORTER - AI Strategy Insights Coming Soon",
+        alt: "FIELDPORTER Insights",
       },
     ],
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  alternates: {
-    canonical: "https://fieldporter.com/insights",
-  },
+  robots: { index: true, follow: true },
+  alternates: { canonical: "https://fieldporter.com/insights" },
 };
 
 export default function InsightsPage() {
@@ -50,7 +47,9 @@ export default function InsightsPage() {
           </div>
         }
       >
-        <InsightsComingSoon />
+        <InsightsHero />
+        <BlogGrid />
+        <NewsletterSignup />
       </Suspense>
     </PageWrapper>
   );
