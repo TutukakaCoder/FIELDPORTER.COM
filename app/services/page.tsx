@@ -15,6 +15,11 @@ import React, { useEffect, useState } from "react";
 
 import { PageWrapper } from "@/components/layout";
 import {
+  BRAND,
+  CORE_OFFER_HIERARCHY,
+  PRIMARY_AUDIENCE,
+} from "@/config/constants";
+import {
   FAQSection,
   type FAQSectionProps,
 } from "@/components/services/faq-section";
@@ -22,10 +27,10 @@ import { MethodologySection } from "@/components/services/methodology-section";
 import { ServiceHero } from "@/components/services/service-hero";
 
 const heroData = {
-  title: "Strategic Research & AI Implementation",
-  subtitle: "Practical AI guidance for small and medium businesses",
+  title: CORE_OFFER_HIERARCHY.primary,
+  subtitle: `For ${PRIMARY_AUDIENCE.short}`,
   description:
-    "We combine systematic research methodology with hands-on development. Building agents, knowledge bases and preparing business professionals with the modern tools to compete.",
+    "We build and deploy production-ready AI and automation so you de-risk investment and reclaim high-value time. Strategic research supports the decisions; implementation delivers the results.",
   stats: [],
   ctaText: "Book a Call",
   ctaHref: "/contact",
@@ -38,14 +43,14 @@ const services = [
     icon: TrendingUp,
     title: "Strategic Research & Intelligence",
     description:
-      "De-risk your next major decision with comprehensive intelligence for strategic clarity.",
+      "For founders and operators deciding where to invest: a written brief with clear recommendations, risk levels, and next steps in 3–5 days.",
     detailedExplanation:
-      "We provide the comprehensive intelligence and market validation you need to commit capital with confidence. Our process combines AI models like Claude and Perplexity with expert analysis to answer critical questions like 'Is this market viable? What are the hidden risks?' in days, not weeks. From market entry analysis to competitor intelligence, we deliver decision-ready insights that prevent costly missteps.",
+      "Best for: leadership about to commit capital to a new market, product, or partnership and who need a fast, evidence-based view before committing. We deliver: a single strategic brief (PDF or Notion) with validated answers to your key question (e.g. market viability, competitor moves, hidden risks), confidence levels, and concrete next steps. At the end you get the document, a short walkthrough, and optional follow-up for one round of questions.",
     outcomes: [
-      "Strategic clarity on viability and risk before you deploy significant resources",
-      "Comprehensive validation preventing costly mistakes and missed opportunities",
-      "Multi-source analysis eliminating blind spots that could derail major investments",
-      "Decision-ready documentation with clear recommendations and confidence levels",
+      "One decision-ready brief with recommendations and confidence levels",
+      "Answers to your specific question in 3–5 days, not weeks",
+      "Clear next steps so you can act or kill the idea with evidence",
+      "Handoff call plus one round of follow-up questions included",
     ],
     investment: "$500-$3,000",
     timeline: "3-5 days",
@@ -54,7 +59,7 @@ const services = [
     hoverBorderColor: "hover:border-emerald-500/25",
     iconColor: "text-emerald-400",
     proof:
-      "From 6-week market analysis to 3-day strategic brief with 40+ actionable insights.",
+      "Strategic research: 6-week market analysis condensed into a 3-day brief with 40+ actionable insights and clear go/no-go recommendation.",
   },
   {
     id: "rapid-development",
@@ -62,14 +67,14 @@ const services = [
     icon: Code,
     title: "Rapid AI Development & Integration",
     description:
-      "Validate your vision with production-ready systems in weeks, not months.",
+      "For teams with a defined use case: a working AI system, integration docs, and handover in 1–3 weeks so you can scale or hand to your devs.",
     detailedExplanation:
-      "We build fully automated AI applications that prove technical feasibility and user value—eliminating guesswork before major investment. Our focus is validating your concept works for your specific use case in 1-3 weeks, then providing complete documentation for scaling. From intelligent chat systems to workflow automation, we deliver production-ready systems that demonstrate tangible value to stakeholders and investors.",
+      "Best for: operators or product leads who have a specific AI use case (e.g. internal chatbot, document processing, workflow automation) and need a working proof that can go to production. We deliver: a built and tested system, source code, API or integration documentation, and a handover session. At the end you own the code and can run it yourself or pass it to your developers; we do not lock you into ongoing dev retainers.",
     outcomes: [
-      "Production-ready AI systems proving concept viability within 1-3 weeks",
-      "Technical validation eliminating risk before major development commitments",
-      "Working applications demonstrating tangible value to stakeholders and investors",
-      "Complete documentation enabling immediate scaling with your existing team",
+      "Working AI system delivered in 1–3 weeks, ready to run or extend",
+      "Source code, integration docs, and one handover session",
+      "You keep full ownership; no mandatory ongoing engagement",
+      "Option to scale in-house or with your existing dev team",
     ],
     investment: "$3,000-$8,000",
     timeline: "1-3 weeks",
@@ -78,22 +83,22 @@ const services = [
     hoverBorderColor: "hover:border-blue-500/25",
     iconColor: "text-blue-400",
     proof:
-      "From manual 15-hour process to 4-hour automated workflow through production system validation.",
+      "Rapid development: manual 15-hour weekly process replaced by a 4-hour automated workflow with production-ready system and handover docs.",
   },
   {
-    id: "workflow-optimisation",
+    id: "workflow-optimization",
     phase: "03",
     icon: Building2,
-    title: "Process Efficiency & Workflow Optimisation",
+    title: "Process Efficiency & Workflow Optimization",
     description:
-      "Reclaim 10+ hours of high-value time weekly for strategic work and growth.",
+      "For teams drowning in repeatable tasks: we identify and automate high-impact workflows and hand you a runnable system plus documentation.",
     detailedExplanation:
-      "We automate the repetitive tasks that drain your focus, freeing your team to solve strategic problems, serve clients, and maintain work-life balance. Our approach analyzes your workflows to identify automation opportunities, then builds solutions that integrate seamlessly with your existing tools. From lead generation to reporting automation, we eliminate operational drag so your best people can drive growth instead of managing spreadsheets.",
+      "Best for: small teams or operators where the same manual process (e.g. lead triage, reporting, data entry) eats 10+ hours a week. We deliver: a scoped automation plan, the built automation (integrated with your tools where possible), runbooks, and a handover so your team can maintain it. At the end you have a live system, docs, and optional short support window—no long-term dependency.",
     outcomes: [
-      "Your team regains strategic focus instead of managing manual processes",
-      "Automated systems reducing repetitive work by 60-80% in targeted areas",
-      "High-performers spend time on business growth, not operational drag",
-      "Integration with existing tools for minimal disruption and maximum impact",
+      "Scoped automation plan plus built solution for agreed workflows",
+      "Integration with your existing tools and clear runbooks",
+      "Handover and optional support window; you run it after that",
+      "Focus on one or two high-impact flows, not everything at once",
     ],
     investment: "$2,000-$5,000",
     timeline: "2-4 weeks",
@@ -102,7 +107,7 @@ const services = [
     hoverBorderColor: "hover:border-purple-500/25",
     iconColor: "text-purple-400",
     proof:
-      "Client saved 15+ hours weekly through strategic workflow optimisation.",
+      "Workflow optimization: recurring manual process (15+ hrs/week) automated and handed over with runbooks; team runs it in-house.",
   },
   {
     id: "ai-strategy",
@@ -110,14 +115,14 @@ const services = [
     icon: BookOpen,
     title: "AI Strategy & Team Capability Building",
     description:
-      "Future-proof your team's competitive edge with systematic AI capability building.",
+      "For leaders who want their team using AI safely and effectively: assessment, tailored training, and a short roadmap—no long-term consulting lock-in.",
     detailedExplanation:
-      "We build your organization's AI advantage through practical, systematic training that ensures your business remains competitive. Beyond tools and tactics, we help you develop strategic AI adoption that aligns with business objectives. This includes capability assessment, tool optimization for your workflows, hands-on training sessions, and ongoing guidance. We focus on building internal AI capability that reduces dependency on external consultants.",
+      "Best for: founders or ops leads who want to raise team AI literacy and align tool use with business goals without hiring a permanent AI team. We deliver: a lightweight capability assessment, tailored training sessions (tools and workflows that fit your context), and a short roadmap. At the end you get the assessment summary, training materials, and optional follow-up sessions—we build your internal capability, not ongoing dependency.",
     outcomes: [
-      "Your team develops irreplaceable AI capability, not dependency on consultants",
-      "Practical skills driving efficiency and innovation in your specific industry",
-      "Strategic advantage over competitors still treating AI as experimental",
-      "Internal capability building through custom training and ongoing support",
+      "Capability assessment summary and a short, actionable roadmap",
+      "Tailored training sessions for your team and tools",
+      "Materials and guidance so you can iterate without us",
+      "Optional follow-up sessions; no required retainer",
     ],
     investment: "$75-$150 per hour",
     timeline: "Custom sessions",
@@ -126,7 +131,7 @@ const services = [
     hoverBorderColor: "hover:border-orange-500/25",
     iconColor: "text-orange-400",
     proof:
-      "Organisations report 3-5x improvement in AI tool effectiveness after strategic guidance.",
+      "AI strategy: team capability assessment plus tailored training; follow-up showed 3–5x improvement in effective use of existing AI tools.",
   },
 ];
 
@@ -216,7 +221,7 @@ const methodologyData = {
 const faqData: FAQSectionProps = {
   title: "Common Questions",
   subtitle:
-    "Understanding how we work with small and medium businesses on AI implementation.",
+    "Understanding how we work with founder-led and operator-led businesses on AI implementation.",
   faqs: [
     {
       question:
@@ -326,37 +331,15 @@ function InteractiveServiceShowcase() {
           </p>
         </div>
 
-        <motion.div
-          className="flex justify-center gap-2 md:gap-3 lg:gap-6 mb-16 md:mb-20 lg:mb-32 flex-wrap px-4"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-            },
-          }}
-        >
+        <div className="flex justify-center gap-2 md:gap-3 lg:gap-6 mb-16 md:mb-20 lg:mb-32 flex-wrap px-4">
           {services.map((service, index) => {
             const ServiceIcon = service.icon;
             return (
-              <motion.button
+              <button
                 key={service.id}
                 onClick={() => setActiveService(index)}
-                variants={{
-                  hidden: { opacity: 0, y: 20, scale: 0.95 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    transition: { duration: 0.4 },
-                  },
-                }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
                 className={`
-                  px-3 md:px-4 lg:px-8 py-2 md:py-3 lg:py-4 rounded-xl md:rounded-2xl transition-all duration-500 backdrop-blur-xl border font-medium text-xs md:text-sm lg:text-lg will-change-transform touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black
+                  min-h-[44px] px-4 md:px-4 lg:px-8 py-3 md:py-3 lg:py-4 rounded-xl md:rounded-2xl transition-colors duration-200 backdrop-blur-xl border font-medium text-xs md:text-sm lg:text-lg touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black
                   ${
                     activeService === index
                       ? "bg-blue-500/20 border-blue-500/40 text-gray-900 dark:text-white shadow-[0_0_30px_rgba(59,130,246,0.3)]"
@@ -376,18 +359,18 @@ function InteractiveServiceShowcase() {
                     {service.title.split(" ")[0]}
                   </span>
                 </span>
-              </motion.button>
+              </button>
             );
           })}
-        </motion.div>
+        </div>
 
         <AnimatePresence mode="wait">
           <motion.div
             key={activeService}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
             className="relative"
           >
             <div className="grid lg:grid-cols-2 gap-8 md:gap-16 lg:gap-24 xl:gap-32 items-start lg:items-center">
@@ -430,18 +413,15 @@ function InteractiveServiceShowcase() {
                         </h4>
                         <ul className="space-y-2 md:space-y-3">
                           {currentService.outcomes.map((outcome, index) => (
-                            <motion.li
+                            <li
                               key={index}
-                              initial={{ opacity: 0, x: -10 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ duration: 0.3, delay: index * 0.1 }}
                               className="flex items-start space-x-3 md:space-x-4 text-base md:text-lg text-gray-800 dark:text-gray-100"
                             >
                               <CheckCircle
                                 className={`w-5 h-5 md:w-6 md:h-6 ${currentService.iconColor} flex-shrink-0 mt-0.5 md:mt-1`}
                               />
                               <span>{outcome}</span>
-                            </motion.li>
+                            </li>
                           ))}
                         </ul>
                       </div>
@@ -469,10 +449,9 @@ function InteractiveServiceShowcase() {
                 <div
                   className={`
                   relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border ${currentService.borderColor} 
-                  rounded-3xl p-8 md:p-12 lg:p-16 xl:p-20 transition-all duration-500
+                  rounded-3xl p-8 md:p-12 lg:p-16 xl:p-20 transition-colors duration-200
                   hover:bg-gray-900/[0.04] dark:hover:bg-white/[0.04] ${currentService.hoverBorderColor}
-                  shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_60px_rgba(59,130,246,0.15)]
-                  hover:-translate-y-2 group/card
+                  shadow-[0_20px_40px_rgba(0,0,0,0.3)]
                 `}
                 >
                   <div
@@ -482,14 +461,14 @@ function InteractiveServiceShowcase() {
                   </div>
 
                   <div
-                    className={`w-16 h-16 md:w-24 md:h-24 rounded-2xl bg-gray-900/5 dark:bg-white/5 border ${currentService.borderColor} flex items-center justify-center mb-6 md:mb-8 backdrop-blur-sm transition-all duration-500 group-hover/card:scale-110 group-hover/card:rotate-3`}
+                    className={`w-16 h-16 md:w-24 md:h-24 rounded-2xl bg-gray-900/5 dark:bg-white/5 border ${currentService.borderColor} flex items-center justify-center mb-6 md:mb-8 backdrop-blur-sm`}
                   >
                     {React.createElement(currentService.icon, {
                       className: `w-8 h-8 md:w-12 md:h-12 ${currentService.iconColor} transition-transform duration-500 group-hover/card:scale-110`,
                     })}
                   </div>
 
-                  <blockquote className="text-lg md:text-xl text-gray-600 dark:text-gray-300 italic leading-relaxed border-l-4 border-blue-500/30 pl-4 md:pl-6 transition-colors duration-500 group-hover/card:text-gray-800 dark:group-hover/card:text-gray-200 group-hover/card:border-blue-500/50">
+                  <blockquote className="text-lg md:text-xl text-gray-600 dark:text-gray-300 italic leading-relaxed border-l-4 border-blue-500/30 pl-4 md:pl-6">
                     &ldquo;{currentService.proof}&rdquo;
                   </blockquote>
                 </div>
@@ -497,32 +476,30 @@ function InteractiveServiceShowcase() {
             </div>
 
             <div className="flex justify-center gap-4 md:gap-6 mt-16">
-              <motion.button
+              <button
+                type="button"
                 onClick={() =>
                   setActiveService(
                     activeService > 0 ? activeService - 1 : services.length - 1,
                   )
                 }
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-3 md:p-4 rounded-full bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 hover:bg-gray-900/10 dark:hover:bg-white/10 hover:border-gray-900/20 dark:hover:border-white/20 transition-all duration-300 backdrop-blur-xl touch-manipulation group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black"
+                className="p-3 md:p-4 rounded-full bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 hover:bg-gray-900/10 dark:hover:bg-white/10 hover:border-gray-900/20 dark:hover:border-white/20 transition-colors duration-200 backdrop-blur-xl touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black"
                 aria-label="Previous service"
               >
-                <ArrowLeft className="w-5 h-5 md:w-6 md:h-6 text-gray-900 dark:text-white group-hover:-translate-x-0.5 transition-transform duration-200" />
-              </motion.button>
-              <motion.button
+                <ArrowLeft className="w-5 h-5 md:w-6 md:h-6 text-gray-900 dark:text-white" />
+              </button>
+              <button
+                type="button"
                 onClick={() =>
                   setActiveService(
                     activeService < services.length - 1 ? activeService + 1 : 0,
                   )
                 }
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-3 md:p-4 rounded-full bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 hover:bg-gray-900/10 dark:hover:bg-white/10 hover:border-gray-900/20 dark:hover:border-white/20 transition-all duration-300 backdrop-blur-xl touch-manipulation group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black"
+                className="p-3 md:p-4 rounded-full bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 hover:bg-gray-900/10 dark:hover:bg-white/10 hover:border-gray-900/20 dark:hover:border-white/20 transition-colors duration-200 backdrop-blur-xl touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black"
                 aria-label="Next service"
               >
-                <ArrowRight className="w-5 h-5 md:w-6 md:h-6 text-gray-900 dark:text-white group-hover:translate-x-0.5 transition-transform duration-200" />
-              </motion.button>
+                <ArrowRight className="w-5 h-5 md:w-6 md:h-6 text-gray-900 dark:text-white" />
+              </button>
             </div>
           </motion.div>
         </AnimatePresence>

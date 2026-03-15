@@ -19,7 +19,7 @@ export const metadata: Metadata = {
       "Move beyond traditional financial engineering. Learn how VCs can drive operational excellence and superior returns through strategic AI and automation implementations.",
     type: "article",
     url: "https://fieldporter.com/insights/vc-portfolio-optimization",
-    publishedTime: "2024-01-05T00:00:00.000Z",
+    publishedTime: "2025-01-05T00:00:00.000Z",
     images: [
       {
         url: "/opengraph-image",
@@ -42,7 +42,7 @@ const articleData = {
     "Post-investment value creation through operational improvement has become the cornerstone of modern VC strategy. Learn our framework for driving portfolio company excellence.",
   category: "VC Insights",
   author: "FIELDPORTER Team",
-  publishDate: "2024-01-05",
+  publishDate: "2025-01-05",
   readTime: "18 min read",
   featured: false,
 };
@@ -708,8 +708,8 @@ export default function VCPortfolioOptimizationPage() {
           drive post-investment operational improvement is no longer a
           peripheral activity but a core determinant of success. For VCs,
           strategically enhancing the operational capabilities of their
-          portfolio companies—particularly through the intelligent application
-          of AI and automation—is a critical lever for maximizing returns and
+          portfolio companies, particularly through the intelligent application
+          of AI and automation, is a critical lever for maximizing returns and
           building market-leading enterprises.
         </p>
 

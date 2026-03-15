@@ -5,14 +5,55 @@
 // BRAND CONSTANTS
 // ============================================================================
 
+/** Primary buyer for the marketing site. Use this in metadata, hero, and key copy so the site speaks to one audience. */
+export const PRIMARY_AUDIENCE = {
+  label: "founder-led and operator-led businesses (SMB to mid-market)",
+  short: "founder-led and operator-led businesses",
+} as const;
+
+/** Core offer hierarchy: what we do first, second, and what supports it. Use in hero, services, and key copy. */
+export const CORE_OFFER_HIERARCHY = {
+  primary:
+    "AI integration and automation: production systems in weeks, not months.",
+  secondary:
+    "Strategic research to de-risk decisions and validate concepts before you invest.",
+  proof: "Case studies, outcomes, and testimonials from real engagements.",
+} as const;
+
+/** Main hero headline: commercial promise above the fold. Keep short and outcome-led. */
+export const HERO_HEADLINE = "Production-Ready AI in Weeks, Not Months.";
+
+/** Supporting hero line (aspirational). Shown under HERO_HEADLINE. */
+export const HERO_SUPPORTING_LINE = "Build Your Own AI Advantage";
+
+/** First-screen value proposition: what we do, for whom, and what outcome improves. Used in hero only. */
+export const HERO_VALUE_PROP =
+  "AI integration and automation for founder-led and operator-led businesses. Production systems in weeks so you de-risk investment and reclaim high-value time.";
+
+/** One proof line under hero CTA: real outcomes so first screen feels credible. */
+export const HERO_PROOF_LINE =
+  "Recent work: 85% onboarding time saved for one client, 15+ hours weekly reclaimed for another, production systems in 1–3 weeks.";
+
+/** What FIELDPORTER is: one line so the whole site reflects the same model. Hybrid = consulting + implementation; we advise and build. */
+export const COMPANY_MODEL = {
+  type: "hybrid" as const,
+  short:
+    "We advise and we build: AI integration, automation, and strategic research.",
+  oneLiner:
+    "FIELDPORTER is a hybrid: consulting and implementation. We don't just advise; we build, deploy, and train your team.",
+} as const;
+
 export const BRAND = {
   name: "FIELDPORTER",
   tagline: "Strategic Research & Business Development",
   description:
-    "AI-powered strategic research and rapid prototyping for ambitious founders",
+    "Workflow automation and strategic research that improve decision quality and speed for founder-led businesses.",
   domain: "fieldporter.com",
   email: "freddy@fieldporter.com",
 } as const;
+
+/** When the AIOS assessment app is moved off fieldporter-aios.web.app, set this to the new URL (e.g. https://aios.fieldporter.com). Links to start the assessment should use this. */
+export const AIOS_APP_URL: string | null = null;
 
 export const BRAND_COLORS = {
   primary: {
@@ -213,16 +254,16 @@ export const LEAD_SCORING = {
 // ============================================================================
 
 export const SEO_DEFAULTS = {
-  title: "FIELDPORTER - Premium AI Strategy Consultancy",
+  title: "FIELDPORTER - AI Integration & Automation",
   description:
-    "Transform your enterprise with strategic AI consulting. Expert guidance for Fortune 500 companies implementing artificial intelligence at scale.",
+    "Consulting and implementation: AI integration, automation, and strategic research. We advise and build: production systems in weeks.",
   keywords: [
-    "AI strategy consulting",
-    "enterprise AI transformation",
-    "artificial intelligence consulting",
+    "AI integration",
+    "automation consulting",
     "AI implementation",
-    "digital transformation",
-    "Fortune 500 AI consulting",
+    "strategic research",
+    "workflow automation",
+    "production AI systems",
   ],
   ogImage: "/og-image.jpg",
 } as const;

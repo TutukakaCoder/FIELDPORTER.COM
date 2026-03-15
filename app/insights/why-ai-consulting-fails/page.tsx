@@ -19,7 +19,7 @@ export const metadata: Metadata = {
       "Over 80% of AI projects fail. Learn from FIELDPORTER's operational experience building AI systems and discover the framework that ensures success.",
     type: "article",
     url: "https://fieldporter.com/insights/why-ai-consulting-fails",
-    publishedTime: "2024-01-15T00:00:00.000Z",
+    publishedTime: "2025-01-15T00:00:00.000Z",
     images: [
       {
         url: "/opengraph-image",
@@ -42,7 +42,7 @@ const articleData = {
     "Over 80% of AI projects fail to deliver on their intended objectives. Learn the common pitfalls and our proven framework for ensuring AI consulting success.",
   category: "AI Strategy",
   author: "FIELDPORTER Team",
-  publishDate: "2024-01-15",
+  publishDate: "2025-01-15",
   readTime: "12 min read",
   featured: true,
 };
@@ -342,9 +342,9 @@ export default function WhyAIConsultingFailsPage() {
         </p>
 
         <p>
-          By understanding the common pitfalls—from inadequate data foundations
+          By understanding the common pitfalls, from inadequate data foundations
           and misaligned objectives to a lack of specialized skills and poor
-          ethical considerations—businesses can proactively de-risk their AI
+          ethical considerations, businesses can proactively de-risk their AI
           initiatives.
         </p>
 

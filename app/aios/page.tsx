@@ -54,7 +54,7 @@ const steps = [
     icon: Search,
     title: "2. Deep Analysis",
     description:
-      "We spend two days analyzing your data, researching your market, and consulting our advisor network to validate findings.",
+      "We spend two days analyzing your data, researching your market, and validating findings against your stated goals.",
     iconBg: "bg-purple-100 dark:bg-purple-900/30",
     iconColor: "text-purple-600 dark:text-purple-400",
   },
@@ -84,9 +84,17 @@ export default function AIOSPage() {
             Find the Right AI for <br className="hidden md:block" /> Your
             Business
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
+          <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
             Stop guessing where to invest. Get a scored roadmap for your
             automation strategy and move forward with certainty.
+          </p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
+            Deliverable: written Assessment Report plus two consultation calls.
+            The report includes a readiness score, priority areas, and a short
+            roadmap—so you see the shape of the output before you book.
+            Typically 1–2 weeks from data submission to first call. Paid
+            assessment; booking confirms your slot. No obligation to proceed
+            with implementation after the report.
           </p>
           <div className="flex justify-center">
             <motion.div
@@ -97,10 +105,10 @@ export default function AIOSPage() {
               transition={{ delay: 0.4, duration: 0.5 }}
             >
               <Link
-                href="https://fieldporter-aios.web.app/"
+                href="/contact"
                 className="group inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900 active:scale-[0.97] active:shadow-md"
               >
-                Start Your Assessment
+                Book Your Assessment
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
               </Link>
             </motion.div>
@@ -180,6 +188,50 @@ export default function AIOSPage() {
           </motion.div>
         </div>
 
+        {/* Example output / What you get */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          transition={{ duration: 0.6 }}
+          className="max-w-4xl mx-auto mb-24"
+        >
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center">
+            What You Get
+          </h3>
+          <p className="text-center text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+            The Assessment Report is a written document (PDF). Example
+            structure:
+          </p>
+          <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 p-6 md:p-8 font-mono text-sm text-gray-700 dark:text-gray-300">
+            <div className="space-y-2">
+              <p>
+                <strong>1. Executive summary</strong> — Your readiness level and
+                top 3 recommendations.
+              </p>
+              <p>
+                <strong>2. Readiness score</strong> — Where you stand today
+                (data, process, team).
+              </p>
+              <p>
+                <strong>3. Top opportunities</strong> — Prioritised areas for
+                automation or AI, with impact vs effort.
+              </p>
+              <p>
+                <strong>4. Roadmap</strong> — Suggested next steps and timeline.
+              </p>
+              <p>
+                <strong>5. Appendix</strong> — Detail on methods and sources.
+              </p>
+            </div>
+            <p className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400">
+              Plus two consultation calls to discuss the report and your
+              questions.
+            </p>
+          </div>
+        </motion.div>
+
         {/* Non-Sales Pitch Section */}
         <motion.div
           initial="hidden"
@@ -225,7 +277,7 @@ export default function AIOSPage() {
               href="/contact"
               className="group inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900 active:scale-[0.97] active:shadow-md"
             >
-              Start Your Assessment
+              Book Your Assessment
               <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
             </Link>
           </motion.div>

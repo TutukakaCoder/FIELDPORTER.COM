@@ -7,28 +7,28 @@ const systematicApproach = [
     number: "01",
     title: "Strategic Research",
     description:
-      "I deploy my AI research agents, using tools like Claude and Perplexity, to analyze markets, competitors, and opportunities. I personally synthesize these findings to deliver deep, actionable research in days, not weeks.",
+      "AI-powered research delivers market and competitor analysis in days, not weeks. We synthesize findings into actionable recommendations so you can decide faster.",
     color: "border-blue-500/30 text-blue-400",
   },
   {
     number: "02",
     title: "Rapid Implementation",
     description:
-      "I build production-ready solutions to validate concepts quickly. I use tools like Cursor AI and n8n to create functional systems, providing strategic guidance and training to accelerate your validation.",
+      "Production-ready systems validate your concept quickly. You get working software plus training so your team can run or extend it.",
     color: "border-purple-500/30 text-purple-400",
   },
   {
     number: "03",
     title: "Implementation & Optimization",
     description:
-      "I deploy the solutions and monitor their performance. I provide ongoing optimization based on real usage data and user feedback to ensure the tools are delivering measurable value.",
+      "Deployed solutions are monitored and tuned against real usage. Optimization focuses on measurable outcomes: time saved, errors reduced, decisions improved.",
     color: "border-green-500/30 text-green-400",
   },
 ];
 
 export function SystematicApproach() {
   return (
-    <section className="relative py-16 md:py-20 lg:py-24 overflow-hidden">
+    <section className="relative py-20 md:py-24 overflow-hidden">
       <div className="absolute inset-0 bg-gray-900/[0.02] dark:bg-white/[0.02]" />
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -39,7 +39,7 @@ export function SystematicApproach() {
           className="text-center mb-12 md:mb-16"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-4 md:mb-6">
-            My{" "}
+            Our{" "}
             <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               Process
             </span>

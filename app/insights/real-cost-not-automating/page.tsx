@@ -20,7 +20,7 @@ export const metadata: Metadata = {
       "Manual processes cost more than you think. Learn how to quantify hidden costs and calculate automation ROI with FIELDPORTER's proven framework.",
     type: "article",
     url: "https://fieldporter.com/insights/real-cost-not-automating",
-    publishedTime: "2024-01-10T00:00:00.000Z",
+    publishedTime: "2025-01-10T00:00:00.000Z",
     images: [
       {
         url: "/opengraph-image",
@@ -43,7 +43,7 @@ const articleData = {
     "Manual processes are silently draining your business daily. Learn how to quantify hidden costs and calculate automation ROI with our proven assessment framework.",
   category: "Business Automation",
   author: "FIELDPORTER Team",
-  publishDate: "2024-01-10",
+  publishDate: "2025-01-10",
   readTime: "15 min read",
   featured: true,
 };
@@ -72,9 +72,9 @@ export default function RealCostNotAutomatingPage() {
           components are diffuse, spread across multiple employees in small
           increments of wasted time, or manifest as errors that are corrected
           without formal tracking of the associated costs. Unlike a clear-cut
-          software subscription or direct materials expense, these costs—such as
-          lost productivity due to inefficient workflows or the opportunity cost
-          of skilled employees performing mundane tasks—do not appear as a
+          software subscription or direct materials expense, these costs, such
+          as lost productivity due to inefficient workflows or the opportunity
+          cost of skilled employees performing mundane tasks, do not appear as a
           distinct line item on a profit and loss statement.
         </p>
 

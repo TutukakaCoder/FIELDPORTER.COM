@@ -55,7 +55,7 @@ const FIELDPORTER_KNOWLEDGE_BASE = [
     category: "services",
     title: "Rapid Development & Integration",
     content:
-      "We build working prototypes to test your ideas quickly. Using React, TypeScript, and Firebase, we create functional applications in 1-2 weeks. Not just mockups - real systems you can use immediately. Our Self-Development Platform has been running for 8+ months with active users. Investment depends on complexity and features needed.",
+      "We build working prototypes to test your ideas quickly. Using React, TypeScript, and Firebase, we create functional applications in 1-2 weeks. Not just mockups - real systems you can use immediately. Our Self-Development Platform has been running for 12+ months with active users. Investment depends on complexity and features needed.",
     keywords: [
       "development",
       "prototype",
@@ -143,7 +143,7 @@ const FIELDPORTER_KNOWLEDGE_BASE = [
     category: "portfolio",
     title: "What We Are Building",
     content:
-      "We are currently running three main projects: Self-Development Platform (live with paying users for 8+ months), AI Research System (using multiple AI models for automated research), and Family Care Platform (AI coordination for elderly care). Everything we learn building these makes our client work better.",
+      "We are currently running three main projects: Self-Development Platform (live with paying users for 12+ months), AI Research System (using multiple AI models for automated research), and Family Care Platform (AI coordination for elderly care). Everything we learn building these makes our client work better.",
     keywords: ["portfolio", "projects", "building", "products", "businesses"],
     priority: 7,
     active: true,

@@ -56,11 +56,13 @@ interface Project {
   capabilities?: string[];
   videoUrl?: string;
   ctaUrl?: string;
+  applyUrl?: string;
 }
 
 interface PortfolioSection {
   id: string;
   title: string;
+  group: "client" | "in-house";
   icon: any;
   iconColor: string;
   borderColor: string;
@@ -74,6 +76,7 @@ const portfolioSections: PortfolioSection[] = [
   {
     id: "client-platforms",
     title: "Client Platforms",
+    group: "client",
     icon: Building2,
     iconColor: "text-blue-400",
     borderColor: "border-blue-500/15",
@@ -81,11 +84,12 @@ const portfolioSections: PortfolioSection[] = [
     timelineStyle: "live",
     projects: [
       {
-        title: "Voluntas Intelligence Platform",
-        status: "LIVE • 12+ CLIENTS",
-        category: "Client Intelligence Hub",
+        title: "Voluntas Client and Investment Management Platform",
+        status: "LIVE • 21 CLIENTS",
+        category: "Client and Investment Management",
         description:
-          "Built in 3 months to solve information fragmentation for a venture studio. Centralizes intelligence for clients, investors, advisors, and admins—enabling scale to 70+ clients with 3-4 staff instead of 10-12. AI accelerates data collection, extracting 15 business fields from pitch decks in 30-45 seconds with 85%+ accuracy. Humans make strategic decisions. Everyone works from the same source of truth. Businesses looking to grow or raise capital can apply at Voluntas.web.app",
+          "Building for 6 months and still evolving. Centralizes intelligence for clients, investors, advisors, and admins—21 clients, 70 portfolio submissions. AI accelerates data collection, extracting 15 business fields from pitch decks in 30-45 seconds with 85%+ accuracy. Humans make strategic decisions. Everyone works from the same source of truth.",
+        applyUrl: "https://voluntas.web.app/apply?ref=FIELDPORTER",
         capabilities: [
           "AI Document Processing: 15 fields extracted with 85%+ accuracy",
           "Structured Client Profiles: 45 fields across 8 categories",
@@ -95,18 +99,23 @@ const portfolioSections: PortfolioSection[] = [
         ],
         metrics: [
           {
-            label: "85% onboarding time saved (hours to minutes)",
+            label:
+              "85% onboarding time saved for new clients (pitch-deck intake: hours to minutes)",
             icon: Clock,
           },
           {
-            label: "70+ client scale capacity without proportional headcount",
+            label: "21 clients, 70 portfolio submissions on the platform",
             icon: TrendingUp,
           },
           {
-            label: "45 structured data fields for comprehensive intelligence",
+            label:
+              "45 structured data fields so advisors and investors work from one source of truth",
             icon: Target,
           },
-          { label: "12+ live production clients", icon: CheckCircle },
+          {
+            label: "Live for 6 months, iterating with client feedback",
+            icon: CheckCircle,
+          },
         ],
         techStack:
           "React 18 • TypeScript • Firebase • Google Gemini AI • Multi-tenant Architecture",
@@ -120,15 +129,22 @@ const portfolioSections: PortfolioSection[] = [
       },
       {
         title: "Self-Development Platform",
-        status: "LIVE • 8 MONTHS",
+        status: "LIVE • 12 MONTHS",
         category: "Production System",
         description:
           "We transformed a leadership coach's manual processes into an automated platform serving 1,000+ daily interactions. The system handles complex timezone logic, subscription management, and delivers bi-weekly feature updates based on actual user needs.",
         metrics: [
-          { label: "100% uptime across 8 months", icon: CheckCircle },
-          { label: "15 hours saved weekly through automation", icon: Clock },
           {
-            label: "Global user base with seamless timezone handling",
+            label: "100% uptime across 12 months (client-reported)",
+            icon: CheckCircle,
+          },
+          {
+            label: "15 hours saved weekly for the coach (admin and scheduling)",
+            icon: Clock,
+          },
+          {
+            label:
+              "1,000+ daily interactions; timezone logic handles global users",
             icon: Globe,
           },
         ],
@@ -145,6 +161,7 @@ const portfolioSections: PortfolioSection[] = [
   {
     id: "ai-automation",
     title: "AI Automation",
+    group: "client",
     icon: Brain,
     iconColor: "text-purple-400",
     borderColor: "border-purple-500/15",
@@ -159,11 +176,19 @@ const portfolioSections: PortfolioSection[] = [
           "VOYCAP needed reliable content and working images. We delivered three approaches using G-News and EODHD API, achieving 85% image success (up from 30%). Each prototype handles different data sources and image fallback strategies.",
         metrics: [
           {
-            label: "Image display success: 85% vs 30% before",
+            label:
+              "Image display success: 85% vs 30% before (news feed context)",
             icon: TrendingUp,
           },
-          { label: "Three working prototypes delivered", icon: Code2 },
-          { label: "AI summarization with cost optimization", icon: Brain },
+          {
+            label:
+              "Three working prototypes delivered for client to choose from",
+            icon: Code2,
+          },
+          {
+            label: "AI summarization with cost controls for production use",
+            icon: Brain,
+          },
         ],
         techStack:
           "G-News API • EODHD Financial Data • Multi-Source Aggregation",
@@ -173,12 +198,18 @@ const portfolioSections: PortfolioSection[] = [
         status: "PROTOTYPE COMPLETE",
         category: "AI System",
         description:
-          "Built for VC firm to automate email triage and response. AI prototype classifies emails with 85% accuracy and generates contextual responses, cutting manual review time by 70%.",
+          "Built for a VC firm to automate email triage and response. AI prototype classifies inbound emails with 85% accuracy and drafts contextual replies; client reported ~70% less time spent on manual review.",
         metrics: [
-          { label: "85% email classification accuracy", icon: Target },
-          { label: "70% reduction in manual review time", icon: Zap },
           {
-            label: "Automated routing of investment inquiries",
+            label: "85% classification accuracy on investment-related inbound",
+            icon: Target,
+          },
+          {
+            label: "~70% reduction in manual review time (client feedback)",
+            icon: Zap,
+          },
+          {
+            label: "Investment inquiries routed automatically for follow-up",
             icon: CheckCircle,
           },
         ],
@@ -189,6 +220,7 @@ const portfolioSections: PortfolioSection[] = [
   {
     id: "strategic-research",
     title: "Strategic Research",
+    group: "client",
     icon: TrendingUp,
     iconColor: "text-emerald-400",
     borderColor: "border-emerald-500/15",
@@ -222,18 +254,20 @@ const portfolioSections: PortfolioSection[] = [
         ],
       },
       {
-        title: "Multiple Strategic Engagements",
+        title: "Strategic Research (Ongoing)",
         status: "ONGOING",
         category: "Business Intelligence",
         description:
-          "From competitor analysis to market sizing, we combine AI tools with business acumen to deliver actionable intelligence across diverse industries and markets.",
-        scope: "Cross-industry strategic research and competitive intelligence",
+          "Competitor analysis, market sizing, and due-diligence support for investors and operators. We focus on sectors where we have depth: advisory and capital, consumer and retail, and operations-heavy businesses. Clear deliverables and recommendations.",
+        scope:
+          "Strategic research and competitive intelligence for defined briefs",
       },
     ],
   },
   {
     id: "in-house-ventures",
     title: "In-House Ventures",
+    group: "in-house",
     icon: Building2,
     iconColor: "text-yellow-400",
     borderColor: "border-yellow-500/15",
@@ -251,13 +285,12 @@ const portfolioSections: PortfolioSection[] = [
         techStack: "Privacy-First AI • Simple Interface Design",
       },
       {
-        title: "MORE IN-HOUSE VENTURES COMING!",
+        title: "Additional In-House Concepts",
         status: "CONCEPT PHASE",
         category: "Product Development",
         description:
-          "Multiple new concepts in development. Each internal project teaches us something valuable for client work.",
-        philosophy:
-          "Every internal project teaches us something that benefits client work",
+          "Other internal products in early concept stage. We build in-house so we stay close to real implementation; what we learn feeds back into client delivery.",
+        philosophy: "We build for ourselves so we build better for you",
       },
     ],
   },
@@ -371,8 +404,8 @@ function PortfolioHero() {
 
           <div className="max-w-2xl mx-auto">
             <p className="text-lg md:text-xl text-gray-400 leading-relaxed">
-              Showcasing hands-on experience building AI systems, automating
-              workflows, and delivering strategic intelligence.
+              Client work and in-house builds: AI systems, workflow automation,
+              and strategic research with clear outcomes.
             </p>
           </div>
 
@@ -493,6 +526,11 @@ function InteractivePortfolioShowcase() {
               </div>
               {/* Section Header */}
               <div className="text-center mb-16 md:mb-20">
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+                  {currentSection.group === "client"
+                    ? "Client work"
+                    : "In-house ventures (internal products)"}
+                </p>
                 <div className="flex items-center justify-center gap-4 mb-6">
                   <div
                     className={`w-16 h-16 rounded-2xl bg-gray-900/5 dark:bg-white/5 border ${currentSection.borderColor} flex items-center justify-center backdrop-blur-sm`}
@@ -515,7 +553,7 @@ function InteractivePortfolioShowcase() {
               </div>
 
               {/* Projects Grid */}
-              <div className="space-y-12 md:space-y-16">
+              <div className="space-y-10 sm:space-y-12 md:space-y-14 lg:space-y-16">
                 {currentSection.projects.map((project, projectIndex) => (
                   <motion.div
                     key={projectIndex}
@@ -552,6 +590,21 @@ function InteractivePortfolioShowcase() {
                           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
                             {project.description}
                           </p>
+                          {project.applyUrl && (
+                            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+                              If you&apos;d like to apply for capital raise or
+                              growth services,{" "}
+                              <a
+                                href={project.applyUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-medium text-blue-500 hover:text-blue-400 underline underline-offset-2"
+                              >
+                                apply here
+                              </a>
+                              .
+                            </p>
+                          )}
                         </div>
 
                         {/* Vision Section */}
@@ -734,7 +787,7 @@ function InteractivePortfolioShowcase() {
                                             ))}
                                           </div>
                                           <span className="text-gray-900 dark:text-white font-medium">
-                                            — {project.testimonial.author}
+                                            - {project.testimonial.author}
                                           </span>
                                         </div>
                                       </div>
@@ -767,7 +820,7 @@ function InteractivePortfolioShowcase() {
                                         ))}
                                       </div>
                                       <span className="text-gray-900 dark:text-white font-medium">
-                                        — {project.testimonial?.author}
+                                        - {project.testimonial?.author}
                                       </span>
                                     </div>
                                   </div>

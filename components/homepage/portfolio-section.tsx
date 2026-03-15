@@ -3,6 +3,7 @@
 import { trackServiceInterest } from "@/lib/firebase-analytics";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import {
   ArrowRight,
   Brain,
@@ -25,16 +26,17 @@ const projects = [
     id: "voluntas-intelligence",
     phase: "01",
     icon: Building2,
-    title: "Voluntas Intelligence Platform",
+    workType: "client" as const,
+    title: "Voluntas Client and Investment Management Platform",
     tagline:
-      "Production AI platform managing 12+ clients for venture studio. Scales to 70+ clients with 3-4 staff instead of 10-12. Built in 3 months.",
+      "Client and investment management platform. 21 clients, 70 portfolio submissions. Building for 6 months, still evolving.",
     keyBenefits: [
       "AI pitch deck extraction: 15 business fields in 30-45 seconds with high accuracy",
       "10-factor investor matching algorithm with confidence scoring",
     ],
-
+    applyUrl: "https://voluntas.web.app/apply?ref=FIELDPORTER",
     timeline: "Live in Production",
-    status: "Live • 12+ Clients",
+    status: "Live • 21 Clients",
     statusColor: "text-green-400",
     statusBg: "bg-green-500/10 border-green-500/20",
     iconColor: "text-green-400",
@@ -49,9 +51,10 @@ const projects = [
     id: "papps-mastery",
     phase: "02",
     icon: Code,
+    workType: "client" as const,
     title: "Self Development Platform",
     tagline:
-      "Custom client platform with 8+ months active use. React/Firebase application demonstrating full-stack capabilities.",
+      "Life-coach platform in production 12+ months. Rebuilt from the ground up with ongoing feature delivery and monthly updates.",
     keyBenefits: [
       "Complex timezone handling, user management, daily programs for life coach",
       "Custom client build, new features and updates monthly",
@@ -71,9 +74,10 @@ const projects = [
     id: "family-care",
     phase: "03",
     icon: Heart,
+    workType: "in-house" as const,
     title: "Family Care Platform",
     tagline:
-      "AI-powered coordination for elderly care. Privacy-first design with the aim of making new tech easily accessble.",
+      "AI-powered coordination for elderly care. Privacy-first, designed to make new tech accessible to families.",
     keyBenefits: [
       "Intelligent scheduling with family-context awareness",
       "SMS to LLM, calendar integration",
@@ -141,6 +145,8 @@ const testimonials = [
     author: "Jason Holdsworth",
     role: "Founding Partner - Voluntas Group",
     highlight: "Production Platform",
+    projectResult:
+      "85% onboarding time saved; 21 clients, 70 submissions on the platform.",
     accentColor: "text-blue-400",
     borderColor: "border-blue-500/20",
     hoverBorderColor: "hover:border-blue-500/30",
@@ -155,6 +161,7 @@ const testimonials = [
     author: "Seb Lindner",
     role: "Founder & CEO, Web3 Daily",
     highlight: "Problem Solving",
+    projectResult: "Strategic research enabled a successful product pivot.",
     accentColor: "text-emerald-400",
     borderColor: "border-emerald-500/20",
     hoverBorderColor: "hover:border-emerald-500/30",
@@ -169,6 +176,8 @@ const testimonials = [
     author: "Steve Papps",
     role: "Life Coach",
     highlight: "Delivery Excellence",
+    projectResult:
+      "Platform live 12+ months; 15 hours saved weekly on admin and scheduling.",
     accentColor: "text-blue-400",
     borderColor: "border-blue-500/20",
     hoverBorderColor: "hover:border-blue-500/30",
@@ -183,6 +192,8 @@ const testimonials = [
     author: "Paul Rataul",
     role: "AI Startup Founder in Stealth",
     highlight: "Strategic Thinking",
+    projectResult:
+      "AI capability and research support for product and strategy.",
     accentColor: "text-purple-400",
     borderColor: "border-purple-500/20",
     hoverBorderColor: "hover:border-purple-500/30",
@@ -384,12 +395,18 @@ const TestimonialCard = memo(
             </div>
 
             <blockquote
-              className={`text-gray-800 dark:text-gray-100 leading-relaxed font-light mb-8 flex-1 tracking-[-0.01em] ${
+              className={`text-gray-800 dark:text-gray-100 leading-relaxed font-light mb-4 flex-1 tracking-[-0.01em] ${
                 isFeatured ? "text-xl lg:text-2xl" : "text-lg lg:text-xl"
               }`}
             >
               &ldquo;{testimonial.quote}&rdquo;
             </blockquote>
+
+            {"projectResult" in testimonial && testimonial.projectResult && (
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                {testimonial.projectResult}
+              </p>
+            )}
 
             <div className="flex justify-start mt-auto">
               <div
@@ -573,8 +590,8 @@ const ProjectCard = memo(
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Floating phase number */}
-        <div className="absolute -top-6 -left-6 lg:-top-8 lg:-left-8 text-6xl lg:text-7xl font-thin text-gray-900/5 dark:text-white/5 pointer-events-none select-none">
+        {/* Phase number - tucked in so it doesn't overlap on mobile */}
+        <div className="absolute top-4 left-4 lg:-top-8 lg:-left-8 text-4xl lg:text-7xl font-thin text-gray-900/5 dark:text-white/5 pointer-events-none select-none">
           {project.phase}
         </div>
 
@@ -588,7 +605,7 @@ const ProjectCard = memo(
         relative p-6 lg:p-8 xl:p-10 rounded-3xl border border-gray-900/10 dark:border-white/10 backdrop-blur-sm
         bg-white/25 dark:bg-black/25 hover:bg-white/35 dark:hover:bg-black/35 hover:border-gray-900/20 dark:hover:border-white/20
         transition-all duration-300 hover:shadow-2xl
-        h-full min-h-[420px] md:min-h-[480px] lg:min-h-[520px]
+        h-full min-h-[360px] sm:min-h-[400px] md:min-h-[440px] lg:min-h-[480px]
       `}
         >
           {/* Premium glassmorphism layers */}
@@ -597,7 +614,7 @@ const ProjectCard = memo(
             className={`absolute inset-0 bg-gradient-to-br ${project.gradientFrom} ${project.gradientTo} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
           />
 
-          <div className="relative z-10 h-full flex flex-col">
+          <div className="relative z-10 h-full flex flex-col min-w-0">
             {/* Header */}
             <div className="flex items-start justify-between mb-6 lg:mb-8">
               <div className="flex items-center gap-3">
@@ -619,20 +636,27 @@ const ProjectCard = memo(
                 )}
               </div>
 
-              <div
-                className={`px-4 lg:px-5 py-2 lg:py-2.5 rounded-full border font-medium text-xs lg:text-sm ${project.statusBg} ${project.statusColor} backdrop-blur-sm`}
-              >
-                {project.status}
+              <div className="flex flex-col items-end gap-2">
+                <div
+                  className={`px-4 lg:px-5 py-2 lg:py-2.5 rounded-full border font-medium text-xs lg:text-sm ${project.statusBg} ${project.statusColor} backdrop-blur-sm`}
+                >
+                  {project.status}
+                </div>
+                <span className="text-[10px] lg:text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  {project.workType === "client"
+                    ? "Client work"
+                    : "In-house venture"}
+                </span>
               </div>
             </div>
 
             {/* Content */}
             <div className="flex-1 space-y-6 lg:space-y-8">
               <div className="space-y-3 lg:space-y-4">
-                <h3 className="text-xl lg:text-2xl xl:text-3xl font-semibold text-gray-900 dark:text-white leading-tight tracking-[-0.01em]">
+                <h3 className="text-xl lg:text-2xl xl:text-3xl font-semibold text-gray-900 dark:text-white leading-tight tracking-[-0.01em] line-clamp-2">
                   {project.title}
                 </h3>
-                <p className="text-base lg:text-lg text-gray-700 dark:text-gray-200 font-light leading-relaxed">
+                <p className="text-base lg:text-lg text-gray-700 dark:text-gray-200 font-light leading-relaxed line-clamp-3">
                   {project.tagline}
                 </p>
               </div>
@@ -666,6 +690,23 @@ const ProjectCard = memo(
                   </div>
                 ))}
               </div>
+
+              {"applyUrl" in project && project.applyUrl && (
+                <p className="text-sm lg:text-base text-gray-600 dark:text-gray-300 pt-2">
+                  If you&apos;d like to apply for capital raise or growth
+                  services,{" "}
+                  <Link
+                    href={project.applyUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="font-medium text-blue-500 hover:text-blue-400 underline underline-offset-2"
+                  >
+                    apply here
+                  </Link>
+                  .
+                </p>
+              )}
             </div>
 
             {/* Enhanced arrow indicator */}
@@ -692,14 +733,14 @@ export function PortfolioSection() {
     <section
       ref={ref}
       id="portfolio"
-      className="relative pt-24 md:pt-32 pb-24 md:pb-32 overflow-hidden bg-transparent"
+      className="relative py-20 md:py-28 overflow-hidden bg-transparent"
     >
       <PremiumBackground />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Enhanced Section Header */}
-        <div className="text-center mb-24 md:mb-28 lg:mb-32">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-900 dark:text-white mb-12 lg:mb-16 leading-tight tracking-[-0.02em]">
+        <div className="text-center mb-16 md:mb-20">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-900 dark:text-white mb-8 md:mb-10 leading-tight tracking-[-0.02em] break-words">
             Projects We&apos;re{" "}
             <span className="relative">
               <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
@@ -716,33 +757,25 @@ export function PortfolioSection() {
         </div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 md:gap-12 lg:gap-16 mb-32 md:mb-36 lg:mb-40">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12 mb-20 md:mb-24">
           {projects.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
           ))}
         </div>
 
         {/* Industries Section */}
-        <div className="mb-32 md:mb-36 lg:mb-40">
-          <div className="text-center mb-24 md:mb-28 lg:mb-32">
-            {/* Filter Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 text-xs font-medium tracking-wide mb-6 uppercase">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-              </span>
-              Optimized for Companies with $2M+ ARR
-            </div>
-
-            <h3 className="text-3xl sm:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-8 leading-tight tracking-[-0.02em]">
-              Deep Domain{" "}
+        <div className="mb-20 md:mb-24">
+          <div className="text-center mb-12 md:mb-16">
+            <h3 className="text-3xl sm:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-6 md:mb-8 leading-tight tracking-[-0.02em]">
+              Sectors We{" "}
               <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                Specialization
+                Focus On
               </span>
             </h3>
             <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
-              We focus on high-value sectors where process complexity meets
-              budget capacity.
+              Strongest track record in advisory and capital, and in scaling
+              operations for growing businesses. We also work in manufacturing
+              and ESG where the fit is right.
             </p>
           </div>
 
@@ -760,8 +793,8 @@ export function PortfolioSection() {
 
         {/* Testimonials Section */}
         <div>
-          <div className="text-center mb-24 md:mb-28 lg:mb-32">
-            <h3 className="text-3xl sm:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-8 leading-tight tracking-[-0.02em]">
+          <div className="text-center mb-12 md:mb-16">
+            <h3 className="text-3xl sm:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-6 md:mb-8 leading-tight tracking-[-0.02em]">
               Client{" "}
               <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
                 Experiences

@@ -8,31 +8,31 @@ const aiCapabilities = [
     icon: Brain,
     title: "AI Implementation Training",
     description:
-      "I teach individuals and teams how to effectively integrate AI tools into their daily workflows, moving beyond basic prompting to systematic AI-powered productivity.",
+      "Teams learn to integrate AI into daily workflows so you cut manual work and keep quality. Training is hands-on and tied to your actual processes.",
     color: "border-blue-500/20 text-blue-400",
-    focus: "Focus: Practical AI adoption strategies",
+    focus: "Outcome: Faster delivery, fewer repetitive tasks",
   },
   {
     icon: Workflow,
     title: "Workflow Optimization",
     description:
-      "I help organizations identify bottlenecks and implement AI solutions that streamline processes, reduce manual work, and improve decision-making speed.",
+      "Bottlenecks are identified and automated so processes run with less manual effort and clearer decision points. Results are measurable.",
     color: "border-purple-500/20 text-purple-400",
-    focus: "Focus: Process automation and efficiency",
+    focus: "Outcome: Time saved, fewer errors",
   },
   {
     icon: Users,
     title: "Strategic AI Consulting",
     description:
-      "I guide companies through AI transformation, from tool selection and implementation to team training and change management for sustainable AI adoption.",
+      "Tool choice, rollout, and handover are designed so adoption sticks and your team owns the outcome.",
     color: "border-green-500/20 text-green-400",
-    focus: "Focus: Organizational AI transformation",
+    focus: "Outcome: Ownership and continuity",
   },
 ];
 
 export function TechnicalCapability() {
   return (
-    <section className="relative py-24 lg:py-32 overflow-hidden">
+    <section className="relative py-20 md:py-28 overflow-hidden">
       <div className="absolute inset-0 bg-gray-900/[0.02] dark:bg-white/[0.02]" />
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -49,9 +49,8 @@ export function TechnicalCapability() {
             </span>
           </h2>
           <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Because I am in the trenches building these tools every day, I can
-            teach your team how to move beyond basic prompting to systematic,
-            AI-powered productivity
+            Training is tied to the systems we deliver so your team gets
+            practical, outcome-focused capability.
           </p>
         </motion.div>
 

@@ -5,24 +5,27 @@ import { motion } from "framer-motion";
 export function TrustIndicatorBar() {
   const indicators = [
     {
-      id: "strategy",
-      value: "Days",
-      label: "Not Months",
+      id: "time-saved",
+      value: "85%",
+      label: "Onboarding time saved (client platform)",
     },
     {
-      id: "training",
-      value: "No",
-      label: "Vendor Lock-in",
+      id: "hours-reclaimed",
+      value: "15+ hrs",
+      label: "Weekly reclaimed (workflow automation)",
     },
     {
-      id: "turnaround",
-      value: "100%",
-      label: "Founder Led",
+      id: "to-production",
+      value: "1–3 weeks",
+      label: "To production-ready system",
     },
   ];
 
   return (
-    <section className="relative py-12 sm:py-16 border-y border-gray-900/5 dark:border-white/5 bg-gray-50/30 dark:bg-white/[0.01] backdrop-blur-sm">
+    <section
+      className="relative py-12 md:py-16 border-y border-gray-900/5 dark:border-white/5 bg-gray-50/30 dark:bg-white/[0.01] backdrop-blur-sm"
+      aria-label="Proof points"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {indicators.map((indicator, index) => (

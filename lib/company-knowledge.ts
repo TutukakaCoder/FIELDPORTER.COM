@@ -108,7 +108,7 @@ export const FIELDPORTER_COMPANY = {
         "Global platform handling 1000+ daily interactions across timezones",
       solution: "AI-powered question system with intelligent scheduling",
       outcome:
-        "8+ months live, 100% uptime, handling global timezone complexity",
+        "12+ months live, 100% uptime, handling global timezone complexity",
       what_we_learned:
         "Scale isn't just about handling more users, it's about handling them intelligently",
     },

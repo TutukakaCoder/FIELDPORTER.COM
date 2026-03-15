@@ -7,7 +7,7 @@ export function CompanyFoundation() {
   return (
     <section
       id="company-foundation"
-      className="relative py-16 md:py-20 lg:py-24 overflow-hidden"
+      className="relative py-20 md:py-24 overflow-hidden"
     >
       <div className="absolute inset-0 bg-gray-50 dark:bg-white/[0.02]" />
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -27,24 +27,20 @@ export function CompanyFoundation() {
             </h2>
             <div className="space-y-4 text-gray-700 dark:text-gray-300 text-base md:text-lg leading-relaxed">
               <p>
-                FIELDPORTER is a specialized network led by{" "}
+                FIELDPORTER is led by{" "}
                 <span className="text-gray-900 dark:text-white font-medium">
                   Freddy Hopkins
                 </span>
-                . I built this practice to solve a specific problem: most
-                companies need more than just &quot;consulting&quot;&mdash;they
-                need execution.
+                . We operate as a hybrid: we lead strategy and architecture;
+                execution is scaled with developers and AI agents where needed.
+                We build, deploy, and train your team to take over. You get
+                delivery speed without losing a single point of contact.
               </p>
               <p>
-                We operate as a hybrid team. I lead the strategy and
-                architecture, while our network of specialized developers and AI
-                agents handles the heavy lifting. This allows us to move faster
-                than traditional agencies while maintaining the personal
-                attention of a boutique partner.
-              </p>
-              <p className="text-gray-900 dark:text-white font-medium">
-                We don&apos;t just advise. We build, deploy, and train your team
-                to take over.
+                Freddy has delivered production platforms for advisory firms and
+                coaches—clients report outcomes like 85% onboarding time saved
+                and 15+ hours weekly reclaimed. He runs discovery, design, and
+                handover directly.
               </p>
             </div>
           </motion.div>
@@ -68,28 +64,10 @@ export function CompanyFoundation() {
               </div>
               <div className="space-y-3 text-gray-700 dark:text-gray-300 text-sm md:text-base leading-relaxed">
                 <p>
-                  <span className="text-gray-900 dark:text-white font-medium">
-                    Human-First Strategy:
-                  </span>{" "}
-                  Every project is led by me. I bring deep specialist experience
-                  to understand your challenge, architect the solution, and
-                  manage execution from concept to deployment.
-                </p>
-                <p>
-                  <span className="text-gray-900 dark:text-white font-medium">
-                    AI-Powered Execution:
-                  </span>{" "}
-                  I leverage custom-built AI agents to accelerate delivery,
-                  handling research, code generation, and data analysis at
-                  speeds traditional teams can&apos;t match.
-                </p>
-                <p>
-                  <span className="text-gray-900 dark:text-white font-medium">
-                    Expert Network:
-                  </span>{" "}
-                  I maintain a dedicated network of senior advisors who validate
-                  assumptions and ensure every solution is commercially robust
-                  and technically sound.
+                  Strategy and architecture are led in-house; execution is
+                  scaled via our developer and AI agent network. Every
+                  engagement includes handover and training so your team can run
+                  and extend what we build.
                 </p>
               </div>
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent pointer-events-none" />

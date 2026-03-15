@@ -125,7 +125,7 @@ SERVICE 2: Rapid AI Development & Integration
 Investment: $3,000-$8,000
 Timeline: 1-3 weeks
 Description: Validate your vision with production-ready systems in weeks, not months.
-Detailed Explanation: We build fully automated AI applications that prove technical feasibility and user value—eliminating guesswork before major investment. Our focus is validating your concept works for your specific use case in 1-3 weeks, then providing complete documentation for scaling. From intelligent chat systems to workflow automation, we deliver production-ready systems that demonstrate tangible value to stakeholders and investors.
+Detailed Explanation: We build fully automated AI applications that prove technical feasibility and user value, eliminating guesswork before major investment. Our focus is validating your concept works for your specific use case in 1-3 weeks, then providing complete documentation for scaling. From intelligent chat systems to workflow automation, we deliver production-ready systems that demonstrate tangible value to stakeholders and investors.
 Key Outcomes:
 1. Production-ready AI systems proving concept viability within 1-3 weeks
 2. Technical validation eliminating risk before major development commitments
@@ -143,7 +143,7 @@ Key Outcomes:
 2. Automated systems reducing repetitive work by 60-80% in targeted areas
 3. High-performers spend time on business growth, not operational drag
 4. Integration with existing tools for minimal disruption and maximum impact
-Proof Point: Client saved 15+ hours weekly through strategic workflow optimisation.
+Proof Point: Client saved 15+ hours weekly through strategic workflow optimization.
 
 SERVICE 4: AI Strategy & Team Capability Building
 Investment: $75-$150 per hour

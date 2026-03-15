@@ -130,7 +130,7 @@ export function Header({ className }: HeaderProps) {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden flex items-center justify-center w-10 h-10 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 mr-2"
+              className="lg:hidden flex items-center justify-center min-w-[44px] min-h-[44px] w-11 h-11 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 mr-2 touch-manipulation"
               aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             >
               <AnimatePresence mode="wait">
@@ -181,7 +181,7 @@ export function Header({ className }: HeaderProps) {
                     <OptimizedLink
                       href={item.href}
                       className={cn(
-                        "flex items-center px-4 py-3 text-base font-medium rounded-xl transition-all duration-300 relative",
+                        "flex items-center min-h-[44px] px-4 py-3 text-base font-medium rounded-xl transition-all duration-300 relative touch-manipulation",
                         isActivePage(item.href)
                           ? "text-gray-900 dark:text-white bg-gradient-to-r from-[#0969DA]/20 to-[#1E40AF]/20 shadow-lg shadow-blue-500/10"
                           : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-900/5 dark:hover:bg-white/5",

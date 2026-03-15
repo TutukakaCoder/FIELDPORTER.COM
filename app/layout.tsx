@@ -6,6 +6,7 @@ import {
   ScrollRestoration,
 } from "@/components/layout";
 import { PageTransition } from "@/components/ui/page-transition";
+import { COMPANY_MODEL, PRIMARY_AUDIENCE } from "@/config/constants";
 import { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import type React from "react";
@@ -32,10 +33,9 @@ export const metadata: Metadata = {
     default:
       "FIELDPORTER - Build Your Own AI Advantage | AI Integration & Automation",
   },
-  description:
-    "AI integration and automation consulting that protects your margins. Build production AI systems in weeks. Save 15+ hours weekly through workflow automation. Strategic research for founders.",
+  description: `${COMPANY_MODEL.short} Production systems in weeks. For ${PRIMARY_AUDIENCE.short}.`,
   keywords:
-    "AI integration, automation consulting, margin protection, workflow automation, AI systems, business automation, FIELDPORTER, AI consulting, production AI",
+    "AI integration, automation consulting, AI implementation, workflow automation, FIELDPORTER, strategic research, production AI",
   authors: [{ name: "FIELDPORTER" }],
   creator: "FIELDPORTER",
   publisher: "FIELDPORTER",

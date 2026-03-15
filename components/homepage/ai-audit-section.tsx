@@ -18,7 +18,7 @@ export function AIAuditSection() {
   return (
     <section
       ref={ref}
-      className="relative py-12 md:py-24 overflow-hidden bg-transparent"
+      className="relative py-16 md:py-24 overflow-hidden bg-transparent"
     >
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-gray-900/60 border border-gray-200 dark:border-white/10 shadow-xl backdrop-blur-xl">
@@ -38,30 +38,17 @@ export function AIAuditSection() {
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight tracking-tight">
                   AI Opportunity Assessment
                 </h2>
-                <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-                  Not sure what AI is right for you? Our assessment finds the
-                  gaps in your process and tells you exactly where to start.
-                </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
-                  Currently optimized for{" "}
-                  <strong>Staffing & Recruitment</strong>.{" "}
-                  <br className="hidden sm:block" />
-                  For other industries, please{" "}
-                  <Link
-                    href="/contact"
-                    className="text-blue-600 dark:text-blue-400 hover:underline underline-offset-2"
-                  >
-                    contact us manually
-                  </Link>{" "}
-                  for a custom audit.
+                <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
+                  Not sure what AI is right for you? Get a scored roadmap for
+                  your automation strategy and move forward with certainty.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link
-                    href="https://fieldporter-aios.web.app/"
+                    href="/contact"
                     className="inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40 hover:-translate-y-0.5 active:scale-95"
                   >
-                    Start Assessment
+                    Book Audit
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                   <Link
@@ -74,8 +61,8 @@ export function AIAuditSection() {
               </motion.div>
             </div>
 
-            {/* Visual/Graphic Side - Softer "Readiness" Card */}
-            <div className="relative hidden md:block perspective-1000">
+            {/* Visual/Graphic Side - Readiness card (visible on all screens) */}
+            <div className="relative block perspective-1000">
               <motion.div
                 initial={{ opacity: 0, rotateY: 10, scale: 0.9 }}
                 animate={isInView ? { opacity: 1, rotateY: 0, scale: 1 } : {}}
@@ -85,17 +72,17 @@ export function AIAuditSection() {
                   type: "spring",
                   stiffness: 100,
                 }}
-                className="relative rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-2xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-md p-6 group hover:shadow-emerald-500/10 transition-all duration-500"
+                className="relative rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-2xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-md p-4 sm:p-6 group hover:shadow-emerald-500/10 transition-all duration-500"
               >
                 {/* Card Header */}
-                <div className="flex justify-between items-start mb-6">
+                <div className="flex justify-between items-start mb-4 sm:mb-6">
                   <div>
-                    <h3 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-emerald-500" />
+                    <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-emerald-500 shrink-0" />
                       AI Readiness Score
                     </h3>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      Based on your workflow data
+                      Example output (based on workflow data)
                     </p>
                   </div>
                   <div className="flex flex-col items-end">
@@ -105,8 +92,8 @@ export function AIAuditSection() {
                   </div>
                 </div>
 
-                {/* Bars Visualization instead of numbers */}
-                <div className="space-y-4 mb-6">
+                {/* Bars - sample output */}
+                <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
                   <div>
                     <div className="flex justify-between text-[10px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400 mb-1">
                       <span>Process Clarity</span>
@@ -136,15 +123,15 @@ export function AIAuditSection() {
                   </div>
                 </div>
 
-                {/* Insight Box */}
-                <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-500/20">
+                {/* Insight Box - example recommendation */}
+                <div className="p-3 sm:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-500/20">
                   <div className="flex gap-3">
-                    <div className="mt-0.5">
+                    <div className="mt-0.5 shrink-0">
                       <CheckCircle2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-100">
-                        Recommended Next Step
+                    <div className="min-w-0">
+                      <h4 className="text-xs sm:text-sm font-semibold text-blue-900 dark:text-blue-100">
+                        Example: Recommended Next Step
                       </h4>
                       <p className="text-xs text-blue-700 dark:text-blue-300 mt-1 leading-relaxed">
                         Your process is ready for automation, but your data

@@ -16,7 +16,7 @@ const services = [
     id: "strategic-research",
     phase: "01",
     icon: TrendingUp,
-    title: "Stop Guessing.",
+    title: "Strategic Research & Intelligence",
     tagline: "Market intelligence that kills risk before you spend.",
     impact: "Know your market in 5 days",
     benefits: [
@@ -43,12 +43,12 @@ const services = [
     id: "rapid-development",
     phase: "02",
     icon: Code,
-    title: "Validate Instantly.",
+    title: "Rapid AI Development & Integration",
     tagline: "Turn 'good ideas' into working products. Fast.",
     impact: "Launch MVP in 2 weeks",
     benefits: [
       "Production-ready AI applications",
-      "Seamless API integrations with existing tools",
+      "APIs that plug into your existing tools, with clear docs",
       "Complete technical documentation and handoff",
     ],
     examples: [
@@ -67,16 +67,16 @@ const services = [
     shadowColor: "shadow-[0_0_30px_rgba(59,130,246,0.15)]",
   },
   {
-    id: "workflow-optimisation",
+    id: "workflow-optimization",
     phase: "03",
     icon: Building2,
-    title: "Cut the Bloat.",
+    title: "Process Efficiency & Workflow Optimisation",
     tagline: "Replace expensive admin hours with reliable code.",
     impact: "Save 20+ hours/week",
     benefits: [
       "Eliminate operational drag and manual data entry",
       "Automate complex workflows end-to-end",
-      "Scale your output without scaling headcount",
+      "Get more done without adding headcount",
     ],
     examples: [
       "Sales workflows",
@@ -97,7 +97,7 @@ const services = [
     id: "ai-training",
     phase: "04",
     icon: BookOpen,
-    title: "Own the Tech.",
+    title: "AI Strategy & Team Capability Building",
     tagline: "Don't rent your advantage. Build internal capability.",
     impact: "Build a self-sufficient team",
     benefits: [
@@ -330,18 +330,17 @@ export function ServicesSection() {
     <section
       ref={ref}
       id="services"
-      className="relative pt-24 md:pt-32 pb-24 md:pb-32 overflow-hidden bg-transparent"
+      className="relative py-20 md:py-28 overflow-hidden bg-transparent"
     >
       <PremiumBackground />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Enhanced Section Header */}
-        <div className="text-center mb-24 md:mb-28 lg:mb-32">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-light text-gray-900 dark:text-white mb-8 lg:mb-12 leading-tight tracking-[-0.02em]">
-            Stop Lagging.{" "}
+        <div className="text-center mb-16 md:mb-20">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-light text-gray-900 dark:text-white mb-6 md:mb-8 leading-tight tracking-[-0.02em] break-words">
             <span className="relative">
               <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                Start Leading.
+                Production Systems in Weeks. Strategic Research in Days.
               </span>
               {/* Subtle glow effect - disabled on mobile for performance */}
               <div className="absolute -inset-x-4 -inset-y-2 bg-blue-500/20 blur-2xl opacity-30 hidden md:block" />
@@ -349,13 +348,13 @@ export function ServicesSection() {
           </h2>
 
           <p className="text-xl lg:text-2xl text-gray-700/70 dark:text-white/70 max-w-4xl mx-auto leading-relaxed font-light">
-            We don't sell &quot;AI&quot;. We sell outcomes. Here is how we
-            remove bottlenecks and drive growth.
+            We remove bottlenecks and save time with AI integration, automation,
+            and research. Here's how we deliver.
           </p>
         </div>
 
         {/* Services Grid - 2x2 Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-12">
           {services.map((service, index) => (
             <ServiceCard key={service.id} service={service} index={index} />
           ))}
@@ -364,7 +363,7 @@ export function ServicesSection() {
         {/* Enhanced bottom CTA */}
         <div className="text-center mt-20 lg:mt-24">
           <p className="text-gray-600 dark:text-white/60 text-lg mb-6">
-            Ready to see how AI can transform your business?
+            Ready to cut overhead, move faster, or de-risk your next decision?
           </p>
           <button
             onClick={handleExploreAllServices}

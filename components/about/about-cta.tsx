@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export function AboutCTA() {
   return (
-    <section className="relative py-24 lg:py-32 overflow-hidden">
+    <section className="relative py-20 md:py-28 overflow-hidden">
       <div className="absolute inset-0 bg-gray-900/[0.02] dark:bg-white/[0.02]" />
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
@@ -45,7 +45,7 @@ export function AboutCTA() {
                     <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/5 to-purple-500/5" />
                     <div className="relative z-10 flex items-center justify-center space-x-3">
                       <Package className="w-5 h-5 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300" />
-                      <span>Explore Our Products</span>
+                      <span>View Our Work</span>
                       <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                     </div>
                   </Button>

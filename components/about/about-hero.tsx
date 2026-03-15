@@ -1,5 +1,6 @@
 "use client";
 
+import { BRAND } from "@/config/constants";
 import {
   motion,
   useInView,
@@ -138,7 +139,7 @@ export function AboutHero() {
                 FIELDPORTER
               </h1>
               <div className="text-xl md:text-2xl text-gray-300 font-light">
-                Strategic Research & AI Implementation
+                {BRAND.tagline}
               </div>
             </motion.div>
 

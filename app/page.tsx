@@ -7,12 +7,13 @@ import {
   TrustIndicatorBar,
 } from "@/components/homepage";
 import { PageWrapper } from "@/components/layout";
+import { HERO_HEADLINE } from "@/config/constants";
 import { Metadata } from "next";
 
-// Unified aurora background component for entire homepage
+// Full-viewport background so animation covers the whole screen
 function UnifiedAuroraBackground() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
       {/* Base gradient - theme aware */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-gray-100 to-white dark:from-black dark:via-gray-950 dark:to-gray-900" />
 
@@ -68,7 +69,7 @@ function UnifiedAuroraBackground() {
 
 export const metadata: Metadata = {
   title: {
-    absolute: "FIELDPORTER - Build Your Own AI Advantage | AI Integration",
+    absolute: `FIELDPORTER - ${HERO_HEADLINE}`,
   },
   description:
     "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. De-risk decisions, validate concepts, and reclaim high-value time with production-ready AI systems.",
@@ -81,11 +82,11 @@ export const metadata: Metadata = {
     "AI strategy consulting",
     "DeepSeek integration",
     "Cursor development",
-    "AI transformation partner",
+    "workflow automation",
     "strategic AI research",
   ],
   openGraph: {
-    title: "FIELDPORTER - Build Your Own AI Advantage",
+    title: `FIELDPORTER - ${HERO_HEADLINE}`,
     description:
       "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. De-risk decisions, validate concepts, and reclaim high-value time.",
     type: "website",
@@ -96,13 +97,13 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "FIELDPORTER - Build Your Own AI Advantage",
+        alt: `FIELDPORTER - ${HERO_HEADLINE}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "FIELDPORTER - Build Your Own AI Advantage",
+    title: `FIELDPORTER - ${HERO_HEADLINE}`,
     description:
       "FIELDPORTER provides AI integration, automation consulting, and strategic research for ambitious founders. De-risk decisions, validate concepts, and reclaim high-value time.",
     images: ["/opengraph-image"],
@@ -136,9 +137,9 @@ export default function Home() {
       <UnifiedAuroraBackground />
       <div className="relative z-10 space-y-0">
         <HeroSection />
+        <TrustIndicatorBar />
         <AIAuditSection />
         <ServicesSection />
-        <TrustIndicatorBar />
         <PortfolioSection />
         <CTASection />
       </div>

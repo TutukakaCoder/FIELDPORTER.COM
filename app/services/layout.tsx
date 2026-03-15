@@ -3,7 +3,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "AI Integration & Automation Services",
   description:
-    "FIELDPORTER provides strategic research, rapid AI development, workflow optimization, and AI training services for small and medium businesses looking to implement AI solutions.",
+    "FIELDPORTER provides AI integration, automation, and strategic research for founder-led and operator-led businesses. Production systems in weeks; decision-ready insights when you need them.",
   keywords: [
     "FIELDPORTER services",
     "AI integration services",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "FIELDPORTER | AI Integration & Automation Services",
     description:
-      "FIELDPORTER provides strategic research, rapid AI development, workflow optimization, and AI training services for small and medium businesses looking to implement AI solutions.",
+      "FIELDPORTER provides AI integration, automation, and strategic research for founder-led and operator-led businesses. Production systems in weeks; decision-ready insights when you need them.",
     type: "website",
     url: "https://fieldporter.com/services",
   },
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "FIELDPORTER | AI Integration & Automation Services",
     description:
-      "FIELDPORTER provides strategic research, rapid AI development, workflow optimization, and AI training services for small and medium businesses looking to implement AI solutions.",
+      "FIELDPORTER provides AI integration, automation, and strategic research for founder-led and operator-led businesses. Production systems in weeks; decision-ready insights when you need them.",
   },
   alternates: {
     canonical: "https://fieldporter.com/services",

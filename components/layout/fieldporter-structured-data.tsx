@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { COMPANY_MODEL } from "@/config/constants";
 
 export function FieldporterStructuredData() {
   return (
@@ -14,8 +15,7 @@ export function FieldporterStructuredData() {
           alternateName: "FIELDPORTER Limited",
           url: "https://fieldporter.com",
           logo: "https://fieldporter.com/favicon-dark.png",
-          description:
-            "AI integration and automation consulting that protects your margins. Build production AI systems in weeks.",
+          description: COMPANY_MODEL.short + " Production systems in weeks.",
           email: "hello@fieldporter.com",
           foundingDate: "2023",
           founders: [
@@ -46,8 +46,9 @@ export function FieldporterStructuredData() {
               "@type": "Offer",
               itemOffered: {
                 "@type": "Service",
-                name: "AI Integration Consulting",
-                description: "Transform your business with custom AI solutions",
+                name: "AI Integration & Implementation",
+                description:
+                  "Consulting and build: custom AI integration and production systems",
               },
             },
             {

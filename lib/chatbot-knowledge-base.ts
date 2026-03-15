@@ -110,7 +110,7 @@ export const FIELDPORTER_KNOWLEDGE = {
   portfolio_examples: {
     client_platforms: {
       self_development_platform: {
-        status: "8+ months live",
+        status: "12+ months live",
         metrics: [
           "1,000+ daily interactions",
           "100% uptime",

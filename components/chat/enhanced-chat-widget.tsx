@@ -77,12 +77,12 @@ const formatChatResponse = (content: string): string => {
   if (hasFalseWork) {
     processedContent = `Here are some real examples of our work:
 
-• Self-Development Platform: 8 months live, 1,000+ daily interactions, 15 hours weekly saved through automation
+• Self-Development Platform: 12 months live, 1,000+ daily interactions, 15 hours weekly saved through automation
 • VOYCAP Investment News: Improved image success from 30% to 85%, AI content summarisation  
 • Lead Generation Platform: 85% email classification accuracy, 70% reduction in manual review time
 • Strategic Research: Market entry analysis, VC portfolio validation frameworks
 
-Our services include strategic research ($500-$3,000), rapid development ($3,000-$8,000), and workflow optimisation ($2,000-$5,000). What type of challenge are you facing?`;
+Our services include strategic research ($500-$3,000), rapid development ($3,000-$8,000), and workflow optimization ($2,000-$5,000). What type of challenge are you facing?`;
   }
 
   // Replace booking capability claims with contact page redirect

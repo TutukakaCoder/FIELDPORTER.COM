@@ -2,224 +2,80 @@
 
 import { motion } from "framer-motion";
 import {
-  BarChart3,
   Brain,
   Cloud,
   Code,
-  Cpu,
-  Database,
-  GitBranch,
   Globe,
   Mail,
   Palette,
   Settings,
-  Shield,
-  Smartphone,
-  Video,
-  Zap,
 } from "lucide-react";
 
+/** Curated shortlist grouped by outcome: what we use to deliver results. */
 const comprehensiveTechStack = [
   {
-    category: "AI & Analysis",
+    category: "Ship production systems",
     tools: [
       {
-        name: "Claude Opus 4.5",
-        icon: Brain,
-        description:
-          "State-of-the-art reasoning, analysis, and code generation",
-      },
-      {
-        name: "GPT-5.2",
-        icon: Cpu,
-        description: "Large context reasoning and specialized task automation",
-      },
-      {
-        name: "Grok 4",
-        icon: Brain,
-        description:
-          "Real-time AI reasoning with live data access and analysis",
-      },
-      {
-        name: "Gemini 3.0 Pro",
-        icon: Globe,
-        description:
-          "Multimodal processing and comprehensive document analysis",
-      },
-      {
-        name: "DeepSeek V3.2",
-        icon: Brain,
-        description: "Cost-effective reasoning for production implementations",
-      },
-      {
-        name: "Perplexity Pro",
-        icon: Globe,
-        description: "Real-time research and information synthesis",
-      },
-      {
-        name: "Cursor AI",
+        name: "Next.js",
         icon: Code,
-        description: "AI-powered development environment and code generation",
-      },
-    ],
-  },
-  {
-    category: "Development & Infrastructure",
-    tools: [
-      {
-        name: "Next.js 15",
-        icon: Code,
-        description: "React framework with App Router and server components",
+        description: "Web apps that load fast and scale",
       },
       {
         name: "TypeScript",
         icon: Code,
-        description: "Type-safe JavaScript for scalable applications",
-      },
-      {
-        name: "Tailwind CSS",
-        icon: Palette,
-        description: "Utility-first CSS framework for rapid UI development",
+        description: "Fewer bugs, clearer handover",
       },
       {
         name: "Firebase",
         icon: Cloud,
-        description: "Real-time database, authentication, and hosting",
-      },
-      {
-        name: "Supabase",
-        icon: Database,
-        description: "Open-source backend with PostgreSQL foundation",
-      },
-      {
-        name: "MongoDB Atlas",
-        icon: Database,
-        description: "Cloud database for complex data structures",
+        description: "Auth, data, and hosting in one place",
       },
       {
         name: "Vercel",
         icon: Cloud,
-        description: "Edge deployment and performance optimization",
-      },
-      {
-        name: "Cloudflare",
-        icon: Shield,
-        description: "CDN, security, and edge computing services",
+        description: "Deploy and host with minimal setup",
       },
     ],
   },
   {
-    category: "Automation & Integration",
+    category: "AI and automation",
     tools: [
+      {
+        name: "Claude",
+        icon: Brain,
+        description: "Reasoning, analysis, and code",
+      },
+      {
+        name: "DeepSeek",
+        icon: Brain,
+        description: "Cost-effective production AI",
+      },
       {
         name: "n8n",
         icon: Settings,
-        description: "Self-hosted workflow automation and integration",
+        description: "Workflow automation you can own",
       },
-      {
-        name: "GitHub Actions",
-        icon: GitBranch,
-        description: "CI/CD pipelines and deployment automation",
-      },
-      {
-        name: "Puppeteer",
-        icon: Settings,
-        description: "Browser automation and web scraping",
-      },
-      {
-        name: "Custom APIs",
-        icon: Zap,
-        description: "Bespoke integration solutions and microservices",
-      },
-      {
-        name: "Webhook Systems",
-        icon: Settings,
-        description: "Real-time event-driven architecture",
-      },
+      { name: "Cursor", icon: Code, description: "Faster build and iteration" },
     ],
   },
   {
-    category: "Analytics & Monitoring",
+    category: "Research and delivery",
     tools: [
       {
-        name: "Google Analytics 4",
-        icon: BarChart3,
-        description: "Web analytics and user behavior insights",
+        name: "Perplexity",
+        icon: Globe,
+        description: "Fast research and synthesis",
       },
-      {
-        name: "Sentry",
-        icon: Shield,
-        description: "Error tracking and performance monitoring",
-      },
-      {
-        name: "Plausible Analytics",
-        icon: BarChart3,
-        description: "Privacy-focused web analytics",
-      },
-      {
-        name: "Custom Dashboards",
-        icon: BarChart3,
-        description: "Tailored analytics and reporting solutions",
-      },
-    ],
-  },
-  {
-    category: "Design & Content",
-    tools: [
       {
         name: "Figma",
         icon: Palette,
-        description: "UI/UX design and collaborative prototyping",
+        description: "Design and prototype with you",
       },
-      {
-        name: "Midjourney V7",
-        icon: Palette,
-        description: "AI-powered image generation with photorealistic quality",
-      },
-      {
-        name: "DALL-E 3",
-        icon: Palette,
-        description: "Precise AI image creation and editing",
-      },
-      {
-        name: "Sora",
-        icon: Video,
-        description: "AI video generation from text prompts",
-      },
-      {
-        name: "ElevenLabs",
-        icon: Video,
-        description: "AI voice synthesis and audio generation",
-      },
-      {
-        name: "RunwayML",
-        icon: Video,
-        description: "AI video generation and editing tools",
-      },
-    ],
-  },
-  {
-    category: "Communication & Infrastructure",
-    tools: [
       {
         name: "Resend",
         icon: Mail,
-        description: "Developer-focused email API and delivery",
-      },
-      {
-        name: "Twilio",
-        icon: Smartphone,
-        description: "SMS, voice, and communication APIs",
-      },
-      {
-        name: "Linear",
-        icon: Settings,
-        description: "Project management and issue tracking",
-      },
-      {
-        name: "Notion",
-        icon: Settings,
-        description: "Documentation and knowledge management",
+        description: "Reliable email and notifications",
       },
     ],
   },
@@ -227,7 +83,7 @@ const comprehensiveTechStack = [
 
 export function TechStack() {
   return (
-    <section className="relative py-24 lg:py-32 overflow-hidden">
+    <section className="relative py-20 md:py-28 overflow-hidden">
       <div className="absolute inset-0 bg-gray-900/[0.02] dark:bg-white/[0.02]" />
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div

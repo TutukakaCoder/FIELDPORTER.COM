@@ -218,7 +218,7 @@ export function MobileChatInterface({
       transition={{ duration: 0.3, ease: "easeOut" }}
       className={cn(
         "fixed inset-0 z-[100] bg-bg-fieldporter-primary flex flex-col",
-        "safe-area-inset-top safe-area-inset-bottom",
+        "safe-top safe-bottom",
         className,
       )}
       ref={containerRef}

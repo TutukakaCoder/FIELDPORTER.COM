@@ -111,7 +111,8 @@ export function BookingWidget({
               Book a Discovery Call
             </h2>
             <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              30-minute consultation to discuss your automation needs
+              A 30-minute call to discuss your situation—AI, automation,
+              research, or a build—and whether we’re a fit.
             </p>
           </div>
 

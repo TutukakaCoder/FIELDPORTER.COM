@@ -6,6 +6,12 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { memo, useMemo, useRef } from "react";
 import {
+  HERO_HEADLINE,
+  HERO_PROOF_LINE,
+  HERO_SUPPORTING_LINE,
+  HERO_VALUE_PROP,
+} from "@/config/constants";
+import {
   useDeviceCapability,
   useReducedMotion,
   useStableMobile,
@@ -164,28 +170,52 @@ const AnimatedCTA = memo(() => {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <motion.div
-      whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
-      whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
+    <div
+      className={`flex ${isMobile ? "flex-col w-full px-4" : "flex-row"} items-center justify-center gap-4`}
     >
-      <Link
-        href="/contact"
-        className={`
-          group relative transition-all duration-300 inline-flex items-center justify-center
-          ${isMobile ? "px-8 py-4 text-base" : "px-10 py-4 text-lg"}
-          bg-gray-900 dark:bg-white text-white dark:text-black
-          hover:bg-gray-800 dark:hover:bg-gray-100
-          rounded-full font-medium tracking-tight
-          shadow-lg hover:shadow-xl
-          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 dark:focus:ring-white
-        `}
+      <motion.div
+        whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+        whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
+        className={isMobile ? "w-full" : ""}
       >
-        <span className="flex items-center gap-2">
-          <span>Book a Call</span>
-          <ArrowRight className="w-4 h-4" />
-        </span>
-      </Link>
-    </motion.div>
+        <Link
+          href="/contact"
+          className={`
+            group relative transition-all duration-300 inline-flex items-center justify-center
+            ${isMobile ? "w-full px-8 py-4 text-base" : "px-8 py-3.5 text-base"}
+            bg-white text-black hover:bg-gray-100
+            rounded-full font-medium tracking-tight
+            shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)]
+            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-white
+          `}
+        >
+          <span className="flex items-center gap-2">
+            <span>Book a Call</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          </span>
+        </Link>
+      </motion.div>
+
+      <motion.div
+        whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+        whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
+        className={isMobile ? "w-full" : ""}
+      >
+        <Link
+          href="/portfolio"
+          className={`
+            group relative transition-all duration-300 inline-flex items-center justify-center
+            ${isMobile ? "w-full px-8 py-4 text-base" : "px-8 py-3.5 text-base"}
+            bg-white/5 hover:bg-white/10 text-white backdrop-blur-md
+            border border-white/10 hover:border-white/20
+            rounded-full font-medium tracking-tight
+            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-white/50
+          `}
+        >
+          <span>View Portfolio</span>
+        </Link>
+      </motion.div>
+    </div>
   );
 });
 
@@ -216,7 +246,7 @@ export function HeroSection() {
       ref={ref}
       className="relative min-h-screen flex items-center justify-center pt-20 pb-24 overflow-hidden bg-transparent"
     >
-      <div className="absolute inset-0 z-0">
+      <div className="fixed inset-0 z-0">
         <TieredBackground />
         <BackgroundPattern />
       </div>
@@ -233,28 +263,39 @@ export function HeroSection() {
           }}
           className="space-y-8 md:space-y-10"
         >
-          <div className="space-y-6">
+          <div className="space-y-8 relative">
+            {/* Background glow to ensure text readability against stars */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-black/40 dark:bg-black/40 blur-[100px] rounded-full pointer-events-none -z-10" />
+
+            <motion.div variants={textReveal} className="flex justify-center">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+                <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
+                <span className="text-sm font-medium text-gray-300">
+                  {HERO_SUPPORTING_LINE}
+                </span>
+              </div>
+            </motion.div>
+
             <motion.h1
               variants={textReveal}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tighter text-gray-900 dark:text-white leading-[1.05]"
+              className="text-5xl sm:text-6xl lg:text-7xl font-medium tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 leading-[1.1] pb-2 break-words"
             >
-              Build Your Own <br className="hidden sm:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
-                AI Advantage
-              </span>
+              {HERO_HEADLINE}
             </motion.h1>
 
             <motion.p
               variants={textReveal}
-              className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-normal leading-relaxed"
+              className="text-lg sm:text-xl text-gray-400 max-w-xl mx-auto font-normal leading-relaxed"
             >
-              AI integration and automation for clearer decisions, faster
-              delivery, and stronger margins.
+              {HERO_VALUE_PROP}
             </motion.p>
           </div>
 
           <motion.div variants={textReveal} className="pt-4">
             <AnimatedCTA />
+            <p className="mt-6 text-sm text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
+              {HERO_PROOF_LINE}
+            </p>
           </motion.div>
         </motion.div>
       </div>

@@ -35,12 +35,11 @@ const phases: MethodologyPhase[] = [
   {
     id: "context",
     number: "01",
-    title: "Data Structuring for AI",
-    value:
-      "We gather your business information and structure it for optimal AI processing",
+    title: "Context & Objectives",
+    value: "We capture your question, context, and decision criteria.",
     time: "",
     example:
-      "Example: We collect your documents, processes, and objectives, then organize them into a format that AI models can efficiently analyze and reference throughout the research process.",
+      "Your brief, documents, and what you need to decide. We structure this so the research answers your question, not a generic report.",
     icon: Upload,
     color: "from-blue-500 to-blue-600",
     colorRgb: "59, 130, 246",
@@ -48,12 +47,11 @@ const phases: MethodologyPhase[] = [
   {
     id: "research",
     number: "02",
-    title: "Multi-Model Research",
-    value:
-      "Deploy multiple AI models to conduct comprehensive research based on your needs",
+    title: "Research & Sourcing",
+    value: "Parallel research from multiple sources aligned to your question.",
     time: "",
     example:
-      "Example: Using Claude for deep analysis, Perplexity for real-time data, and specialized models for industry-specific insights, all working in parallel to gather comprehensive information.",
+      "We run targeted research and synthesis so you get breadth and depth in days, not weeks.",
     icon: Search,
     color: "from-purple-500 to-purple-600",
     colorRgb: "139, 92, 246",
@@ -61,11 +59,11 @@ const phases: MethodologyPhase[] = [
   {
     id: "filter",
     number: "03",
-    title: "Strategic Filtering",
-    value: "Extract only the insights that matter for your specific objectives",
+    title: "Filter & Prioritise",
+    value: "Noise removed; only decision-relevant insights stay.",
     time: "",
     example:
-      "Example: From hundreds of data points, we identify the critical insights that directly impact your decision-making, removing noise and focusing on actionable intelligence.",
+      "Hundreds of data points become a short set of clear implications and options.",
     icon: Filter,
     color: "from-emerald-500 to-emerald-600",
     colorRgb: "16, 185, 129",
@@ -73,12 +71,11 @@ const phases: MethodologyPhase[] = [
   {
     id: "verify",
     number: "04",
-    title: "Cross-Model Validation",
-    value:
-      "Verify accuracy by cross-referencing findings across different AI models",
+    title: "Validation",
+    value: "Key findings checked across sources so you can trust the brief.",
     time: "",
     example:
-      "Example: Each key finding is validated through multiple AI models and source verification to ensure accuracy and eliminate any potential AI hallucinations or biases.",
+      "Critical claims are verified so the brief is decision-ready, not speculative.",
     icon: CheckCircle,
     color: "from-orange-500 to-orange-600",
     colorRgb: "251, 146, 60",
@@ -86,11 +83,11 @@ const phases: MethodologyPhase[] = [
   {
     id: "deliver",
     number: "05",
-    title: "Direct Documentation",
-    value: "Deliver clear, organized documentation tailored to your needs",
+    title: "Brief & Handoff",
+    value: "One document with recommendations and next steps.",
     time: "",
     example:
-      "Example: You receive structured documentation with findings, insights, and recommendations in a format that directly supports your decision-making process.",
+      "You get a written brief, a short walkthrough, and one round of follow-up questions.",
     icon: FileText,
     color: "from-green-500 to-green-600",
     colorRgb: "34, 197, 94",

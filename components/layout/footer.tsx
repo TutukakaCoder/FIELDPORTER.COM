@@ -14,7 +14,7 @@ interface FooterProps {
 const services = [
   { label: "Strategic Intelligence", href: "/services#strategic-research" },
   { label: "Rapid Development", href: "/services#rapid-development" },
-  { label: "Workflow Optimisation", href: "/services#workflow-optimisation" },
+  { label: "Workflow Optimization", href: "/services#workflow-optimization" },
   { label: "AI Strategy & Training", href: "/services#ai-strategy" },
 ];
 
@@ -86,7 +86,7 @@ export function Footer({ className }: FooterProps) {
               {BRAND.name}
             </Link>
             <p className="text-sm text-gray-500 dark:text-gray-400 font-light max-w-xs">
-              Building AI-Powered Futures.
+              {BRAND.tagline}.
               <br />
               Auckland • Worldwide
             </p>
@@ -125,7 +125,8 @@ export function Footer({ className }: FooterProps) {
             <div className="space-y-3">
               <button
                 onClick={() => setIsServicesOpen(!isServicesOpen)}
-                className="flex items-center justify-between w-full md:w-auto group cursor-pointer md:cursor-default"
+                className="flex items-center justify-between w-full md:w-auto min-h-[44px] py-2 group cursor-pointer md:cursor-default touch-manipulation"
+                aria-expanded={isServicesOpen}
               >
                 <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300 md:group-hover:text-gray-400 md:dark:group-hover:text-gray-500 transition-colors">
                   Services
@@ -150,7 +151,7 @@ export function Footer({ className }: FooterProps) {
                   <li key={service.href}>
                     <Link
                       href={service.href}
-                      className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors block py-0.5"
+                      className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors block py-2 min-h-[44px] flex items-center touch-manipulation"
                     >
                       {service.label}
                     </Link>
@@ -169,7 +170,7 @@ export function Footer({ className }: FooterProps) {
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors block py-0.5"
+                      className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors block py-2 min-h-[44px] flex items-center touch-manipulation"
                     >
                       {item.label}
                     </Link>
@@ -183,13 +184,13 @@ export function Footer({ className }: FooterProps) {
           <div className="lg:col-span-3 flex flex-col gap-4 lg:items-end">
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center w-full lg:w-auto px-6 py-2.5 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-black font-semibold text-sm hover:opacity-90 hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-gray-200/50 dark:shadow-none"
+              className="inline-flex items-center justify-center w-full lg:w-auto min-h-[44px] px-6 py-3 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-black font-semibold text-sm hover:opacity-90 hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-gray-200/50 dark:shadow-none touch-manipulation"
             >
               Start Project
             </Link>
             <a
               href={`mailto:${BRAND.email}`}
-              className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+              className="inline-flex items-center gap-2 min-h-[44px] text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors touch-manipulation"
             >
               <Mail className="w-4 h-4" />
               {BRAND.email}
@@ -205,13 +206,13 @@ export function Footer({ className }: FooterProps) {
           <div className="flex items-center gap-6 text-xs">
             <Link
               href="/privacy-policy"
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+              className="inline-flex items-center min-h-[44px] text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors touch-manipulation"
             >
               Privacy
             </Link>
             <Link
               href="/terms-of-service"
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+              className="inline-flex items-center min-h-[44px] text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors touch-manipulation"
             >
               Terms
             </Link>

@@ -164,7 +164,7 @@ export function InsightsHero() {
       ),
       name: "AI Strategy",
       count: "12 Articles",
-      description: "Strategic frameworks for AI transformation",
+      description: "Frameworks for faster decisions and workflow improvement",
       gradient: "from-emerald-500/20 to-blue-500/20",
       iconColor: "text-emerald-400",
       glow: "shadow-[0_0_30px_rgba(16,185,129,0.3)]",

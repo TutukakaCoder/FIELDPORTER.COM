@@ -26,14 +26,14 @@ Consolidated from the full website audit, code review, and follow-up strategy no
 
 ## P1 Positioning And Offer Clarity
 
-- [ ] Choose one primary buyer for the marketing site instead of speaking to founders, SMBs, VC firms, staffing firms, and `$2M+ ARR` companies at the same time.
-- [ ] Define one clear core offer hierarchy for the site: what FIELDPORTER does first, what it also does second, and what is supporting proof.
-- [ ] Standardize the main positioning line across metadata, hero sections, footer, and config constants.
-- [ ] Remove brand language drift between `AI integration & automation`, `Strategic Research & Business Development`, `Strategic Research & AI Implementation`, and `Building AI-Powered Futures`.
-- [ ] Clarify whether FIELDPORTER is primarily a consulting firm, a product studio, or a hybrid model, then make the whole site reflect that clearly.
-- [ ] Decide whether `AIOS` is a core offer, a lead magnet, or a product and position it consistently.
-- [ ] Make the first-screen value proposition say exactly what FIELDPORTER does, for whom, and what outcome it improves.
-- [ ] Replace vague “cool AI” framing with a sharper business promise around workflow improvement, margin protection, speed, or decision quality.
+- [x] Choose one primary buyer for the marketing site instead of speaking to founders, SMBs, VC firms, staffing firms, and `$2M+ ARR` companies at the same time.
+- [x] Define one clear core offer hierarchy for the site: what FIELDPORTER does first, what it also does second, and what is supporting proof.
+- [x] Standardize the main positioning line across metadata, hero sections, footer, and config constants.
+- [x] Remove brand language drift between `AI integration & automation`, `Strategic Research & Business Development`, `Strategic Research & AI Implementation`, and `Building AI-Powered Futures`.
+- [x] Clarify whether FIELDPORTER is primarily a consulting firm, a product studio, or a hybrid model, then make the whole site reflect that clearly.
+- [x] Decide whether `AIOS` is a core offer, a lead magnet, or a product and position it consistently.
+- [x] Make the first-screen value proposition say exactly what FIELDPORTER does, for whom, and what outcome it improves.
+- [x] Replace vague “cool AI” framing with a sharper business promise around workflow improvement, margin protection, speed, or decision quality.
 
 ## P1 CTA And Conversion Fixes
 
@@ -42,122 +42,122 @@ Consolidated from the full website audit, code review, and follow-up strategy no
 - [x] Rewrite `Let's Explore Your Options` in `components/homepage/cta-section.tsx` to something more direct and commercial.
 - [x] Rewrite `Contact Us` and `View Our Work` buttons in the homepage CTA section so they feel less generic.
 - [x] Rewrite the services hero CTA `Schedule Strategy Discussion` so it feels more concrete and less consultant-generic.
-- [ ] Make the AIOS final CTA accurate if it links to `/contact` instead of actually starting the assessment.
-- [ ] Add clearer expectation-setting on the contact page about who should book, what they get, and what happens next.
-- [ ] Add basic qualification copy on the contact page: fit, minimum scope, timeline, and whether FIELDPORTER is right for them.
-- [ ] Add privacy/NDA/data-handling reassurance near contact and booking flows.
-- [ ] Move the strongest proof closer to the first CTA instead of making people dig deep before trusting the business.
+- [x] Make the AIOS final CTA accurate if it links to `/contact` instead of actually starting the assessment.
+- [x] Add clearer expectation-setting on the contact page about who should book, what they get, and what happens next.
+- [x] Add basic qualification copy on the contact page: fit, minimum scope, timeline, and whether FIELDPORTER is right for them.
+- [x] Add privacy/NDA/data-handling reassurance near contact and booking flows.
+- [x] Move the strongest proof closer to the first CTA instead of making people dig deep before trusting the business.
 
 ## P1 Homepage Tasks
 
 - [x] Rewrite the homepage hero subheadline in `components/homepage/hero-section.tsx` to be more specific and less slogan-based.
-- [ ] Decide whether `Build Your Own AI Advantage` stays as the main headline or becomes a supporting line under a clearer commercial headline.
-- [ ] Remove generic slogan copy like `Stop Lagging. Start Leading.` unless it is immediately backed by specific proof.
-- [ ] Rewrite the four service card headlines in `components/homepage/services-section.tsx` so they sound like clear offers, not ad slogans.
-- [ ] Replace filler lines like `We don't sell "AI". We sell outcomes.` with more concrete proof-led copy.
+- [x] Decide whether `Build Your Own AI Advantage` stays as the main headline or becomes a supporting line under a clearer commercial headline.
+- [x] Remove generic slogan copy like `Stop Lagging. Start Leading.` unless it is immediately backed by specific proof.
+- [x] Rewrite the four service card headlines in `components/homepage/services-section.tsx` so they sound like clear offers, not ad slogans.
+- [x] Replace filler lines like `We don't sell "AI". We sell outcomes.` with more concrete proof-led copy.
 - [x] Remove the `Public Beta • Feedback Wanted` badge from `components/homepage/ai-audit-section.tsx`.
-- [ ] Decide whether the AI assessment is staffing-specific or broader and align homepage copy with the AIOS page.
-- [ ] Build a real mobile version of the AI readiness visual instead of hiding it behind `hidden md:block` in `components/homepage/ai-audit-section.tsx`.
-- [ ] Replace the hardcoded AI readiness sample bars with a more believable sample output or interactive preview.
-- [ ] Rewrite the homepage portfolio card taglines that feel junior or self-referential, especially `demonstrating full-stack capabilities`.
-- [ ] Separate client proof from in-house experiments more clearly on the homepage.
-- [ ] Replace the abstract trust indicator bar in `components/homepage/trust-indicator-bar.tsx` with proof-backed metrics or statements.
-- [ ] Make the final homepage CTA more direct about the first step and expected outcome.
+- [x] Decide whether the AI assessment is staffing-specific or broader and align homepage copy with the AIOS page.
+- [x] Build a real mobile version of the AI readiness visual instead of hiding it behind `hidden md:block` in `components/homepage/ai-audit-section.tsx`.
+- [x] Replace the hardcoded AI readiness sample bars with a more believable sample output or interactive preview.
+- [x] Rewrite the homepage portfolio card taglines that feel junior or self-referential, especially `demonstrating full-stack capabilities`.
+- [x] Separate client proof from in-house experiments more clearly on the homepage.
+- [x] Replace the abstract trust indicator bar in `components/homepage/trust-indicator-bar.tsx` with proof-backed metrics or statements.
+- [x] Make the final homepage CTA more direct about the first step and expected outcome.
 
 ## P1 About Page Tasks
 
-- [ ] Unify the `I` versus `we` voice across `components/about/*`.
-- [ ] Clarify the founder-led operating model in one clean explanation instead of repeating it in multiple slightly different ways.
-- [ ] Remove or rewrite vague claims about a `specialized network`, `expert network`, or `senior advisors` unless named proof can support them.
-- [ ] Tighten `components/about/company-foundation.tsx` so it explains execution clearly without sounding inflated.
-- [ ] Rewrite `components/about/systematic-approach.tsx` to focus more on business outcomes and less on tool names.
-- [ ] Tighten `components/about/technical-capability.tsx` so it sounds commercially credible, not like training catalog copy.
-- [ ] Reduce repetition between `AboutHero`, `CompanyFoundation`, `SystematicApproach`, and `TechnicalCapability`.
-- [ ] Remove the signal that FIELDPORTER is moving away from consulting if consulting is still being sold.
-- [ ] Fix the mismatch between `Explore Our Products` and the current `/portfolio` destination.
+- [x] Unify the `I` versus `we` voice across `components/about/*`.
+- [x] Clarify the founder-led operating model in one clean explanation instead of repeating it in multiple slightly different ways.
+- [x] Remove or rewrite vague claims about a `specialized network`, `expert network`, or `senior advisors` unless named proof can support them.
+- [x] Tighten `components/about/company-foundation.tsx` so it explains execution clearly without sounding inflated.
+- [x] Rewrite `components/about/systematic-approach.tsx` to focus more on business outcomes and less on tool names.
+- [x] Tighten `components/about/technical-capability.tsx` so it sounds commercially credible, not like training catalog copy.
+- [x] Reduce repetition between `AboutHero`, `CompanyFoundation`, `SystematicApproach`, and `TechnicalCapability`.
+- [x] Remove the signal that FIELDPORTER is moving away from consulting if consulting is still being sold.
+- [x] Fix the mismatch between `Explore Our Products` and the current `/portfolio` destination.
 
 ## P1 Services Page Tasks
 
-- [ ] Rewrite the services hero in `app/services/page.tsx` so it sells one coherent offer, not several adjacent businesses.
-- [ ] Align the `small and medium businesses` framing with the rest of the site’s actual target audience.
-- [ ] Decide whether the services page is targeting owner-led SMBs, mid-market operators, or investor-backed businesses.
-- [ ] Rewrite service descriptions to be more specific about deliverables, who each service is for, and what happens at the end.
-- [ ] Replace unattributed proof blurbs like `Client saved 15+ hours weekly` with named or contextual proof.
-- [ ] Add stronger proof next to performance claims like `3-5x improvement` and `production-ready systems in 1-3 weeks`.
-- [ ] Simplify the interactive service showcase if it adds motion without adding clarity.
-- [ ] Check mobile usability of the service selector pills and detail panels.
-- [ ] Standardize spelling across `optimization` and `optimisation`.
-- [ ] Review whether the methodology section is too long and tool-heavy for a sales page.
-- [ ] Remove any scroll gimmicks or motion that hurts mobile battery life or scroll smoothness.
+- [x] Rewrite the services hero in `app/services/page.tsx` so it sells one coherent offer, not several adjacent businesses.
+- [x] Align the `small and medium businesses` framing with the rest of the site’s actual target audience.
+- [x] Decide whether the services page is targeting owner-led SMBs, mid-market operators, or investor-backed businesses.
+- [x] Rewrite service descriptions to be more specific about deliverables, who each service is for, and what happens at the end.
+- [x] Replace unattributed proof blurbs like `Client saved 15+ hours weekly` with named or contextual proof.
+- [x] Add stronger proof next to performance claims like `3-5x improvement` and `production-ready systems in 1-3 weeks`.
+- [x] Simplify the interactive service showcase if it adds motion without adding clarity.
+- [x] Check mobile usability of the service selector pills and detail panels.
+- [x] Standardize spelling across `optimization` and `optimisation`.
+- [x] Review whether the methodology section is too long and tool-heavy for a sales page.
+- [x] Remove any scroll gimmicks or motion that hurts mobile battery life or scroll smoothness.
 
 ## P1 AIOS Page Tasks
 
 - [x] Remove `secure portal` language from `app/aios/page.tsx` step 1.
-- [ ] Clarify exactly what the AIOS deliverable is: report, score, roadmap, call, or all of the above.
-- [ ] Add a sample report, screenshot, or example output so visitors know what they are buying or starting.
-- [ ] Clarify whether AIOS is paid, free, beta, or lead qualification.
-- [ ] Clarify how long AIOS takes and what the user gets immediately versus later.
-- [ ] Align AIOS targeting with the homepage so it is not staffing-specific in one place and broad in another.
-- [ ] Move AIOS off `fieldporter-aios.web.app` to a stronger branded domain or subdomain if it remains a core offer.
-- [ ] Rewrite the final CTA if it does not actually start the assessment.
+- [x] Clarify exactly what the AIOS deliverable is: report, score, roadmap, call, or all of the above.
+- [x] Add a sample report, screenshot, or example output so visitors know what they are buying or starting.
+- [x] Clarify whether AIOS is paid, free, beta, or lead qualification.
+- [x] Clarify how long AIOS takes and what the user gets immediately versus later.
+- [x] Align AIOS targeting with the homepage so it is not staffing-specific in one place and broad in another.
+- [x] Move AIOS off `fieldporter-aios.web.app` to a stronger branded domain or subdomain if it remains a core offer.
+- [x] Rewrite the final CTA if it does not actually start the assessment.
 
 ## P1 Portfolio Page Tasks
 
-- [ ] Split client work and internal ventures more clearly in `app/portfolio/page.tsx`.
-- [ ] Turn vague entries into sharper case studies with clearer before/after outcomes.
-- [ ] Remove or rewrite `Multiple Strategic Engagements`.
-- [ ] Remove or rewrite `MORE IN-HOUSE VENTURES COMING!`.
-- [ ] Rewrite weak portfolio language like `demonstrating full-stack capabilities`.
-- [ ] Make each portfolio item answer: who it was for, what problem it solved, what changed, and what proof exists.
-- [ ] Reduce the sense that FIELDPORTER works across every industry under the sun.
-- [ ] Re-evaluate the `Deep Domain Specialization` section if those verticals are only exploratory interests.
-- [ ] Add more context to metrics so they feel believable, not floating claims.
-- [ ] Check portfolio card height, floating numbers, and spacing on mobile.
+- [x] Split client work and internal ventures more clearly in `app/portfolio/page.tsx`.
+- [x] Turn vague entries into sharper case studies with clearer before/after outcomes.
+- [x] Remove or rewrite `Multiple Strategic Engagements`.
+- [x] Remove or rewrite `MORE IN-HOUSE VENTURES COMING!`.
+- [x] Rewrite weak portfolio language like `demonstrating full-stack capabilities`.
+- [x] Make each portfolio item answer: who it was for, what problem it solved, what changed, and what proof exists.
+- [x] Reduce the sense that FIELDPORTER works across every industry under the sun.
+- [x] Re-evaluate the `Deep Domain Specialization` section if those verticals are only exploratory interests.
+- [x] Add more context to metrics so they feel believable, not floating claims.
+- [x] Check portfolio card height, floating numbers, and spacing on mobile.
 
 ## P1 Contact Page Tasks
 
-- [ ] Rewrite the contact page hero in `app/contact/contact-page-client.tsx` so it feels like a serious buyer funnel, not a generic contact screen.
-- [ ] Match booking page copy to the full FIELDPORTER offer, not just `automation needs`.
-- [ ] Add a short `who this is for` section.
-- [ ] Add a short `what we will cover on the call` section.
-- [ ] Add a short `best fit / not a fit` section.
-- [ ] Add privacy/confidentiality reassurance near the form and booking flow.
-- [ ] Check the Cal embed on mobile for clipping, scroll friction, and perceived loading quality.
+- [x] Rewrite the contact page hero in `app/contact/contact-page-client.tsx` so it feels like a serious buyer funnel, not a generic contact screen.
+- [x] Match booking page copy to the full FIELDPORTER offer, not just `automation needs`.
+- [x] Add a short `who this is for` section.
+- [x] Add a short `what we will cover on the call` section.
+- [x] Add a short `best fit / not a fit` section.
+- [x] Add privacy/confidentiality reassurance near the form and booking flow.
+- [x] Check the Cal embed on mobile for clipping, scroll friction, and perceived loading quality.
 
 ## P1 Insights Tasks
 
-- [ ] Keep `Insights`, but convert it into a real article hub.
-- [ ] Publish the three existing long-form articles from the main `/insights` page.
-- [ ] Remove `Coming Soon` messaging from public insights surfaces.
-- [ ] Update stale article dates and metadata where needed.
-- [ ] Ensure article categories are consistent.
-- [ ] Make `Back to Insights` in `components/insights/article-layout.tsx` return to a real content index.
-- [ ] Keep newsletter signup as a secondary CTA, not the entire page.
-- [ ] Review article CTA language so it promotes more reading first and consultation second.
-- [ ] Verify `app/sitemap.ts` still makes sense once the insights index is fixed.
+- [x] Keep `Insights`, but convert it into a real article hub.
+- [x] Publish the three existing long-form articles from the main `/insights` page.
+- [x] Remove `Coming Soon` messaging from public insights surfaces.
+- [x] Update stale article dates and metadata where needed.
+- [x] Ensure article categories are consistent.
+- [x] Make `Back to Insights` in `components/insights/article-layout.tsx` return to a real content index.
+- [x] Keep newsletter signup as a secondary CTA, not the entire page.
+- [x] Review article CTA language so it promotes more reading first and consultation second.
+- [x] Verify `app/sitemap.ts` still makes sense once the insights index is fixed.
 
 ## P1 Trust And Credibility Tasks
 
-- [ ] Pull the strongest proof points higher up the site.
-- [ ] Replace abstract credibility statements with named outcomes and context.
-- [ ] Improve testimonial quality by pairing each quote with a clearer project result.
-- [ ] Add more proof around founder expertise without over-relying on vague `expert network` language.
-- [ ] Show sample outputs where possible: reports, dashboards, AI workflows, or audit outputs.
-- [ ] Make the business feel safer to buy from by explaining process, scope, and handoff more clearly.
-- [ ] Consider dedicated case study pages if portfolio proof becomes a major conversion lever.
+- [x] Pull the strongest proof points higher up the site.
+- [x] Replace abstract credibility statements with named outcomes and context.
+- [x] Improve testimonial quality by pairing each quote with a clearer project result.
+- [x] Add more proof around founder expertise without over-relying on vague `expert network` language.
+- [x] Show sample outputs where possible: reports, dashboards, AI workflows, or audit outputs.
+- [x] Make the business feel safer to buy from by explaining process, scope, and handoff more clearly.
+- [x] Consider dedicated case study pages if portfolio proof becomes a major conversion lever.
 
 ## P2 Mobile UX Tasks
 
-- [ ] Review all key pages with mobile as the default experience, not a fallback.
-- [ ] Fix the homepage AI assessment section so mobile users do not lose the core visual explanation.
-- [ ] Audit card stacking, section spacing, and vertical rhythm across homepage, services, about, portfolio, and contact.
-- [ ] Check tap targets in nav, footer accordion, CTA buttons, and chat controls.
-- [ ] Check all floating UI elements for overlap on mobile: chat, back-to-top, nav, and sticky elements.
-- [ ] Review card min-heights and overflow on mobile for portfolio and services components.
-- [ ] Make sure large headings do not feel oversized or break awkwardly on small screens.
+- [x] Review all key pages with mobile as the default experience, not a fallback.
+- [x] Fix the homepage AI assessment section so mobile users do not lose the core visual explanation.
+- [x] Audit card stacking, section spacing, and vertical rhythm across homepage, services, about, portfolio, and contact.
+- [x] Check tap targets in nav, footer accordion, CTA buttons, and chat controls.
+- [x] Check all floating UI elements for overlap on mobile: chat, back-to-top, nav, and sticky elements.
+- [x] Review card min-heights and overflow on mobile for portfolio and services components.
+- [x] Make sure large headings do not feel oversized or break awkwardly on small screens.
 - [ ] Remove any desktop-first effects that disappear on mobile without a real replacement.
-- [ ] Fix the mobile chat safe-area class mismatch in `components/chat/mobile-chat-interface.tsx`.
-- [ ] Make safe-area utilities consistent with the global CSS utility names in `app/globals.css`.
+- [x] Fix the mobile chat safe-area class mismatch in `components/chat/mobile-chat-interface.tsx`.
+- [x] Make safe-area utilities consistent with the global CSS utility names in `app/globals.css`.
 
 ## P2 Design System Tasks
 
@@ -198,10 +198,10 @@ Consolidated from the full website audit, code review, and follow-up strategy no
 
 ## P2 Copy Cleanup Tasks
 
-- [ ] Remove generic agency-style phrases across the site.
-- [ ] Replace filler copy with specific outcomes, deliverables, or constraints.
-- [ ] Remove buzzword-heavy lines that sound broader than the actual offer.
-- [ ] Replace junior-sounding phrases like `demonstrating full-stack capabilities`.
+- [x] Remove generic agency-style phrases across the site.
+- [x] Replace filler copy with specific outcomes, deliverables, or constraints.
+- [x] Remove buzzword-heavy lines that sound broader than the actual offer.
+- [x] Replace junior-sounding phrases like `demonstrating full-stack capabilities`.
 - [ ] Rewrite copy that tries to sound smart instead of useful.
 - [ ] Make every main page answer the buyer’s likely next question instead of repeating brand claims.
 - [ ] Standardize terminology for AI, automation, research, consulting, implementation, and products.
@@ -209,10 +209,10 @@ Consolidated from the full website audit, code review, and follow-up strategy no
 
 ## P2 About Tech Stack Tasks
 
-- [ ] Cut the `TechStack` wall in `components/about/tech-stack.tsx` from 34 tools to a curated shortlist.
-- [ ] Group the shortened tech stack around outcomes, not just tool names.
-- [ ] Remove inaccurate or inflated version claims if they do not match the real codebase or matter to buyers.
-- [ ] Consider replacing the long tool wall with a smaller `how we build` section plus 3-4 real examples.
+- [x] Cut the `TechStack` wall in `components/about/tech-stack.tsx` from 34 tools to a curated shortlist.
+- [x] Group the shortened tech stack around outcomes, not just tool names.
+- [x] Remove inaccurate or inflated version claims if they do not match the real codebase or matter to buyers.
+- [x] Consider replacing the long tool wall with a smaller `how we build` section plus 3-4 real examples.
 
 ## P2 Footer And Navigation Tasks
 
@@ -250,15 +250,15 @@ Consolidated from the full website audit, code review, and follow-up strategy no
 - [x] Replace `/insights` with a real article index.
 - [x] Remove `We're in Transition` from the About page.
 - [x] Rewrite the homepage hero subheadline and CTA.
-- [ ] Remove the `Public Beta` badge from the AI assessment.
+- [x] Remove the `Public Beta` badge from the AI assessment.
 - [x] Fix broken footer service anchors.
 - [x] Standardize the main CTA language sitewide.
 - [ ] Decide and lock the primary target audience.
 - [ ] Decide and lock the main FIELDPORTER positioning line.
-- [ ] Build a mobile-friendly AI assessment visual.
+- [x] Build a mobile-friendly AI assessment visual.
 - [ ] Reduce the layered background and blur effects.
 - [ ] Cut the About tech stack wall to a curated shortlist.
-- [ ] Rewrite weak portfolio taglines and vague case entries.
+- [x] Rewrite weak portfolio taglines and vague case entries.
 - [ ] Improve contact page fit, expectation, and trust copy.
 - [x] Secure or remove the public admin route.
 
