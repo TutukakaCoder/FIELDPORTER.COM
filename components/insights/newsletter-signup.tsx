@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle, Loader2, Mail } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function NewsletterSignup() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -118,9 +120,9 @@ export function NewsletterSignup() {
                     size="enterprise"
                     className="group focus-visible:ring-2 focus-visible:ring-fieldporter-blue"
                     onClick={() => {
-                      // Scroll back to blog grid
+                      // Scroll back to articles
                       document
-                        .getElementById("blog-grid")
+                        .getElementById("latest-insights")
                         ?.scrollIntoView({ behavior: "smooth" });
                     }}
                   >
@@ -137,9 +139,7 @@ export function NewsletterSignup() {
                     variant="fieldporter-secondary"
                     size="enterprise"
                     className="group focus-visible:ring-2 focus-visible:ring-white/50"
-                    onClick={() => {
-                      window.location.href = "/contact";
-                    }}
+                    onClick={() => router.push("/contact")}
                   >
                     Get Consultation
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />

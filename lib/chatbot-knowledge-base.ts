@@ -6,13 +6,12 @@ export const FIELDPORTER_KNOWLEDGE = {
       "Business consultancy that builds the software solutions that bring strategies to life",
     business_model:
       "We don't just consult - we build. When we recommend an AI solution, it's because we've implemented something similar ourselves",
-    philosophy: "We Build What We Recommend",
+    philosophy: "Practical AI, shipped fast",
     differentiator:
       "Bridge the gap between business needs and technical possibilities",
     team_advantage:
       "Small team led by Frederick Hopkins means direct access to expertise, not junior consultants",
-    client_range:
-      "Everyone: enterprises, startups, small businesses, and individuals",
+    client_range: "Growing companies and ambitious teams (SMB to mid-market)",
   },
 
   services: {
@@ -197,13 +196,11 @@ export const FIELDPORTER_KNOWLEDGE = {
   },
 
   target_clients: [
-    "VCs evaluating portfolio company strategies",
-    "Growth-stage companies needing strategic research",
-    "Founders requiring concept validation",
-    "Enterprises seeking AI implementation",
-    "Startups needing rapid prototyping",
-    "Small businesses wanting process automation",
-    "Individuals learning about AI and automation",
+    "Growing companies needing AI implementation",
+    "Ambitious teams requiring process automation",
+    "Operators seeking workflow optimization",
+    "Business leaders needing concept validation",
+    "Mid-market companies exploring AI strategy",
   ],
 
   confidential_boundaries: {

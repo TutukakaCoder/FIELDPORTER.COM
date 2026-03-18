@@ -31,9 +31,9 @@ export const metadata: Metadata = {
   title: {
     template: "FIELDPORTER | %s",
     default:
-      "FIELDPORTER - Build Your Own AI Advantage | AI Integration & Automation",
+      "FIELDPORTER - AI Integration & Automation | Practical AI for Growing Companies",
   },
-  description: `${COMPANY_MODEL.short} Production systems in weeks. For ${PRIMARY_AUDIENCE.short}.`,
+  description: `${COMPANY_MODEL.short} First useful system in 1–3 weeks.`,
   keywords:
     "AI integration, automation consulting, AI implementation, workflow automation, FIELDPORTER, strategic research, production AI",
   authors: [{ name: "FIELDPORTER" }],
@@ -133,9 +133,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://fieldporter.com",
-    title: "FIELDPORTER - AI Integration & Automation Consulting",
+    title: "FIELDPORTER - AI Integration & Automation",
     description:
-      "Build production AI systems in weeks. Save 15+ hours weekly. Protect your margins with automation that works.",
+      "Practical AI systems, automations, and internal tools for growing companies. First useful system in 1–3 weeks.",
     siteName: "FIELDPORTER",
     images: [
       {
@@ -148,9 +148,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "FIELDPORTER - AI Integration & Automation Consulting",
+    title: "FIELDPORTER - AI Integration & Automation",
     description:
-      "Build production AI systems in weeks. Save 15+ hours weekly. Protect your margins with automation that works.",
+      "Practical AI systems, automations, and internal tools for growing companies. First useful system in 1–3 weeks.",
     creator: "@fieldporter",
     images: ["/opengraph-image"],
   },

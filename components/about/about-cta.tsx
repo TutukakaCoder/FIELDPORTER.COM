@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export function AboutCTA() {
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden">
+    <section className="relative section-rhythm-lg overflow-hidden">
       <div className="absolute inset-0 bg-gray-900/[0.02] dark:bg-white/[0.02]" />
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
@@ -16,10 +16,8 @@ export function AboutCTA() {
           whileHover={{ y: -4 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ delay: 0, duration: 0.8 }}
-          className="relative p-12 rounded-2xl backdrop-blur-xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02] hover:border-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 group/card"
+          className="relative card-section card-section-hover p-12 hover:border-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/10 group/card"
         >
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent pointer-events-none" />
-
           <div className="relative z-10 space-y-8">
             <div className="space-y-6">
               <h2 className="text-3xl md:text-4xl font-light text-gray-900 dark:text-white leading-tight">
@@ -40,33 +38,42 @@ export function AboutCTA() {
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.2 }}
               >
-                <Link href="/portfolio">
-                  <Button className="group relative px-8 py-4 rounded-2xl backdrop-blur-xl border border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/20 transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] text-gray-900 dark:text-white font-medium min-w-[200px]">
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/5 to-purple-500/5" />
-                    <div className="relative z-10 flex items-center justify-center space-x-3">
-                      <Package className="w-5 h-5 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300" />
-                      <span>View Our Work</span>
-                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                    </div>
-                  </Button>
-                </Link>
+                <Button
+                  variant="primary"
+                  size="lg"
+                  className="min-w-[200px] group"
+                  asChild
+                >
+                  <Link
+                    href="/portfolio"
+                    className="inline-flex items-center justify-center gap-3"
+                  >
+                    <Package className="w-5 h-5 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300" />
+                    <span>View Our Work</span>
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Link>
+                </Button>
               </motion.div>
-
               <motion.div
                 whileHover={{ y: -2, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.2 }}
               >
-                <Link href="/services">
-                  <Button className="group relative px-8 py-4 rounded-2xl backdrop-blur-xl border border-gray-900/20 dark:border-white/20 bg-gray-900/5 dark:bg-white/5 hover:bg-gray-900/10 dark:hover:bg-white/10 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] text-gray-900 dark:text-white font-medium min-w-[200px]">
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-gray-900/[0.02] dark:from-white/[0.02] to-gray-900/[0.01] dark:to-white/[0.01]" />
-                    <div className="relative z-10 flex items-center justify-center space-x-3">
-                      <Settings className="w-5 h-5 group-hover:scale-110 group-hover:rotate-90 transition-transform duration-500" />
-                      <span>Current Services</span>
-                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                    </div>
-                  </Button>
-                </Link>
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="min-w-[200px] group"
+                  asChild
+                >
+                  <Link
+                    href="/services"
+                    className="inline-flex items-center justify-center gap-3"
+                  >
+                    <Settings className="w-5 h-5 group-hover:scale-110 group-hover:rotate-90 transition-transform duration-500" />
+                    <span>Current Services</span>
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Link>
+                </Button>
               </motion.div>
             </div>
           </div>

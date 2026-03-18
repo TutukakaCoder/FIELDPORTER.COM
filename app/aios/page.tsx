@@ -4,6 +4,7 @@ import { PageWrapper } from "@/components/layout";
 import { ArrowRight, Phone, Search, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { AIOS_APP_URL } from "@/config/constants";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -69,8 +70,11 @@ const steps = [
 ];
 
 export default function AIOSPage() {
+  const staffingRecruitmentLink =
+    AIOS_APP_URL ?? "https://fieldporter-aios.web.app/";
+
   return (
-    <PageWrapper className="pt-32 pb-20">
+    <PageWrapper className="pt-36 md:pt-44 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <motion.div
@@ -78,7 +82,7 @@ export default function AIOSPage() {
           animate="visible"
           variants={fadeInUp}
           transition={{ duration: 0.6 }}
-          className="max-w-3xl mx-auto text-center mb-24"
+          className="max-w-4xl mx-auto text-center mb-24 p-8 md:p-12 rounded-3xl backdrop-blur-md border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02]"
         >
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
             Find the Right AI for <br className="hidden md:block" /> Your
@@ -113,6 +117,18 @@ export default function AIOSPage() {
               </Link>
             </motion.div>
           </div>
+          <p className="mt-5 text-sm text-gray-500 dark:text-gray-400">
+            Staffing &amp; Recruitment only:{" "}
+            <Link
+              href={staffingRecruitmentLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline underline-offset-4"
+            >
+              Use the AI Readiness quick assessment
+            </Link>
+            .
+          </p>
         </motion.div>
 
         {/* The Problem Section */}

@@ -86,7 +86,7 @@ export function ResponsiveChatManager({
           className={cn(
             "fixed z-[60] transition-all duration-300",
             isMobile
-              ? "bottom-4 right-4 w-14 h-14"
+              ? "right-4 bottom-with-safe w-14 h-14"
               : "bottom-6 right-6 w-16 h-16",
 
             // Premium glassmorphism background

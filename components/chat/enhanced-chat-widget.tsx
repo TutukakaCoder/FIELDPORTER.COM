@@ -7,6 +7,7 @@ import { FALLBACK_RESPONSES } from "@/lib/chatbot-system-prompt";
 import { enhancedChatService } from "@/lib/enhanced-chat-service";
 import { cn } from "@/lib/utils";
 import type { Message } from "@/types/chat";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { MessageManager } from "./message-manager";
 import { ResponsiveChatManager } from "./responsive-chat-manager";
@@ -56,7 +57,7 @@ const formatChatResponse = (content: string): string => {
 
   if (hasFalse3DClaim) {
     processedContent =
-      "That's outside our current service focus. We specialise in strategic research, AI implementation, and workflow automation. What specific business challenge are you looking to solve?";
+      "That's outside our current service focus. We specialize in strategic research, AI implementation, and workflow automation. What specific business challenge are you looking to solve?";
   }
 
   // Replace false client work claims with real FIELDPORTER examples
@@ -430,8 +431,8 @@ interface EnhancedChatWidgetProps {
 }
 
 export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
-  // Mobile detection using project's stable hook
   const isMobile = useStableMobile();
+  const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
   const [messageManager] = useState(() => new MessageManager());
@@ -605,11 +606,8 @@ export function EnhancedChatWidget({ className }: EnhancedChatWidgetProps) {
     // Track the consultation request
     await messageManager.markConsultationRequested();
 
-    // Close the chat dialog
     setIsOpen(false);
-
-    // Route to contact page
-    window.location.href = "/contact";
+    router.push("/contact");
   };
 
   const handleNewChat = useCallback(async () => {

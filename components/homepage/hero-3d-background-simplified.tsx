@@ -216,21 +216,17 @@ function SimplifiedParticleSystem({ isScrolling }: { isScrolling: boolean }) {
   // Simplified animation loop with scroll freeze prevention
   useFrame((state) => {
     if (!meshRef.current || !materialRef.current) return;
-
-    // SCROLL FREEZE FIX: Skip heavy operations during active scrolling
-    if (isScrolling) {
-      const currentTime = state.clock.getElapsedTime();
-      if (materialRef.current.uniforms["uTime"]) {
-        materialRef.current.uniforms["uTime"].value = currentTime;
-      }
-      return;
-    }
-
     const currentTime = state.clock.getElapsedTime();
 
-    // Throttle to 30fps (every other frame)
+    // Always advance time so animation never hard-stops on scroll.
+    if (materialRef.current.uniforms["uTime"]) {
+      materialRef.current.uniforms["uTime"].value = currentTime;
+    }
+
+    // During scroll, reduce update frequency instead of pausing.
     frameCount.current++;
-    if (frameCount.current % 2 !== 0) return;
+    const frameStep = isScrolling ? 3 : 2;
+    if (frameCount.current % frameStep !== 0) return;
 
     // Premium mouse interpolation for smooth, elegant interaction
     const interpolationSpeed = 0.05;
@@ -240,9 +236,6 @@ function SimplifiedParticleSystem({ isScrolling }: { isScrolling: boolean }) {
       (mouseRef.current.y - currentMouse.current.y) * interpolationSpeed;
 
     // Update shader uniforms
-    if (materialRef.current.uniforms["uTime"]) {
-      materialRef.current.uniforms["uTime"].value = currentTime;
-    }
     if (materialRef.current.uniforms["uMouse"]) {
       materialRef.current.uniforms["uMouse"].value.set(
         currentMouse.current.x,
@@ -275,12 +268,10 @@ function SimplifiedCameraControls({ isScrolling }: { isScrolling: boolean }) {
   const frameCount = useRef(0);
 
   useFrame(() => {
-    // SCROLL FREEZE FIX: Skip during active scrolling
-    if (isScrolling) return;
-
-    // Throttle to 30fps (every other frame)
+    // During scroll, reduce update frequency instead of pausing.
     frameCount.current++;
-    if (frameCount.current % 2 !== 0) return;
+    const frameStep = isScrolling ? 3 : 2;
+    if (frameCount.current % frameStep !== 0) return;
 
     // Premium camera movement with smooth, elegant motion
     const targetX = mouse.x * 1.0;

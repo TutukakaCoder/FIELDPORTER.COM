@@ -277,23 +277,19 @@ function PremiumParticleSystem({ isScrolling }: { isScrolling: boolean }) {
   // Animation loop with scroll freeze prevention
   useFrame((state) => {
     if (!meshRef.current || !materialRef.current) return;
+    const currentTime = state.clock.getElapsedTime();
 
-    // SCROLL FREEZE FIX: Skip heavy operations during active scrolling
-    if (isScrolling) {
-      // Only update time to keep animations in sync when scroll ends
-      const currentTime = state.clock.getElapsedTime();
-      if (materialRef.current.uniforms["uTime"]) {
-        materialRef.current.uniforms["uTime"].value = currentTime;
-      }
-      return;
+    // Always advance time so motion remains fluid during scroll.
+    if (materialRef.current.uniforms["uTime"]) {
+      materialRef.current.uniforms["uTime"].value = currentTime;
     }
 
     // Performance monitoring
     frameCount.current++;
-    const currentTime = state.clock.getElapsedTime();
 
-    // Throttle to 30fps during animations (every other frame)
-    if (frameCount.current % 2 !== 0) return;
+    // During scroll, reduce update frequency instead of pausing.
+    const frameStep = isScrolling ? 3 : 2;
+    if (frameCount.current % frameStep !== 0) return;
 
     lastTime.current = currentTime;
 
@@ -305,9 +301,6 @@ function PremiumParticleSystem({ isScrolling }: { isScrolling: boolean }) {
       (mouseRef.current.y - currentMouse.current.y) * interpolationSpeed;
 
     // Update shader uniforms
-    if (materialRef.current.uniforms["uTime"]) {
-      materialRef.current.uniforms["uTime"].value = currentTime;
-    }
     if (materialRef.current.uniforms["uMouse"]) {
       materialRef.current.uniforms["uMouse"].value.set(
         currentMouse.current.x,
@@ -347,12 +340,10 @@ function EnhancedCameraControls({ isScrolling }: { isScrolling: boolean }) {
   useFrame(() => {
     if (isMobile) return;
 
-    // SCROLL FREEZE FIX: Skip during active scrolling
-    if (isScrolling) return;
-
-    // Throttle to 30fps (every other frame)
+    // During scroll, reduce update frequency instead of pausing.
     frameCount.current++;
-    if (frameCount.current % 2 !== 0) return;
+    const frameStep = isScrolling ? 3 : 2;
+    if (frameCount.current % frameStep !== 0) return;
 
     // Enhanced camera movement for premium feel
     const targetX = mouse.x * 2.0;

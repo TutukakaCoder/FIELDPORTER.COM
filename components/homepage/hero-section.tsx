@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { motion, useInView, Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -147,9 +148,20 @@ const PremiumAuroraBackground = memo(() => {
 
 PremiumAuroraBackground.displayName = "PremiumAuroraBackground";
 
-// Tiered Background System
+// Lighter hero background for mobile/tablet (no 3D, simple gradient)
+const LightHeroBackground = memo(() => (
+  <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-gray-50 to-white dark:from-gray-950 dark:via-gray-900 dark:to-black" />
+));
+
+LightHeroBackground.displayName = "LightHeroBackground";
+
+// Tiered Background System - mobile/tablet get lighter background
 const TieredBackground = memo(() => {
-  const { experience } = useDeviceCapability();
+  const { experience, isMobile, isTablet } = useDeviceCapability();
+
+  if (isMobile || isTablet) {
+    return <LightHeroBackground />;
+  }
 
   switch (experience) {
     case "full":
@@ -164,56 +176,47 @@ const TieredBackground = memo(() => {
 
 TieredBackground.displayName = "TieredBackground";
 
-// Animated CTA Button
+// Animated CTA Button - uses shared button system
 const AnimatedCTA = memo(() => {
   const isMobile = useStableMobile();
   const prefersReducedMotion = useReducedMotion();
 
   return (
     <div
-      className={`flex ${isMobile ? "flex-col w-full px-4" : "flex-row"} items-center justify-center gap-4`}
+      className={`flex ${isMobile ? "flex-col w-full px-4" : "flex-row"} items-center justify-center gap-4 sm:gap-6`}
     >
       <motion.div
-        whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+        whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -2 }}
         whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
-        className={isMobile ? "w-full" : ""}
+        className={isMobile ? "w-full relative group" : "relative group"}
       >
-        <Link
-          href="/contact"
-          className={`
-            group relative transition-all duration-300 inline-flex items-center justify-center
-            ${isMobile ? "w-full px-8 py-4 text-base" : "px-8 py-3.5 text-base"}
-            bg-white text-black hover:bg-gray-100
-            rounded-full font-medium tracking-tight
-            shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)]
-            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-white
-          `}
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-blue-400 rounded-xl blur opacity-30 group-hover:opacity-70 transition duration-500"></div>
+        <Button
+          variant="invert"
+          size="lg"
+          className={`relative text-base sm:text-lg px-8 sm:px-10 h-14 shadow-2xl ${isMobile ? "w-full" : ""}`}
+          asChild
         >
-          <span className="flex items-center gap-2">
+          <Link href="/contact" className="inline-flex items-center gap-2">
             <span>Book a Call</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </span>
-        </Link>
+            <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+        </Button>
       </motion.div>
 
       <motion.div
-        whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+        whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -2 }}
         whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
         className={isMobile ? "w-full" : ""}
       >
-        <Link
-          href="/portfolio"
-          className={`
-            group relative transition-all duration-300 inline-flex items-center justify-center
-            ${isMobile ? "w-full px-8 py-4 text-base" : "px-8 py-3.5 text-base"}
-            bg-white/5 hover:bg-white/10 text-white backdrop-blur-md
-            border border-white/10 hover:border-white/20
-            rounded-full font-medium tracking-tight
-            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-white/50
-          `}
+        <Button
+          variant="outline"
+          size="lg"
+          className={`text-base sm:text-lg px-8 sm:px-10 h-14 bg-white/[0.02] hover:bg-white/[0.08] border-white/10 hover:border-white/20 backdrop-blur-md transition-all duration-300 ${isMobile ? "w-full" : ""}`}
+          asChild
         >
-          <span>View Portfolio</span>
-        </Link>
+          <Link href="/portfolio">View Portfolio</Link>
+        </Button>
       </motion.div>
     </div>
   );
@@ -225,21 +228,25 @@ AnimatedCTA.displayName = "AnimatedCTA";
 export function HeroSection() {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const prefersReducedMotion = useReducedMotion();
 
-  const textReveal: Variants = useMemo(
-    () => ({
-      hidden: { opacity: 0, y: 20 },
-      visible: {
-        opacity: 1,
-        y: 0,
-        transition: {
-          duration: 0.8,
-          ease: [0.21, 0.47, 0.32, 0.98],
+  const { textReveal, containerVariants } = useMemo(() => {
+    const duration = prefersReducedMotion ? 0 : 0.8;
+    const stagger = prefersReducedMotion ? 0 : 0.1;
+    return {
+      textReveal: {
+        hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 20 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { duration, ease: [0.21, 0.47, 0.32, 0.98] },
         },
+      } as Variants,
+      containerVariants: {
+        visible: { transition: { staggerChildren: stagger } },
       },
-    }),
-    [],
-  );
+    };
+  }, [prefersReducedMotion]);
 
   return (
     <section
@@ -258,12 +265,10 @@ export function HeroSection() {
         <motion.div
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          variants={{
-            visible: { transition: { staggerChildren: 0.1 } },
-          }}
-          className="space-y-8 md:space-y-10"
+          variants={containerVariants}
+          className="space-y-8 md:space-y-12"
         >
-          <div className="space-y-8 relative">
+          <div className="space-y-6 relative">
             {/* Background glow to ensure text readability against stars */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-black/40 dark:bg-black/40 blur-[100px] rounded-full pointer-events-none -z-10" />
 
@@ -278,22 +283,22 @@ export function HeroSection() {
 
             <motion.h1
               variants={textReveal}
-              className="text-5xl sm:text-6xl lg:text-7xl font-medium tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 leading-[1.1] pb-2 break-words"
+              className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 leading-[1.1] pb-2 break-words max-w-4xl mx-auto"
             >
               {HERO_HEADLINE}
             </motion.h1>
 
             <motion.p
               variants={textReveal}
-              className="text-lg sm:text-xl text-gray-400 max-w-xl mx-auto font-normal leading-relaxed"
+              className="text-lg sm:text-xl lg:text-2xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed"
             >
               {HERO_VALUE_PROP}
             </motion.p>
           </div>
 
-          <motion.div variants={textReveal} className="pt-4">
+          <motion.div variants={textReveal} className="pt-6">
             <AnimatedCTA />
-            <p className="mt-6 text-sm text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
+            <p className="mt-8 text-sm sm:text-base font-medium text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
               {HERO_PROOF_LINE}
             </p>
           </motion.div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { trackServiceInterest } from "@/lib/firebase-analytics";
 import { motion, useInView } from "framer-motion";
 import {
@@ -9,6 +10,8 @@ import {
   Code,
   TrendingUp,
 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { memo, useCallback, useRef } from "react";
 
 const services = [
@@ -122,57 +125,17 @@ const services = [
   },
 ];
 
-// Mobile-optimized background with reduced complexity
-const PremiumBackground = memo(() => {
-  return (
-    <div className="absolute inset-0 overflow-hidden">
-      {/* Simple gradient base */}
-      <div className="absolute inset-0 bg-transparent" />
-
-      {/* Mobile-optimized floating orbs - much smaller and simpler */}
-      <div className="absolute inset-0 opacity-20">
-        {/* Reduced size for mobile compatibility */}
-        <div className="absolute top-1/4 left-1/3 w-32 h-32 md:w-48 md:h-48 lg:w-64 bg-blue-500/6 rounded-full blur-xl md:blur-2xl animate-pulse" />
-        <div
-          className="absolute bottom-1/3 right-1/4 w-28 h-28 md:w-40 md:h-40 lg:w-56 lg:h-56 bg-emerald-500/6 rounded-full blur-xl md:blur-2xl animate-pulse"
-          style={{ animationDelay: "2s" }}
-        />
-        <div
-          className="absolute top-2/3 left-1/6 w-24 h-24 md:w-36 md:h-36 lg:w-48 lg:h-48 bg-purple-500/4 rounded-full blur-lg md:blur-xl animate-pulse"
-          style={{ animationDelay: "3s" }}
-        />
-      </div>
-
-      {/* Simplified grain texture - disabled on mobile for performance */}
-      <div
-        className="absolute inset-0 opacity-[0.01] md:opacity-[0.015] pointer-events-none hidden sm:block"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-          backgroundRepeat: "repeat",
-        }}
-      />
-
-      {/* Subtle radial overlay */}
-      <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-gray-900/20 dark:to-black/20" />
-    </div>
-  );
-});
-
-PremiumBackground.displayName = "PremiumBackground";
-
 // Mobile-optimized service card component
 const ServiceCard = memo(
   ({ service, index }: { service: (typeof services)[0]; index: number }) => {
+    const router = useRouter();
     const handleServiceClick = useCallback(() => {
       trackServiceInterest(service.id, "learn_more", {
         service_name: service.title,
         location: "services_section",
       });
-
-      // Navigate directly to the specific service section with proper anchor
-      const serviceAnchor = service.id;
-      window.location.href = `/services#${serviceAnchor}`;
-    }, [service.id, service.title]);
+      router.push(`/services#${service.id}`);
+    }, [service.id, service.title, router]);
 
     return (
       <motion.article
@@ -201,9 +164,9 @@ const ServiceCard = memo(
           {service.phase}
         </div>
 
-        {/* Mobile-optimized hover glow effect - reduced for performance */}
+        {/* Hover/tap glow: subtle on mobile, full on desktop */}
         <div
-          className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${service.shadowColor} hidden md:block`}
+          className={`absolute inset-0 rounded-2xl opacity-[0.08] group-hover:opacity-100 group-active:opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 ${service.shadowColor}`}
         />
 
         {/* Main card with mobile-optimized glassmorphism */}
@@ -220,7 +183,7 @@ const ServiceCard = memo(
           {/* Simplified glassmorphism layers for mobile */}
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent rounded-2xl" />
           <div
-            className={`absolute inset-0 bg-gradient-to-br ${service.gradientFrom} ${service.gradientTo} rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 md:duration-500`}
+            className={`absolute inset-0 bg-gradient-to-br ${service.gradientFrom} ${service.gradientTo} rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
           />
 
           <div className="relative z-10 flex flex-col h-full">
@@ -322,18 +285,12 @@ export function ServicesSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-20%" });
 
-  const handleExploreAllServices = useCallback(() => {
-    window.location.href = "/services";
-  }, []);
-
   return (
     <section
       ref={ref}
       id="services"
-      className="relative py-20 md:py-28 overflow-hidden bg-transparent"
+      className="relative section-rhythm-lg overflow-hidden bg-transparent"
     >
-      <PremiumBackground />
-
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Enhanced Section Header */}
         <div className="text-center mb-16 md:mb-20">
@@ -342,8 +299,8 @@ export function ServicesSection() {
               <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
                 Production Systems in Weeks. Strategic Research in Days.
               </span>
-              {/* Subtle glow effect - disabled on mobile for performance */}
-              <div className="absolute -inset-x-4 -inset-y-2 bg-blue-500/20 blur-2xl opacity-30 hidden md:block" />
+              {/* Subtle glow - lighter on mobile */}
+              <div className="absolute -inset-x-4 -inset-y-2 bg-blue-500/20 blur-2xl opacity-15 md:opacity-30" />
             </span>
           </h2>
 
@@ -365,21 +322,12 @@ export function ServicesSection() {
           <p className="text-gray-600 dark:text-white/60 text-lg mb-6">
             Ready to cut overhead, move faster, or de-risk your next decision?
           </p>
-          <button
-            onClick={handleExploreAllServices}
-            className="
-              inline-flex items-center gap-3 px-8 py-4 
-              bg-gray-900/10 dark:bg-white/10 hover:bg-gray-900/15 dark:hover:bg-white/15 backdrop-blur-sm
-              border border-gray-900/20 dark:border-white/20 hover:border-gray-900/30 dark:hover:border-white/30
-              rounded-xl text-gray-900 dark:text-white font-medium
-              transition-all duration-300 hover:scale-105
-              group hover:shadow-2xl hover:shadow-blue-500/20
-              active:scale-95 touch-manipulation
-            "
-          >
-            Explore All Services
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-          </button>
+          <Button variant="secondary" size="lg" className="group" asChild>
+            <Link href="/services" className="inline-flex items-center gap-3">
+              Explore All Services
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+            </Link>
+          </Button>
         </div>
       </div>
     </section>

@@ -11,10 +11,8 @@ interface ConditionalLayoutProps {
 export function ConditionalLayout({ children }: ConditionalLayoutProps) {
   const pathname = usePathname();
 
-  const isAuthPage = pathname?.startsWith("/auth");
   const isPartnerFlyer = pathname?.startsWith("/think-global-voluntas");
-
-  const showHeaderFooter = !isAuthPage && !isPartnerFlyer;
+  const showHeaderFooter = !isPartnerFlyer;
 
   return (
     <>

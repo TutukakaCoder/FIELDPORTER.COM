@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { OptimizedLink } from "@/components/ui/optimized-link";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { BRAND, MAIN_NAVIGATION } from "@/config/constants";
@@ -54,7 +55,7 @@ export function Header({ className }: HeaderProps) {
         {/* Main Floating Navigation Bar */}
         <nav
           className={cn(
-            "relative mx-auto max-w-7xl rounded-2xl backdrop-blur-xl shadow-2xl",
+            "relative mx-auto max-w-7xl rounded-2xl backdrop-blur-md shadow-2xl",
             // SCROLL FREEZE FIX: Disable transitions during scroll
             isScrolling
               ? "transition-none"
@@ -115,16 +116,23 @@ export function Header({ className }: HeaderProps) {
               ))}
             </nav>
 
-            {/* Theme Toggle and Premium CTA Button - More to the right */}
+            {/* Theme Toggle and CTA */}
             <div className="hidden lg:flex items-center gap-4 pr-4">
               <ThemeToggle />
-              <OptimizedLink
-                href="/contact"
-                className="group flex items-center gap-2 px-6 py-2.5 text-sm font-medium text-gray-900 dark:text-white bg-gradient-to-r from-[#0969DA]/30 to-[#1E40AF]/30 hover:from-[#0969DA]/50 hover:to-[#1E40AF]/50 backdrop-blur-sm rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30 border border-blue-500/20"
+              <Button
+                variant="primary"
+                size="sm"
+                className="group rounded-xl"
+                asChild
               >
-                Book a Call
-                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </OptimizedLink>
+                <OptimizedLink
+                  href="/contact"
+                  className="inline-flex items-center gap-2"
+                >
+                  Book a Call
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </OptimizedLink>
+              </Button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -168,7 +176,7 @@ export function Header({ className }: HeaderProps) {
               animate={{ opacity: 1, height: "auto", y: 0 }}
               exit={{ opacity: 0, height: 0, y: -10 }}
               transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="lg:hidden mt-3 mx-auto max-w-7xl rounded-2xl backdrop-blur-xl bg-white/95 dark:bg-black/95 border border-gray-900/[0.12] dark:border-white/[0.12] shadow-2xl overflow-hidden"
+              className="lg:hidden mt-3 mx-auto max-w-7xl rounded-2xl backdrop-blur-md bg-white/95 dark:bg-black/95 border border-gray-900/[0.12] dark:border-white/[0.12] shadow-2xl overflow-hidden"
             >
               <div className="px-6 py-5 space-y-2">
                 {MAIN_NAVIGATION.map((item, index) => (

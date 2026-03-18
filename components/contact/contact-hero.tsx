@@ -1,13 +1,14 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 import React, {
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from "react";
 
 // Premium aurora background matching services page with performance optimization
@@ -218,24 +219,29 @@ export const ContactHero = React.memo(() => {
 
             {/* Direct scroll-to-form CTA */}
             <motion.div variants={itemVariants} className="pt-8">
-              <motion.button
-                onClick={scrollToForm}
+              <motion.div
                 whileHover={{ y: -2, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="group flex items-center gap-3 mx-auto px-8 py-4 bg-white/[0.015] hover:bg-white/[0.04] border border-white/20 hover:border-blue-400/40 rounded-2xl text-white hover:text-blue-300 transition-all duration-300 font-medium backdrop-blur-xl hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]"
               >
-                <span className="text-lg">Start here</span>
-                <motion.div
-                  animate={{ y: [0, 4, 0] }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={scrollToForm}
+                  className="group mx-auto min-w-[200px] inline-flex items-center gap-3"
                 >
-                  <ArrowDown className="w-5 h-5" />
-                </motion.div>
-              </motion.button>
+                  <span className="text-lg">Start here</span>
+                  <motion.div
+                    animate={{ y: [0, 4, 0] }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  >
+                    <ArrowDown className="w-5 h-5" />
+                  </motion.div>
+                </Button>
+              </motion.div>
             </motion.div>
 
             {/* Premium divider */}

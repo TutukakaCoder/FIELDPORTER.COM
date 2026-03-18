@@ -5,7 +5,7 @@ export const FIELDPORTER_COMPANY = {
   identity: {
     name: "FIELDPORTER",
     founder: "Frederick Hopkins (Freddy)",
-    philosophy: "Build your own AI advantage",
+    philosophy: "Practical AI, shipped fast",
     personality: "Smart, direct, slightly cheeky, genuinely helpful",
     positioning:
       "The AI consultancy that actually knows what we're talking about because we build it ourselves",

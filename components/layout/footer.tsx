@@ -1,8 +1,9 @@
 "use client";
 
-import { BRAND } from "@/config/constants";
+import { BRAND, FOOTER_LINKS, SOCIAL_LINKS } from "@/config/constants";
+import { useReducedMotion } from "@/hooks";
 import { cn } from "@/lib/utils";
-import { ChevronDown, Linkedin, Mail, Sparkles } from "lucide-react";
+import { Linkedin, Mail, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -10,30 +11,19 @@ interface FooterProps {
   className?: string;
 }
 
-// Simplified service structure
-const services = [
-  { label: "Strategic Intelligence", href: "/services#strategic-research" },
-  { label: "Rapid Development", href: "/services#rapid-development" },
-  { label: "Workflow Optimization", href: "/services#workflow-optimization" },
-  { label: "AI Strategy & Training", href: "/services#ai-strategy" },
-];
-
-const company = [
-  { label: "About", href: "/about" },
-  { label: "Portfolio", href: "/portfolio" },
-  { label: "Contact", href: "/contact" },
-];
+const services = FOOTER_LINKS.services;
+const company = FOOTER_LINKS.company;
 
 export function Footer({ className }: FooterProps) {
   const currentYear = new Date().getFullYear();
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   // SCROLL FIX: Optimize footer scroll listener - reduce layout reads
   useEffect(() => {
     let ticking = false;
     let lastCheck = 0;
-    const throttleDelay = 200; // Throttle layout reads
+    const throttleDelay = 100; // Throttle layout reads; lower = sooner reveal
 
     const handleScroll = () => {
       if (!ticking) {
@@ -67,10 +57,12 @@ export function Footer({ className }: FooterProps) {
     <footer
       id="main-footer"
       className={cn(
-        "bg-white dark:bg-black border-t border-gray-200 dark:border-gray-800 transition-all duration-1000",
+        "bg-white dark:bg-black border-t border-gray-200 dark:border-gray-800 transition-all duration-300",
         isFooterVisible
           ? "opacity-100 translate-y-0"
-          : "opacity-0 translate-y-8",
+          : prefersReducedMotion
+            ? "opacity-0"
+            : "opacity-0 translate-y-4",
         className,
       )}
       role="contentinfo"
@@ -94,10 +86,10 @@ export function Footer({ className }: FooterProps) {
             {/* Social Links - Minimal */}
             <div className="flex pt-2">
               <a
-                href="https://www.linkedin.com/in/freddyjhopkins/"
+                href={SOCIAL_LINKS.founderLinkedIn}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 hover:scale-110"
+                className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
                 aria-label="Connect with Freddy Hopkins on LinkedIn"
               >
                 <Linkedin className="w-5 h-5" />
@@ -116,37 +108,17 @@ export function Footer({ className }: FooterProps) {
                 href="/aios"
                 className="group inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-lg transition-all duration-200 hover:translate-x-1"
               >
-                <Sparkles className="w-5 h-5 group-hover:text-yellow-400 group-hover:scale-110 transition-all duration-200" />
-                The AIOS
+                <Sparkles className="w-5 h-5 group-hover:text-yellow-400 transition-colors duration-200" />
+                AI Readiness
               </Link>
             </div>
 
-            {/* Services - Accordion on Mobile / List on Desktop */}
+            {/* Services - Static list (simpler on mobile, consistent with Company) */}
             <div className="space-y-3">
-              <button
-                onClick={() => setIsServicesOpen(!isServicesOpen)}
-                className="flex items-center justify-between w-full md:w-auto min-h-[44px] py-2 group cursor-pointer md:cursor-default touch-manipulation"
-                aria-expanded={isServicesOpen}
-              >
-                <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300 md:group-hover:text-gray-400 md:dark:group-hover:text-gray-500 transition-colors">
-                  Services
-                </h3>
-                <ChevronDown
-                  className={cn(
-                    "w-4 h-4 text-gray-400 md:hidden transition-transform duration-200",
-                    isServicesOpen ? "rotate-180" : "",
-                  )}
-                />
-              </button>
-
-              <ul
-                className={cn(
-                  "space-y-2 overflow-hidden transition-all duration-300",
-                  isServicesOpen
-                    ? "max-h-48 opacity-100"
-                    : "max-h-0 opacity-0 md:max-h-none md:opacity-100",
-                )}
-              >
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+                Services
+              </h3>
+              <ul className="space-y-2">
                 {services.map((service) => (
                   <li key={service.href}>
                     <Link
@@ -184,7 +156,7 @@ export function Footer({ className }: FooterProps) {
           <div className="lg:col-span-3 flex flex-col gap-4 lg:items-end">
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center w-full lg:w-auto min-h-[44px] px-6 py-3 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-black font-semibold text-sm hover:opacity-90 hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-gray-200/50 dark:shadow-none touch-manipulation"
+              className="inline-flex items-center justify-center w-full lg:w-auto min-h-[44px] px-6 py-3 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-black font-semibold text-sm hover:opacity-90 active:scale-[0.98] transition-all duration-200 shadow-lg shadow-gray-200/50 dark:shadow-none touch-manipulation"
             >
               Start Project
             </Link>

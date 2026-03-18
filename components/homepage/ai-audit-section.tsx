@@ -1,5 +1,6 @@
 "use client";
 
+import { useReducedMotion } from "@/hooks";
 import { motion, useInView } from "framer-motion";
 import {
   ArrowRight,
@@ -14,14 +15,15 @@ import { useRef } from "react";
 export function AIAuditSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-20%" });
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <section
       ref={ref}
-      className="relative py-16 md:py-24 overflow-hidden bg-transparent"
+      className="relative section-rhythm overflow-hidden bg-transparent"
     >
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-gray-900/60 border border-gray-200 dark:border-white/10 shadow-xl backdrop-blur-xl">
+        <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-gray-900/60 border border-gray-200 dark:border-white/10 shadow-xl backdrop-blur-md">
           {/* Background Gradient Effects */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 dark:from-blue-500/10 dark:via-transparent dark:to-purple-500/10 pointer-events-none" />
           <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
@@ -36,7 +38,7 @@ export function AIAuditSection() {
                 transition={{ duration: 0.6 }}
               >
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight tracking-tight">
-                  AI Opportunity Assessment
+                  AI Readiness Assessment
                 </h2>
                 <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
                   Not sure what AI is right for you? Get a scored roadmap for
@@ -72,7 +74,7 @@ export function AIAuditSection() {
                   type: "spring",
                   stiffness: 100,
                 }}
-                className="relative rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-2xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-md p-4 sm:p-6 group hover:shadow-emerald-500/10 transition-all duration-500"
+                className="relative rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-2xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-md p-4 sm:p-6 group hover:shadow-emerald-500/10 transition-shadow duration-300"
               >
                 {/* Card Header */}
                 <div className="flex justify-between items-start mb-4 sm:mb-6">
@@ -92,35 +94,57 @@ export function AIAuditSection() {
                   </div>
                 </div>
 
-                {/* Bars - sample output */}
+                {/* Bars - sample output (fill animates on view to show level) */}
                 <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
-                  <div>
-                    <div className="flex justify-between text-[10px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400 mb-1">
-                      <span>Process Clarity</span>
-                      <span>High</span>
+                  {[
+                    {
+                      label: "Process Clarity",
+                      value: "High",
+                      width: "85%",
+                      color: "bg-emerald-500",
+                    },
+                    {
+                      label: "Data Structure",
+                      value: "Low",
+                      width: "40%",
+                      color: "bg-amber-500",
+                    },
+                    {
+                      label: "Tech Stack",
+                      value: "Modern",
+                      width: "90%",
+                      color: "bg-blue-500",
+                    },
+                  ].map((bar, i) => (
+                    <div key={bar.label}>
+                      <div className="flex justify-between text-[10px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400 mb-1">
+                        <span>{bar.label}</span>
+                        <span>{bar.value}</span>
+                      </div>
+                      <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                        <motion.div
+                          className={`h-full ${bar.color} rounded-full`}
+                          initial={{
+                            width: prefersReducedMotion ? bar.width : 0,
+                          }}
+                          animate={
+                            isInView
+                              ? { width: bar.width }
+                              : { width: prefersReducedMotion ? bar.width : 0 }
+                          }
+                          transition={
+                            prefersReducedMotion
+                              ? { duration: 0 }
+                              : {
+                                  duration: 0.6,
+                                  delay: 0.4 + i * 0.1,
+                                  ease: "easeOut",
+                                }
+                          }
+                        />
+                      </div>
                     </div>
-                    <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-emerald-500 w-[85%] rounded-full" />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-[10px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400 mb-1">
-                      <span>Data Structure</span>
-                      <span>Low</span>
-                    </div>
-                    <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-amber-500 w-[40%] rounded-full" />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-[10px] uppercase tracking-wider font-medium text-gray-500 dark:text-gray-400 mb-1">
-                      <span>Tech Stack</span>
-                      <span>Modern</span>
-                    </div>
-                    <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-blue-500 w-[90%] rounded-full" />
-                    </div>
-                  </div>
+                  ))}
                 </div>
 
                 {/* Insight Box - example recommendation */}

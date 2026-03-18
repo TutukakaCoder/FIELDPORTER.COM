@@ -7,49 +7,64 @@
 
 /** Primary buyer for the marketing site. Use this in metadata, hero, and key copy so the site speaks to one audience. */
 export const PRIMARY_AUDIENCE = {
-  label: "founder-led and operator-led businesses (SMB to mid-market)",
-  short: "founder-led and operator-led businesses",
+  label: "growing companies and ambitious teams",
+  short: "growing companies",
 } as const;
 
 /** Core offer hierarchy: what we do first, second, and what supports it. Use in hero, services, and key copy. */
 export const CORE_OFFER_HIERARCHY = {
   primary:
-    "AI integration and automation: production systems in weeks, not months.",
+    "Practical AI systems, automations, and internal tools that remove manual work and speed up decisions.",
   secondary:
-    "Strategic research to de-risk decisions and validate concepts before you invest.",
+    "Research to de-risk decisions and validate concepts before you invest.",
   proof: "Case studies, outcomes, and testimonials from real engagements.",
 } as const;
 
-/** Main hero headline: commercial promise above the fold. Keep short and outcome-led. */
-export const HERO_HEADLINE = "Production-Ready AI in Weeks, Not Months.";
+/** Main hero headline: commercial promise above the fold. Plain English. */
+export const HERO_HEADLINE = "AI Systems Your Team Can Actually Use";
 
 /** Supporting hero line (aspirational). Shown under HERO_HEADLINE. */
-export const HERO_SUPPORTING_LINE = "Build Your Own AI Advantage";
+export const HERO_SUPPORTING_LINE = "Practical AI, Shipped Fast";
 
 /** First-screen value proposition: what we do, for whom, and what outcome improves. Used in hero only. */
 export const HERO_VALUE_PROP =
-  "AI integration and automation for founder-led and operator-led businesses. Production systems in weeks so you de-risk investment and reclaim high-value time.";
+  "We build AI automations, internal tools, and workflows for growing companies.";
 
 /** One proof line under hero CTA: real outcomes so first screen feels credible. */
 export const HERO_PROOF_LINE =
-  "Recent work: 85% onboarding time saved for one client, 15+ hours weekly reclaimed for another, production systems in 1–3 weeks.";
+  "Recent outcomes: 85% less onboarding time, 15+ hours weekly reclaimed.";
 
 /** What FIELDPORTER is: one line so the whole site reflects the same model. Hybrid = consulting + implementation; we advise and build. */
 export const COMPANY_MODEL = {
   type: "hybrid" as const,
   short:
-    "We advise and we build: AI integration, automation, and strategic research.",
+    "We advise and build: AI integration, automation, and internal tools for growing companies.",
   oneLiner:
-    "FIELDPORTER is a hybrid: consulting and implementation. We don't just advise; we build, deploy, and train your team.",
+    "FIELDPORTER builds practical AI systems, automations, and internal tools. We advise, build, deploy, and train your team.",
 } as const;
 
 export const BRAND = {
   name: "FIELDPORTER",
-  tagline: "Strategic Research & Business Development",
+  tagline: "AI Integration & Automation",
   description:
-    "Workflow automation and strategic research that improve decision quality and speed for founder-led businesses.",
+    "Practical AI systems, automations, and internal tools for growing companies. Remove manual work and speed up decisions.",
   domain: "fieldporter.com",
   email: "freddy@fieldporter.com",
+} as const;
+
+/** Scoped timeline claims for credibility. Use these instead of blanket "weeks not months". */
+export const TIMELINE_CLAIMS = {
+  assessment: "2–5 days",
+  firstUseful: "1–3 weeks",
+  largerRollout: "4–8+ weeks depending on scope",
+} as const;
+
+/** AIOS: stable name and one clear deliverable definition. */
+export const AIOS = {
+  name: "AI Readiness Assessment",
+  shortName: "AI Readiness",
+  description:
+    "Scored roadmap for your automation strategy. Know what to build first.",
 } as const;
 
 /** When the AIOS assessment app is moved off fieldporter-aios.web.app, set this to the new URL (e.g. https://aios.fieldporter.com). Links to start the assessment should use this. */
@@ -70,6 +85,11 @@ export const BRAND_COLORS = {
   },
 } as const;
 
+/** Breakpoints (px) aligned with Tailwind md. Use for useStableMobile and useDeviceCapability so layout and capability match. */
+export const BREAKPOINTS = {
+  mobile: 768,
+} as const;
+
 // ============================================================================
 // BUSINESS CONSTANTS
 // ============================================================================
@@ -77,8 +97,7 @@ export const BRAND_COLORS = {
 export const COMPANY_SIZES = [
   { value: "startup", label: "Startup (1-50 employees)", priority: 1 },
   { value: "scale-up", label: "Scale-up (51-500 employees)", priority: 2 },
-  { value: "enterprise", label: "Enterprise (500+ employees)", priority: 3 },
-  { value: "fortune-500", label: "Fortune 500", priority: 4 },
+  { value: "mid-market", label: "Mid-market (500+ employees)", priority: 3 },
 ] as const;
 
 export const BUDGET_RANGES = [
@@ -163,24 +182,19 @@ export const DEEPSEEK_CONFIG = {
 export const MAIN_NAVIGATION = [
   { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
-  { label: "AIOS", href: "/aios" },
+  { label: "AI Readiness", href: "/aios" },
   { label: "Portfolio", href: "/portfolio" },
   { label: "Insights", href: "/insights" },
   { label: "Contact", href: "/contact" },
 ] as const;
 
+/** Footer link groups. Service anchors must match app/services/page.tsx section ids. */
 export const FOOTER_LINKS = {
   services: [
-    {
-      label: "Strategic Research Intelligence",
-      href: "/services#strategic-research",
-    },
-    {
-      label: "Rapid Development & Integration",
-      href: "/services#rapid-development",
-    },
+    { label: "Strategic Intelligence", href: "/services#strategic-research" },
+    { label: "Rapid Development", href: "/services#rapid-development" },
     { label: "Workflow Optimization", href: "/services#workflow-optimization" },
-    { label: "AI Training & Education", href: "/services#ai-training" },
+    { label: "AI Strategy & Training", href: "/services#ai-strategy" },
   ],
   company: [
     { label: "About", href: "/about" },
@@ -189,7 +203,7 @@ export const FOOTER_LINKS = {
   ],
   resources: [
     { label: "Insights", href: "/insights" },
-    { label: "Case Studies", href: "/case-studies" },
+    { label: "Portfolio", href: "/portfolio" },
   ],
   legal: [
     { label: "Privacy Policy", href: "/privacy-policy" },
@@ -256,28 +270,32 @@ export const LEAD_SCORING = {
 export const SEO_DEFAULTS = {
   title: "FIELDPORTER - AI Integration & Automation",
   description:
-    "Consulting and implementation: AI integration, automation, and strategic research. We advise and build: production systems in weeks.",
+    "Practical AI systems, automations, and internal tools for growing companies. First useful system in 1–3 weeks.",
   keywords: [
     "AI integration",
     "automation consulting",
     "AI implementation",
-    "strategic research",
     "workflow automation",
-    "production AI systems",
+    "internal AI tools",
+    "growing companies",
   ],
   ogImage: "/og-image.jpg",
 } as const;
 
+/** Company and founder social URLs. Update here to keep links current sitewide. */
 export const SOCIAL_LINKS = {
-  linkedin: "https://linkedin.com/company/fieldporter",
+  linkedin: "https://www.linkedin.com/company/fieldporter",
   twitter: "https://twitter.com/fieldporter",
   github: "https://github.com/fieldporter",
+  /** Founder profile used in footer. */
+  founderLinkedIn: "https://www.linkedin.com/in/freddyjhopkins/",
 } as const;
 
 // ============================================================================
 // FEATURE FLAGS
 // ============================================================================
 
+/** Feature flags for optional behaviour. Unused flags reserved for future use. */
 export const FEATURES = {
   aiChat: true,
   leadScoring: true,
@@ -285,8 +303,8 @@ export const FEATURES = {
   newsletter: true,
   blog: true,
   caseStudies: true,
-  webinars: false, // Coming soon
-  partnerships: false, // Coming soon
+  webinars: false,
+  partnerships: false,
 } as const;
 
 // ============================================================================

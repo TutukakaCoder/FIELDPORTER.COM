@@ -155,46 +155,46 @@ Consolidated from the full website audit, code review, and follow-up strategy no
 - [x] Check all floating UI elements for overlap on mobile: chat, back-to-top, nav, and sticky elements.
 - [x] Review card min-heights and overflow on mobile for portfolio and services components.
 - [x] Make sure large headings do not feel oversized or break awkwardly on small screens.
-- [ ] Remove any desktop-first effects that disappear on mobile without a real replacement.
+- [x] Remove any desktop-first effects that disappear on mobile without a real replacement.
 - [x] Fix the mobile chat safe-area class mismatch in `components/chat/mobile-chat-interface.tsx`.
 - [x] Make safe-area utilities consistent with the global CSS utility names in `app/globals.css`.
 
 ## P2 Design System Tasks
 
-- [ ] Reduce visual mud caused by stacking too many blurred backgrounds, glows, and gradient layers.
-- [ ] Pick one stronger button system and standardize it across homepage, services, about, portfolio, contact, and insights.
-- [ ] Make glassmorphism more restrained so the site feels premium instead of overloaded.
-- [ ] Standardize spacing rhythm instead of solving page layouts one section at a time.
-- [ ] Standardize card treatment, border opacity, blur depth, and hover behavior across sections.
-- [ ] Standardize headline style, supporting copy style, and badge style sitewide.
-- [ ] Remove self-conscious decorative effects that do not improve clarity.
-- [ ] Tighten visual hierarchy so important proof and CTAs stand out more clearly.
+- [x] Reduce visual mud caused by stacking too many blurred backgrounds, glows, and gradient layers.
+- [x] Pick one stronger button system and standardize it across homepage, services, about, portfolio, contact, and insights.
+- [x] Make glassmorphism more restrained so the site feels premium instead of overloaded.
+- [x] Standardize spacing rhythm instead of solving page layouts one section at a time.
+- [x] Standardize card treatment, border opacity, blur depth, and hover behavior across sections.
+- [x] Standardize headline style, supporting copy style, and badge style sitewide.
+- [x] Remove self-conscious decorative effects that do not improve clarity.
+- [x] Tighten visual hierarchy so important proof and CTAs stand out more clearly.
 
 ## P2 Motion And Animation Tasks
 
-- [ ] Remove or reduce section-level background effects when the page already has a strong global background.
-- [ ] Simplify the homepage and portfolio background stacks so they do not compete with the content.
-- [ ] Reduce `animate-pulse` overuse across backgrounds and decorative layers.
-- [ ] Make mobile/tablet default to a lighter hero background experience in `components/homepage/hero-section.tsx`.
-- [ ] Ensure reduced-motion preferences are respected consistently across hero and shell animations.
-- [ ] Reduce shell-level motion stacking from page transitions, header, footer, back-to-top, and cursor effects.
-- [ ] Review whether the custom cursor in `components/layout/conditional-fieldporter-extras.tsx` adds value or just adds noise.
-- [ ] Speed up or remove the footer fade-in so it does not feel like blank space while scrolling.
-- [ ] Make micro-interactions more purposeful and less decorative.
-- [ ] Animate real explanatory elements, not just ambient backgrounds.
-- [ ] Consider animating the AI readiness bars only if that improves comprehension.
+- [x] Remove or reduce section-level background effects when the page already has a strong global background.
+- [x] Simplify the homepage and portfolio background stacks so they do not compete with the content.
+- [x] Reduce `animate-pulse` overuse across backgrounds and decorative layers.
+- [x] Make mobile/tablet default to a lighter hero background experience in `components/homepage/hero-section.tsx`.
+- [x] Ensure reduced-motion preferences are respected consistently across hero and shell animations.
+- [x] Reduce shell-level motion stacking from page transitions, header, footer, back-to-top, and cursor effects.
+- [x] Review whether the custom cursor in `components/layout/conditional-fieldporter-extras.tsx` adds value or just adds noise.
+- [x] Speed up or remove the footer fade-in so it does not feel like blank space while scrolling.
+- [x] Make micro-interactions more purposeful and less decorative.
+- [x] Animate real explanatory elements, not just ambient backgrounds.
+- [x] Consider animating the AI readiness bars only if that improves comprehension.
 
 ## P2 Performance Tasks
 
-- [ ] Stop globally hiding all scrollbars in `app/globals.css`.
-- [ ] Review whether hidden scrollbars make chat, modals, embeds, and article content feel broken.
-- [ ] Align mobile breakpoints across `useStableMobile`, `useDeviceCapability`, and visual components.
-- [ ] Reduce 3D and animated hero cost on phones and tablets.
-- [ ] Replace `window.location.href` navigations with `Link` or router navigation where appropriate.
-- [ ] Review heavy blurred backgrounds and remove duplicates.
-- [ ] Audit unused heavy visual components and delete dead code if not needed.
-- [ ] Review back-to-top and chat widgets for overlap and repaint cost on mobile.
-- [ ] Check Cal embed, article pages, and chat for scroll performance once scrollbar rules are fixed.
+- [x] Stop globally hiding all scrollbars in `app/globals.css`.
+- [x] Review whether hidden scrollbars make chat, modals, embeds, and article content feel broken.
+- [x] Align mobile breakpoints across `useStableMobile`, `useDeviceCapability`, and visual components.
+- [x] Reduce 3D and animated hero cost on phones and tablets.
+- [x] Replace `window.location.href` navigations with `Link` or router navigation where appropriate.
+- [x] Review heavy blurred backgrounds and remove duplicates.
+- [x] Audit unused heavy visual components and delete dead code if not needed.
+- [x] Review back-to-top and chat widgets for overlap and repaint cost on mobile.
+- [x] Check Cal embed, article pages, and chat for scroll performance once scrollbar rules are fixed.
 
 ## P2 Copy Cleanup Tasks
 
@@ -202,10 +202,10 @@ Consolidated from the full website audit, code review, and follow-up strategy no
 - [x] Replace filler copy with specific outcomes, deliverables, or constraints.
 - [x] Remove buzzword-heavy lines that sound broader than the actual offer.
 - [x] Replace junior-sounding phrases like `demonstrating full-stack capabilities`.
-- [ ] Rewrite copy that tries to sound smart instead of useful.
-- [ ] Make every main page answer the buyer’s likely next question instead of repeating brand claims.
-- [ ] Standardize terminology for AI, automation, research, consulting, implementation, and products.
-- [ ] Standardize British vs American spelling across public content.
+- [x] Rewrite copy that tries to sound smart instead of useful.
+- [x] Make every main page answer the buyer’s likely next question instead of repeating brand claims.
+- [x] Standardize terminology for AI, automation, research, consulting, implementation, and products.
+- [x] Standardize British vs American spelling across public content.
 
 ## P2 About Tech Stack Tasks
 
@@ -216,33 +216,33 @@ Consolidated from the full website audit, code review, and follow-up strategy no
 
 ## P2 Footer And Navigation Tasks
 
-- [ ] Verify every nav item earns its place and leads to a clear destination.
-- [ ] Re-evaluate whether `AIOS` is self-explanatory enough in the main nav.
-- [ ] Verify footer service anchors and company links.
-- [ ] Review the footer accordion max height in `components/layout/footer.tsx`.
-- [ ] Replace the footer tagline `Building AI-Powered Futures` with sharper positioning if needed.
-- [ ] Remove or fix any outdated or inconsistent route references in config/constants.
+- [x] Verify every nav item earns its place and leads to a clear destination.
+- [x] Re-evaluate whether `AIOS` is self-explanatory enough in the main nav.
+- [x] Verify footer service anchors and company links.
+- [x] Review the footer accordion max height in `components/layout/footer.tsx`.
+- [x] Replace the footer tagline `Building AI-Powered Futures` with sharper positioning if needed.
+- [x] Remove or fix any outdated or inconsistent route references in config/constants.
 
 ## P2 Technical Consistency Tasks
 
-- [ ] Clean up stale messaging in `config/constants.ts`.
-- [ ] Remove old enterprise/Fortune 500 framing if it no longer matches FIELDPORTER’s actual market.
-- [ ] Audit `FOOTER_LINKS`, `FEATURES`, and related constants for dead ideas and unused routes.
-- [ ] Review whether `/case-studies` or other configured resources point to non-existent pages.
-- [ ] Remove stale route assumptions around `auth` and `portal` if those products are gone.
-- [ ] Check metadata descriptions so they match the current public positioning.
-- [ ] Review the hidden `think-global-voluntas` route and ensure it stays isolated from core brand confusion.
+- [x] Clean up stale messaging in `config/constants.ts`.
+- [x] Remove old enterprise/Fortune 500 framing if it no longer matches FIELDPORTER’s actual market.
+- [x] Audit `FOOTER_LINKS`, `FEATURES`, and related constants for dead ideas and unused routes.
+- [x] Review whether `/case-studies` or other configured resources point to non-existent pages.
+- [x] Remove stale route assumptions around `auth` and `portal` if those products are gone.
+- [x] Check metadata descriptions so they match the current public positioning.
+- [x] Review the hidden `think-global-voluntas` route and ensure it stays isolated from core brand confusion.
 
 ## P3 Small But Important Cleanup Tasks
 
-- [ ] Replace hardcoded article dates if they are misleading.
-- [ ] Verify social links in config are current and correct.
-- [ ] Check for typos like `accessble` and other polish issues in portfolio copy.
-- [ ] Normalize section badge styles and wording.
-- [ ] Review whether the homepage trust bar should include icons or stronger wording.
-- [ ] Tighten footer reveal timing and overall shell polish.
-- [ ] Check whether `Services` is the right accordion label in footer on mobile or if a simpler static list is better.
-- [ ] Review chat opening text so it matches the site’s sharper positioning.
+- [x] Replace hardcoded article dates if they are misleading.
+- [x] Verify social links in config are current and correct.
+- [x] Check for typos like `accessble` and other polish issues in portfolio copy.
+- [x] Normalize section badge styles and wording.
+- [x] Review whether the homepage trust bar should include icons or stronger wording.
+- [x] Tighten footer reveal timing and overall shell polish.
+- [x] Check whether `Services` is the right accordion label in footer on mobile or if a simpler static list is better.
+- [x] Review chat opening text so it matches the site’s sharper positioning.
 
 ## Suggested First 15 Tasks
 
@@ -253,13 +253,13 @@ Consolidated from the full website audit, code review, and follow-up strategy no
 - [x] Remove the `Public Beta` badge from the AI assessment.
 - [x] Fix broken footer service anchors.
 - [x] Standardize the main CTA language sitewide.
-- [ ] Decide and lock the primary target audience.
-- [ ] Decide and lock the main FIELDPORTER positioning line.
+- [x] Decide and lock the primary target audience.
+- [x] Decide and lock the main FIELDPORTER positioning line.
 - [x] Build a mobile-friendly AI assessment visual.
-- [ ] Reduce the layered background and blur effects.
-- [ ] Cut the About tech stack wall to a curated shortlist.
+- [x] Reduce the layered background and blur effects.
+- [x] Cut the About tech stack wall to a curated shortlist.
 - [x] Rewrite weak portfolio taglines and vague case entries.
-- [ ] Improve contact page fit, expectation, and trust copy.
+- [x] Improve contact page fit, expectation, and trust copy.
 - [x] Secure or remove the public admin route.
 
 ## Notes For Execution

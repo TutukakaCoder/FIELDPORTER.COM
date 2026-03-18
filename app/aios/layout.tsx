@@ -1,14 +1,14 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "AI Operating System (AIOS) | FIELDPORTER",
+  title: "AI Readiness Assessment | FIELDPORTER",
   description:
-    "A strategic diagnostic framework to identify high-ROI AI opportunities. Get a scored roadmap and expert consultation.",
-  keywords: ["AI Operating System", "AIOS", "AI Audit", "Automation Roadmap"],
+    "Scored roadmap for your automation strategy. Know what to build first. Written report plus consultation in 2–5 days.",
+  keywords: ["AI Readiness", "AI Assessment", "Automation Roadmap", "AI Audit"],
   openGraph: {
-    title: "AI Operating System (AIOS) | FIELDPORTER",
+    title: "AI Readiness Assessment | FIELDPORTER",
     description:
-      "A strategic diagnostic framework to identify high-ROI AI opportunities. Get a scored roadmap and expert consultation.",
+      "Scored roadmap for your automation strategy. Know what to build first. Written report plus consultation in 2–5 days.",
     type: "website",
     url: "https://fieldporter.com/aios",
   },

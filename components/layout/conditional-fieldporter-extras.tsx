@@ -29,15 +29,12 @@ export function ConditionalFieldporterExtras() {
               }
               
               function initCursor() {
-                // More accurate mobile detection - exclude desktop with touch
+                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
                 const userAgent = navigator.userAgent.toLowerCase();
                 const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
                 const isSmallScreen = window.innerWidth < 768;
                 const isMobile = isMobileUA || isSmallScreen;
-                
-                if (isMobile) {
-                  return;
-                }
+                if (isMobile) return;
                 
                 // Create cursor elements dynamically to avoid hydration issues
                 const primaryCursor = document.createElement('div');

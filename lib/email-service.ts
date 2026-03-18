@@ -164,7 +164,7 @@ class EmailService {
             <!-- Premium FIELDPORTER Header -->
             <div style="background: linear-gradient(135deg, #0969da 0%, #1e40af 50%, #7c3aed 100%); padding: 40px 32px; text-align: center;">
               <h1 style="color: white; font-size: 32px; margin: 0; font-weight: 700; letter-spacing: 1px;">FIELDPORTER</h1>
-              <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0 0; font-size: 16px; font-weight: 500;">Strategic Research & Business Development</p>
+              <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0 0; font-size: 16px; font-weight: 500;">AI Integration & Automation</p>
             </div>
 
             <!-- Welcome Content -->
@@ -226,7 +226,7 @@ class EmailService {
             <!-- Professional Footer -->
             <div style="background: #f8fafc; padding: 24px 32px; text-align: center; border-top: 1px solid #e5e7eb;">
               <p style="margin: 0 0 8px 0; color: #6b7280; font-size: 14px;">
-                <strong>FIELDPORTER</strong> - Strategic Research & Business Development
+                <strong>FIELDPORTER</strong> - AI Integration & Automation
               </p>
               <p style="margin: 0; color: #9ca3af; font-size: 12px;">
                 This email was sent to ${data.email}. 
@@ -262,7 +262,7 @@ Best regards,
 The FIELDPORTER Team
 
 ---
-FIELDPORTER - Strategic Research & Business Development
+FIELDPORTER - AI Integration & Automation
 This email was sent to ${data.email}
 Privacy Policy: https://fieldporter.com/privacy-policy
     `;

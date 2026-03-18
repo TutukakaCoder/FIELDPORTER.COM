@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   motion,
   useScroll,
@@ -8,6 +9,7 @@ import {
   Variants,
 } from "framer-motion";
 import { ArrowRight, Briefcase } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 interface ServiceHeroProps {
@@ -203,7 +205,7 @@ export function ServiceHero({
             {/* Icon */}
             <motion.div variants={itemVariants} className="flex justify-center">
               <motion.div
-                className="p-4 rounded-2xl backdrop-blur-xl border border-white/10 bg-white/[0.02] transition-all duration-300 hover:border-blue-400/40 hover:bg-white/[0.04] hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]"
+                className="p-4 rounded-2xl backdrop-blur-md border border-white/10 bg-white/[0.02] transition-all duration-300 hover:border-blue-400/40 hover:bg-white/[0.04] hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -235,33 +237,20 @@ export function ServiceHero({
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.2, ease: "easeInOut" }}
               >
-                <button
-                  onClick={() => (window.location.href = ctaHref)}
-                  className="
-                    group relative px-8 py-4 rounded-2xl backdrop-blur-xl border border-white/20 transition-all duration-300
-                    bg-white/[0.015] hover:bg-white/[0.04] hover:border-blue-400/40
-                    hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]
-                    will-change-transform font-medium text-white
-                    min-w-[240px] text-center
-                  "
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="min-w-[240px] group"
+                  asChild
                 >
-                  {/* Enhanced glassmorphism layers */}
-                  <div className="absolute inset-0 bg-white/[0.01] backdrop-blur-xl rounded-2xl" />
-                  <div className="absolute inset-0 rounded-2xl border border-white/5" />
-
-                  {/* Premium glow effect */}
-                  <div className="absolute -inset-1 rounded-2xl bg-blue-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
-
-                  <div className="relative z-10 flex items-center justify-center space-x-3">
+                  <Link
+                    href={ctaHref}
+                    className="inline-flex items-center justify-center gap-3"
+                  >
                     <span className="text-base lg:text-lg">{ctaText}</span>
-                    <motion.div
-                      whileHover={{ x: 4 }}
-                      transition={{ duration: 0.2, ease: "easeInOut" }}
-                    >
-                      <ArrowRight className="w-5 h-5" />
-                    </motion.div>
-                  </div>
-                </button>
+                    <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </Button>
               </motion.div>
             </motion.div>
 

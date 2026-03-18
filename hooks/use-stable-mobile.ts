@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { BREAKPOINTS } from "@/config/constants";
+import { useEffect, useRef, useState } from "react";
 
-export function useStableMobile(breakpoint: number = 768) {
+export function useStableMobile(breakpoint: number = BREAKPOINTS.mobile) {
   const [isMobile, setIsMobile] = useState(false);
   const isInitialized = useRef(false);
   const resizeTimeoutRef = useRef<NodeJS.Timeout>();
@@ -18,20 +19,20 @@ export function useStableMobile(breakpoint: number = 768) {
       if (resizeTimeoutRef.current) {
         clearTimeout(resizeTimeoutRef.current);
       }
-      
+
       resizeTimeoutRef.current = setTimeout(() => {
         const newIsMobile = window.innerWidth < breakpoint;
-        setIsMobile(current => {
+        setIsMobile((current) => {
           // Only update if actually changed
           return current !== newIsMobile ? newIsMobile : current;
         });
       }, 150); // Debounce delay
     };
 
-    window.addEventListener('resize', handleResize, { passive: true });
-    
+    window.addEventListener("resize", handleResize, { passive: true });
+
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
       if (resizeTimeoutRef.current) {
         clearTimeout(resizeTimeoutRef.current);
       }
@@ -47,7 +48,7 @@ export function useReducedMotion() {
 
   useEffect(() => {
     if (!isInitialized.current) {
-      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
       setPrefersReducedMotion(mediaQuery.matches);
       isInitialized.current = true;
 
@@ -55,13 +56,13 @@ export function useReducedMotion() {
         setPrefersReducedMotion(e.matches);
       };
 
-      mediaQuery.addEventListener('change', handleChange);
-      return () => mediaQuery.removeEventListener('change', handleChange);
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
     }
-    
+
     // Return empty cleanup function for other code paths
     return () => {};
   }, []);
 
   return prefersReducedMotion;
-} 
+}

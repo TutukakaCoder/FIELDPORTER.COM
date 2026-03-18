@@ -248,7 +248,7 @@ export function DesktopChatSidebar({
             className="flex-1 flex flex-col overflow-hidden"
           >
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin">
               {messages.length === 0 && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -260,24 +260,24 @@ export function DesktopChatSidebar({
                     <Bot className="w-8 h-8 text-fieldporter-blue" />
                   </div>
                   <h3 className="text-lg font-semibold text-fieldporter-white mb-2">
-                    Welcome to FIELDPORTER
+                    FIELDPORTER
                   </h3>
                   <p className="text-fieldporter-gray text-sm leading-relaxed mb-4">
-                    We help solve your business challenges with AI automation.
+                    AI integration and automation for growing companies. First
+                    useful system in 1–3 weeks.
                   </p>
 
-                  {/* Value-driven questions focused on user outcomes */}
                   <div className="space-y-2">
                     <p className="text-xs text-fieldporter-gray/80 mb-3">
-                      What challenge can we help solve?
+                      What do you want to explore?
                     </p>
                     <div className="flex flex-wrap gap-1.5 justify-center">
                       {[
-                        "Save 15+ hours weekly?",
-                        "Get market insights in days vs weeks?",
-                        "Turn manual processes into automation?",
-                        "Validate your concept quickly?",
-                        "Build production AI systems?",
+                        "Save 15+ hours weekly",
+                        "Production AI in 1–3 weeks",
+                        "Automate manual processes",
+                        "Validate a concept before investing",
+                        "Strategic research or due diligence",
                       ].map((suggestion, idx) => (
                         <motion.button
                           key={idx}
@@ -291,7 +291,7 @@ export function DesktopChatSidebar({
                           }
                           className="px-2 py-1 text-xs bg-fieldporter-gray/10 hover:bg-fieldporter-gray/20 
                                    border border-fieldporter-gray/20 rounded-full transition-all duration-200
-                                   text-fieldporter-white/80 hover:text-fieldporter-white hover:scale-105"
+                                   text-fieldporter-white/80 hover:text-fieldporter-white"
                         >
                           {suggestion}
                         </motion.button>

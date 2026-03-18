@@ -11,15 +11,25 @@ export interface ConsultationRequest {
   contactName: string;
   email: string;
   phone?: string;
-  companySize: 'startup' | 'scale-up' | 'enterprise' | 'fortune-500';
+  companySize: "startup" | "scale-up" | "mid-market";
   industry: string;
-  aiMaturityLevel: 'exploring' | 'piloting' | 'scaling' | 'optimizing';
-  projectScope: 'strategy' | 'implementation' | 'transformation' | 'optimization';
-  budget: 'under-50k' | '50k-250k' | '250k-1m' | 'over-1m';
-  timeline: 'immediate' | '1-3-months' | '3-6-months' | '6-12-months';
+  aiMaturityLevel: "exploring" | "piloting" | "scaling" | "optimizing";
+  projectScope:
+    | "strategy"
+    | "implementation"
+    | "transformation"
+    | "optimization";
+  budget: "under-50k" | "50k-250k" | "250k-1m" | "over-1m";
+  timeline: "immediate" | "1-3-months" | "3-6-months" | "6-12-months";
   message: string;
   leadScore: number;
-  status: 'new' | 'qualified' | 'contacted' | 'proposal-sent' | 'closed-won' | 'closed-lost';
+  status:
+    | "new"
+    | "qualified"
+    | "contacted"
+    | "proposal-sent"
+    | "closed-won"
+    | "closed-lost";
   createdAt: Date;
   updatedAt: Date;
 }
@@ -35,7 +45,7 @@ export interface AIInteraction {
   timestamp: Date;
   responseTime: number;
   cost: number;
-  model: 'deepseek-chat' | 'deepseek-coder';
+  model: "deepseek-chat" | "deepseek-coder";
 }
 
 // ============================================================================
@@ -48,18 +58,18 @@ export interface ComponentProps {
 }
 
 export interface ButtonProps extends ComponentProps {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'outline';
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  variant?: "primary" | "secondary" | "ghost" | "outline";
+  size?: "sm" | "md" | "lg" | "xl";
   disabled?: boolean;
   loading?: boolean;
   onClick?: () => void;
   href?: string;
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
 }
 
 export interface CardProps extends ComponentProps {
-  variant?: 'default' | 'elevated' | 'outlined' | 'glass';
-  padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  variant?: "default" | "elevated" | "outlined" | "glass";
+  padding?: "none" | "sm" | "md" | "lg" | "xl";
 }
 
 // ============================================================================
@@ -91,7 +101,7 @@ export interface PageMetadata {
 export interface FormField {
   name: string;
   label: string;
-  type: 'text' | 'email' | 'tel' | 'textarea' | 'select' | 'radio' | 'checkbox';
+  type: "text" | "email" | "tel" | "textarea" | "select" | "radio" | "checkbox";
   placeholder?: string;
   required?: boolean;
   validation?: {
@@ -167,7 +177,7 @@ export interface PaginatedResponse<T> extends ApiResponse<T[]> {
 // ============================================================================
 
 export interface AppConfig {
-  env: 'development' | 'staging' | 'production';
+  env: "development" | "staging" | "production";
   apiUrl: string;
   firebase: {
     projectId: string;

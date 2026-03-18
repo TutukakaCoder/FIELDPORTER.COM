@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 
 export default function InsightsPage() {
   return (
-    <PageWrapper>
+    <PageWrapper className="pt-0">
       <Suspense
         fallback={
           <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-white dark:from-gray-950 dark:via-gray-900 dark:to-black flex items-center justify-center">

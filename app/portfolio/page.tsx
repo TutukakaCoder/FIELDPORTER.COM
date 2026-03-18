@@ -88,14 +88,14 @@ const portfolioSections: PortfolioSection[] = [
         status: "LIVE • 21 CLIENTS",
         category: "Client and Investment Management",
         description:
-          "Building for 6 months and still evolving. Centralizes intelligence for clients, investors, advisors, and admins—21 clients, 70 portfolio submissions. AI accelerates data collection, extracting 15 business fields from pitch decks in 30-45 seconds with 85%+ accuracy. Humans make strategic decisions. Everyone works from the same source of truth.",
+          "Built over the last 6 months and actively improving. It centralizes intelligence for clients, investors, advisors, and admins, with 21 active clients and 70 portfolio submissions. AI extracts 15 key business fields from pitch decks in 30-45 seconds with 99%+ accuracy, while humans stay in control of strategic decisions.",
         applyUrl: "https://voluntas.web.app/apply?ref=FIELDPORTER",
         capabilities: [
-          "AI Document Processing: 15 fields extracted with 85%+ accuracy",
-          "Structured Client Profiles: 45 fields across 8 categories",
-          "Investor Matching: 10-factor algorithm with confidence scoring",
-          "AI-Powered ICP Generation: 6-section professional documents",
-          "Context-Aware Assistant: Mobile-ready instant answers",
+          "AI Document Processing: 15 fields extracted with 99%+ accuracy",
+          "Structured client profiles: 45 fields across 8 categories",
+          "Investor matching: 10-factor scoring model",
+          "AI ICP generation: complete 6-section documents",
+          "Context-aware assistant: fast answers on mobile",
         ],
         metrics: [
           {
@@ -151,7 +151,7 @@ const portfolioSections: PortfolioSection[] = [
         techStack: "React • Firebase • Complex Timezone Logic",
         testimonial: {
           quote:
-            "After nine months with another developer who couldn't deliver, FIELDPORTER rebuilt our entire platform from scratch. Their work is exceptional delivered on time, beautifully crafted, and at a fair price. You're partnering with a team that genuinely cares about your success.",
+            "After nine months with another developer who couldn't deliver, FIELDPORTER rebuilt our entire platform from scratch. Their work is exceptional, delivered on time, beautifully crafted, and at a fair price. You're partnering with a team that genuinely cares about your success.",
           author: "Steve, Leadership Development Coach",
           rating: 5,
         },
@@ -312,54 +312,12 @@ const getTimelineBadgeStyle = (timelineStyle?: string) => {
   }
 };
 
-// Premium Aurora Background - Pure CSS for scroll performance
-function PremiumAuroraBackground() {
+// Simple hero background - static gradient blobs, no animation
+function PortfolioHeroBackground() {
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-50">
-      <style jsx>{`
-        @keyframes aurora-1 {
-          0%,
-          100% {
-            transform: translate(0, 0) scale(1);
-          }
-          50% {
-            transform: translate(100px, 50px) scale(1.2);
-          }
-        }
-        @keyframes aurora-2 {
-          0%,
-          100% {
-            transform: translate(0, 0) scale(1);
-          }
-          50% {
-            transform: translate(-80px, -60px) scale(1.1);
-          }
-        }
-        @keyframes aurora-3 {
-          0%,
-          100% {
-            transform: translate(0, 0) scale(1);
-          }
-          50% {
-            transform: translate(60px, -40px) scale(0.9);
-          }
-        }
-        .aurora-blob-1 {
-          animation: aurora-1 20s ease-in-out infinite;
-        }
-        .aurora-blob-2 {
-          animation: aurora-2 25s ease-in-out infinite;
-        }
-        .aurora-blob-3 {
-          animation: aurora-3 30s ease-in-out infinite 10s;
-        }
-      `}</style>
-
-      <div className="aurora-blob-1 absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-500/20 via-blue-500/10 to-transparent rounded-full blur-3xl" />
-
-      <div className="aurora-blob-2 absolute top-1/2 right-1/4 w-80 h-80 bg-gradient-to-l from-purple-500/15 via-purple-400/8 to-transparent rounded-full blur-3xl" />
-
-      <div className="aurora-blob-3 absolute bottom-1/4 left-1/2 w-72 h-72 bg-gradient-to-t from-emerald-500/10 via-emerald-300/5 to-transparent rounded-full blur-3xl" />
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-500/10 to-transparent rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-gradient-to-t from-emerald-500/8 to-transparent rounded-full blur-3xl" />
     </div>
   );
 }
@@ -374,9 +332,8 @@ function PortfolioHero() {
       ref={ref}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Premium Aurora Background */}
       <div className="absolute inset-0 z-0">
-        <PremiumAuroraBackground />
+        <PortfolioHeroBackground />
       </div>
 
       {/* Hero Content */}
@@ -453,7 +410,7 @@ function InteractivePortfolioShowcase() {
   }
 
   return (
-    <section className="relative py-32 md:py-40 lg:py-48 overflow-hidden">
+    <section className="relative section-rhythm-2xl overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:via-gray-950 dark:to-black" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -526,10 +483,10 @@ function InteractivePortfolioShowcase() {
               </div>
               {/* Section Header */}
               <div className="text-center mb-16 md:mb-20">
-                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+                <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">
                   {currentSection.group === "client"
                     ? "Client work"
-                    : "In-house ventures (internal products)"}
+                    : "In-house ventures"}
                 </p>
                 <div className="flex items-center justify-center gap-4 mb-6">
                   <div
@@ -587,11 +544,11 @@ function InteractivePortfolioShowcase() {
                             {project.title}
                           </h3>
 
-                          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+                          <p className="max-w-3xl text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-8">
                             {project.description}
                           </p>
                           {project.applyUrl && (
-                            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+                            <p className="max-w-3xl text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-8">
                               If you&apos;d like to apply for capital raise or
                               growth services,{" "}
                               <a
@@ -639,11 +596,11 @@ function InteractivePortfolioShowcase() {
                             <h4 className="text-gray-900 dark:text-white font-semibold text-lg">
                               Current Capabilities:
                             </h4>
-                            <ul className="space-y-3">
+                            <ul className="space-y-3 max-w-3xl">
                               {project.capabilities.map((capability, idx) => (
                                 <li
                                   key={idx}
-                                  className="flex items-start gap-3 text-gray-600 dark:text-gray-300"
+                                  className="flex items-start gap-3 text-gray-600 dark:text-gray-300 leading-7"
                                 >
                                   <CheckCircle className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
                                   <span>{capability}</span>
@@ -740,7 +697,7 @@ function InteractivePortfolioShowcase() {
 
                             {project.videoUrl ? (
                               // Video showcase card
-                              <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-4 md:p-6 overflow-hidden transition-all duration-500 hover:border-gray-900/20 dark:hover:border-white/20 hover:shadow-2xl hover:shadow-blue-500/10">
+                              <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-4 md:p-6 overflow-hidden transition-colors duration-200 hover:border-gray-900/20 dark:hover:border-white/20">
                                 <div className="relative w-full rounded-3xl overflow-hidden bg-black/50">
                                   <video
                                     controls
@@ -797,9 +754,9 @@ function InteractivePortfolioShowcase() {
                               </div>
                             ) : (
                               // Testimonial-only card (existing design)
-                              <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-8 md:p-12 transition-all duration-500 hover:border-gray-900/20 dark:hover:border-white/20 hover:shadow-2xl hover:shadow-blue-500/10">
+                              <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-8 md:p-12 transition-colors duration-200 hover:border-gray-900/20 dark:hover:border-white/20">
                                 <div className="flex items-start gap-4 group/quote">
-                                  <div className="text-blue-400 text-4xl leading-none group-hover/quote:scale-110 transition-transform duration-500">
+                                  <div className="text-blue-400 text-4xl leading-none">
                                     "
                                   </div>
                                   <div className="flex-1">
@@ -848,7 +805,7 @@ function PortfolioCTA() {
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
-    <section ref={ref} className="relative py-24 md:py-32">
+    <section ref={ref} className="relative section-rhythm-xl">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -860,9 +817,12 @@ function PortfolioCTA() {
             From Concept to Revenue
           </h2>
           <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
-            Whether you need strategic guidance, AI implementation advice, or
-            help building prototypes, we bring hands-on experience to your
-            business challenges. No theory. Just practical solutions.
+            Need research before a big decision, help shipping AI or automation,
+            or a prototype fast? We work from real projects—no fluff.
+          </p>
+          <p className="text-base text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+            Book a call to scope your project. We reply within 24 hours and will
+            say clearly if we&apos;re a fit.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-12">
             <motion.a
@@ -881,7 +841,7 @@ function PortfolioCTA() {
               whileTap={{ scale: 0.98 }}
             >
               Learn Our Approach
-              <ExternalLink className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+              <ExternalLink className="w-5 h-5 group-hover:translate-x-0.5 transition-transform duration-200" />
             </motion.a>
           </div>
         </motion.div>

@@ -60,7 +60,7 @@ export function ContactMethods() {
   ];
 
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden">
+    <section className="relative section-rhythm-xl overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:to-gray-950" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -98,7 +98,7 @@ export function ContactMethods() {
               animate={isLoaded ? "visible" : "hidden"}
               whileHover={{ y: -6, scale: 1.01 }}
               transition={{ delay: index * 0.1, duration: 0.3 }}
-              className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-6 md:p-8 hover:bg-gray-900/[0.04] dark:hover:bg-white/[0.04] transition-all duration-300 group text-center hover:shadow-[0_20px_50px_rgba(59,130,246,0.1)] hover:border-blue-500/20"
+              className="relative card-section card-section-hover rounded-3xl md:rounded-2xl group text-center hover:shadow-[0_20px_50px_rgba(59,130,246,0.1)] hover:border-blue-500/20"
             >
               {/* Step Number */}
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
@@ -136,7 +136,7 @@ export function ContactMethods() {
           animate={isLoaded ? "visible" : "hidden"}
           className="text-center"
         >
-          <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-6 md:p-8 max-w-3xl mx-auto">
+          <div className="relative card-section max-w-3xl mx-auto">
             <h3 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-2 leading-tight">
               Prefer Direct Contact?
             </h3>

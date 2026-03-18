@@ -88,7 +88,7 @@ export function BookingWidget({
   return (
     <section
       id="booking-widget"
-      className="relative py-8 md:py-16 overflow-hidden"
+      className="relative section-rhythm-tight overflow-hidden"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-gray-50 via-gray-100 to-white dark:from-black dark:via-gray-950 dark:to-black" />
 
@@ -118,21 +118,21 @@ export function BookingWidget({
 
           {/* Benefits Cards - Compact */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8 max-w-3xl mx-auto px-4">
-            <div className="bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-xl p-3 md:p-4 flex items-center justify-center gap-3">
+            <div className="bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-md border border-gray-900/10 dark:border-white/10 rounded-xl p-3 md:p-4 flex items-center justify-center gap-3">
               <Clock className="w-5 h-5 text-blue-400" />
               <span className="text-sm font-medium text-gray-900 dark:text-white">
                 30 Minutes
               </span>
             </div>
 
-            <div className="bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-xl p-3 md:p-4 flex items-center justify-center gap-3">
+            <div className="bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-md border border-gray-900/10 dark:border-white/10 rounded-xl p-3 md:p-4 flex items-center justify-center gap-3">
               <Video className="w-5 h-5 text-emerald-400" />
               <span className="text-sm font-medium text-gray-900 dark:text-white">
                 Video Call
               </span>
             </div>
 
-            <div className="bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-xl p-3 md:p-4 flex items-center justify-center gap-3">
+            <div className="bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-md border border-gray-900/10 dark:border-white/10 rounded-xl p-3 md:p-4 flex items-center justify-center gap-3">
               <Calendar className="w-5 h-5 text-purple-400" />
               <span className="text-sm font-medium text-gray-900 dark:text-white">
                 Flexible Times
@@ -141,7 +141,7 @@ export function BookingWidget({
           </div>
 
           {/* Booking Widget Container */}
-          <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border-y border-gray-900/10 dark:border-white/10 sm:border sm:rounded-3xl p-0 md:p-4 hover:bg-gray-900/[0.04] dark:hover:bg-white/[0.04] transition-all duration-300 overflow-hidden">
+          <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-md border-y border-gray-900/10 dark:border-white/10 sm:border sm:rounded-3xl p-0 md:p-4 hover:bg-gray-900/[0.04] dark:hover:bg-white/[0.04] transition-all duration-300 overflow-hidden">
             {!isLoaded && (
               <div className="flex items-center justify-center min-h-[600px] md:min-h-[700px]">
                 <div className="text-center animate-fade-in">
@@ -167,7 +167,7 @@ export function BookingWidget({
             )}
 
             <CalErrorBoundary>
-              <div className="scrollbar-hide w-full h-full">
+              <div className="w-full h-full min-h-[600px]">
                 <Cal
                   calLink={calLink}
                   style={{

@@ -4,6 +4,7 @@ import { trackServiceInterest } from "@/lib/firebase-analytics";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   Brain,
@@ -203,43 +204,6 @@ const testimonials = [
   },
 ];
 
-// Enhanced premium background with subtle effects
-const PremiumBackground = memo(() => {
-  return (
-    <div className="absolute inset-0 overflow-hidden">
-      {/* Sophisticated gradient base */}
-      <div className="absolute inset-0 bg-transparent" />
-
-      {/* Subtle floating orbs */}
-      <div className="absolute inset-0 opacity-40">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/8 rounded-full blur-3xl animate-pulse" />
-        <div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/8 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "1s" }}
-        />
-        <div
-          className="absolute top-3/4 left-3/4 w-64 h-64 bg-purple-500/6 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "2s" }}
-        />
-      </div>
-
-      {/* Premium grain texture */}
-      <div
-        className="absolute inset-0 opacity-[0.015] pointer-events-none"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-          backgroundRepeat: "repeat",
-        }}
-      />
-
-      {/* Subtle radial gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-white/20 dark:to-black/20" />
-    </div>
-  );
-});
-
-PremiumBackground.displayName = "PremiumBackground";
-
 // Enhanced industry card with premium effects
 const IndustryCard = memo(
   ({
@@ -276,7 +240,7 @@ const IndustryCard = memo(
 
           {/* Border Glow Effect */}
           <div
-            className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r ${glowColor.replace("bg-", "from-").replace("/10", "/20")} to-transparent pointer-events-none p-[1px] -z-10`}
+            className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r ${glowColor.replace("bg-", "from-").replace("/10", "/20")} to-transparent pointer-events-none p-[1px] -z-10`}
             style={{
               mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
             }}
@@ -286,7 +250,7 @@ const IndustryCard = memo(
 
           <div className="relative z-10 flex flex-col h-full items-center text-center">
             <div
-              className={`w-10 h-10 lg:w-12 lg:h-12 mb-4 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-sm flex items-center justify-center group-hover:${glowColor} transition-all duration-300 group-hover:scale-110`}
+              className={`w-10 h-10 lg:w-12 lg:h-12 mb-4 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-sm flex items-center justify-center group-hover:${glowColor} transition-all duration-300`}
             >
               <Icon className={`w-5 h-5 lg:w-6 lg:h-6 ${iconColor}`} />
             </div>
@@ -351,7 +315,7 @@ const TestimonialCard = memo(
       >
         {/* Subtle glow on hover */}
         <div
-          className={`absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${testimonial.glowColor}`}
+          className={`absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${testimonial.glowColor}`}
         />
 
         <div
@@ -558,6 +522,7 @@ const ProjectCard = memo(
     index: number;
   }) => {
     const [isHovered, setIsHovered] = useState(false);
+    const router = useRouter();
 
     const handleClick = useCallback(() => {
       trackServiceInterest(project.id, "learn_more", {
@@ -572,8 +537,8 @@ const ProjectCard = memo(
       };
 
       sessionStorage.setItem("targetSection", sectionMap[project.id] || "");
-      window.location.href = "/portfolio";
-    }, [project.id, project.title]);
+      router.push("/portfolio");
+    }, [project.id, project.title, router]);
 
     return (
       <motion.div
@@ -597,7 +562,7 @@ const ProjectCard = memo(
 
         {/* Premium hover glow */}
         <div
-          className={`absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${project.hoverGlow}`}
+          className={`absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${project.hoverGlow}`}
         />
 
         <div
@@ -611,7 +576,7 @@ const ProjectCard = memo(
           {/* Premium glassmorphism layers */}
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900/[0.03] dark:from-white/[0.03] to-transparent rounded-3xl" />
           <div
-            className={`absolute inset-0 bg-gradient-to-br ${project.gradientFrom} ${project.gradientTo} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+            className={`absolute inset-0 bg-gradient-to-br ${project.gradientFrom} ${project.gradientTo} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
           />
 
           <div className="relative z-10 h-full flex flex-col min-w-0">
@@ -733,10 +698,8 @@ export function PortfolioSection() {
     <section
       ref={ref}
       id="portfolio"
-      className="relative py-20 md:py-28 overflow-hidden bg-transparent"
+      className="relative section-rhythm-lg overflow-hidden bg-transparent"
     >
-      <PremiumBackground />
-
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Enhanced Section Header */}
         <div className="text-center mb-16 md:mb-20">

@@ -6,6 +6,7 @@
 
 import { motion } from "framer-motion";
 import React from "react";
+import { useReducedMotion } from "@/hooks";
 
 interface PageTransitionProps {
   children: React.ReactNode;
@@ -13,14 +14,17 @@ interface PageTransitionProps {
 }
 
 export function PageTransition({ children, className }: PageTransitionProps) {
+  const prefersReducedMotion = useReducedMotion();
+  const duration = prefersReducedMotion ? 0 : 0.2;
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 10 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
+      exit={{ opacity: 0, y: prefersReducedMotion ? 0 : -10 }}
       transition={{
-        duration: 0.2,
-        ease: [0.4, 0, 0.2, 1], // Custom easing for quick, smooth feel
+        duration,
+        ease: [0.4, 0, 0.2, 1],
       }}
       className={className}
     >

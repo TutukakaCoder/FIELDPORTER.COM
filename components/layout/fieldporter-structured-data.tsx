@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { COMPANY_MODEL } from "@/config/constants";
+import { COMPANY_MODEL, SOCIAL_LINKS } from "@/config/constants";
 
 export function FieldporterStructuredData() {
   return (
@@ -31,9 +31,9 @@ export function FieldporterStructuredData() {
             addressLocality: "Auckland",
           },
           sameAs: [
-            "https://twitter.com/fieldporter",
-            "https://linkedin.com/company/fieldporter",
-            "https://github.com/fieldporter",
+            SOCIAL_LINKS.twitter,
+            SOCIAL_LINKS.linkedin,
+            SOCIAL_LINKS.github,
           ],
           contactPoint: {
             "@type": "ContactPoint",

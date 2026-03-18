@@ -30,7 +30,7 @@ const heroData = {
   title: CORE_OFFER_HIERARCHY.primary,
   subtitle: `For ${PRIMARY_AUDIENCE.short}`,
   description:
-    "We build and deploy production-ready AI and automation so you de-risk investment and reclaim high-value time. Strategic research supports the decisions; implementation delivers the results.",
+    "We build and deploy practical AI systems and automations that remove manual work and speed up decisions. Research supports the decisions; implementation delivers the results.",
   stats: [],
   ctaText: "Book a Call",
   ctaHref: "/contact",
@@ -43,17 +43,17 @@ const services = [
     icon: TrendingUp,
     title: "Strategic Research & Intelligence",
     description:
-      "For founders and operators deciding where to invest: a written brief with clear recommendations, risk levels, and next steps in 3–5 days.",
+      "For leaders deciding where to invest: a written brief with clear recommendations, risk levels, and next steps in 2–5 days.",
     detailedExplanation:
       "Best for: leadership about to commit capital to a new market, product, or partnership and who need a fast, evidence-based view before committing. We deliver: a single strategic brief (PDF or Notion) with validated answers to your key question (e.g. market viability, competitor moves, hidden risks), confidence levels, and concrete next steps. At the end you get the document, a short walkthrough, and optional follow-up for one round of questions.",
     outcomes: [
       "One decision-ready brief with recommendations and confidence levels",
-      "Answers to your specific question in 3–5 days, not weeks",
+      "Answers to your specific question in 2–5 days",
       "Clear next steps so you can act or kill the idea with evidence",
       "Handoff call plus one round of follow-up questions included",
     ],
     investment: "$500-$3,000",
-    timeline: "3-5 days",
+    timeline: "2-5 days",
     timelineStyle: "research",
     borderColor: "border-emerald-500/15",
     hoverBorderColor: "hover:border-emerald-500/25",
@@ -221,7 +221,7 @@ const methodologyData = {
 const faqData: FAQSectionProps = {
   title: "Common Questions",
   subtitle:
-    "Understanding how we work with founder-led and operator-led businesses on AI implementation.",
+    "Understanding how we work with growing companies on AI implementation.",
   faqs: [
     {
       question:
@@ -308,7 +308,7 @@ function InteractiveServiceShowcase() {
   return (
     <section
       id="services-showcase"
-      className="relative py-20 md:py-32 lg:py-40 overflow-hidden"
+      className="relative section-rhythm-xl overflow-hidden"
     >
       {/* Add invisible anchor elements for each service */}
       {services.map((service) => (
@@ -514,14 +514,14 @@ export default function ServicesPage() {
       <ServiceHero {...heroData} />
       <InteractiveServiceShowcase />
 
-      <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden">
+      <section className="relative section-rhythm-xl overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-black" />
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <MethodologySection {...methodologyData} />
         </div>
       </section>
 
-      <div className="py-24 md:py-32 lg:py-40">
+      <div className="section-rhythm-xl">
         <FAQSection {...faqData} />
       </div>
     </PageWrapper>

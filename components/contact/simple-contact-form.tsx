@@ -203,7 +203,7 @@ export function SimpleContactForm() {
     return (
       <section
         id="contact-form"
-        className="relative py-32 md:py-40 lg:py-48 overflow-hidden"
+        className="relative section-rhythm-2xl overflow-hidden"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-gray-50 via-gray-100 to-white dark:from-black dark:via-gray-950 dark:to-black" />
 
@@ -214,7 +214,7 @@ export function SimpleContactForm() {
             transition={{ duration: 0.6 }}
             className="max-w-3xl mx-auto text-center"
           >
-            <div className="relative bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 hover:bg-white/[0.04] transition-all duration-300">
+            <div className="relative bg-white/[0.02] backdrop-blur-md border border-white/10 rounded-3xl p-8 md:p-12 hover:bg-white/[0.04] transition-all duration-300">
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
@@ -302,7 +302,7 @@ export function SimpleContactForm() {
   return (
     <section
       id="contact-form"
-      className="relative py-32 md:py-40 lg:py-48 overflow-hidden"
+      className="relative section-rhythm-2xl overflow-hidden"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-gray-50 via-gray-100 to-white dark:from-black dark:via-gray-950 dark:to-black" />
 
@@ -338,7 +338,7 @@ export function SimpleContactForm() {
           <motion.form
             variants={itemVariants}
             onSubmit={handleSubmit}
-            className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-6 md:p-12 hover:bg-gray-900/[0.04] dark:hover:bg-white/[0.04] transition-all duration-300"
+            className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-md border border-gray-900/10 dark:border-white/10 rounded-3xl p-6 md:p-12 hover:bg-gray-900/[0.04] dark:hover:bg-white/[0.04] transition-all duration-300"
           >
             {/* Error Messages */}
             <AnimatePresence>

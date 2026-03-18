@@ -33,7 +33,7 @@ export default function OpengraphImage() {
             width: "fit-content",
           }}
         >
-          AI Integration & Automation Consulting
+          AI Integration & Automation
         </div>
         <div style={{ fontSize: 76, fontWeight: 800, letterSpacing: -1 }}>
           FIELDPORTER
@@ -46,7 +46,7 @@ export default function OpengraphImage() {
             color: "#d1d5db",
           }}
         >
-          Build Your Own AI Advantage
+          Practical AI for Growing Companies
         </div>
         <div
           style={{

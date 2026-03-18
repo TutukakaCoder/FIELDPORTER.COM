@@ -32,7 +32,7 @@ const aiCapabilities = [
 
 export function TechnicalCapability() {
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden">
+    <section className="relative section-rhythm-lg overflow-hidden">
       <div className="absolute inset-0 bg-gray-900/[0.02] dark:bg-white/[0.02]" />
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -66,7 +66,7 @@ export function TechnicalCapability() {
               className="relative group"
             >
               <div
-                className={`relative p-8 rounded-2xl backdrop-blur-xl border ${capability.color.split(" ")[0]} bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-blue-500/10`}
+                className={`relative p-8 rounded-2xl backdrop-blur-md border ${capability.color.split(" ")[0]} bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-blue-500/10`}
               >
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent pointer-events-none" />
 

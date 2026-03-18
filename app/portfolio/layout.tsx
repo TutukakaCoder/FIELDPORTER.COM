@@ -1,28 +1,31 @@
-import { Metadata } from 'next';
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Portfolio & Case Studies',
-  description: 'FIELDPORTER\'s portfolio of AI automation projects, strategic research, and client platform development. See real results from our AI integration and automation consulting work.',
+  title: "Portfolio & Case Studies",
+  description:
+    "Real results from FIELDPORTER's AI automation projects and client work. See live systems, workflows, and outcomes for growing companies.",
   keywords: [
-    'FIELDPORTER portfolio',
-    'AI automation projects',
-    'client case studies',
-    'strategic research',
-    'AI integration results',
-    'automation consulting portfolio',
-    'business AI solutions',
-    'project case studies',
+    "FIELDPORTER portfolio",
+    "AI automation projects",
+    "client case studies",
+    "strategic research",
+    "AI integration results",
+    "automation consulting portfolio",
+    "business AI solutions",
+    "project case studies",
   ],
   openGraph: {
-    title: 'FIELDPORTER | Portfolio & Case Studies',
-    description: 'FIELDPORTER\'s portfolio of AI automation projects, strategic research, and client platform development. See real results from our AI integration and automation consulting work.',
-    type: 'website',
-    url: 'https://fieldporter.com/portfolio',
+    title: "FIELDPORTER | Portfolio & Case Studies",
+    description:
+      "Real results from FIELDPORTER's AI automation projects and client work. See live systems, workflows, and outcomes for growing companies.",
+    type: "website",
+    url: "https://fieldporter.com/portfolio",
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'FIELDPORTER | Portfolio & Case Studies',
-    description: 'FIELDPORTER\'s portfolio of AI automation projects, strategic research, and client platform development. See real results from our AI integration and automation consulting work.',
+    card: "summary_large_image",
+    title: "FIELDPORTER | Portfolio & Case Studies",
+    description:
+      "Real results from FIELDPORTER's AI automation projects and client work. See live systems, workflows, and outcomes for growing companies.",
   },
   robots: {
     index: true,
@@ -30,6 +33,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PortfolioLayout({ children }: { children: React.ReactNode }) {
+export default function PortfolioLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return children;
 }

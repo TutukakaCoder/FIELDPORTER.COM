@@ -35,8 +35,10 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
     switch (category.toLowerCase()) {
       case "ai strategy":
         return "bg-fieldporter-blue/20 text-fieldporter-blue border-fieldporter-blue/30";
-      case "automation":
+      case "business automation":
         return "bg-green-500/20 text-green-500 border-green-500/30";
+      case "vc insights":
+        return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
       case "implementation":
         return "bg-fieldporter-blue/20 text-fieldporter-blue border-fieldporter-blue/30";
       default:
@@ -204,28 +206,28 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
                 Discover more practical insights from our AI implementations and
                 business building experiences.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                 <motion.div
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <Button
                     variant="primary"
                     size="enterprise"
-                    className="focus-visible:ring-2 focus-visible:ring-fieldporter-blue focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                    className="w-full sm:w-auto focus-visible:ring-2 focus-visible:ring-fieldporter-blue focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                     asChild
                   >
                     <Link href="/insights">View All Articles</Link>
                   </Button>
                 </motion.div>
                 <motion.div
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <Button
                     variant="fieldporter-secondary"
                     size="enterprise"
-                    className="focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                    className="w-full sm:w-auto focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                     asChild
                   >
                     <Link href="/contact">Schedule Consultation</Link>

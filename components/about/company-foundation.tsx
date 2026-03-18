@@ -7,7 +7,7 @@ export function CompanyFoundation() {
   return (
     <section
       id="company-foundation"
-      className="relative py-20 md:py-24 overflow-hidden"
+      className="relative section-rhythm-lg overflow-hidden"
     >
       <div className="absolute inset-0 bg-gray-50 dark:bg-white/[0.02]" />
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -53,7 +53,7 @@ export function CompanyFoundation() {
             whileHover={{ y: -4, scale: 1.01 }}
             className="relative group"
           >
-            <div className="relative p-6 md:p-8 rounded-2xl backdrop-blur-xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-300 group-hover:border-blue-500/20 group-hover:shadow-xl group-hover:shadow-blue-500/5">
+            <div className="relative p-6 md:p-8 rounded-2xl backdrop-blur-md border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-300 group-hover:border-blue-500/20 group-hover:shadow-xl group-hover:shadow-blue-500/5">
               <div className="flex items-center space-x-4 mb-6">
                 <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20">
                   <Building2 className="w-6 h-6 text-blue-400" />

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { ArrowRight, MessageCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface ContactSectionProps {
   title: string;
@@ -18,6 +19,7 @@ export function ContactSection({
   ctaText,
   ctaHref,
 }: ContactSectionProps) {
+  const router = useRouter();
   return (
     <section className="py-20 lg:py-28 relative">
       {/* Background */}
@@ -66,9 +68,7 @@ export function ContactSection({
                   variant="primary"
                   size="enterprise"
                   className="group focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-                  onClick={() => {
-                    window.location.href = ctaHref;
-                  }}
+                  onClick={() => router.push(ctaHref)}
                 >
                   {ctaText}
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />

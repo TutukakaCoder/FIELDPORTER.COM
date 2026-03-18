@@ -28,7 +28,7 @@ const systematicApproach = [
 
 export function SystematicApproach() {
   return (
-    <section className="relative py-20 md:py-24 overflow-hidden">
+    <section className="relative section-rhythm-lg overflow-hidden">
       <div className="absolute inset-0 bg-gray-900/[0.02] dark:bg-white/[0.02]" />
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -61,7 +61,7 @@ export function SystematicApproach() {
               className="relative group"
             >
               <div
-                className={`relative p-6 md:p-8 rounded-2xl backdrop-blur-xl border ${step.color.split(" ")[0]} bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-500`}
+                className={`relative p-6 md:p-8 rounded-2xl backdrop-blur-md border ${step.color.split(" ")[0]} bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-500`}
               >
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent pointer-events-none" />
 
@@ -85,9 +85,12 @@ export function SystematicApproach() {
                   </div>
                 </div>
 
-                {/* Connecting line for desktop */}
+                {/* Connector: horizontal on desktop, vertical on mobile */}
                 {index < systematicApproach.length - 1 && (
-                  <div className="hidden md:block absolute top-1/2 -right-4 lg:-right-6 w-8 lg:w-12 h-px bg-gradient-to-r from-gray-900/20 dark:from-white/20 to-transparent" />
+                  <>
+                    <div className="hidden md:block absolute top-1/2 -right-4 lg:-right-6 w-8 lg:w-12 h-px bg-gradient-to-r from-gray-900/20 dark:from-white/20 to-transparent" />
+                    <div className="md:hidden absolute -bottom-6 left-1/2 -translate-x-1/2 w-px h-6 bg-gradient-to-b from-gray-900/20 dark:from-white/20 to-transparent" />
+                  </>
                 )}
               </div>
             </motion.div>

@@ -1,3 +1,4 @@
+import { BREAKPOINTS } from "@/config/constants";
 import { useEffect, useRef, useState } from "react";
 
 export type DeviceCapability = "high" | "medium" | "low";
@@ -103,10 +104,10 @@ export function useDeviceCapability() {
         }
       }
 
-      // Viewport-based detection (more liberal than previous implementation)
+      // Viewport-based detection (aligned with Tailwind md / useStableMobile)
       const viewport = window.innerWidth;
-      const isSmallScreen = viewport < 640; // Only very small screens
-      const isMediumScreen = viewport >= 640 && viewport < 1200;
+      const isSmallScreen = viewport < BREAKPOINTS.mobile;
+      const isMediumScreen = viewport >= BREAKPOINTS.mobile && viewport < 1200;
       const isLargeScreen = viewport >= 1200;
 
       // Capability calculation
@@ -127,20 +128,18 @@ export function useDeviceCapability() {
         capability = "low";
         experience = "css-only";
       } else if (isMobile || isTablet) {
-        // Mobile/tablet devices get simplified
+        // Mobile/tablet: no 3D to save battery and cost; hero uses light background only
         capability = "medium";
-        experience = "simplified";
+        experience = "css-only";
       } else {
         // Desktop with WebGL = full experience with interactive particles
         capability = "high";
         experience = "full";
       }
 
-      // Battery-based adjustments
+      // Battery-based adjustments (only desktop can be "full"; mobile/tablet already css-only)
       if (batteryLevel !== undefined && batteryLevel < 0.2 && !isCharging) {
-        // Low battery, reduce experience
         if (experience === "full") experience = "simplified";
-        else if (experience === "simplified") experience = "css-only";
       }
 
       setMetrics({

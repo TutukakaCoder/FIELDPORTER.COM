@@ -178,8 +178,7 @@ export function calculateLeadScore(data: {
 
   // Company size scoring
   const companySizeScores = {
-    "fortune-500": 40,
-    enterprise: 35,
+    "mid-market": 35,
     "scale-up": 25,
     startup: 15,
   };

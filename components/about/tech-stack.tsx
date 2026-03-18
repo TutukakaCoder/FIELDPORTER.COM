@@ -83,7 +83,7 @@ const comprehensiveTechStack = [
 
 export function TechStack() {
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden">
+    <section className="relative section-rhythm-lg overflow-hidden">
       <div className="absolute inset-0 bg-gray-900/[0.02] dark:bg-white/[0.02]" />
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -130,7 +130,7 @@ export function TechStack() {
                     whileHover={{ y: -4, scale: 1.02 }}
                     className="group relative"
                   >
-                    <div className="relative p-6 rounded-xl backdrop-blur-xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-300 group-hover:bg-gray-900/[0.04] dark:group-hover:bg-white/[0.04] group-hover:border-gray-900/20 dark:group-hover:border-white/20">
+                    <div className="relative p-6 rounded-xl backdrop-blur-md border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-300 group-hover:bg-gray-900/[0.04] dark:group-hover:bg-white/[0.04] group-hover:border-gray-900/20 dark:group-hover:border-white/20">
                       <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent pointer-events-none" />
 
                       <div className="relative z-10 space-y-4">
