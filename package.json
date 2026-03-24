@@ -7,9 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "build:clean": "node scripts/clean-build.js",
-    "build:firebase": "npm run build && firebase deploy --only hosting",
+    "build:firebase": "npm run build && npx firebase deploy --only hosting",
     "deploy:firebase": "npm run build:firebase",
-    "deploy:all": "npm run build && firebase deploy",
+    "deploy:all": "npm run build && npx firebase deploy",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
@@ -18,8 +18,8 @@
     "format:check": "prettier --check .",
     "analyze": "ANALYZE=true npm run build",
     "clean": "rimraf .next dist build",
-    "firebase:serve": "firebase serve --only hosting",
-    "firebase:emulators": "firebase emulators:start",
+    "firebase:serve": "npx firebase serve --only hosting",
+    "firebase:emulators": "npx firebase emulators:start",
     "prepare": "husky install"
   },
   "dependencies": {
