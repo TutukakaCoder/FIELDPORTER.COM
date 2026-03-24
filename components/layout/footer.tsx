@@ -57,7 +57,7 @@ export function Footer({ className }: FooterProps) {
     <footer
       id="main-footer"
       className={cn(
-        "bg-white dark:bg-black border-t border-gray-200 dark:border-gray-800 transition-all duration-300",
+        "relative z-20 pointer-events-auto bg-white dark:bg-black border-t border-gray-200 dark:border-gray-800 transition-all duration-300",
         isFooterVisible
           ? "opacity-100 translate-y-0"
           : prefersReducedMotion
