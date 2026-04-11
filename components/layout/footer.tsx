@@ -72,8 +72,8 @@ export function Footer({ className }: FooterProps) {
       )}
       role="contentinfo"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-start">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           {/* LEFT SECTION - Brand Identity */}
           <div className="lg:col-span-3 space-y-4">
             <Link
@@ -176,8 +176,8 @@ export function Footer({ className }: FooterProps) {
         </div>
 
         {/* Copyright Bar */}
-        <div className="mt-10 pt-6 border-t border-gray-100 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
-          <div className="flex flex-col gap-1 items-center md:items-start text-center md:text-left">
+        <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 flex flex-col items-center justify-center gap-3 text-center px-4 md:px-12">
+          <div className="flex flex-col gap-1 items-center">
             <div className="text-xs text-gray-400">
               © {currentYear} {BRAND.name}
             </div>
@@ -187,16 +187,16 @@ export function Footer({ className }: FooterProps) {
               &middot; GST {LEGAL_ENTITY.gst}
             </div>
           </div>
-          <div className="flex items-center gap-6 text-xs">
+          <div className="flex items-center justify-center gap-6 text-xs pt-1 pb-4">
             <Link
               href="/privacy-policy"
-              className="inline-flex items-center min-h-[44px] text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors touch-manipulation"
+              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors touch-manipulation py-2"
             >
               Privacy
             </Link>
             <Link
               href="/terms-of-service"
-              className="inline-flex items-center min-h-[44px] text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors touch-manipulation"
+              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors touch-manipulation py-2"
             >
               Terms
             </Link>
