@@ -179,11 +179,15 @@ export default function PrivacyPolicyPage() {
             <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
               Privacy Policy
             </h1>
-            <p className="text-xl text-fieldporter-gray leading-relaxed mb-8">
+            <p className="text-xl text-fieldporter-gray leading-relaxed mb-6">
               FIELDPORTER is committed to protecting your privacy and
               maintaining enterprise-grade data security standards. This policy
               explains how we collect, use, and protect your information in our
               AI consulting services.
+            </p>
+            <p className="text-sm text-fieldporter-gray/80 leading-relaxed mb-8">
+              Services are provided by FIELDPORTER LIMITED (Company No. 1301915,
+              NZBN 9429035991564, GST 085-395-475).
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="text-sm text-fieldporter-gray">

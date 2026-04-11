@@ -183,11 +183,15 @@ export default function TermsOfServicePage() {
             <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
               Terms of Service
             </h1>
-            <p className="text-xl text-fieldporter-gray leading-relaxed mb-8">
+            <p className="text-xl text-fieldporter-gray leading-relaxed mb-6">
               Professional terms governing FIELDPORTER&apos;s AI consulting
               services, designed to protect both parties while fostering
               successful collaborative partnerships in AI transformation and
               business automation.
+            </p>
+            <p className="text-sm text-fieldporter-gray/80 leading-relaxed mb-8">
+              These terms apply to all services provided by FIELDPORTER LIMITED
+              (Company No. 1301915, NZBN 9429035991564, GST 085-395-475).
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="text-sm text-fieldporter-gray">

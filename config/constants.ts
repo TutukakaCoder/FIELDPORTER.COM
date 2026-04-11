@@ -52,6 +52,13 @@ export const BRAND = {
   email: "freddy@fieldporter.com",
 } as const;
 
+export const LEGAL_ENTITY = {
+  name: "FIELDPORTER LIMITED",
+  companyNumber: "1301915",
+  nzbn: "9429035991564",
+  gst: "085-395-475",
+} as const;
+
 /** Scoped timeline claims for credibility. Use these instead of blanket "weeks not months". */
 export const TIMELINE_CLAIMS = {
   assessment: "2–5 days",

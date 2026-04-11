@@ -1,6 +1,11 @@
 "use client";
 
-import { BRAND, FOOTER_LINKS, SOCIAL_LINKS } from "@/config/constants";
+import {
+  BRAND,
+  FOOTER_LINKS,
+  SOCIAL_LINKS,
+  LEGAL_ENTITY,
+} from "@/config/constants";
 import { useReducedMotion } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { Linkedin, Mail, Sparkles } from "lucide-react";
@@ -171,9 +176,16 @@ export function Footer({ className }: FooterProps) {
         </div>
 
         {/* Copyright Bar */}
-        <div className="mt-10 pt-6 border-t border-gray-100 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-xs text-gray-400">
-            © {currentYear} {BRAND.name}
+        <div className="mt-10 pt-6 border-t border-gray-100 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
+          <div className="flex flex-col gap-1 items-center md:items-start text-center md:text-left">
+            <div className="text-xs text-gray-400">
+              © {currentYear} {BRAND.name}
+            </div>
+            <div className="text-[10px] sm:text-xs text-gray-400/80 dark:text-gray-500 font-light tracking-wide">
+              {LEGAL_ENTITY.name} &middot; Company No.{" "}
+              {LEGAL_ENTITY.companyNumber} &middot; NZBN {LEGAL_ENTITY.nzbn}{" "}
+              &middot; GST {LEGAL_ENTITY.gst}
+            </div>
           </div>
           <div className="flex items-center gap-6 text-xs">
             <Link
