@@ -141,7 +141,7 @@
     /* Improve text rendering on mobile */
     text-rendering: optimizeLegibility;
     /* Ensure black background from the start to prevent white flash */
-    background-color: #000000 !important;
+    background-color: #000000;
     /* Prevent horizontal scrollbar */
     overflow-x: hidden;
     /* Smooth theme transition */

@@ -2,8 +2,17 @@
 
 import React from "react";
 import { usePathname } from "next/navigation";
-import { EnhancedChatWidget } from "@/components/chat";
+import dynamic from "next/dynamic";
+import Script from "next/script";
 import { FieldporterStructuredData } from "./fieldporter-structured-data";
+
+const EnhancedChatWidget = dynamic(
+  () =>
+    import("@/components/chat").then((mod) => ({
+      default: mod.EnhancedChatWidget,
+    })),
+  { ssr: false },
+);
 
 export function ConditionalFieldporterExtras() {
   const pathname = usePathname();
@@ -18,7 +27,9 @@ export function ConditionalFieldporterExtras() {
     <>
       <EnhancedChatWidget />
       <FieldporterStructuredData />
-      <script
+      <Script
+        id="fieldporter-cursor-init"
+        strategy="lazyOnload"
         dangerouslySetInnerHTML={{
           __html: `
               // Wait for DOM to be fully ready

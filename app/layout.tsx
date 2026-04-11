@@ -182,7 +182,7 @@ export default function RootLayout({
           <ScrollRestoration />
           <ConditionalLayout>
             <PageTransition>
-              <main className="flex-1">{children}</main>
+              <div className="flex-1 flex flex-col">{children}</div>
             </PageTransition>
           </ConditionalLayout>
           <BackToTop />

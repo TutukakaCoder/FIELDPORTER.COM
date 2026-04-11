@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { OptimizedLink } from "@/components/ui/optimized-link";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { BRAND, MAIN_NAVIGATION } from "@/config/constants";
-import { useIsScrolled, useScrollState } from "@/hooks";
+import { useIsScrolled, useIsScrolling } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Menu, X } from "lucide-react";
@@ -19,13 +19,24 @@ interface HeaderProps {
 export function Header({ className }: HeaderProps) {
   // SCROLL FREEZE FIX: Use centralized scroll state (reduces listener count)
   const isScrolled = useIsScrolled();
-  const { isScrolling } = useScrollState();
+  const isScrolling = useIsScrolling();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
+
+  // Handle Escape key to close mobile menu
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isMobileMenuOpen]);
 
   const isActivePage = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -54,6 +65,7 @@ export function Header({ className }: HeaderProps) {
       >
         {/* Main Floating Navigation Bar */}
         <nav
+          aria-label="Primary"
           className={cn(
             "relative mx-auto max-w-7xl rounded-2xl backdrop-blur-md shadow-2xl",
             // SCROLL FREEZE FIX: Disable transitions during scroll
@@ -79,7 +91,10 @@ export function Header({ className }: HeaderProps) {
             </Link>
 
             {/* Desktop Navigation - Better spacing and lowered position */}
-            <nav className="hidden lg:flex items-center space-x-10 px-4">
+            <nav
+              aria-label="Desktop"
+              className="hidden lg:flex items-center space-x-10 px-4"
+            >
               {MAIN_NAVIGATION.map((item) => (
                 <div key={item.label} className="relative flex items-center">
                   <OptimizedLink
@@ -172,6 +187,9 @@ export function Header({ className }: HeaderProps) {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Mobile Menu"
               initial={{ opacity: 0, height: 0, y: -10 }}
               animate={{ opacity: 1, height: "auto", y: 0 }}
               exit={{ opacity: 0, height: 0, y: -10 }}

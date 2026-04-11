@@ -156,6 +156,7 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
                         size="sm"
                         onClick={() => handleShare("twitter")}
                         className="p-2 hover:text-fieldporter-blue hover:bg-fieldporter-blue/10 transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-fieldporter-blue"
+                        aria-label="Share on X"
                       >
                         <Twitter className="w-4 h-4" />
                       </Button>
@@ -169,6 +170,7 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
                         size="sm"
                         onClick={() => handleShare("linkedin")}
                         className="p-2 hover:text-fieldporter-blue hover:bg-fieldporter-blue/10 transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-fieldporter-blue"
+                        aria-label="Share on LinkedIn"
                       >
                         <Linkedin className="w-4 h-4" />
                       </Button>

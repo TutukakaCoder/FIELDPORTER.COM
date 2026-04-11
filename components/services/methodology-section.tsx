@@ -134,12 +134,22 @@ const InteractivePhaseCard = ({
     >
       {/* Simplified card with smooth height expansion */}
       <motion.div
-        className="relative p-6 sm:p-8 rounded-2xl border border-gray-900/10 dark:border-white/10 bg-white dark:bg-black hover:border-gray-900/20 dark:hover:border-white/20 transition-all duration-300 cursor-pointer overflow-hidden"
+        className="relative p-6 sm:p-8 rounded-2xl border border-gray-900/10 dark:border-white/10 bg-white dark:bg-black hover:border-gray-900/20 dark:hover:border-white/20 transition-all duration-300 cursor-pointer overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-fieldporter-blue focus-visible:ring-offset-2"
         animate={{
           height: isExpanded ? "auto" : isMobile ? 380 : 420,
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        role="button"
+        tabIndex={0}
+        aria-expanded={isExpanded}
+        aria-controls={`phase-content-${phase.id}`}
         onClick={() => setIsExpanded(!isExpanded)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setIsExpanded(!isExpanded);
+          }
+        }}
       >
         {/* Number badge moved to top-right and made smaller */}
         <div
@@ -211,6 +221,7 @@ const InteractivePhaseCard = ({
           <AnimatePresence>
             {isExpanded && (
               <motion.div
+                id={`phase-content-${phase.id}`}
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}

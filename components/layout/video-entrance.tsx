@@ -104,8 +104,19 @@ export function VideoEntrance({
           if (playPromise !== undefined) {
             await playPromise;
 
-            // Start preloading routes while video plays
-            startPreloading(MAIN_NAVIGATION.map((item) => item.href));
+            // Start preloading routes while video plays (delayed to let video load smoothly)
+            setTimeout(() => {
+              if (
+                typeof window !== "undefined" &&
+                "requestIdleCallback" in window
+              ) {
+                (window as any).requestIdleCallback(() => {
+                  startPreloading(MAIN_NAVIGATION.map((item) => item.href));
+                });
+              } else {
+                startPreloading(MAIN_NAVIGATION.map((item) => item.href));
+              }
+            }, 1000);
 
             if (process.env.NODE_ENV === "development") {
               console.log(
@@ -196,7 +207,7 @@ export function VideoEntrance({
               autoPlay
               muted
               playsInline
-              preload="auto"
+              preload="metadata"
               controls={false}
               disablePictureInPicture
               disableRemotePlayback

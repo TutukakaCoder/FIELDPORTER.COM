@@ -219,6 +219,7 @@ export function NewsletterSignup() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter your email address"
+                      aria-label="Email address"
                       required
                       disabled={isSubmitting}
                       className="w-full px-4 py-4 rounded-lg bg-white/10 border border-white/20 text-fieldporter-white placeholder-fieldporter-gray focus:outline-none focus:ring-2 focus:ring-fieldporter-blue focus:border-transparent focus:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all duration-300 disabled:opacity-50 min-h-[48px] touch-manipulation hover:border-white/30 hover:bg-white/[0.12]"

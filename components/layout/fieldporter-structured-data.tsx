@@ -21,7 +21,7 @@ export function FieldporterStructuredData() {
           founders: [
             {
               "@type": "Person",
-              name: "Freddy Krueger",
+              name: "Freddy Hopkins",
               jobTitle: "Founder & AI Integration Specialist",
             },
           ],

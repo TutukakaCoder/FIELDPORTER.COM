@@ -550,10 +550,19 @@ const ProjectCard = memo(
           duration: 0.6,
           ease: "easeOut",
         }}
-        className="group relative cursor-pointer"
+        className="group relative cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-fieldporter-blue focus-visible:ring-offset-2 rounded-3xl"
+        role="button"
+        tabIndex={0}
         onClick={handleClick}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleClick();
+          }
+        }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        aria-label={`View project details for ${project.title}`}
       >
         {/* Phase number - tucked in so it doesn't overlap on mobile */}
         <div className="absolute top-4 left-4 lg:-top-8 lg:-left-8 text-4xl lg:text-7xl font-thin text-gray-900/5 dark:text-white/5 pointer-events-none select-none">

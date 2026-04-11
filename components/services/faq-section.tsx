@@ -63,11 +63,14 @@ export function FAQSection({ title, subtitle, faqs }: FAQSectionProps) {
                 transition={{ duration: 0.2 }}
               >
                 <button
+                  id={`faq-button-${index}`}
+                  aria-controls={`faq-answer-${index}`}
                   onClick={() => toggleFAQ(index)}
                   className="w-full p-6 md:p-8 text-left flex items-center justify-between hover:bg-gray-900/[0.01] dark:hover:bg-white/[0.01] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-inset rounded-2xl"
                   aria-expanded={openIndex === index}
                 >
                   <h3
+                    id={`faq-heading-${index}`}
                     className={`text-lg font-medium pr-4 leading-relaxed transition-colors duration-300 ${
                       openIndex === index
                         ? "text-blue-400"
@@ -77,6 +80,7 @@ export function FAQSection({ title, subtitle, faqs }: FAQSectionProps) {
                     {faq.question}
                   </h3>
                   <ChevronDown
+                    aria-hidden="true"
                     className={`w-5 h-5 transition-all duration-300 flex-shrink-0 ${
                       openIndex === index
                         ? "rotate-180 text-blue-400"
@@ -86,6 +90,9 @@ export function FAQSection({ title, subtitle, faqs }: FAQSectionProps) {
                 </button>
 
                 <motion.div
+                  id={`faq-answer-${index}`}
+                  role="region"
+                  aria-labelledby={`faq-heading-${index}`}
                   initial={false}
                   animate={{
                     height: openIndex === index ? "auto" : 0,
