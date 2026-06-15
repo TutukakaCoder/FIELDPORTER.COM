@@ -3,6 +3,11 @@
 import { motion } from "framer-motion";
 import { Building2 } from "lucide-react";
 
+const leadership = [
+  { name: "Freddy Hopkins", initials: "FH" },
+  { name: "Sam Allais", initials: "SA" },
+] as const;
+
 export function CompanyFoundation() {
   return (
     <section
@@ -30,6 +35,10 @@ export function CompanyFoundation() {
                 FIELDPORTER is led by{" "}
                 <span className="text-gray-900 dark:text-white font-medium">
                   Freddy Hopkins
+                </span>{" "}
+                and{" "}
+                <span className="text-gray-900 dark:text-white font-medium">
+                  Sam Allais
                 </span>
                 . We operate as a hybrid: we lead strategy and architecture;
                 execution is scaled with developers and AI agents where needed.
@@ -37,10 +46,12 @@ export function CompanyFoundation() {
                 delivery speed without losing a single point of contact.
               </p>
               <p>
-                Freddy has delivered production platforms for advisory firms and
-                coaches—clients report outcomes like 85% onboarding time saved
-                and 15+ hours weekly reclaimed. He runs discovery, design, and
-                handover directly.
+                Freddy has delivered production platforms for advisory firms,
+                venture capital firms, and property lenders across New Zealand,
+                Hong Kong, and Australia. Clients have saved tens of thousands
+                per month on seat licenses by replacing off-the-shelf platforms
+                like HubSpot with custom software built for how they work. He
+                runs discovery, design, and handover directly.
               </p>
             </div>
           </motion.div>
@@ -69,11 +80,52 @@ export function CompanyFoundation() {
                   engagement includes handover and training so your team can run
                   and extend what we build.
                 </p>
+                <p>
+                  Core delivery stays in house. Larger projects can draw on
+                  100+ developers, specialist security testing partners, and
+                  advisors across different domains when the work needs it.
+                </p>
               </div>
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent pointer-events-none" />
             </div>
           </motion.div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          viewport={{ once: true }}
+          className="mt-12 md:mt-16"
+        >
+          <h3 className="text-sm font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-6">
+            Leadership
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+            {leadership.map((person, index) => (
+              <motion.div
+                key={person.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="flex items-center gap-4 p-5 md:p-6 rounded-2xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02]"
+              >
+                <div
+                  className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-blue-500/20 bg-blue-500/10 text-sm font-medium text-blue-400"
+                  aria-hidden="true"
+                >
+                  {person.initials}
+                </div>
+                <div>
+                  <p className="text-lg font-medium text-gray-900 dark:text-white">
+                    {person.name}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   );

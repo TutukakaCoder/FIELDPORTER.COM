@@ -1,214 +1,168 @@
+import { getAdminDb } from "@/lib/firebase-admin";
+import { createHmac, timingSafeEqual } from "crypto";
+import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
 
-/**
- * Cal.com Webhook Handler
- * Receives booking events and stores them in Firebase
- *
- * Supported Events:
- * - BOOKING_CREATED
- * - BOOKING_RESCHEDULED
- * - BOOKING_CANCELLED
- *
- * Note: This uses server-side Firebase Admin SDK
- * For client-side alternative, bookings can be queried via Cal.com API
- */
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-// Webhook secret for signature verification (set in Cal.com dashboard)
-const WEBHOOK_SECRET = process.env["CALCOM_WEBHOOK_SECRET"];
+function verifySignature(
+  rawBody: string,
+  signature: string | null,
+  secret: string | undefined,
+): boolean {
+  if (!secret) {
+    console.warn("CALCOM_WEBHOOK_SECRET missing - skipping signature verification");
+    return true;
+  }
 
-// Lazy load firebase-admin to avoid build errors if not configured
-let adminDb: any = null;
-async function getAdminDb() {
-  if (adminDb) return adminDb;
+  if (!signature) {
+    return false;
+  }
+
+  const expected = createHmac("sha256", secret).update(rawBody).digest("hex");
 
   try {
-    const admin = await import("firebase-admin");
-
-    if (!admin.apps.length) {
-      const serviceAccount = {
-        projectId: process.env["FIREBASE_PROJECT_ID"],
-        clientEmail: process.env["FIREBASE_CLIENT_EMAIL"],
-        privateKey: process.env["FIREBASE_PRIVATE_KEY"]?.replace(/\\n/g, "\n"),
-      };
-
-      admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount as any),
-      });
+    const sigBuffer = Buffer.from(signature);
+    const expectedBuffer = Buffer.from(expected);
+    if (sigBuffer.length !== expectedBuffer.length) {
+      return false;
     }
+    return timingSafeEqual(sigBuffer, expectedBuffer);
+  } catch {
+    return signature === expected;
+  }
+}
 
-    adminDb = admin.firestore();
-    return adminDb;
-  } catch (error) {
-    console.warn("Firebase Admin not configured, bookings will be logged only");
+function parseTimestamp(value: unknown): Timestamp | null {
+  if (!value || typeof value !== "string") {
     return null;
   }
-}
 
-interface CalcomBooking {
-  id: number;
-  uid: string;
-  title: string;
-  description?: string;
-  startTime: string;
-  endTime: string;
-  attendees: Array<{
-    name: string;
-    email: string;
-    timeZone: string;
-  }>;
-  organizer: {
-    name: string;
-    email: string;
-    timeZone: string;
-  };
-  location?: string;
-  status: string;
-  metadata?: Record<string, unknown>;
-}
-
-interface CalcomWebhookPayload {
-  triggerEvent: string;
-  createdAt: string;
-  payload: CalcomBooking;
-}
-
-// Verify webhook signature
-function verifySignature(payload: string, signature: string): boolean {
-  if (!WEBHOOK_SECRET) {
-    console.warn(
-      "CALCOM_WEBHOOK_SECRET not set - skipping signature verification",
-    );
-    return true; // In development, allow without secret
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return null;
   }
 
-  const hmac = crypto.createHmac("sha256", WEBHOOK_SECRET);
-  const digest = hmac.update(payload).digest("hex");
-
-  return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(digest));
+  return Timestamp.fromDate(date);
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.text();
+    const rawBody = await request.text();
     const signature = request.headers.get("x-cal-signature-256");
+    const secret = process.env["CALCOM_WEBHOOK_SECRET"];
 
-    // Verify signature if secret is configured
-    if (WEBHOOK_SECRET && signature) {
-      const isValid = verifySignature(body, signature);
-      if (!isValid) {
-        console.error("Invalid webhook signature");
-        return NextResponse.json(
-          { error: "Invalid signature" },
-          { status: 401 },
-        );
-      }
+    if (!verifySignature(rawBody, signature, secret)) {
+      return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const webhookData: CalcomWebhookPayload = JSON.parse(body);
-    const { triggerEvent, payload: booking } = webhookData;
+    const payload = JSON.parse(rawBody) as {
+      triggerEvent?: string;
+      payload?: Record<string, unknown>;
+    };
 
-    console.log(`Received Cal.com webhook: ${triggerEvent}`, {
-      bookingId: booking.uid,
-      attendee: booking.attendees[0]?.email,
-    });
+    const triggerEvent = payload.triggerEvent || "UNKNOWN";
+    const booking = (payload.payload || {}) as Record<string, unknown>;
+    const uid = typeof booking["uid"] === "string" ? booking["uid"] : null;
 
-    // Try to store booking in Firebase if admin is configured
-    const db = await getAdminDb();
-
-    if (db) {
-      const bookingRef = db.collection("bookings").doc(booking.uid);
-
-      const bookingData = {
-        bookingId: booking.id.toString(),
-        uid: booking.uid,
-        eventType: "discovery-call",
-        title: booking.title,
-        description: booking.description || "",
-        startTime: new Date(booking.startTime),
-        endTime: new Date(booking.endTime),
-        attendee: booking.attendees[0]
-          ? {
-              name: booking.attendees[0].name,
-              email: booking.attendees[0].email,
-              timeZone: booking.attendees[0].timeZone,
-            }
-          : null,
-        organizer: {
-          name: booking.organizer.name,
-          email: booking.organizer.email,
-          timeZone: booking.organizer.timeZone,
-        },
-        location: booking.location || "TBD",
-        status: booking.status,
-        triggerEvent: triggerEvent,
-        metadata: booking.metadata || {},
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      // Handle different event types
-      switch (triggerEvent) {
-        case "BOOKING_CREATED":
-          await bookingRef.set(bookingData);
-          console.log("Booking created in Firebase:", booking.uid);
-          break;
-
-        case "BOOKING_RESCHEDULED":
-          await bookingRef.update({
-            ...bookingData,
-            rescheduledAt: new Date(),
-          });
-          console.log("Booking rescheduled in Firebase:", booking.uid);
-          break;
-
-        case "BOOKING_CANCELLED":
-          await bookingRef.update({
-            status: "cancelled",
-            cancelledAt: new Date(),
-            updatedAt: new Date(),
-          });
-          console.log("Booking cancelled in Firebase:", booking.uid);
-          break;
-
-        default:
-          console.log(`Unhandled event type: ${triggerEvent}`);
-      }
-    } else {
-      console.log(
-        "Firebase Admin not configured - booking logged but not stored",
+    if (!uid) {
+      return NextResponse.json(
+        { error: "Missing booking uid" },
+        { status: 400 },
       );
-      console.log("Booking details:", {
-        event: triggerEvent,
-        uid: booking.uid,
-        attendee: booking.attendees[0]?.email,
-        startTime: booking.startTime,
+    }
+
+    const attendee = (booking["attendees"] as Array<Record<string, unknown>>)?.[0] || {};
+    const organizer = (booking["organizer"] as Record<string, unknown>) || {};
+    const eventSlug =
+      process.env["NEXT_PUBLIC_CAL_EVENT_SLUG"] || "discovery-call";
+
+    const bookingDoc = {
+      bookingId: String(booking["bookingId"] || booking["id"] || uid),
+      uid,
+      eventType: eventSlug,
+      title: String(booking["title"] || "Discovery Call"),
+      description: String(booking["description"] || ""),
+      startTime: parseTimestamp(booking["startTime"]),
+      endTime: parseTimestamp(booking["endTime"]),
+      attendee: {
+        name: String(attendee["name"] || ""),
+        email: String(attendee["email"] || ""),
+        timeZone: String(attendee["timeZone"] || ""),
+      },
+      organizer: {
+        name: String(organizer["name"] || ""),
+        email: String(organizer["email"] || ""),
+        timeZone: String(organizer["timeZone"] || ""),
+      },
+      location: String(booking["location"] || ""),
+      status: String(booking["status"] || triggerEvent),
+      triggerEvent,
+      metadata: booking["metadata"] || {},
+      updatedAt: FieldValue.serverTimestamp(),
+    };
+
+    const db = getAdminDb();
+    if (!db) {
+      console.warn("Cal.com webhook received but Firebase Admin is not configured", {
+        triggerEvent,
+        uid,
       });
+
+      return NextResponse.json({
+        success: true,
+        stored: false,
+        triggerEvent,
+      });
+    }
+
+    const docRef = db.collection("bookings").doc(uid);
+
+    switch (triggerEvent) {
+      case "BOOKING_CREATED":
+        await docRef.set({
+          ...bookingDoc,
+          createdAt: FieldValue.serverTimestamp(),
+        });
+        break;
+
+      case "BOOKING_RESCHEDULED":
+        await docRef.set(
+          {
+            ...bookingDoc,
+            rescheduledAt: FieldValue.serverTimestamp(),
+            createdAt: FieldValue.serverTimestamp(),
+          },
+          { merge: true },
+        );
+        break;
+
+      case "BOOKING_CANCELLED":
+        await docRef.set(
+          {
+            ...bookingDoc,
+            status: "cancelled",
+            cancelledAt: FieldValue.serverTimestamp(),
+          },
+          { merge: true },
+        );
+        break;
+
+      default:
+        console.log("Unhandled Cal.com webhook event:", triggerEvent);
     }
 
     return NextResponse.json({
       success: true,
-      message: `Webhook processed: ${triggerEvent}`,
-      bookingId: booking.uid,
-      stored: db !== null,
+      stored: true,
+      triggerEvent,
     });
   } catch (error) {
-    console.error("Error processing Cal.com webhook:", error);
+    console.error("Cal.com webhook error:", error);
     return NextResponse.json(
-      {
-        error: "Webhook processing failed",
-        message: error instanceof Error ? error.message : "Unknown error",
-      },
+      { error: "Webhook processing failed" },
       { status: 500 },
     );
   }
-}
-
-// Health check endpoint
-export async function GET() {
-  return NextResponse.json({
-    status: "ok",
-    endpoint: "Cal.com Webhook Handler",
-    events: ["BOOKING_CREATED", "BOOKING_RESCHEDULED", "BOOKING_CANCELLED"],
-  });
 }

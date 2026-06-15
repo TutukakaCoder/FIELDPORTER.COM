@@ -35,7 +35,8 @@ const envSchema = z.object({
   FIREBASE_CLIENT_EMAIL: z.string().email().optional(),
   FIREBASE_PROJECT_ID: z.string().optional(),
 
-  // AI Integration (DeepSeek)
+  // AI Integration
+  GEMINI_API_KEY: z.string().min(1, "Gemini API key is required").optional(),
   DEEPSEEK_API_KEY: z
     .string()
     .min(1, "DeepSeek API key is required")
@@ -171,6 +172,10 @@ export const firebaseAdminConfig = {
 
 // AI configuration
 export const aiConfig = {
+  gemini: {
+    apiKey: env.GEMINI_API_KEY,
+    model: "gemini-3.1-flash-lite",
+  },
   deepseek: {
     apiKey: env.DEEPSEEK_API_KEY,
     apiUrl: env.DEEPSEEK_API_URL,

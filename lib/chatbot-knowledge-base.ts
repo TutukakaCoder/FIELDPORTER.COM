@@ -3,66 +3,68 @@ export const FIELDPORTER_KNOWLEDGE = {
     name: "FIELDPORTER",
     owner: "Frederick Hopkins",
     positioning:
-      "Business consultancy that builds the software solutions that bring strategies to life",
+      "Custom software development company building portals, internal tools, dashboards, and workflow systems with practical AI inside them",
     business_model:
-      "We don't just consult - we build. When we recommend an AI solution, it's because we've implemented something similar ourselves",
-    philosophy: "Practical AI, shipped fast",
+      "We scope, build, deploy, and train teams on custom software your business actually uses",
+    philosophy: "Custom software, AI where it helps",
     differentiator:
-      "Bridge the gap between business needs and technical possibilities",
+      "We build the systems clients, staff, and investors log into, not loose AI demos",
     team_advantage:
       "Small team led by Frederick Hopkins means direct access to expertise, not junior consultants",
     client_range: "Growing companies and ambitious teams (SMB to mid-market)",
   },
 
   services: {
-    strategic_research: {
-      name: "Strategic Research Intelligence",
+    custom_portals: {
+      name: "Custom Portals and Internal Tools",
       description:
-        "AI-powered market research and competitive analysis delivered 90% faster",
-      delivery_time: "3-7 days",
-      investment_range: "$500-$5,000",
+        "Role-based portals and internal tools for clients, staff, admins, investors, or partners",
+      delivery_time: "8-10 weeks typical",
+      investment_range: "Scoped per build",
       approach:
-        "Deep research methodology scanning thousands of sources with AI agents",
-      validation:
-        "Cross-model validation using Claude, Gemini, and DeepSeek for accuracy",
+        "Map roles, permissions, and workflows first, then build screens and database around the process",
       examples: [
-        "SIR The Label US market entry analysis",
-        "Australian VC portfolio validation frameworks",
+        "Client and investor portals",
+        "Admin dashboards and deal flow systems",
       ],
     },
-    rapid_development: {
-      name: "Rapid Development & Integration",
+    databases_dashboards: {
+      name: "Databases, Dashboards and Reporting",
       description:
-        "Concept validation through working prototypes, not production systems",
-      delivery_time: "1-4 weeks",
-      investment_range: "$1,000-$25,000",
-      focus: "Proof of concept and validation with client team handoff",
+        "Custom data structures, management screens, and reporting views",
+      delivery_time: "Scoped per build",
+      investment_range: "Scoped per build",
+      focus: "Reliable data layer and role-based visibility",
       examples: [
-        "VOYCAP investment news feed (85% image success vs 30% before)",
-        "Lead generation platform (85% email classification accuracy)",
+        "Reporting portals",
+        "Management dashboards and activity logs",
       ],
     },
-    business_advisory: {
-      name: "Business Advisory",
+    workflow_automation: {
+      name: "Workflow Automation and Integrations",
       description:
-        "Strategic guidance based on real portfolio business experience",
-      delivery_model:
-        "Monthly or quarterly engagements with operational insights",
-      investment_range: "$2,000-$10,000/month",
+        "Automate handoffs, document intake, approvals, notifications, and repeatable admin",
+      delivery_time: "2-6 weeks or part of build",
+      investment_range: "Scoped per build or automation",
+      approach: "Connect tools and automate repeatable steps with owned workflow logic",
+      examples: [
+        "Document intake and approval chains",
+        "CRM replacement and API sync",
+      ],
+    },
+    ai_capability: {
+      name: "AI Capability and Team Enablement",
+      description:
+        "Controlled AI features inside real systems plus practical team training",
+      delivery_model: "Built into scoped software work",
+      investment_range: "Built into scope",
       value:
-        "Real operational experience from building businesses while consulting",
-      includes: ["Technology roadmaps", "System recommendations"],
-    },
-    process_automation: {
-      name: "Process Automation & Workflow Optimization",
-      description: "Transform manual workflows into automated systems",
-      delivery_time: "1-3 weeks",
-      investment_range: "$500-$8,000",
-      approach: "Business process analysis and automation implementation",
-      examples: [
-        "Client reduced weekly administrative time from 15 hours to 4 hours",
+        "AI connected to approved business data inside the workflow, not outside it",
+      includes: [
+        "AI chat over business data",
+        "Document review and SOP checks",
+        "Team training",
       ],
-      includes: ["API integrations", "System connections"],
     },
   },
 
@@ -238,7 +240,7 @@ export const FIELDPORTER_KNOWLEDGE = {
       "No production 3D pipelines or client 3D work",
     ],
     deflection_response:
-      "That's outside our current service focus. We specialize in strategic research, AI implementation, and workflow automation. What specific business challenge are you looking to solve?",
+      "That is outside our current service focus. We build custom portals, internal tools, dashboards, workflow systems, and AI features inside those systems. What workflow is causing the most friction?",
   },
 
   conversation_goals: [
@@ -261,11 +263,11 @@ export const FIELDPORTER_KNOWLEDGE = {
 
   value_propositions: [
     "Direct access to Frederick (founder), not junior consultants",
-    "We build what we recommend - real operational experience",
-    "AI-powered research delivering insights 90% faster",
-    "Portfolio business perspective on strategic challenges",
-    "Practical, real-world tools that solve tangible problems",
-    "Complete business models around AI and automation",
+    "Custom software your team and clients actually log into",
+    "Portals, dashboards, workflow systems, and AI where it helps",
+    "Focused builds with honest timelines and scoped milestones",
+    "Practical systems that replace spreadsheet and email chaos",
+    "You own the system, data model, and workflow logic",
   ],
 
   lead_qualification_triggers: [

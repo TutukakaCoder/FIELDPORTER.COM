@@ -1,189 +1,139 @@
+import { getAdminDb, isFirebaseAdminConfigured } from "@/lib/firebase-admin";
 import { emailService } from "@/lib/email-service";
-import { db } from "@/lib/firebase";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { NextResponse } from "next/server";
+import { FieldValue } from "firebase-admin/firestore";
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 
-export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-interface ContactFormData {
-  name: string;
-  email: string;
-  company?: string;
-  projectType?: string;
+const PROJECT_TYPE_SCORES: Record<string, number> = {
+  "Strategic Research Intelligence": 5,
+  "Rapid Development & Integration": 4,
+  "Process Efficiency & Workflow Optimization": 4,
+  "AI Training & Implementation Education": 3,
+  "Not Sure - Let's Discuss": 2,
+};
+
+const TIMELINE_SCORES: Record<string, number> = {
+  "Urgent (days)": 5,
+  "Short-term (weeks)": 4,
+  "Medium-term (months)": 3,
+  Flexible: 2,
+};
+
+const BUDGET_SCORES: Record<string, number> = {
+  "Under $3K": 2,
+  "$3K-$8K": 4,
+  "Above $8K": 5,
+  "Let's discuss": 3,
+};
+
+function calculateContactLeadScore(data: {
+  projectType: string;
+  timeline: string;
+  budgetRange?: string | undefined;
+  company?: string | undefined;
   challengeDescription: string;
-  timeline?: string;
-  budgetRange?: string;
-  additionalContext?: {
-    timeline?: string;
-    currentTools?: string;
-    teamSize?: string;
-  };
+}): number {
+  let score = 1;
+  score += PROJECT_TYPE_SCORES[data.projectType] || 1;
+  score += TIMELINE_SCORES[data.timeline] || 1;
+
+  if (data.budgetRange) {
+    score += BUDGET_SCORES[data.budgetRange] || 1;
+  }
+
+  if (data.company?.trim()) {
+    score += 1;
+  }
+
+  if (data.challengeDescription.length > 100) {
+    score += 1;
+  }
+
+  return Math.min(score, 10);
 }
 
-function validateContactForm(data: any): { isValid: boolean; error?: string } {
-  if (!data.name || data.name.trim().length === 0) {
-    return { isValid: false, error: "Name is required" };
-  }
+const contactSchema = z.object({
+  name: z.string().min(1),
+  email: z.string().email(),
+  company: z.string().optional().default(""),
+  projectType: z.string().min(1),
+  challengeDescription: z.string().min(1),
+  timeline: z.string().min(1),
+  budgetRange: z.string().optional(),
+  additionalContext: z
+    .object({
+      timeline: z.string().optional(),
+      currentTools: z.string().optional(),
+      teamSize: z.string().optional(),
+    })
+    .optional(),
+});
 
-  if (!data.email || !data.email.includes("@")) {
-    return { isValid: false, error: "Valid email address is required" };
-  }
-
-  if (
-    !data.challengeDescription ||
-    data.challengeDescription.trim().length === 0
-  ) {
-    return { isValid: false, error: "Project description is required" };
-  }
-
-  return { isValid: true };
-}
-
-function calculateContactLeadScore(data: ContactFormData): {
-  score: number;
-  details: string[];
-} {
-  let score = 5; // Base score for contact form submission
-  const details: string[] = ["Base contact form submission: +5 points"];
-
-  // Business email bonus
-  const email = data.email.toLowerCase();
-  if (
-    !email.includes("@gmail.com") &&
-    !email.includes("@yahoo.com") &&
-    !email.includes("@hotmail.com") &&
-    !email.includes("@outlook.com")
-  ) {
-    score += 2;
-    details.push("Business email domain: +2 points");
-  }
-
-  // Company information bonus
-  if (data.company && data.company.trim().length > 3) {
-    score += 1;
-    details.push("Company information provided: +1 point");
-  }
-
-  // Message quality bonus - detailed description
-  if (data.challengeDescription && data.challengeDescription.length > 100) {
-    score += 1;
-    details.push("Detailed project description (>100 chars): +1 point");
-  }
-
-  // Service interest bonus - specific project type
-  if (
-    data.projectType &&
-    data.projectType !== "Just exploring AI possibilities"
-  ) {
-    score += 2;
-    details.push("Specific project type identified: +2 points");
-  }
-
-  // Timeline urgency bonus
-  if (
-    data.additionalContext?.timeline &&
-    (data.additionalContext.timeline.toLowerCase().includes("asap") ||
-      data.additionalContext.timeline.toLowerCase().includes("urgent") ||
-      data.additionalContext.timeline.toLowerCase().includes("immediate"))
-  ) {
-    score += 1;
-    details.push("Urgent timeline indicated: +1 point");
-  }
-
-  // Budget indication bonus (if they mention budget even if not in range field)
-  const fullText =
-    `${data.challengeDescription} ${data.budgetRange || ""}`.toLowerCase();
-  if (
-    fullText.includes("budget") ||
-    fullText.includes("$") ||
-    fullText.includes("investment")
-  ) {
-    score += 1;
-    details.push("Budget/investment mentioned: +1 point");
-  }
-
-  return { score: Math.min(score, 10), details };
-}
-
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    const parsed = contactSchema.safeParse(body);
 
-    // Validate form data
-    const validation = validateContactForm(body);
-    if (!validation.isValid) {
-      return NextResponse.json({ error: validation.error }, { status: 400 });
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Invalid form data", details: parsed.error.flatten() },
+        { status: 400 },
+      );
     }
 
-    // Calculate lead score
-    const { score: leadScore, details: leadScoreDetails } =
-      calculateContactLeadScore(body);
+    const data = parsed.data;
+    const submissionId = `contact_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+    const leadScore = calculateContactLeadScore(data);
 
-    // Prepare data for Firebase
-    const contactData = {
-      name: body.name,
-      email: body.email,
-      company: body.company || "",
-      projectType: body.projectType || "General inquiry",
-      challengeDescription: body.challengeDescription,
-      timeline:
-        body.additionalContext?.timeline || body.timeline || "Not specified",
-      budgetRange: body.budgetRange || "Not specified",
-      additionalContext: body.additionalContext || {},
-      leadScore,
-      leadScoreDetails,
-      submittedAt: serverTimestamp(),
-      source: "contact_form",
-      status: "new",
-      metadata: {
-        userAgent: request.headers.get("user-agent"),
-        referrer: request.headers.get("referer"),
+    const db = getAdminDb();
+    if (db) {
+      await db.collection("contact_submissions").doc(submissionId).set({
+        name: data.name.trim(),
+        email: data.email.trim().toLowerCase(),
+        company: data.company?.trim() || null,
+        project_type: data.projectType,
+        challenge_description: data.challengeDescription.trim(),
+        timeline: data.timeline,
+        budget_range: data.budgetRange || null,
+        additional_context: data.additionalContext || null,
+        lead_score: leadScore,
+        submitted_at: FieldValue.serverTimestamp(),
+        status: "new",
+        source: "contact_form",
+      });
+    } else if (!isFirebaseAdminConfigured()) {
+      console.warn(
+        "Firebase Admin not configured - contact submission email only",
+      );
+    }
+
+    await emailService.sendNotificationEmail({
+      subject: `New Contact: ${data.name} (Score: ${leadScore}/10)`,
+      type: "contact",
+      data: {
+        id: submissionId,
+        name: data.name,
+        email: data.email,
+        company: data.company,
+        projectType: data.projectType,
+        timeline: data.timeline,
+        challengeDescription: data.challengeDescription,
+        leadScore,
       },
-    };
+    });
 
-    // Save to Firebase
-    const docRef = await addDoc(
-      collection(db, "contact_submissions"),
-      contactData,
-    );
-
-    // Send email notification for qualified leads (same as AI chat)
-    if (leadScore >= 5) {
-      try {
-        console.log(
-          `📧 Contact form - Sending email for lead score: ${leadScore}/10`,
-        );
-        const emailResult = await emailService.sendNotificationEmail({
-          subject: `🎯 New Contact Form Submission - Lead Score: ${leadScore}/10 - ${body.name}`,
-          type: "contact",
-          data: {
-            ...contactData,
-            id: docRef.id,
-            leadScoreDetails,
-          },
-        });
-        console.log("📧 Contact email result:", emailResult);
-      } catch (emailError) {
-        console.error("❌ Failed to send email notification:", emailError);
-        // Don't fail the form submission if email fails
-      }
-    }
-
-    // Track conversion analytics
-    console.log(
-      `📊 Contact form submission - Lead Score: ${leadScore}/10 - ${body.email}`,
-    );
+    await emailService.sendWelcomeEmail(data.email, data.name.split(" ")[0] || data.name);
 
     return NextResponse.json({
       success: true,
-      id: docRef.id,
+      submissionId,
       leadScore,
-      message:
-        "Thank you for your submission. We'll get back to you within 24 hours.",
     });
   } catch (error) {
-    console.error("Contact form submission error:", error);
+    console.error("Contact API error:", error);
     return NextResponse.json(
       { error: "Failed to submit contact form. Please try again." },
       { status: 500 },

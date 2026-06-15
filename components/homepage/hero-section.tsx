@@ -215,7 +215,7 @@ const AnimatedCTA = memo(() => {
           className={`text-base sm:text-lg px-8 sm:px-10 h-14 bg-white/[0.02] hover:bg-white/[0.08] border-white/10 hover:border-white/20 backdrop-blur-md transition-all duration-300 ${isMobile ? "w-full" : ""}`}
           asChild
         >
-          <Link href="/portfolio">View Portfolio</Link>
+          <Link href="/portfolio">View Work</Link>
         </Button>
       </motion.div>
     </div>
@@ -266,7 +266,7 @@ export function HeroSection() {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={containerVariants}
-          className="space-y-8 md:space-y-12"
+          className="space-y-7 md:space-y-10"
         >
           <div className="space-y-6 relative">
             {/* Background glow to ensure text readability against stars */}
@@ -290,7 +290,7 @@ export function HeroSection() {
 
             <motion.p
               variants={textReveal}
-              className="text-lg sm:text-xl lg:text-2xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed"
+              className="text-lg sm:text-xl lg:text-2xl text-gray-400 max-w-xl sm:max-w-2xl mx-auto font-light leading-relaxed"
             >
               {HERO_VALUE_PROP}
             </motion.p>
@@ -298,9 +298,11 @@ export function HeroSection() {
 
           <motion.div variants={textReveal} className="pt-6">
             <AnimatedCTA />
-            <p className="mt-8 text-sm sm:text-base font-medium text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
-              {HERO_PROOF_LINE}
-            </p>
+            {HERO_PROOF_LINE ? (
+              <p className="mt-8 text-sm sm:text-base font-medium text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+                {HERO_PROOF_LINE}
+              </p>
+            ) : null}
           </motion.div>
         </motion.div>
       </div>

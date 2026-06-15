@@ -5,90 +5,96 @@ export const FIELDPORTER_COMPANY = {
   identity: {
     name: "FIELDPORTER",
     founder: "Frederick Hopkins (Freddy)",
-    philosophy: "Practical AI, shipped fast",
+    philosophy: "Custom software, AI where it helps",
     personality: "Smart, direct, slightly cheeky, genuinely helpful",
     positioning:
-      "The AI consultancy that actually knows what we're talking about because we build it ourselves",
+      "A custom software development company that builds portals, internal tools, dashboards, and workflow systems with practical AI inside them",
     differentiator:
-      "We don't just consult - we build. Every AI solution we recommend? We've probably built something similar ourselves.",
+      "We build the systems your team and clients actually log into, not slide decks or loose chatbot demos.",
   },
 
   services: {
-    strategic_research: {
-      name: "Strategic Research Intelligence",
+    custom_portals: {
+      name: "Custom Portals and Internal Tools",
       what_it_is:
-        "AI-powered market research that delivers McKinsey-level insights at Silicon Valley speed",
-      investment_range: "Typically $10K-$50K depending on scope",
-      timeline: "3-7 days (seriously, not weeks)",
+        "Role-based portals and internal tools for clients, staff, admins, investors, or partners",
+      investment_range: "Scoped per build; focused portals often start around $20K USD",
+      timeline: "8-10 weeks typical for a focused portal",
       why_it_works:
-        "We use Claude, Gemini, and DeepSeek to process thousands of sources simultaneously, then cross-validate everything",
+        "We map roles, permissions, and workflows first, then build the screens and database around how work actually moves",
       personality_hook:
-        "Remember when market research took 6 weeks? Yeah, we fixed that.",
+        "One secure place beats spreadsheet, email, and oversized SaaS sprawl.",
       teaching_angle:
-        "AI can scan 10,000 sources in the time it takes you to read one report",
+        "Custom portals work when people need different views of the same workflow",
       when_to_recommend: [
-        "market entry",
-        "competitive analysis",
-        "VC due diligence",
-        "strategic planning",
+        "client portals",
+        "investor portals",
+        "admin dashboards",
+        "deal flow",
+        "internal tools",
       ],
     },
 
-    rapid_development: {
-      name: "Rapid Development & Integration",
+    databases_dashboards: {
+      name: "Databases, Dashboards and Reporting",
       what_it_is:
-        "Working prototypes that prove your concept works before you commit to full development",
-      investment_range: "$5K-$25K for most prototypes",
-      timeline: "1-4 weeks to working prototype",
+        "Custom data models, management screens, and reporting views for the decisions you make",
+      investment_range: "Scoped per build",
+      timeline: "Scoped per build",
       why_it_works:
-        "React, TypeScript, Firebase stack - we build fast and we build right",
-      personality_hook: "Why guess when you can build it and know for sure?",
-      teaching_angle: "A working prototype tells you more than 100 meetings",
-      when_to_recommend: [
-        "new product ideas",
-        "workflow automation",
-        "system integration",
-        "proof of concept",
-      ],
-    },
-
-    workflow_optimization: {
-      name: "Workflow Optimization & Automation",
-      what_it_is:
-        "Transform manual workflows into intelligent automated systems",
-      investment_range: "$2K-$15K depending on complexity",
-      timeline: "1-3 weeks for most workflows",
-      why_it_works:
-        "We analyze your actual workflow, not what you think it is, then automate the right parts",
+        "Clean data and role-based visibility come before automation or AI can be useful",
       personality_hook:
-        "If you're doing it manually more than 3 times, we can probably automate it",
+        "If the right data is not visible to the right people, every other tool fails.",
       teaching_angle:
-        "The right automation saves 15+ hours per week while reducing errors by 90%",
+        "A reliable data layer is the foundation for portals, automation, and AI",
       when_to_recommend: [
-        "repetitive tasks",
-        "data entry",
         "reporting",
-        "manual processes",
+        "dashboards",
+        "data cleanup",
+        "activity logs",
+        "management screens",
       ],
     },
 
-    business_advisory: {
-      name: "Business Advisory & AI Strategy",
+    workflow_automation: {
+      name: "Workflow Automation and Integrations",
       what_it_is:
-        "Strategic guidance based on real operational experience building AI businesses",
-      investment_range: "$2K-$10K per month",
-      timeline: "Ongoing monthly or quarterly engagements",
+        "Automate handoffs, document intake, approvals, notifications, and repeatable admin",
+      investment_range: "Scoped per build or automation",
+      timeline: "2-6 weeks or part of a larger build",
       why_it_works:
-        "We're not just consultants - we're building our own AI businesses while advising yours",
+        "We connect the right tools and automate repeatable steps while keeping humans in control where judgement matters",
       personality_hook:
-        "Strategy from people who actually execute, not just talk",
+        "If the same handoff happens every week, it should not live in email.",
       teaching_angle:
-        "The best AI strategy comes from understanding what actually works in practice",
+        "Good automation removes duplicate entry and broken status updates",
       when_to_recommend: [
-        "AI transformation",
-        "technology roadmaps",
-        "strategic planning",
-        "system architecture",
+        "document intake",
+        "approvals",
+        "integrations",
+        "notifications",
+        "CRM replacement",
+      ],
+    },
+
+    ai_capability: {
+      name: "AI Capability and Team Enablement",
+      what_it_is:
+        "Controlled AI features inside real business systems plus practical team training",
+      investment_range: "Built into scoped software work",
+      timeline: "Built into scope",
+      why_it_works:
+        "AI works best when it is connected to approved business data inside a real workflow",
+      personality_hook:
+        "A chatbot outside your process is a demo. AI inside the portal is useful.",
+      teaching_angle:
+        "Use AI for specific jobs like search, extraction, triage, summaries, and SOP checks",
+      when_to_recommend: [
+        "AI chat over company data",
+        "document review",
+        "SOP checks",
+        "team training",
+        "knowledge search",
       ],
     },
   },
@@ -239,11 +245,38 @@ export function getServiceByType(
   const challengeLower = challenge.toLowerCase();
 
   if (
-    challengeLower.includes("research") ||
-    challengeLower.includes("analysis") ||
-    challengeLower.includes("market")
+    challengeLower.includes("portal") ||
+    challengeLower.includes("dashboard") ||
+    challengeLower.includes("internal tool") ||
+    challengeLower.includes("client login")
   ) {
-    return FIELDPORTER_COMPANY.services.strategic_research;
+    return FIELDPORTER_COMPANY.services.custom_portals;
+  }
+
+  if (
+    challengeLower.includes("database") ||
+    challengeLower.includes("reporting") ||
+    challengeLower.includes("data model")
+  ) {
+    return FIELDPORTER_COMPANY.services.databases_dashboards;
+  }
+
+  if (
+    challengeLower.includes("workflow") ||
+    challengeLower.includes("automation") ||
+    challengeLower.includes("integration") ||
+    challengeLower.includes("process")
+  ) {
+    return FIELDPORTER_COMPANY.services.workflow_automation;
+  }
+
+  if (
+    challengeLower.includes("ai") ||
+    challengeLower.includes("chat") ||
+    challengeLower.includes("training") ||
+    challengeLower.includes("document review")
+  ) {
+    return FIELDPORTER_COMPANY.services.ai_capability;
   }
 
   if (
@@ -251,23 +284,7 @@ export function getServiceByType(
     challengeLower.includes("development") ||
     challengeLower.includes("build")
   ) {
-    return FIELDPORTER_COMPANY.services.rapid_development;
-  }
-
-  if (
-    challengeLower.includes("workflow") ||
-    challengeLower.includes("automation") ||
-    challengeLower.includes("process")
-  ) {
-    return FIELDPORTER_COMPANY.services.workflow_optimization;
-  }
-
-  if (
-    challengeLower.includes("strategy") ||
-    challengeLower.includes("advisory") ||
-    challengeLower.includes("planning")
-  ) {
-    return FIELDPORTER_COMPANY.services.business_advisory;
+    return FIELDPORTER_COMPANY.services.custom_portals;
   }
 
   return null;

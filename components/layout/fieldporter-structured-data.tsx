@@ -15,14 +15,14 @@ export function FieldporterStructuredData() {
           alternateName: "FIELDPORTER Limited",
           url: "https://fieldporter.com",
           logo: "https://fieldporter.com/favicon-dark.png",
-          description: COMPANY_MODEL.short + " Production systems in weeks.",
+          description: COMPANY_MODEL.short,
           email: "hello@fieldporter.com",
           foundingDate: "2023",
           founders: [
             {
               "@type": "Person",
               name: "Freddy Hopkins",
-              jobTitle: "Founder & AI Integration Specialist",
+              jobTitle: "Founder & Custom Software Developer",
             },
           ],
           address: {
@@ -46,35 +46,36 @@ export function FieldporterStructuredData() {
               "@type": "Offer",
               itemOffered: {
                 "@type": "Service",
-                name: "AI Integration & Implementation",
+                name: "Custom Portals and Internal Tools",
                 description:
-                  "Consulting and build: custom AI integration and production systems",
+                  "Role-based portals and internal tools for clients, staff, admins, and investors",
               },
             },
             {
               "@type": "Offer",
               itemOffered: {
                 "@type": "Service",
-                name: "Workflow Automation",
+                name: "Databases, Dashboards and Reporting",
                 description:
-                  "Automate repetitive tasks and streamline operations",
+                  "Custom data structures and reporting screens for operational visibility",
               },
             },
             {
               "@type": "Offer",
               itemOffered: {
                 "@type": "Service",
-                name: "Strategic AI Research",
-                description: "Data-driven insights for competitive advantage",
+                name: "Workflow Automation and Integrations",
+                description:
+                  "Automate handoffs, document intake, approvals, and repeatable admin",
               },
             },
             {
               "@type": "Offer",
               itemOffered: {
                 "@type": "Service",
-                name: "AI Training & Implementation",
+                name: "AI Capability and Team Enablement",
                 description:
-                  "Team training and hands-on AI system implementation",
+                  "Controlled AI features inside business systems plus practical team training",
               },
             },
           ],

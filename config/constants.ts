@@ -14,40 +14,40 @@ export const PRIMARY_AUDIENCE = {
 /** Core offer hierarchy: what we do first, second, and what supports it. Use in hero, services, and key copy. */
 export const CORE_OFFER_HIERARCHY = {
   primary:
-    "Practical AI systems, automations, and internal tools that remove manual work and speed up decisions.",
+    "Custom portals, internal tools, dashboards, databases, and AI-enabled workflows built around how your business actually runs.",
   secondary:
-    "Research to de-risk decisions and validate concepts before you invest.",
-  proof: "Case studies, outcomes, and testimonials from real engagements.",
+    "Discovery, workflow mapping, and practical AI capability support the build.",
+  proof: "Real client platforms, production workflows, and hands-on delivery.",
 } as const;
 
 /** Main hero headline: commercial promise above the fold. Plain English. */
-export const HERO_HEADLINE = "AI Systems Your Team Can Actually Use";
+export const HERO_HEADLINE =
+  "Custom software built around how your business runs";
 
 /** Supporting hero line (aspirational). Shown under HERO_HEADLINE. */
-export const HERO_SUPPORTING_LINE = "Practical AI, Shipped Fast";
+export const HERO_SUPPORTING_LINE = "Custom Software Development";
 
 /** First-screen value proposition: what we do, for whom, and what outcome improves. Used in hero only. */
 export const HERO_VALUE_PROP =
-  "We build AI automations, internal tools, and workflows for growing companies.";
+  "We build portals, dashboards, automations, and AI features that replace spreadsheets, manual handoffs, and bloated software.";
 
 /** One proof line under hero CTA: real outcomes so first screen feels credible. */
-export const HERO_PROOF_LINE =
-  "Recent outcomes: 85% less onboarding time, 15+ hours weekly reclaimed.";
+export const HERO_PROOF_LINE = "";
 
 /** What FIELDPORTER is: one line so the whole site reflects the same model. Hybrid = consulting + implementation; we advise and build. */
 export const COMPANY_MODEL = {
   type: "hybrid" as const,
   short:
-    "We advise and build: AI integration, automation, and internal tools for growing companies.",
+    "We build custom portals, internal tools, dashboards, and workflow systems for growing companies.",
   oneLiner:
-    "FIELDPORTER builds practical AI systems, automations, and internal tools. We advise, build, deploy, and train your team.",
+    "FIELDPORTER builds custom software with AI where it helps. We scope, build, deploy, and train your team.",
 } as const;
 
 export const BRAND = {
   name: "FIELDPORTER",
-  tagline: "AI Integration & Automation",
+  tagline: "Custom Software Development",
   description:
-    "Practical AI systems, automations, and internal tools for growing companies. Remove manual work and speed up decisions.",
+    "Custom portals, internal tools, dashboards, workflow systems, and AI-enabled software for growing companies.",
   domain: "fieldporter.com",
   email: "freddy@fieldporter.com",
 } as const;
@@ -61,9 +61,9 @@ export const LEGAL_ENTITY = {
 
 /** Scoped timeline claims for credibility. Use these instead of blanket "weeks not months". */
 export const TIMELINE_CLAIMS = {
-  assessment: "2–5 days",
-  firstUseful: "1–3 weeks",
-  largerRollout: "4–8+ weeks depending on scope",
+  assessment: "2-5 days",
+  firstUseful: "8-10 weeks typical for focused portals",
+  largerRollout: "Scoped per build depending on users, integrations, and AI features",
 } as const;
 
 /** AIOS: stable name and one clear deliverable definition. */
@@ -161,7 +161,7 @@ export const CACHE_DURATIONS = {
 
 export const API_ENDPOINTS = {
   consultation: "/api/consultation",
-  aiChat: "/api/ai/chat",
+  aiChat: "/api/chat",
   analytics: "/api/analytics",
   contact: "/api/contact",
 } as const;
@@ -198,10 +198,10 @@ export const MAIN_NAVIGATION = [
 /** Footer link groups. Service anchors must match app/services/page.tsx section ids. */
 export const FOOTER_LINKS = {
   services: [
-    { label: "Strategic Intelligence", href: "/services#strategic-research" },
-    { label: "Rapid Development", href: "/services#rapid-development" },
-    { label: "Workflow Optimization", href: "/services#workflow-optimization" },
-    { label: "AI Strategy & Training", href: "/services#ai-strategy" },
+    { label: "Custom Portals", href: "/services#custom-portals" },
+    { label: "Databases & Dashboards", href: "/services#databases-dashboards" },
+    { label: "Workflow Automation", href: "/services#workflow-automation" },
+    { label: "AI Capability", href: "/services#ai-capability" },
   ],
   company: [
     { label: "About", href: "/about" },
@@ -275,16 +275,18 @@ export const LEAD_SCORING = {
 // ============================================================================
 
 export const SEO_DEFAULTS = {
-  title: "FIELDPORTER - AI Integration & Automation",
+  title: "FIELDPORTER - Custom Software Development",
   description:
-    "Practical AI systems, automations, and internal tools for growing companies. First useful system in 1–3 weeks.",
+    "FIELDPORTER builds custom portals, internal tools, dashboards, workflow systems, and AI-enabled software for growing companies.",
   keywords: [
-    "AI integration",
-    "automation consulting",
-    "AI implementation",
+    "custom software development",
+    "client portals",
+    "internal tools",
+    "business portals",
     "workflow automation",
-    "internal AI tools",
-    "growing companies",
+    "AI-enabled software",
+    "custom dashboards",
+    "database applications",
   ],
   ogImage: "/og-image.jpg",
 } as const;

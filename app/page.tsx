@@ -41,23 +41,21 @@ export const metadata: Metadata = {
     absolute: `FIELDPORTER - ${HERO_HEADLINE}`,
   },
   description:
-    "FIELDPORTER builds practical AI systems, automations, and internal tools for growing companies. First useful system in 1–3 weeks.",
+    "FIELDPORTER builds custom software, portals, dashboards, automations, and AI-enabled workflows for growing companies.",
   keywords: [
-    "FIELDPORTER",
-    "AI integration consultant",
-    "business automation expert",
-    "Claude AI implementation",
-    "workflow automation services",
-    "AI strategy consulting",
-    "DeepSeek integration",
-    "Cursor development",
+    "custom software development",
+    "client portals",
+    "internal tools",
+    "business portals",
     "workflow automation",
-    "strategic AI research",
+    "AI-enabled software",
+    "custom dashboards",
+    "database applications",
   ],
   openGraph: {
     title: `FIELDPORTER - ${HERO_HEADLINE}`,
     description:
-      "FIELDPORTER builds practical AI systems, automations, and internal tools for growing companies. First useful system in 1–3 weeks.",
+      "FIELDPORTER builds custom software, portals, dashboards, automations, and AI-enabled workflows for growing companies.",
     type: "website",
     url: "https://fieldporter.com",
     siteName: "FIELDPORTER",
@@ -74,7 +72,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `FIELDPORTER - ${HERO_HEADLINE}`,
     description:
-      "FIELDPORTER builds practical AI systems, automations, and internal tools for growing companies. First useful system in 1–3 weeks.",
+      "FIELDPORTER builds custom software, portals, dashboards, automations, and AI-enabled workflows for growing companies.",
     images: ["/opengraph-image"],
     creator: "@fieldporter",
   },
@@ -107,9 +105,9 @@ export default function Home() {
       <div className="relative z-10 space-y-0">
         <HeroSection />
         <TrustIndicatorBar />
-        <AIAuditSection />
         <ServicesSection />
         <PortfolioSection />
+        <AIAuditSection />
         <CTASection />
       </div>
     </PageWrapper>

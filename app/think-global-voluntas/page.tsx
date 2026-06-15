@@ -1,6 +1,5 @@
 import Image from "next/image";
 import type { Metadata } from "next";
-import ThinkGlobalLogo from "./components/Gemini_Generated_Image_obtmw9obtmw9obtm.png";
 
 export const metadata: Metadata = {
   title: "ANZ Market Expansion for Cyberport Portfolio",
@@ -8,7 +7,7 @@ export const metadata: Metadata = {
     "Partnership overview between Think Global and Voluntas Group supporting Cyberport HK startups expanding into ANZ.",
   robots: { index: false },
   icons: {
-    icon: [{ url: "/partnership-assets/voluntas-logo.png", type: "image/png" }],
+    icon: [{ url: "/partnership-assets/voluntas-logo.svg", type: "image/svg+xml" }],
   },
 };
 
@@ -67,7 +66,7 @@ export default function Page() {
       <header className="px-4 md:px-8 lg:px-16 max-w-6xl mx-auto pt-16 pb-6">
         <div className="logo-container">
           <Image
-            src="/partnership-assets/voluntas-logo.png"
+            src="/partnership-assets/voluntas-logo.svg"
             alt="Voluntas Group Logo"
             width={800}
             height={200}
@@ -75,7 +74,7 @@ export default function Page() {
             priority
           />
           <Image
-            src={ThinkGlobalLogo}
+            src="/partnership-assets/think-global-logo.svg"
             alt="Think Global Logo"
             width={800}
             height={200}

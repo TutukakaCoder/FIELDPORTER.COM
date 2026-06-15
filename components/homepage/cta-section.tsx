@@ -35,17 +35,12 @@ export function CTASection() {
           <div className="relative z-10 space-y-8 md:space-y-10">
             {/* Headline */}
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-light text-gray-900 dark:text-white leading-tight tracking-[-0.02em] break-words">
-              Book a Call. Get a{" "}
-              <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                Scored Roadmap
-              </span>
-              .
+              Build the system your business has been missing.
             </h2>
 
-            {/* Description */}
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed font-light">
-              One call to scope your challenge and receive a clear next step. No
-              obligation.
+              Tell us where work gets stuck. We will map the portal, workflow,
+              or AI feature that would make the biggest difference first.
             </p>
 
             {/* CTA Buttons */}
@@ -97,8 +92,8 @@ export function CTASection() {
 
             {/* Trust Note */}
             <p className="text-sm text-gray-500 dark:text-gray-400 max-w-lg mx-auto leading-relaxed">
-              No sales pitches. Just an honest conversation about whether we can
-              help solve your specific challenge.
+              No sales pitch. Just a practical conversation about what should
+              be built, what should not, and what it would take.
             </p>
           </div>
         </motion.div>

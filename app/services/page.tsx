@@ -4,21 +4,16 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
-  BookOpen,
+  BarChart3,
   Building2,
   CheckCircle,
   ChevronDown,
-  Code,
-  TrendingUp,
+  Sparkles,
+  Workflow,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 import { PageWrapper } from "@/components/layout";
-import {
-  BRAND,
-  CORE_OFFER_HIERARCHY,
-  PRIMARY_AUDIENCE,
-} from "@/config/constants";
 import {
   FAQSection,
   type FAQSectionProps,
@@ -27,193 +22,144 @@ import { MethodologySection } from "@/components/services/methodology-section";
 import { ServiceHero } from "@/components/services/service-hero";
 
 const heroData = {
-  title: CORE_OFFER_HIERARCHY.primary,
-  subtitle: `For ${PRIMARY_AUDIENCE.short}`,
+  title: "Custom software for workflows that generic tools do not fit.",
+  subtitle: "Custom Software Development",
   description:
-    "We build and deploy practical AI systems and automations that remove manual work and speed up decisions. Research supports the decisions; implementation delivers the results.",
+    "We build portals, databases, dashboards, integrations, and AI-enabled tools around the way your business actually runs. Your clients and team get one secure place to see the right information and act on it.",
   stats: [],
-  ctaText: "Book a Call",
+  ctaText: "Book a Scoping Call",
   ctaHref: "/contact",
 };
 
 const services = [
   {
-    id: "strategic-research",
+    id: "custom-portals",
     phase: "01",
-    icon: TrendingUp,
-    title: "Strategic Research & Intelligence",
+    icon: Building2,
+    title: "Custom Portals and Internal Tools",
     description:
-      "For leaders deciding where to invest: a written brief with clear recommendations, risk levels, and next steps in 2–5 days.",
+      "Role-based systems for clients, staff, admins, investors, partners or suppliers, built around the way work actually moves through your business.",
     detailedExplanation:
-      "Best for: leadership about to commit capital to a new market, product, or partnership and who need a fast, evidence-based view before committing. We deliver: a single strategic brief (PDF or Notion) with validated answers to your key question (e.g. market viability, competitor moves, hidden risks), confidence levels, and concrete next steps. At the end you get the document, a short walkthrough, and optional follow-up for one round of questions.",
+      "Best for companies that need one secure place for people to log in, submit information, review status, upload documents, approve steps and see the right data. We map the roles, workflows and permissions first, then build the screens and database around that process.",
     outcomes: [
-      "One decision-ready brief with recommendations and confidence levels",
-      "Answers to your specific question in 2–5 days",
-      "Clear next steps so you can act or kill the idea with evidence",
-      "Handoff call plus one round of follow-up questions included",
+      "Secure login and role-based views",
+      "Dashboards, uploads, approvals, notes and status tracking",
+      "Custom workflows instead of forcing your business into generic SaaS",
+      "A system your team owns and can improve over time",
     ],
-    investment: "$500-$3,000",
-    timeline: "2-5 days",
-    timelineStyle: "research",
+    timeline: "8-10 weeks typical",
+    timelineStyle: "development",
     borderColor: "border-emerald-500/15",
     hoverBorderColor: "hover:border-emerald-500/25",
     iconColor: "text-emerald-400",
     proof:
-      "Strategic research: 6-week market analysis condensed into a 3-day brief with 40+ actionable insights and clear go/no-go recommendation.",
+      "Best fit: client portals, investor portals, admin dashboards, deal flow systems and internal tools.",
   },
   {
-    id: "rapid-development",
+    id: "databases-dashboards",
     phase: "02",
-    icon: Code,
-    title: "Rapid AI Development & Integration",
+    icon: BarChart3,
+    title: "Databases, Dashboards and Reporting",
     description:
-      "For teams with a defined use case: a working AI system, integration docs, and handover in 1–3 weeks so you can scale or hand to your devs.",
+      "Custom data structures and reporting screens that make the right information visible to the right people.",
     detailedExplanation:
-      "Best for: operators or product leads who have a specific AI use case (e.g. internal chatbot, document processing, workflow automation) and need a working proof that can go to production. We deliver: a built and tested system, source code, API or integration documentation, and a handover session. At the end you own the code and can run it yourself or pass it to your developers; we do not lock you into ongoing dev retainers.",
+      "Best for teams whose important information is split across spreadsheets, emails, PDFs or disconnected apps. We design the data model, build management screens and create reporting views so decisions are made from one reliable source of truth.",
     outcomes: [
-      "Working AI system delivered in 1–3 weeks, ready to run or extend",
-      "Source code, integration docs, and one handover session",
-      "You keep full ownership; no mandatory ongoing engagement",
-      "Option to scale in-house or with your existing dev team",
+      "Custom database structure for your actual workflow",
+      "Admin screens, reports, logs and decision dashboards",
+      "Cleaner data before automation or AI is added",
+      "Visibility for leaders, operators, clients or partners",
     ],
-    investment: "$3,000-$8,000",
-    timeline: "1-3 weeks",
-    timelineStyle: "development",
+    timeline: "Scoped per build",
+    timelineStyle: "research",
     borderColor: "border-blue-500/15",
     hoverBorderColor: "hover:border-blue-500/25",
     iconColor: "text-blue-400",
     proof:
-      "Rapid development: manual 15-hour weekly process replaced by a 4-hour automated workflow with production-ready system and handover docs.",
+      "Best fit: reporting portals, management dashboards, data cleanup, activity logs and operational visibility.",
   },
   {
-    id: "workflow-optimization",
+    id: "workflow-automation",
     phase: "03",
-    icon: Building2,
-    title: "Process Efficiency & Workflow Optimization",
+    icon: Workflow,
+    title: "Workflow Automation and Integrations",
     description:
-      "For teams drowning in repeatable tasks: we identify and automate high-impact workflows and hand you a runnable system plus documentation.",
+      "Automate handoffs, document intake, approvals, notifications and repeatable admin across your tools.",
     detailedExplanation:
-      "Best for: small teams or operators where the same manual process (e.g. lead triage, reporting, data entry) eats 10+ hours a week. We deliver: a scoped automation plan, the built automation (integrated with your tools where possible), runbooks, and a handover so your team can maintain it. At the end you have a live system, docs, and optional short support window—no long-term dependency.",
+      "Best for teams losing time to duplicate entry, manual status updates, document chasing or systems that do not talk to each other. We connect the right tools, automate the repeatable steps and keep humans in control where judgement is needed.",
     outcomes: [
-      "Scoped automation plan plus built solution for agreed workflows",
-      "Integration with your existing tools and clear runbooks",
-      "Handover and optional support window; you run it after that",
-      "Focus on one or two high-impact flows, not everything at once",
+      "Document intake, approvals, notifications and task routing",
+      "Integrations with CRMs, finance tools, forms, email and storage",
+      "n8n where it is practical and custom code where the workflow needs ownership",
+      "Less manual chasing and fewer broken handoffs",
     ],
-    investment: "$2,000-$5,000",
-    timeline: "2-4 weeks",
+    timeline: "2-6 weeks or part of build",
     timelineStyle: "automation",
     borderColor: "border-purple-500/15",
     hoverBorderColor: "hover:border-purple-500/25",
     iconColor: "text-purple-400",
     proof:
-      "Workflow optimization: recurring manual process (15+ hrs/week) automated and handed over with runbooks; team runs it in-house.",
+      "Best fit: intake workflows, approval chains, CRM replacement, reporting automation and API sync.",
   },
   {
-    id: "ai-strategy",
+    id: "ai-capability",
     phase: "04",
-    icon: BookOpen,
-    title: "AI Strategy & Team Capability Building",
+    icon: Sparkles,
+    title: "AI Capability and Team Enablement",
     description:
-      "For leaders who want their team using AI safely and effectively: assessment, tailored training, and a short roadmap—no long-term consulting lock-in.",
+      "Controlled AI features inside real business systems, plus training so your team can use them safely.",
     detailedExplanation:
-      "Best for: founders or ops leads who want to raise team AI literacy and align tool use with business goals without hiring a permanent AI team. We deliver: a lightweight capability assessment, tailored training sessions (tools and workflows that fit your context), and a short roadmap. At the end you get the assessment summary, training materials, and optional follow-up sessions—we build your internal capability, not ongoing dependency.",
+      "Best for companies that want AI connected to their own information, not a loose chatbot sitting outside the workflow. We add AI where it improves a real task, such as document review, extraction, search, triage, summaries, SOP checks or decision support.",
     outcomes: [
-      "Capability assessment summary and a short, actionable roadmap",
-      "Tailored training sessions for your team and tools",
-      "Materials and guidance so you can iterate without us",
-      "Optional follow-up sessions; no required retainer",
+      "AI chat over approved business data",
+      "Document extraction, review, triage, summaries and recommendations",
+      "Safe access patterns, clear limits and human review where needed",
+      "Team training focused on practical daily use",
     ],
-    investment: "$75-$150 per hour",
-    timeline: "Custom sessions",
+    timeline: "Built into scope",
     timelineStyle: "strategic",
     borderColor: "border-orange-500/15",
     hoverBorderColor: "hover:border-orange-500/25",
     iconColor: "text-orange-400",
     proof:
-      "AI strategy: team capability assessment plus tailored training; follow-up showed 3–5x improvement in effective use of existing AI tools.",
+      "Best fit: AI-assisted portals, SOP checks, document review, knowledge search and team training.",
   },
 ];
 
 const methodologyData = {
-  title: "How Strategic Research Intelligence Works",
+  title: "How a custom build works",
   subtitle:
-    "Here's an example of our research process for the Strategic Research Intelligence service:",
+    "A focused process for turning a messy workflow into software your team can use.",
   phases: [
     {
       phase: "01",
-      title: "Foundation",
+      title: "Understand the workflow",
       description:
-        "Gather all your business context - pitch decks, processes, investment memorandums, competitive landscape, strategic objectives.",
-      deliverables: [
-        "Complete business context mapping and documentation",
-        "Strategic objectives analysis and priority framework",
-        "Competitive landscape assessment and positioning analysis",
-        "Investment memorandums and pitch deck strategic review",
-        "Project knowledge base creation for AI-specific context",
-      ],
-      timeline: "Foundation Phase",
-      timelineStyle: "research",
+        "We map the current process, roles, data, pain points and where work gets stuck.",
     },
     {
       phase: "02",
-      title: "Deep Research",
+      title: "Map roles, data and permissions",
       description:
-        "Using Claude for contextual understanding, Gemini for deep analysis, DeepSeek for cost-effective bulk processing.",
-      deliverables: [
-        "Claude integration for contextual understanding and analysis",
-        "Gemini deployment for comprehensive deep research processing",
-        "DeepSeek utilization for cost-effective bulk data processing",
-        "Specialized research tools and database integration",
-        "Parallel source processing across thousands of information sources",
-      ],
-      timeline: "Research Phase",
-      timelineStyle: "prototype",
+        "We define who logs in, what they can see, what they can change and what needs to be tracked.",
     },
     {
       phase: "03",
-      title: "Validation & Filtering",
+      title: "Design the portal and database",
       description:
-        "Raw AI research produces massive information volumes. Systematically filter this down to useful intelligence.",
-      deliverables: [
-        "Systematic information filtering and relevance assessment",
-        "Strategic decision framework application to research data",
-        "Intelligence extraction from bulk research volumes",
-        "Jargon elimination and clarity-focused content refinement",
-        "Decision-relevant insight prioritization and organization",
-      ],
-      timeline: "Validation Phase",
-      timelineStyle: "advisory",
+        "We shape the core screens, database structure, automation points and AI features before build starts.",
     },
     {
       phase: "04",
-      title: "Cross-Model Validation",
+      title: "Build in focused milestones",
       description:
-        "Run refined information through different AI models to catch inconsistencies and verify source quality.",
-      deliverables: [
-        "Cross-model validation for accuracy and consistency verification",
-        "Source quality assessment and credibility weighting",
-        "Academic research versus social media content differentiation",
-        "Hallucination prevention through systematic verification processes",
-        "Reliability framework application for business decision support",
-      ],
-      timeline: "Validation Phase",
-      timelineStyle: "research",
+        "We ship working sections in practical milestones so feedback happens while the system is taking shape.",
     },
     {
       phase: "05",
-      title: "Strategic Documentation",
+      title: "Test, launch, train and hand over",
       description:
-        "Convert validated research into usable business documentation - strategic frameworks, competitive analysis, implementation roadmaps.",
-      deliverables: [
-        "Strategic frameworks and decision-making tools",
-        "Competitive analysis with positioning insights",
-        "Implementation roadmaps with clear next steps",
-        "Business documentation designed for operational use",
-        "Complete handoff materials and ongoing support guidance",
-      ],
-      timeline: "Delivery Phase",
-      timelineStyle: "advisory",
+        "We test the workflow, deploy the system, train users and provide the documentation needed to run it.",
     },
   ],
 };
@@ -221,40 +167,43 @@ const methodologyData = {
 const faqData: FAQSectionProps = {
   title: "Common Questions",
   subtitle:
-    "Understanding how we work with growing companies on AI implementation.",
+    "Practical answers about custom software, portals, and AI inside real workflows.",
   faqs: [
     {
-      question:
-        "Do you build complete production systems or just proof-of-concepts?",
+      question: "Do you build complete systems or prototypes?",
       answer:
-        "We build fully automated AI applications and production-ready integrations. Our focus is proving concepts work in 1-3 weeks with systems you can scale immediately. Think of us as your AI R&D team delivering working applications, not experiments.",
-    },
-    {
-      question: "How quickly can you build and deliver AI functionality?",
-      answer:
-        "Most production systems are delivered within 1-3 weeks. Week 1: We understand your process. Week 2: AI agents are trained and tested. Week 3: Working system with integration documentation. Faster than hiring, more focused than consultants.",
-    },
-    {
-      question: "What happens after you deliver the AI system?",
-      answer:
-        "You get: 1) Production-ready application code, 2) Integration documentation, 3) Training for your team, 4) 30-day support for questions. Most clients either implement themselves or use our integration roadmap with their existing developers.",
+        "We build working custom software, not slide decks. For larger portals, we usually start with a focused version that solves the core workflow first, then improve it from real use.",
     },
     {
       question:
-        "How do you help us integrate AI into our existing application?",
+        "When is custom software better than HubSpot, Airtable, Monday or another SaaS tool?",
       answer:
-        "We create production-ready systems with clear API documentation. Your developers get commented code, integration guides, and implementation roadmaps. We show exactly how to connect AI features to your existing systems.",
+        "Custom software makes sense when your workflow is specific, your users need different views, your data is scattered, or you are paying for large tools with features you do not use.",
     },
     {
-      question: "What if we need ongoing development beyond the AI features?",
+      question: "How long does a portal or internal system take?",
       answer:
-        "We focus on AI innovation, not long-term development. After delivering production systems and training, most clients either implement themselves or work with their existing dev teams. We are happy to recommend trusted partners for ongoing development.",
+        "Focused custom software projects usually start around 8-10 weeks. Smaller automations can be faster. Larger portals with multiple user types, integrations or AI features need a scoped plan before timelines are promised.",
     },
     {
-      question:
-        "How do you choose which AI tools and approaches for our project?",
+      question: "What does a typical 8-week build include?",
       answer:
-        "We match tools to your specific needs. Claude for complex reasoning, GPT-4 for general tasks, DeepSeek for cost efficiency, open-source models for privacy. No vendor lock-in - we recommend what works best for you.",
+        "Usually a focused portal or internal tool with authentication, role-based views, a custom database, core dashboards, key workflows, testing, deployment and handover documentation.",
+    },
+    {
+      question: "Can you add AI to a portal safely?",
+      answer:
+        "Yes, when the data, permissions and workflow are clear. We use AI for specific jobs such as search, document extraction, summaries, triage, SOP checks and decision support, with human review where needed.",
+    },
+    {
+      question: "Who owns the code and data after launch?",
+      answer:
+        "The goal is for you to own the system, data model and workflow logic. We document the build and avoid locking you into a tool stack you cannot understand or maintain.",
+    },
+    {
+      question: "Can you train our team to use the system and AI features?",
+      answer:
+        "Yes. Training is part of making the system useful. We show your team how the workflow works, where AI should be trusted, where it should be checked, and how to use it day to day.",
     },
   ],
 };
@@ -320,14 +269,14 @@ function InteractiveServiceShowcase() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-20 md:mb-32 lg:mb-40">
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-gray-900 dark:text-white mb-6 md:mb-8 lg:mb-12 leading-tight tracking-[-0.02em]">
-            Four Things We{" "}
+            What We{" "}
             <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-              Do
+              Build
             </span>
           </h2>
           <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed font-light">
-            AI-powered solutions applied to specific business challenges with
-            clear outcomes.
+            Four capabilities inside every custom software build: portals, data,
+            automation, and AI where it helps.
           </p>
         </div>
 
@@ -427,19 +376,6 @@ function InteractiveServiceShowcase() {
                       </div>
                     </div>
                   </details>
-
-                  <div className="pt-6 md:pt-8 border-t border-gray-900/10 dark:border-white/10">
-                    <div className="space-y-2 md:space-y-3">
-                      <p className="text-base md:text-lg text-gray-500 dark:text-gray-400">
-                        Investment:
-                      </p>
-                      <p
-                        className={`text-xl md:text-2xl font-medium ${currentService.iconColor} hover:drop-shadow-[0_0_12px_rgba(96,165,250,0.5)] transition-all duration-300`}
-                      >
-                        {currentService.investment}
-                      </p>
-                    </div>
-                  </div>
                 </div>
               </div>
 

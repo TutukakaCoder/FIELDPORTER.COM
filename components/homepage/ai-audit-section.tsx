@@ -38,11 +38,11 @@ export function AIAuditSection() {
                 transition={{ duration: 0.6 }}
               >
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight tracking-tight">
-                  AI Readiness Assessment
+                  Not sure what to build first?
                 </h2>
                 <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
-                  Not sure what AI is right for you? Get a scored roadmap for
-                  your automation strategy and move forward with certainty.
+                  Start with an AI Readiness check to find the workflows, data
+                  gaps, and AI opportunities worth tackling first.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4">
@@ -50,7 +50,7 @@ export function AIAuditSection() {
                     href="/contact"
                     className="inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40 hover:-translate-y-0.5 active:scale-95"
                   >
-                    Book Audit
+                    Book a Readiness Call
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                   <Link

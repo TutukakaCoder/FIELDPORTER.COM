@@ -6,7 +6,7 @@ import {
   ScrollRestoration,
 } from "@/components/layout";
 import { PageTransition } from "@/components/ui/page-transition";
-import { COMPANY_MODEL, PRIMARY_AUDIENCE } from "@/config/constants";
+import { SEO_DEFAULTS } from "@/config/constants";
 import { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import type React from "react";
@@ -30,12 +30,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://fieldporter.com"),
   title: {
     template: "FIELDPORTER | %s",
-    default:
-      "FIELDPORTER - AI Integration & Automation | Practical AI for Growing Companies",
+    default: SEO_DEFAULTS.title,
   },
-  description: `${COMPANY_MODEL.short} First useful system in 1–3 weeks.`,
-  keywords:
-    "AI integration, automation consulting, AI implementation, workflow automation, FIELDPORTER, strategic research, production AI",
+  description: SEO_DEFAULTS.description,
+  keywords: SEO_DEFAULTS.keywords.join(", "),
   authors: [{ name: "FIELDPORTER" }],
   creator: "FIELDPORTER",
   publisher: "FIELDPORTER",
@@ -133,24 +131,22 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://fieldporter.com",
-    title: "FIELDPORTER - AI Integration & Automation",
-    description:
-      "Practical AI systems, automations, and internal tools for growing companies. First useful system in 1–3 weeks.",
+    title: SEO_DEFAULTS.title,
+    description: SEO_DEFAULTS.description,
     siteName: "FIELDPORTER",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "FIELDPORTER - AI Integration & Automation Consulting",
+        alt: "FIELDPORTER - Custom Software Development",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "FIELDPORTER - AI Integration & Automation",
-    description:
-      "Practical AI systems, automations, and internal tools for growing companies. First useful system in 1–3 weeks.",
+    title: SEO_DEFAULTS.title,
+    description: SEO_DEFAULTS.description,
     creator: "@fieldporter",
     images: ["/opengraph-image"],
   },

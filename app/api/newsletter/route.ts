@@ -1,214 +1,83 @@
+import { getAdminDb, isFirebaseAdminConfigured } from "@/lib/firebase-admin";
 import { emailService } from "@/lib/email-service";
-import { db } from "@/lib/firebase";
-import {
-  addDoc,
-  collection,
-  getDocs,
-  query,
-  serverTimestamp,
-  where,
-} from "firebase/firestore";
-import { NextResponse } from "next/server";
+import { FieldValue } from "firebase-admin/firestore";
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 
-export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-interface NewsletterSignupData {
-  email: string;
-  source?: string;
-}
+const newsletterSchema = z.object({
+  email: z.string().email(),
+  source: z.string().optional().default("website"),
+});
 
-function validateEmail(email: string): { isValid: boolean; error?: string } {
-  if (!email || !email.includes("@")) {
-    return { isValid: false, error: "Valid email address is required" };
-  }
-
-  // Basic email format validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return { isValid: false, error: "Please enter a valid email address" };
-  }
-
-  return { isValid: true };
-}
-
-function calculateNewsletterLeadScore(
-  email: string,
-  source: string,
-): { score: number; details: string[] } {
-  let score = 2; // Base score for newsletter signup
-  const details: string[] = ["Newsletter signup: +2 points"];
-
-  // Business email bonus
-  const emailLower = email.toLowerCase();
-  if (
-    !emailLower.includes("@gmail.com") &&
-    !emailLower.includes("@yahoo.com") &&
-    !emailLower.includes("@hotmail.com") &&
-    !emailLower.includes("@outlook.com") &&
-    !emailLower.includes("@aol.com")
-  ) {
-    score += 3;
-    details.push("Business email domain: +3 points");
-  }
-
-  // Source bonus - higher intent from specific pages
-  switch (source) {
-    case "insights":
-      score += 2;
-      details.push("Signed up from insights page: +2 points");
-      break;
-    case "services":
-      score += 3;
-      details.push("Signed up from services page: +3 points");
-      break;
-    case "portfolio":
-      score += 2;
-      details.push("Signed up from portfolio page: +2 points");
-      break;
-    case "contact":
-      score += 1;
-      details.push("Signed up from contact page: +1 point");
-      break;
-    default:
-      details.push("Signed up from homepage: +0 points");
-  }
-
-  // Domain quality bonus - check for enterprise domains
-  const domain = email.split("@")[1]?.toLowerCase();
-  if (domain) {
-    const enterpriseDomains = [".edu", ".gov", ".org"];
-    const isEnterprise = enterpriseDomains.some((suffix) =>
-      domain.endsWith(suffix),
-    );
-    if (isEnterprise) {
-      score += 2;
-      details.push("Enterprise/institutional domain: +2 points");
-    }
-  }
-
-  return { score: Math.min(score, 10), details };
-}
-
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    // Validate request body
-    let body;
-    try {
-      body = await request.json();
-    } catch (parseError) {
+    const body = await request.json();
+    const parsed = newsletterSchema.safeParse(body);
+
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: "Invalid request body" },
+        { error: "Please enter a valid email address" },
         { status: 400 },
       );
     }
 
-    const { email, source = "homepage" }: NewsletterSignupData = body;
+    const { email, source } = parsed.data;
+    const normalizedEmail = email.trim().toLowerCase();
+    const subscriptionId = `newsletter_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+    const leadScore = 3;
 
-    // Validate email
-    const validation = validateEmail(email);
-    if (!validation.isValid) {
-      return NextResponse.json({ error: validation.error }, { status: 400 });
-    }
+    const db = getAdminDb();
+    if (db) {
+      const existing = await db
+        .collection("newsletter_subscriptions")
+        .where("email", "==", normalizedEmail)
+        .limit(1)
+        .get();
 
-    // Check if already subscribed
-    let existingDocs;
-    try {
-      const existingQuery = query(
-        collection(db, "newsletter_subscriptions"),
-        where("email", "==", email.toLowerCase()),
-      );
-      existingDocs = await getDocs(existingQuery);
-    } catch (dbError) {
-      console.error("Firebase query error:", dbError);
-      return NextResponse.json(
-        { error: "Database error. Please try again." },
-        { status: 500 },
-      );
-    }
-
-    if (!existingDocs.empty) {
-      return NextResponse.json({
-        success: true,
-        message: "You're already subscribed to our newsletter!",
-        alreadySubscribed: true,
-      });
-    }
-
-    // Calculate lead score
-    const { score: leadScore, details: leadScoreDetails } =
-      calculateNewsletterLeadScore(email, source);
-
-    // Prepare subscription data
-    const subscriptionData = {
-      email: email.toLowerCase(),
-      source,
-      leadScore,
-      leadScoreDetails,
-      subscribedAt: serverTimestamp(),
-      status: "active",
-      metadata: {
-        userAgent: request.headers.get("user-agent"),
-        referrer: request.headers.get("referer"),
-        ipAddress:
-          request.headers.get("x-forwarded-for") ||
-          request.headers.get("x-real-ip"),
-      },
-    };
-
-    // Save to Firebase
-    let docRef;
-    try {
-      docRef = await addDoc(
-        collection(db, "newsletter_subscriptions"),
-        subscriptionData,
-      );
-    } catch (dbError) {
-      console.error("Firebase save error:", dbError);
-      return NextResponse.json(
-        { error: "Failed to save subscription. Please try again." },
-        { status: 500 },
-      );
-    }
-
-    // Send email notification for qualified signups
-    if (leadScore >= 4) {
-      try {
-        await emailService.sendNotificationEmail({
-          subject: `📧 New Newsletter Signup - ${source} - Score: ${leadScore}/10`,
-          type: "newsletter",
-          data: {
-            email,
-            source,
-            leadScore,
-            leadScoreDetails,
-            id: docRef.id,
-          },
+      if (!existing.empty) {
+        return NextResponse.json({
+          success: true,
+          leadScore,
+          message: "Already subscribed",
         });
-      } catch (emailError) {
-        console.error("Failed to send email notification:", emailError);
-        // Don't fail the signup if email fails
       }
-    }
 
-    // Track conversion analytics
-    if (process.env.NODE_ENV === "development") {
-      console.log(
-        `Newsletter signup - Lead Score: ${leadScore}/10 - ${email} - Source: ${source}`,
+      await db.collection("newsletter_subscriptions").doc(subscriptionId).set({
+        email: normalizedEmail,
+        source,
+        lead_score: leadScore,
+        subscribed_at: FieldValue.serverTimestamp(),
+        submitted_at: FieldValue.serverTimestamp(),
+        status: "active",
+      });
+    } else if (!isFirebaseAdminConfigured()) {
+      console.warn(
+        "Firebase Admin not configured - newsletter signup email only",
       );
     }
+
+    await emailService.sendNotificationEmail({
+      subject: `Newsletter Signup: ${normalizedEmail}`,
+      type: "newsletter",
+      data: {
+        id: subscriptionId,
+        email: normalizedEmail,
+        source,
+        leadScore,
+      },
+    });
 
     return NextResponse.json({
       success: true,
-      id: docRef.id,
       leadScore,
-      message:
-        "Thanks for subscribing! Check your email to confirm your subscription.",
     });
   } catch (error) {
-    console.error("Newsletter signup error:", error);
+    console.error("Newsletter API error:", error);
     return NextResponse.json(
-      { error: "Failed to subscribe. Please try again." },
+      { error: "Subscription failed. Please try again." },
       { status: 500 },
     );
   }

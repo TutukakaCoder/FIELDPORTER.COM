@@ -7,16 +7,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   ArrowRight,
-  Brain,
   Building2,
   Code,
+  HardHat,
   Heart,
-  Lightbulb,
   Quote,
   Shield,
-  Target,
   TrendingUp,
-  Zap,
+  Users,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -98,41 +96,42 @@ const projects = [
 
 const industries = [
   {
-    title: "Venture Capital & Private Equity",
-    description: "Automating deal flow triage and portfolio due diligence.",
-    stats: "70% reduction in manual review time",
-    techStack: "Interests: DeepSeek V3, Firebase, Custom API Triage",
+    title: "Advisory and Private Capital",
+    description:
+      "Portals for deal flow, client management, investor visibility and portfolio information.",
+    stats: "Client, admin and investor workflows",
+    techStack: "Focus: Deal flow, reporting, AI search, document intake",
     icon: TrendingUp,
     iconColor: "text-blue-400",
     glowColor: "bg-blue-500/10",
   },
   {
-    title: "Smart Manufacturing",
+    title: "Finance and Lending",
     description:
-      "Predictive maintenance and edge automation for the factory floor.",
-    stats: "30% Productivity Gain Target",
-    techStack: "Interests: Process Automation, Real-time Data",
-    icon: Zap,
-    iconColor: "text-amber-400",
-    glowColor: "bg-amber-500/10",
-  },
-  {
-    title: "Environmental & ESG Intelligence",
-    description:
-      "Automating carbon management and regulatory compliance workflows.",
-    stats: "Strategic mapping in days, not weeks",
-    techStack: "Interests: Public Datasets, Automated Reporting",
-    icon: Target,
+      "Custom deal portals that reduce email handoffs, document chasing and unnecessary SaaS seats.",
+    stats: "Purpose-built workflow systems",
+    techStack: "Focus: Applications, approvals, reporting, document workflows",
+    icon: Building2,
     iconColor: "text-emerald-400",
     glowColor: "bg-emerald-500/10",
   },
   {
-    title: "High-Growth Mid-Market ($2M+ ARR)",
+    title: "Construction and Field Operations",
     description:
-      "Scaling technical operations and removing bottlenecks for established companies.",
-    stats: "Reclaim 40+ hours monthly",
-    techStack: "Interests: n8n, Custom Integrations, Process Mining",
-    icon: Building2,
+      "Secure portals for project records, document intake, permit visibility and SOP review.",
+    stats: "Broad focus area",
+    techStack: "Focus: Workbooks, permits, SOP checks, AI-assisted review",
+    icon: HardHat,
+    iconColor: "text-amber-400",
+    glowColor: "bg-amber-500/10",
+  },
+  {
+    title: "Service Businesses and Client Portals",
+    description:
+      "Client-facing portals and internal tools for teams that need a cleaner way to deliver work.",
+    stats: "One place for clients and teams",
+    techStack: "Focus: Status, files, approvals, dashboards, communications",
+    icon: Users,
     iconColor: "text-purple-400",
     glowColor: "bg-purple-500/10",
   },
@@ -745,9 +744,9 @@ export function PortfolioSection() {
               </span>
             </h3>
             <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
-              Strongest track record in advisory and capital, and in scaling
-              operations for growing businesses. We also work in manufacturing
-              and ESG where the fit is right.
+              Strongest track record in advisory, capital, finance, and service
+              businesses. We also work with construction and field teams where
+              the workflow fits.
             </p>
           </div>
 

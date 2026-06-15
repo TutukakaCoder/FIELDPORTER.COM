@@ -5,10 +5,10 @@ import { trackServiceInterest } from "@/lib/firebase-analytics";
 import { motion, useInView } from "framer-motion";
 import {
   ArrowRight,
-  BookOpen,
+  BarChart3,
   Building2,
-  Code,
-  TrendingUp,
+  Sparkles,
+  Workflow,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -16,24 +16,25 @@ import { memo, useCallback, useRef } from "react";
 
 const services = [
   {
-    id: "strategic-research",
+    id: "custom-portals",
     phase: "01",
-    icon: TrendingUp,
-    title: "Strategic Research & Intelligence",
-    tagline: "Market intelligence that kills risk before you spend.",
-    impact: "Know your market in 5 days",
+    icon: Building2,
+    title: "Custom Portals and Internal Tools",
+    tagline:
+      "One secure place for the right people to see the right information and take action.",
+    impact: "Client, staff, admin and investor views",
     benefits: [
-      "Multi-source research preventing costly missteps",
-      "Strategic insights answering critical viability questions",
-      "Clear implementation guidance, not just theory",
+      "Role-based access for clients, staff, admins, investors or partners",
+      "Dashboards, forms, uploads, approvals and activity tracking",
+      "A focused alternative to spreadsheet, email and oversized SaaS workflows",
     ],
     examples: [
-      "Market sizing",
-      "Due diligence",
-      "Competitor intel",
-      "Tech scouting",
+      "Client portals",
+      "Investor portals",
+      "Admin tools",
+      "Deal flow",
     ],
-    timeline: "3-5 days",
+    timeline: "8-10 weeks typical",
     gradientFrom: "from-emerald-500/20",
     gradientTo: "to-emerald-500/5",
     borderColor: "border-emerald-500/20",
@@ -43,24 +44,20 @@ const services = [
     shadowColor: "shadow-[0_0_30px_rgba(16,185,129,0.15)]",
   },
   {
-    id: "rapid-development",
+    id: "databases-dashboards",
     phase: "02",
-    icon: Code,
-    title: "Rapid AI Development & Integration",
-    tagline: "Turn 'good ideas' into working products. Fast.",
-    impact: "Launch MVP in 2 weeks",
+    icon: BarChart3,
+    title: "Databases, Dashboards and Reporting",
+    tagline:
+      "Clean data models and reporting screens built around the decisions you make.",
+    impact: "Right data, right role",
     benefits: [
-      "Production-ready AI applications",
-      "APIs that plug into your existing tools, with clear docs",
-      "Complete technical documentation and handoff",
+      "Custom databases for the information your business actually needs",
+      "Management screens, reporting views, logs and decision dashboards",
+      "A stronger data layer before automation or AI is added",
     ],
-    examples: [
-      "AI chat systems",
-      "Custom dashboards",
-      "API integration",
-      "Web apps",
-    ],
-    timeline: "1-2 weeks",
+    examples: ["Dashboards", "Reporting", "Data models", "Activity logs"],
+    timeline: "Scoped per build",
     gradientFrom: "from-blue-500/20",
     gradientTo: "to-blue-500/5",
     borderColor: "border-blue-500/20",
@@ -70,24 +67,20 @@ const services = [
     shadowColor: "shadow-[0_0_30px_rgba(59,130,246,0.15)]",
   },
   {
-    id: "workflow-optimization",
+    id: "workflow-automation",
     phase: "03",
-    icon: Building2,
-    title: "Process Efficiency & Workflow Optimisation",
-    tagline: "Replace expensive admin hours with reliable code.",
-    impact: "Save 20+ hours/week",
+    icon: Workflow,
+    title: "Workflow Automation and Integrations",
+    tagline:
+      "Automate handoffs, document intake, approvals, notifications and repeatable admin.",
+    impact: "Less duplicate entry",
     benefits: [
-      "Eliminate operational drag and manual data entry",
-      "Automate complex workflows end-to-end",
-      "Get more done without adding headcount",
+      "Connect CRMs, finance tools, email, forms, storage and existing systems",
+      "Reduce manual chasing, re-keying and status updates",
+      "Use n8n where it fits and custom code where ownership matters",
     ],
-    examples: [
-      "Sales workflows",
-      "Report automation",
-      "Data sync",
-      "Email sequences",
-    ],
-    timeline: "2-4 weeks",
+    examples: ["Document intake", "Approvals", "API sync", "Notifications"],
+    timeline: "2-6 weeks or part of build",
     gradientFrom: "from-purple-500/20",
     gradientTo: "to-purple-500/5",
     borderColor: "border-purple-500/20",
@@ -97,24 +90,20 @@ const services = [
     shadowColor: "shadow-[0_0_30px_rgba(168,85,247,0.15)]",
   },
   {
-    id: "ai-training",
+    id: "ai-capability",
     phase: "04",
-    icon: BookOpen,
-    title: "AI Strategy & Team Capability Building",
-    tagline: "Don't rent your advantage. Build internal capability.",
-    impact: "Build a self-sufficient team",
+    icon: Sparkles,
+    title: "AI Capability and Team Enablement",
+    tagline:
+      "Add AI where it is controlled, useful and connected to approved business data.",
+    impact: "AI inside the workflow",
     benefits: [
-      "Industry-specific AI strategy workshops",
-      "Custom knowledge systems on your own data",
-      "Train your team to fish, not just eat",
+      "Secure chat over approved business information",
+      "Document extraction, review, triage, summaries and recommendations",
+      "Practical training so your team uses AI safely in daily work",
     ],
-    examples: [
-      "Team workshops",
-      "AI adoption",
-      "Prompt engineering",
-      "Process design",
-    ],
-    timeline: "Custom sessions",
+    examples: ["AI chat", "SOP checks", "Document review", "Training"],
+    timeline: "Built into scope",
     gradientFrom: "from-orange-500/20",
     gradientTo: "to-orange-500/5",
     borderColor: "border-orange-500/20",
@@ -125,7 +114,6 @@ const services = [
   },
 ];
 
-// Mobile-optimized service card component
 const ServiceCard = memo(
   ({ service, index }: { service: (typeof services)[0]; index: number }) => {
     const router = useRouter();
@@ -159,17 +147,14 @@ const ServiceCard = memo(
           }
         }}
       >
-        {/* Premium phase number background */}
         <div className="absolute -top-2 -left-2 text-6xl font-thin text-gray-900/[0.03] dark:text-white/[0.03] pointer-events-none select-none">
           {service.phase}
         </div>
 
-        {/* Hover/tap glow: subtle on mobile, full on desktop */}
         <div
           className={`absolute inset-0 rounded-2xl opacity-[0.08] group-hover:opacity-100 group-active:opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 ${service.shadowColor}`}
         />
 
-        {/* Main card with mobile-optimized glassmorphism */}
         <div
           className={`
           relative bg-gray-900/[0.02] dark:bg-white/[0.02] border ${service.borderColor} ${service.hoverBorder}
@@ -180,14 +165,12 @@ const ServiceCard = memo(
           backdrop-blur-sm
         `}
         >
-          {/* Simplified glassmorphism layers for mobile */}
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent rounded-2xl" />
           <div
             className={`absolute inset-0 bg-gradient-to-br ${service.gradientFrom} ${service.gradientTo} rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
           />
 
           <div className="relative z-10 flex flex-col h-full">
-            {/* Enhanced header */}
             <div className="flex items-start justify-between mb-6 sm:mb-8">
               <div className="p-3 sm:p-4 rounded-xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-sm group-hover:bg-gray-900/15 dark:group-hover:bg-white/15 transition-all duration-300">
                 <service.icon
@@ -207,9 +190,7 @@ const ServiceCard = memo(
               </div>
             </div>
 
-            {/* Enhanced content */}
             <div className="flex-1 space-y-6">
-              {/* Title and tagline */}
               <div className="space-y-3">
                 <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white leading-tight tracking-[-0.01em]">
                   {service.title}
@@ -224,7 +205,6 @@ const ServiceCard = memo(
                 </div>
               </div>
 
-              {/* Enhanced benefits */}
               <div className="space-y-3">
                 {service.benefits.map((benefit, idx) => (
                   <div key={idx} className="flex items-start gap-3">
@@ -244,9 +224,7 @@ const ServiceCard = memo(
               </div>
             </div>
 
-            {/* Enhanced footer */}
             <div className="mt-8 pt-6 border-t border-gray-900/10 dark:border-white/10">
-              {/* Premium example tags */}
               <div className="flex flex-wrap gap-2 mb-4">
                 {service.examples.map((example, idx) => (
                   <span
@@ -258,7 +236,6 @@ const ServiceCard = memo(
                 ))}
               </div>
 
-              {/* Enhanced CTA */}
               <div className="flex items-center justify-between">
                 <span
                   className={`text-sm font-medium ${service.accentColor} group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300`}
@@ -283,7 +260,7 @@ ServiceCard.displayName = "ServiceCard";
 
 export function ServicesSection() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-20%" });
+  useInView(ref, { once: true, margin: "-20%" });
 
   return (
     <section
@@ -292,39 +269,39 @@ export function ServicesSection() {
       className="relative section-rhythm-lg overflow-hidden bg-transparent"
     >
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Enhanced Section Header */}
-        <div className="text-center mb-16 md:mb-20">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-light text-gray-900 dark:text-white mb-6 md:mb-8 leading-tight tracking-[-0.02em] break-words">
+        <div className="text-center mb-12 md:mb-16">
+          <p className="text-sm font-medium text-blue-500 dark:text-blue-400 uppercase tracking-wider mb-4">
+            What We Build
+          </p>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light text-gray-900 dark:text-white mb-6 md:mb-8 leading-tight tracking-[-0.02em] break-words">
             <span className="relative">
               <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                Production Systems in Weeks. Strategic Research in Days.
+                Software for workflows generic tools do not fit.
               </span>
-              {/* Subtle glow - lighter on mobile */}
               <div className="absolute -inset-x-4 -inset-y-2 bg-blue-500/20 blur-2xl opacity-15 md:opacity-30" />
             </span>
           </h2>
 
           <p className="text-xl lg:text-2xl text-gray-700/70 dark:text-white/70 max-w-4xl mx-auto leading-relaxed font-light">
-            We remove bottlenecks and save time with AI integration, automation,
-            and research. Here's how we deliver.
+            We design and build the core systems your team, clients, and partners
+            use to see the right information and get work done.
           </p>
         </div>
 
-        {/* Services Grid - 2x2 Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-12">
           {services.map((service, index) => (
             <ServiceCard key={service.id} service={service} index={index} />
           ))}
         </div>
 
-        {/* Enhanced bottom CTA */}
         <div className="text-center mt-20 lg:mt-24">
           <p className="text-gray-600 dark:text-white/60 text-lg mb-6">
-            Ready to cut overhead, move faster, or de-risk your next decision?
+            Tell us where work gets stuck. We will map the simplest useful
+            system to build first.
           </p>
           <Button variant="secondary" size="lg" className="group" asChild>
             <Link href="/services" className="inline-flex items-center gap-3">
-              Explore All Services
+              Explore Services
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
             </Link>
           </Button>
