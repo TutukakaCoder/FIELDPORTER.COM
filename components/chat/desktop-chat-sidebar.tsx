@@ -14,6 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { ChatV2ComingSoonOverlay } from "./chat-v2-coming-soon-overlay";
 
 interface DesktopChatSidebarProps {
   isOpen: boolean;
@@ -245,8 +246,10 @@ export function DesktopChatSidebar({
             animate={{ opacity: 1, height: "calc(100vh - 80px)" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-            className="flex-1 flex flex-col overflow-hidden"
+            className="relative flex-1 flex flex-col overflow-hidden"
           >
+            <ChatV2ComingSoonOverlay />
+
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin">
               {messages.length === 0 && (

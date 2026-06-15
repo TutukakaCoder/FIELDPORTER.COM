@@ -14,6 +14,7 @@ import {
   User,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { ChatV2ComingSoonOverlay } from "./chat-v2-coming-soon-overlay";
 
 interface MobileChatInterfaceProps {
   isOpen: boolean;
@@ -285,6 +286,9 @@ export function MobileChatInterface({
         </div>
       </motion.div>
 
+      <div className="relative flex min-h-0 flex-1 flex-col">
+        <ChatV2ComingSoonOverlay />
+
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin">
         {messages.length === 0 && (
@@ -475,6 +479,7 @@ export function MobileChatInterface({
           </motion.button>
         </div>
       </motion.div>
+      </div>
     </motion.div>
   );
 }
