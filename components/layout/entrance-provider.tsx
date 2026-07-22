@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import { usePathname } from "next/navigation";
+import { forceDarkMode } from "@/lib/theme";
 import { VideoEntrance } from "./video-entrance";
 
 interface EntranceContextType {
@@ -58,6 +59,8 @@ export function EntranceProvider({ children }: EntranceProviderProps) {
     }
 
     if (!hasSeenInSession) {
+      // Page behind entrance loads in dark so reveal is consistent
+      forceDarkMode();
       setShowEntrance(true);
     }
 
@@ -68,6 +71,8 @@ export function EntranceProvider({ children }: EntranceProviderProps) {
     if (process.env.NODE_ENV === "development") {
       console.log("FIELDPORTER: Entrance completed, revealing main content");
     }
+    // Always land on dark mode after intro
+    forceDarkMode();
     sessionStorage.setItem("fieldporter-video-seen-session", "true");
     setShowEntrance(false);
   };

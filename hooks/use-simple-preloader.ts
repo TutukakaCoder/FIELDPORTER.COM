@@ -31,7 +31,6 @@ export function useSimplePreloader() {
 
       let loadedCount = 0;
 
-      // Prefetch routes with a small delay between each
       for (const route of routes) {
         try {
           router.prefetch(route);
@@ -42,9 +41,6 @@ export function useSimplePreloader() {
             loadedRoutes: loadedCount,
             isComplete: loadedCount >= routes.length,
           });
-
-          // Small delay to avoid overwhelming the network
-          await new Promise((resolve) => setTimeout(resolve, 100));
         } catch (error) {
           console.warn(`Failed to prefetch route: ${route}`, error);
         }

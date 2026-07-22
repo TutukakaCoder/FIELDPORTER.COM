@@ -10,7 +10,6 @@ export function ThemeToggle() {
 
   useEffect(() => {
     setMounted(true);
-    // Always start with dark theme
     const savedTheme = localStorage.getItem("theme") as "dark" | "light" | null;
     const initialTheme = savedTheme || "dark";
 
@@ -20,6 +19,17 @@ export function ThemeToggle() {
       "light",
       initialTheme === "light",
     );
+
+    const onForceDark = () => {
+      setTheme("dark");
+      document.documentElement.classList.toggle("dark", true);
+      document.documentElement.classList.toggle("light", false);
+    };
+
+    window.addEventListener("fieldporter-theme-force-dark", onForceDark);
+    return () => {
+      window.removeEventListener("fieldporter-theme-force-dark", onForceDark);
+    };
   }, []);
 
   const toggleTheme = () => {
