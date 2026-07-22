@@ -9,7 +9,6 @@ import { memo, useMemo, useRef } from "react";
 import {
   HERO_HEADLINE,
   HERO_PROOF_LINE,
-  HERO_SUPPORTING_LINE,
   HERO_VALUE_PROP,
 } from "@/config/constants";
 import {
@@ -45,7 +44,6 @@ const Hero3DBackgroundSimplified = dynamic(
   },
 );
 
-// Memoized background pattern
 const BackgroundPattern = memo(() => {
   const isMobile = useStableMobile();
 
@@ -92,7 +90,6 @@ const BackgroundPattern = memo(() => {
 
 BackgroundPattern.displayName = "BackgroundPattern";
 
-// Optimized premium aurora background
 const PremiumAuroraBackground = memo(() => {
   const isMobile = useStableMobile();
   const prefersReducedMotion = useReducedMotion();
@@ -119,28 +116,26 @@ const PremiumAuroraBackground = memo(() => {
       />
 
       {auroraSettings.showAnimated ? (
-        <>
-          <motion.div
-            className="absolute w-[300px] h-[300px] rounded-full opacity-15"
-            style={{
-              background:
-                "linear-gradient(45deg, rgba(16, 185, 129, 0.2), rgba(59, 130, 246, 0.15))",
-              willChange: "transform",
-              filter: `blur(${auroraSettings.blurAmount}px)`,
-              left: "calc(50% - 150px)",
-              top: "calc(50% - 150px)",
-            }}
-            animate={{
-              scale: [1, 1.1, 0.95, 1],
-              opacity: [0.15, 0.2, 0.15],
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        </>
+        <motion.div
+          className="absolute w-[300px] h-[300px] rounded-full opacity-15"
+          style={{
+            background:
+              "linear-gradient(45deg, rgba(16, 185, 129, 0.2), rgba(59, 130, 246, 0.15))",
+            willChange: "transform",
+            filter: `blur(${auroraSettings.blurAmount}px)`,
+            left: "calc(50% - 150px)",
+            top: "calc(50% - 150px)",
+          }}
+          animate={{
+            scale: [1, 1.1, 0.95, 1],
+            opacity: [0.15, 0.2, 0.15],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
       ) : null}
     </div>
   );
@@ -148,14 +143,12 @@ const PremiumAuroraBackground = memo(() => {
 
 PremiumAuroraBackground.displayName = "PremiumAuroraBackground";
 
-// Lighter hero background for mobile/tablet (no 3D, simple gradient)
 const LightHeroBackground = memo(() => (
   <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-gray-50 to-white dark:from-gray-950 dark:via-gray-900 dark:to-black" />
 ));
 
 LightHeroBackground.displayName = "LightHeroBackground";
 
-// Tiered Background System - mobile/tablet get lighter background
 const TieredBackground = memo(() => {
   const { experience, isMobile, isTablet } = useDeviceCapability();
 
@@ -176,7 +169,6 @@ const TieredBackground = memo(() => {
 
 TieredBackground.displayName = "TieredBackground";
 
-// Animated CTA Button - uses shared button system
 const AnimatedCTA = memo(() => {
   const isMobile = useStableMobile();
   const prefersReducedMotion = useReducedMotion();
@@ -190,7 +182,7 @@ const AnimatedCTA = memo(() => {
         whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
         className={isMobile ? "w-full relative group" : "relative group"}
       >
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-blue-400 rounded-xl blur opacity-30 group-hover:opacity-70 transition duration-500"></div>
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-blue-400 rounded-xl blur opacity-30 group-hover:opacity-70 transition duration-500" />
         <Button
           variant="invert"
           size="lg"
@@ -224,7 +216,6 @@ const AnimatedCTA = memo(() => {
 
 AnimatedCTA.displayName = "AnimatedCTA";
 
-// Main Hero Section
 export function HeroSection() {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -258,7 +249,6 @@ export function HeroSection() {
         <BackgroundPattern />
       </div>
 
-      {/* Bottom gradient fade for smooth transition */}
       <div className="absolute bottom-0 left-0 right-0 h-40 z-[1] bg-gradient-to-t from-gray-50 via-gray-50/80 to-transparent dark:from-gray-950 dark:via-gray-950/80 dark:to-transparent pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pointer-events-auto">
@@ -269,17 +259,7 @@ export function HeroSection() {
           className="space-y-7 md:space-y-10"
         >
           <div className="space-y-6 relative">
-            {/* Background glow to ensure text readability against stars */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-black/40 dark:bg-black/40 blur-[100px] rounded-full pointer-events-none -z-10" />
-
-            <motion.div variants={textReveal} className="flex justify-center">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-                <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
-                <span className="text-sm font-medium text-gray-300">
-                  {HERO_SUPPORTING_LINE}
-                </span>
-              </div>
-            </motion.div>
 
             <motion.h1
               variants={textReveal}

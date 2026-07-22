@@ -25,6 +25,7 @@ import {
   TrendingUp,
   Zap,
 } from "lucide-react";
+import Image from "next/image";
 import React, { useRef, useState } from "react";
 
 // TypeScript interfaces
@@ -57,6 +58,10 @@ interface Project {
   videoUrl?: string;
   ctaUrl?: string;
   applyUrl?: string;
+  heroImage?: string;
+  galleryImages?: string[];
+  logoSrc?: string;
+  statusStyle?: "live" | "uat" | "delivered" | "research" | "development";
 }
 
 interface PortfolioSection {
@@ -84,7 +89,7 @@ const portfolioSections: PortfolioSection[] = [
     timelineStyle: "live",
     projects: [
       {
-        title: "Voluntas Client and Investment Management Platform",
+        title: "VOLOCEAN Client and Investment Management Platform",
         status: "LIVE • 21 CLIENTS",
         category: "Client and Investment Management",
         description:
@@ -123,7 +128,7 @@ const portfolioSections: PortfolioSection[] = [
         testimonial: {
           quote:
             "We wanted to create an AI platform to help run our advisory business, something that could manage clients, streamline admin and help automate our service delivery. Freddy took the time to really understand what we needed and delivered something right on the mark, fast, professional, and great to work with.",
-          author: "Jason Holdsworth, Founding Partner - Voluntas Group",
+          author: "Jason Holdsworth, Founding Partner - VOLOCEAN",
           rating: 5,
         },
       },
@@ -155,6 +160,31 @@ const portfolioSections: PortfolioSection[] = [
           author: "Steve, Leadership Development Coach",
           rating: 5,
         },
+      },
+      {
+        title: "GoGoProp Portal",
+        status: "IN DEVELOPMENT • CLIENT UAT",
+        statusStyle: "uat",
+        category: "Full product build · Property finance",
+        description:
+          "FIELDPORTER is building GoGoProp’s Phase 1 lending portal: a branded system for staff, borrowers, and brokers covering enquiry, decisions in principle, full application, and KYC. It replaces early CRM-based workflow with a purpose-built pipeline, deal tools, and client portal — currently in active client testing ahead of launch.",
+        capabilities: [
+          "Branded online enquiry and status tracking",
+          "One portal for borrowers and introducers/brokers",
+          "Staff deal pipeline and deal workspace",
+          "Property data checks and valuation support",
+          "Decision-in-principle (PDF) with staff control",
+          "Full application documents and identity-check journey",
+        ],
+        techStack:
+          "Next.js • React • TypeScript • Firebase • Transactional email • Property data and identity verification integrations",
+        heroImage: "/portfolio/gogoprop/dashboard-hero.png",
+        logoSrc: "/portfolio/gogoprop/mark.svg",
+        galleryImages: [
+          "/portfolio/gogoprop/pipeline-list.png",
+          "/portfolio/gogoprop/deal-workspace.png",
+          "/portfolio/gogoprop/borrower-dashboard.png",
+        ],
       },
     ],
   },
@@ -301,6 +331,8 @@ const getTimelineBadgeStyle = (timelineStyle?: string) => {
   switch (timelineStyle) {
     case "live":
       return "bg-green-500/20 border-green-500/30 text-green-400";
+    case "uat":
+      return "bg-amber-500/20 border-amber-500/30 text-amber-400";
     case "delivered":
       return "bg-blue-500/20 border-blue-500/30 text-blue-400";
     case "research":
@@ -525,7 +557,13 @@ function InteractivePortfolioShowcase() {
                     className="relative group/project"
                   >
                     <div
-                      className={`grid gap-8 md:gap-12 lg:gap-16 items-start ${project.testimonial ? "lg:grid-cols-2" : "lg:grid-cols-1 max-w-4xl mx-auto"}`}
+                      className={`grid gap-8 md:gap-12 lg:gap-16 items-start ${
+                        project.testimonial ||
+                        project.videoUrl ||
+                        project.heroImage
+                          ? "lg:grid-cols-2"
+                          : "lg:grid-cols-1 max-w-4xl mx-auto"
+                      }`}
                     >
                       {/* Content Side */}
                       <div className="space-y-6 md:space-y-8">
@@ -534,7 +572,7 @@ function InteractivePortfolioShowcase() {
                             <span>{project.category}</span>
                             <span>•</span>
                             <span
-                              className={`px-3 py-1 rounded-xl border backdrop-blur-md font-medium ${getTimelineBadgeStyle(currentSection.timelineStyle)}`}
+                              className={`px-3 py-1 rounded-xl border backdrop-blur-md font-medium ${getTimelineBadgeStyle(project.statusStyle || currentSection.timelineStyle)}`}
                             >
                               {project.status}
                             </span>
@@ -689,14 +727,15 @@ function InteractivePortfolioShowcase() {
                         )}
                       </div>
 
-                      {/* Testimonial/Video Side (only show for projects that have one) */}
-                      {(project.testimonial || project.videoUrl) && (
+                      {/* Media side: video, testimonial, or product images */}
+                      {(project.testimonial ||
+                        project.videoUrl ||
+                        project.heroImage) && (
                         <div className="relative order-first lg:order-last">
                           <div className="relative">
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/5 rounded-3xl blur-xl opacity-60" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/5 rounded-3xl blur-xl opacity-60" />
 
                             {project.videoUrl ? (
-                              // Video showcase card
                               <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-4 md:p-6 overflow-hidden transition-colors duration-200 hover:border-gray-900/20 dark:hover:border-white/20">
                                 <div className="relative w-full rounded-3xl overflow-hidden bg-black/50">
                                   <video
@@ -719,7 +758,6 @@ function InteractivePortfolioShowcase() {
                                     Your browser does not support the video tag.
                                   </video>
                                 </div>
-                                {/* Optional: Add caption below video */}
                                 {project.testimonial && (
                                   <div className="mt-6">
                                     <div className="flex items-start gap-4">
@@ -752,8 +790,50 @@ function InteractivePortfolioShowcase() {
                                   </div>
                                 )}
                               </div>
+                            ) : project.heroImage ? (
+                              <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-3 md:p-4 overflow-hidden transition-colors duration-200 hover:border-gray-900/20 dark:hover:border-white/20">
+                                {project.logoSrc && (
+                                  <div className="absolute top-5 left-5 z-10 p-2 rounded-xl bg-black/55 backdrop-blur-sm border border-white/10">
+                                    <Image
+                                      src={project.logoSrc}
+                                      alt=""
+                                      width={28}
+                                      height={28}
+                                      className="w-7 h-7"
+                                    />
+                                  </div>
+                                )}
+                                <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-black/60 border border-white/5">
+                                  <Image
+                                    src={project.heroImage}
+                                    alt={`${project.title} product interface`}
+                                    fill
+                                    className="object-cover object-top"
+                                    sizes="(max-width: 1024px) 100vw, 50vw"
+                                    priority={projectIndex === 0}
+                                  />
+                                </div>
+                                {project.galleryImages &&
+                                  project.galleryImages.length > 0 && (
+                                    <div className="mt-3 grid grid-cols-3 gap-2 md:gap-3">
+                                      {project.galleryImages.map((src, idx) => (
+                                        <div
+                                          key={src}
+                                          className="relative aspect-[16/10] rounded-xl overflow-hidden bg-black/50 border border-white/5"
+                                        >
+                                          <Image
+                                            src={src}
+                                            alt={`${project.title} screen ${idx + 1}`}
+                                            fill
+                                            className="object-cover object-top"
+                                            sizes="(max-width: 1024px) 33vw, 160px"
+                                          />
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+                              </div>
                             ) : (
-                              // Testimonial-only card (existing design)
                               <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-3xl p-8 md:p-12 transition-colors duration-200 hover:border-gray-900/20 dark:hover:border-white/20">
                                 <div className="flex items-start gap-4 group/quote">
                                   <div className="text-blue-400 text-4xl leading-none">

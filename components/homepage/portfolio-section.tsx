@@ -1,696 +1,77 @@
 "use client";
 
-import { trackServiceInterest } from "@/lib/firebase-analytics";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import {
-  ArrowRight,
-  Building2,
-  Code,
-  HardHat,
-  Heart,
-  Quote,
-  Shield,
-  TrendingUp,
-  Users,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
-import { memo, useCallback, useRef, useState, useEffect } from "react";
+import { ArrowRight, Building2, Code, Quote } from "lucide-react";
+import { memo } from "react";
 
 const projects = [
   {
     id: "voluntas-intelligence",
-    phase: "01",
     icon: Building2,
-    workType: "client" as const,
-    title: "Voluntas Client and Investment Management Platform",
+    title: "VOLOCEAN Client and Investment Management Platform",
     tagline:
       "Client and investment management platform. 21 clients, 70 portfolio submissions. Building for 6 months, still evolving.",
-    keyBenefits: [
-      "AI pitch deck extraction: 15 business fields in 30-45 seconds with high accuracy",
-      "10-factor investor matching algorithm with confidence scoring",
-    ],
-    applyUrl: "https://voluntas.web.app/apply?ref=FIELDPORTER",
-    timeline: "Live in Production",
     status: "Live • 21 Clients",
-    statusColor: "text-green-400",
-    statusBg: "bg-green-500/10 border-green-500/20",
-    iconColor: "text-green-400",
-    glowColor: "bg-green-500/10",
-    hoverGlow: "shadow-[0_0_30px_rgba(34,197,94,0.15)]",
-    gradientFrom: "from-green-500/20",
-    gradientTo: "to-green-500/5",
-    clientImage: "/images/jason-h-profile.jpg",
-    clientName: "Jason Holdsworth",
   },
   {
     id: "papps-mastery",
-    phase: "02",
     icon: Code,
-    workType: "client" as const,
     title: "Self Development Platform",
     tagline:
-      "Life-coach platform in production 12+ months. Rebuilt from the ground up with ongoing feature delivery and monthly updates.",
-    keyBenefits: [
-      "Complex timezone handling, user management, daily programs for life coach",
-      "Custom client build, new features and updates monthly",
-    ],
-
-    timeline: "Live & Active",
+      "Life-coach platform in production 12+ months. Rebuilt from the ground up with ongoing feature delivery.",
     status: "Production",
-    statusColor: "text-emerald-400",
-    statusBg: "bg-emerald-500/10 border-emerald-500/20",
-    iconColor: "text-emerald-400",
-    glowColor: "bg-emerald-500/10",
-    hoverGlow: "shadow-[0_0_30px_rgba(16,185,129,0.15)]",
-    gradientFrom: "from-emerald-500/20",
-    gradientTo: "to-emerald-500/5",
-  },
-  {
-    id: "family-care",
-    phase: "03",
-    icon: Heart,
-    workType: "in-house" as const,
-    title: "Family Care Platform",
-    tagline:
-      "AI-powered coordination for elderly care. Privacy-first, designed to make new tech accessible to families.",
-    keyBenefits: [
-      "Intelligent scheduling with family-context awareness",
-      "SMS to LLM, calendar integration",
-    ],
-
-    timeline: "Under Development",
-    status: "Planning",
-    statusColor: "text-purple-400",
-    statusBg: "bg-purple-500/10 border-purple-500/20",
-    iconColor: "text-purple-400",
-    glowColor: "bg-purple-500/10",
-    hoverGlow: "shadow-[0_0_30px_rgba(168,85,247,0.15)]",
-    gradientFrom: "from-purple-500/20",
-    gradientTo: "to-purple-500/5",
   },
 ];
 
-const industries = [
-  {
-    title: "Advisory and Private Capital",
-    description:
-      "Portals for deal flow, client management, investor visibility and portfolio information.",
-    stats: "Client, admin and investor workflows",
-    techStack: "Focus: Deal flow, reporting, AI search, document intake",
-    icon: TrendingUp,
-    iconColor: "text-blue-400",
-    glowColor: "bg-blue-500/10",
-  },
-  {
-    title: "Finance and Lending",
-    description:
-      "Custom deal portals that reduce email handoffs, document chasing and unnecessary SaaS seats.",
-    stats: "Purpose-built workflow systems",
-    techStack: "Focus: Applications, approvals, reporting, document workflows",
-    icon: Building2,
-    iconColor: "text-emerald-400",
-    glowColor: "bg-emerald-500/10",
-  },
-  {
-    title: "Construction and Field Operations",
-    description:
-      "Secure portals for project records, document intake, permit visibility and SOP review.",
-    stats: "Broad focus area",
-    techStack: "Focus: Workbooks, permits, SOP checks, AI-assisted review",
-    icon: HardHat,
-    iconColor: "text-amber-400",
-    glowColor: "bg-amber-500/10",
-  },
-  {
-    title: "Service Businesses and Client Portals",
-    description:
-      "Client-facing portals and internal tools for teams that need a cleaner way to deliver work.",
-    stats: "One place for clients and teams",
-    techStack: "Focus: Status, files, approvals, dashboards, communications",
-    icon: Users,
-    iconColor: "text-purple-400",
-    glowColor: "bg-purple-500/10",
-  },
-];
-
-const testimonials = [
-  {
-    id: "jason",
-    quote:
-      "We wanted to create an AI platform to help run our advisory business, something that could manage clients, streamline admin and help automate our service delivery. Freddy took the time to really understand what we needed and delivered something right on the mark, fast, professional, and great to work with.",
-    author: "Jason Holdsworth",
-    role: "Founding Partner - Voluntas Group",
-    highlight: "Production Platform",
-    projectResult:
-      "85% onboarding time saved; 21 clients, 70 submissions on the platform.",
-    accentColor: "text-blue-400",
-    borderColor: "border-blue-500/20",
-    hoverBorderColor: "hover:border-blue-500/30",
-    badgeColor: "bg-blue-500/10 border-blue-500/20 text-blue-400",
-    glowColor: "shadow-[0_0_25px_rgba(59,130,246,0.12)]",
-    image: "/images/jason-h-profile.jpg",
-  },
-  {
-    id: "seb",
-    quote:
-      "Fieldporter combines sharp problem solving with excellent communication and handy technical expertise. Their systematic approach, enthusiasm for learning and actually getting stuck into the complex business challenges set them apart.",
-    author: "Seb Lindner",
-    role: "Founder & CEO, Web3 Daily",
-    highlight: "Problem Solving",
-    projectResult: "Strategic research enabled a successful product pivot.",
-    accentColor: "text-emerald-400",
-    borderColor: "border-emerald-500/20",
-    hoverBorderColor: "hover:border-emerald-500/30",
-    badgeColor: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400",
-    glowColor: "shadow-[0_0_25px_rgba(16,185,129,0.12)]",
-    image: "/images/seb-lindner-profile.jpg",
-  },
-  {
-    id: "steve",
-    quote:
-      "We had a rare find. After a previous development company failed to deliver, Freddy stepped in and completely rebuilt our coaching platform from the ground up. His integrity and professionalism exceeded expectations.",
-    author: "Steve Papps",
-    role: "Life Coach",
-    highlight: "Delivery Excellence",
-    projectResult:
-      "Platform live 12+ months; 15 hours saved weekly on admin and scheduling.",
-    accentColor: "text-blue-400",
-    borderColor: "border-blue-500/20",
-    hoverBorderColor: "hover:border-blue-500/30",
-    badgeColor: "bg-blue-500/10 border-blue-500/20 text-blue-400",
-    glowColor: "shadow-[0_0_25px_rgba(59,130,246,0.12)]",
-    image: "/images/steve-p-profile.jpg",
-  },
-  {
-    id: "paul",
-    quote:
-      "Freddy was an asset to our team. He demonstrated a deep understanding of AI, including the latest tools, and an exceptional ability to get up the learning curve fast on new industries or topics. Showed experience and maturity beyond his years.",
-    author: "Paul Rataul",
-    role: "AI Startup Founder in Stealth",
-    highlight: "Strategic Thinking",
-    projectResult:
-      "AI capability and research support for product and strategy.",
-    accentColor: "text-purple-400",
-    borderColor: "border-purple-500/20",
-    hoverBorderColor: "hover:border-purple-500/30",
-    badgeColor: "bg-purple-500/10 border-purple-500/20 text-purple-400",
-    glowColor: "shadow-[0_0_25px_rgba(168,85,247,0.12)]",
-    image: "/images/paul-r-profile.jpg",
-  },
-];
-
-// Enhanced industry card with premium effects
-const IndustryCard = memo(
-  ({
-    title,
-    description,
-    stats,
-    techStack,
-    icon: Icon,
-    iconColor,
-    glowColor,
-    delay,
-    isInView,
-  }: {
-    title: string;
-    description: string;
-    stats: string;
-    techStack: string;
-    icon: React.ElementType;
-    iconColor: string;
-    glowColor: string;
-    delay: number;
-    isInView: boolean;
-  }) => {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 20 }}
-        transition={{ delay, duration: 0.4, ease: "easeOut" }}
-        className="group relative h-full"
-      >
-        <div className="relative p-6 lg:p-8 rounded-2xl bg-white/20 dark:bg-black/20 backdrop-blur-sm border border-gray-900/10 dark:border-white/10 hover:bg-white/30 dark:hover:bg-black/30 hover:border-gray-900/20 dark:hover:border-white/20 transition-all duration-300 h-full flex flex-col min-h-[200px] lg:min-h-[220px] overflow-hidden">
-          {/* Subtle gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent rounded-2xl" />
-
-          {/* Border Glow Effect */}
-          <div
-            className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r ${glowColor.replace("bg-", "from-").replace("/10", "/20")} to-transparent pointer-events-none p-[1px] -z-10`}
-            style={{
-              mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent to-transparent" />
-          </div>
-
-          <div className="relative z-10 flex flex-col h-full items-center text-center">
-            <div
-              className={`w-10 h-10 lg:w-12 lg:h-12 mb-4 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-sm flex items-center justify-center group-hover:${glowColor} transition-all duration-300`}
-            >
-              <Icon className={`w-5 h-5 lg:w-6 lg:h-6 ${iconColor}`} />
-            </div>
-
-            <div className="flex-1 space-y-2 w-full">
-              <h4 className="text-base lg:text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-300 transition-colors duration-300 leading-tight">
-                {title}
-              </h4>
-
-              <div className="relative grid place-items-center min-h-[60px]">
-                {/* Description - Fades out on hover */}
-                <p className="text-gray-500 dark:text-gray-400 leading-relaxed text-sm transition-opacity duration-300 group-hover:opacity-0 col-start-1 row-start-1">
-                  {description}
-                </p>
-
-                {/* Tech Stack - Fades in on hover */}
-                <div className="text-gray-600 dark:text-gray-300 leading-relaxed text-xs lg:text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 col-start-1 row-start-1">
-                  <span className="bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent">
-                    {techStack}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Micro-Stats */}
-            <div className="mt-4 pt-4 border-t border-gray-900/5 dark:border-white/5 w-full">
-              <span className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider group-hover:text-blue-400/80 transition-colors duration-300">
-                {stats}
-              </span>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-    );
-  },
-);
-
-IndustryCard.displayName = "IndustryCard";
-
-// Enhanced testimonial with premium glassmorphism
-const TestimonialCard = memo(
-  ({
-    testimonial,
-    index,
-    isFeatured = false,
-  }: {
-    testimonial: (typeof testimonials)[0];
-    index: number;
-    isFeatured?: boolean;
-  }) => {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{
-          delay: index * 0.1,
-          duration: 0.6,
-          ease: "easeOut",
-        }}
-        className={`group relative h-full ${isFeatured ? "h-full" : ""}`}
-      >
-        {/* Subtle glow on hover */}
-        <div
-          className={`absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${testimonial.glowColor}`}
-        />
-
-        <div
-          className={`
-        relative p-8 lg:p-10 rounded-3xl border backdrop-blur-sm
-        ${testimonial.borderColor} ${testimonial.hoverBorderColor}
-        bg-white/25 dark:bg-black/25 hover:bg-white/35 dark:hover:bg-black/35 
-        transition-all duration-300 h-full flex flex-col
-      `}
-        >
-          {/* Premium glassmorphism layers */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/[0.03] dark:from-white/[0.03] to-transparent rounded-3xl" />
-          <div className="absolute inset-0 bg-gradient-to-t from-white/10 dark:from-black/10 to-transparent rounded-3xl" />
-
-          <div className="relative z-10 flex flex-col h-full">
-            <div className="flex items-start justify-between mb-8">
-              <div className="flex items-center gap-4">
-                <div className="relative w-14 h-14 rounded-full overflow-hidden border border-white/10 shadow-lg">
-                  <Image
-                    src={testimonial.image}
-                    alt={testimonial.author}
-                    fill
-                    className="object-cover"
-                    sizes="56px"
-                  />
-                </div>
-                <div>
-                  <div className="text-gray-900 dark:text-white font-semibold text-lg tracking-[-0.01em]">
-                    {testimonial.author}
-                  </div>
-                  <div
-                    className={`${testimonial.accentColor} text-sm font-normal`}
-                  >
-                    {testimonial.role}
-                  </div>
-                </div>
-              </div>
-              <Quote
-                className={`w-8 h-8 ${testimonial.accentColor} opacity-50`}
-              />
-            </div>
-
-            <blockquote
-              className={`text-gray-800 dark:text-gray-100 leading-relaxed font-light mb-4 flex-1 tracking-[-0.01em] ${
-                isFeatured ? "text-xl lg:text-2xl" : "text-lg lg:text-xl"
-              }`}
-            >
-              &ldquo;{testimonial.quote}&rdquo;
-            </blockquote>
-
-            {"projectResult" in testimonial && testimonial.projectResult && (
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-                {testimonial.projectResult}
-              </p>
-            )}
-
-            <div className="flex justify-start mt-auto">
-              <div
-                className={`px-4 py-2 rounded-xl ${testimonial.badgeColor} backdrop-blur-sm`}
-              >
-                <span className="text-sm font-medium">
-                  {testimonial.highlight}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-    );
-  },
-);
-
-TestimonialCard.displayName = "TestimonialCard";
-
-// Slideshow component for secondary testimonials
-const TestimonialSlider = ({ items }: { items: typeof testimonials }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
-
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 100 : -100,
-      opacity: 0,
-      scale: 0.95,
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1,
-      scale: 1,
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? 100 : -100,
-      opacity: 0,
-      scale: 0.95,
-    }),
-  };
-
-  const swipeConfidenceThreshold = 10000;
-  const swipePower = (offset: number, velocity: number) => {
-    return Math.abs(offset) * velocity;
-  };
-
-  const paginate = useCallback(
-    (newDirection: number) => {
-      setDirection(newDirection);
-      setCurrentIndex((prev) => {
-        let nextIndex = prev + newDirection;
-        if (nextIndex < 0) nextIndex = items.length - 1;
-        if (nextIndex >= items.length) nextIndex = 0;
-        return nextIndex;
-      });
-    },
-    [items.length],
-  );
-
-  const currentItem = items[currentIndex];
-
-  if (!currentItem) return null;
-
-  return (
-    <div className="relative h-full flex flex-col justify-center min-h-[400px]">
-      <div className="relative h-full w-full">
-        <AnimatePresence initial={false} custom={direction} mode="wait">
-          <motion.div
-            key={currentIndex}
-            custom={direction}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              x: { type: "spring", stiffness: 300, damping: 30 },
-              opacity: { duration: 0.2 },
-            }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={1}
-            onDragEnd={(e, { offset, velocity }) => {
-              const swipe = swipePower(offset.x, velocity.x);
-
-              if (swipe < -swipeConfidenceThreshold) {
-                paginate(1);
-              } else if (swipe > swipeConfidenceThreshold) {
-                paginate(-1);
-              }
-            }}
-            className="absolute inset-0"
-          >
-            <TestimonialCard testimonial={currentItem} index={currentIndex} />
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Controls */}
-      <div className="flex items-center justify-center gap-4 mt-8 absolute -bottom-12 left-0 right-0 z-20">
-        <button
-          onClick={() => paginate(-1)}
-          className="p-2 rounded-full bg-white/10 hover:bg-white/20 dark:bg-white/5 dark:hover:bg-white/10 transition-colors backdrop-blur-sm border border-white/10"
-          aria-label="Previous testimonial"
-        >
-          <ChevronLeft className="w-5 h-5 text-gray-900 dark:text-white" />
-        </button>
-        <div className="flex gap-2">
-          {items.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => {
-                setDirection(idx > currentIndex ? 1 : -1);
-                setCurrentIndex(idx);
-              }}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                idx === currentIndex
-                  ? "bg-blue-500 w-6"
-                  : "bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600"
-              }`}
-              aria-label={`Go to testimonial ${idx + 1}`}
-            />
-          ))}
-        </div>
-        <button
-          onClick={() => paginate(1)}
-          className="p-2 rounded-full bg-white/10 hover:bg-white/20 dark:bg-white/5 dark:hover:bg-white/10 transition-colors backdrop-blur-sm border border-white/10"
-          aria-label="Next testimonial"
-        >
-          <ChevronRight className="w-5 h-5 text-gray-900 dark:text-white" />
-        </button>
-      </div>
-    </div>
-  );
+const jasonTestimonial = {
+  quote:
+    "We wanted to create an AI platform to help run our advisory business, something that could manage clients, streamline admin and help automate our service delivery. Freddy took the time to really understand what we needed and delivered something right on the mark, fast, professional, and great to work with.",
+  author: "Jason Holdsworth",
+    role: "Founding Partner - VOLOCEAN",
+  projectResult:
+    "85% onboarding time saved; 21 clients, 70 submissions on the platform.",
+  image: "/images/jason-h-profile.jpg",
 };
 
-// Enhanced project card with premium effects
 const ProjectCard = memo(
-  ({
-    project,
-    index,
-  }: {
-    project: (typeof projects)[0] & {
-      clientImage?: string;
-      clientName?: string;
-    };
-    index: number;
-  }) => {
-    const [isHovered, setIsHovered] = useState(false);
-    const router = useRouter();
-
-    const handleClick = useCallback(() => {
-      trackServiceInterest(project.id, "learn_more", {
-        service_name: project.title,
-        location: "portfolio_section",
-      });
-
-      const sectionMap: { [key: string]: string } = {
-        "voluntas-intelligence": "portfolio-section",
-        "papps-mastery": "portfolio-section",
-        "family-care": "portfolio-section",
-      };
-
-      sessionStorage.setItem("targetSection", sectionMap[project.id] || "");
-      router.push("/portfolio");
-    }, [project.id, project.title, router]);
+  ({ project, index }: { project: (typeof projects)[0]; index: number }) => {
+    const Icon = project.icon;
 
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
+      <motion.article
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{
-          delay: index * 0.15,
-          duration: 0.6,
-          ease: "easeOut",
-        }}
-        className="group relative cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-fieldporter-blue focus-visible:ring-offset-2 rounded-3xl"
-        role="button"
-        tabIndex={0}
-        onClick={handleClick}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            handleClick();
-          }
-        }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        aria-label={`View project details for ${project.title}`}
+        viewport={{ once: true, margin: "-10%" }}
+        transition={{ delay: index * 0.1, duration: 0.5 }}
       >
-        {/* Phase number - tucked in so it doesn't overlap on mobile */}
-        <div className="absolute top-4 left-4 lg:-top-8 lg:-left-8 text-4xl lg:text-7xl font-thin text-gray-900/5 dark:text-white/5 pointer-events-none select-none">
-          {project.phase}
-        </div>
-
-        {/* Premium hover glow */}
-        <div
-          className={`absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${project.hoverGlow}`}
-        />
-
-        <div
-          className={`
-        relative p-6 lg:p-8 xl:p-10 rounded-3xl border border-gray-900/10 dark:border-white/10 backdrop-blur-sm
-        bg-white/25 dark:bg-black/25 hover:bg-white/35 dark:hover:bg-black/35 hover:border-gray-900/20 dark:hover:border-white/20
-        transition-all duration-300 hover:shadow-2xl
-        h-full min-h-[360px] sm:min-h-[400px] md:min-h-[440px] lg:min-h-[480px]
-      `}
+        <Link
+          href="/portfolio"
+          className="group block h-full rounded-2xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02] p-6 sm:p-8 transition-colors duration-300 hover:border-gray-900/20 dark:hover:border-white/20"
         >
-          {/* Premium glassmorphism layers */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/[0.03] dark:from-white/[0.03] to-transparent rounded-3xl" />
-          <div
-            className={`absolute inset-0 bg-gradient-to-br ${project.gradientFrom} ${project.gradientTo} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-          />
-
-          <div className="relative z-10 h-full flex flex-col min-w-0">
-            {/* Header */}
-            <div className="flex items-start justify-between mb-6 lg:mb-8">
-              <div className="flex items-center gap-3">
-                <div className="p-4 lg:p-5 rounded-2xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 backdrop-blur-sm group-hover:bg-gray-900/15 dark:group-hover:bg-white/15 transition-all duration-300">
-                  <project.icon
-                    className={`w-7 h-7 lg:w-8 lg:h-8 ${project.iconColor}`}
-                  />
-                </div>
-                {project.clientImage && (
-                  <div className="relative w-12 h-12 rounded-full overflow-hidden border border-white/10 shadow-sm">
-                    <Image
-                      src={project.clientImage}
-                      alt={project.clientName || "Client"}
-                      fill
-                      className="object-cover"
-                      sizes="48px"
-                    />
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-col items-end gap-2">
-                <div
-                  className={`px-4 lg:px-5 py-2 lg:py-2.5 rounded-full border font-medium text-xs lg:text-sm ${project.statusBg} ${project.statusColor} backdrop-blur-sm`}
-                >
-                  {project.status}
-                </div>
-                <span className="text-[10px] lg:text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                  {project.workType === "client"
-                    ? "Client work"
-                    : "In-house venture"}
-                </span>
-              </div>
+          <div className="flex items-start justify-between gap-4 mb-5">
+            <div className="p-3 rounded-xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20">
+              <Icon className="w-6 h-6 text-blue-500 dark:text-blue-400" />
             </div>
-
-            {/* Content */}
-            <div className="flex-1 space-y-6 lg:space-y-8">
-              <div className="space-y-3 lg:space-y-4">
-                <h3 className="text-xl lg:text-2xl xl:text-3xl font-semibold text-gray-900 dark:text-white leading-tight tracking-[-0.01em] line-clamp-2">
-                  {project.title}
-                </h3>
-                <p className="text-base lg:text-lg text-gray-700 dark:text-gray-200 font-light leading-relaxed line-clamp-3">
-                  {project.tagline}
-                </p>
-              </div>
-
-              {/* Timeline */}
-              <div className="flex items-center space-x-3">
-                <Shield className="w-4 h-4 text-blue-400" />
-                <span className="text-blue-400 font-medium text-sm">
-                  Status:
-                </span>
-                <span className="text-gray-600 dark:text-gray-300 text-sm font-medium">
-                  {project.timeline}
-                </span>
-              </div>
-
-              {/* Key Benefits */}
-              <div className="space-y-3">
-                {project.keyBenefits.map((benefit, idx) => (
-                  <div key={idx} className="flex items-start space-x-3">
-                    <div className="relative flex-shrink-0 mt-1.5">
-                      <div
-                        className={`w-2 h-2 rounded-full ${project.iconColor.replace("text-", "bg-")}`}
-                      />
-                      <div
-                        className={`absolute inset-0 ${project.glowColor} blur-sm opacity-60`}
-                      />
-                    </div>
-                    <span className="text-gray-700 dark:text-gray-200 leading-relaxed text-sm lg:text-base group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300">
-                      {benefit}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              {"applyUrl" in project && project.applyUrl && (
-                <p className="text-sm lg:text-base text-gray-600 dark:text-gray-300 pt-2">
-                  If you&apos;d like to apply for capital raise or growth
-                  services,{" "}
-                  <Link
-                    href={project.applyUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="font-medium text-blue-500 hover:text-blue-400 underline underline-offset-2"
-                  >
-                    apply here
-                  </Link>
-                  .
-                </p>
-              )}
-            </div>
-
-            {/* Enhanced arrow indicator */}
-            <div className="absolute bottom-8 right-8 opacity-0 group-hover:opacity-100 transition-all duration-300">
-              <div className="p-2 rounded-full bg-gray-900/5 dark:bg-white/5 backdrop-blur-sm">
-                <ArrowRight className="w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300" />
-              </div>
-            </div>
+            <span className="text-xs font-medium text-green-600 dark:text-green-400 border border-green-500/20 bg-green-500/10 px-2.5 py-1 rounded-full">
+              {project.status}
+            </span>
           </div>
-        </div>
-      </motion.div>
+
+          <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white leading-tight mb-3">
+            {project.title}
+          </h3>
+          <p className="text-sm sm:text-base text-gray-600 dark:text-white/70 font-light leading-relaxed mb-6">
+            {project.tagline}
+          </p>
+
+          <div className="flex items-center gap-2 text-sm font-medium text-blue-500 dark:text-blue-400 group-hover:gap-3 transition-all duration-300">
+            <span>View work</span>
+            <ArrowRight className="w-4 h-4" />
+          </div>
+        </Link>
+      </motion.article>
     );
   },
 );
@@ -698,101 +79,71 @@ const ProjectCard = memo(
 ProjectCard.displayName = "ProjectCard";
 
 export function PortfolioSection() {
-  const ref = useRef(null);
-  // FIXED: Reduced negative margin to prevent overlap
-  const isInView = useInView(ref, { once: true, margin: "-10%" });
-
   return (
     <section
-      ref={ref}
       id="portfolio"
       className="relative section-rhythm-lg overflow-hidden bg-transparent"
     >
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Enhanced Section Header */}
-        <div className="text-center mb-16 md:mb-20">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-900 dark:text-white mb-8 md:mb-10 leading-tight tracking-[-0.02em] break-words">
-            Projects We&apos;re{" "}
-            <span className="relative">
-              <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                Building
-              </span>
-              {/* Subtle glow effect */}
-              <div className="absolute -inset-x-4 -inset-y-2 bg-blue-500/20 blur-2xl opacity-30" />
-            </span>
+        <div className="text-center mb-12 md:mb-16">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-6 leading-tight tracking-[-0.02em] break-words">
+            Live client work
           </h2>
-          <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed font-light">
-            Real applications we&apos;re developing while helping clients.
-            Everything we recommend comes from hands-on experience.
+          <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
+            Production platforms we built and continue to improve with clients.
           </p>
         </div>
 
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12 mb-20 md:mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-16 md:mb-20">
           {projects.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
           ))}
         </div>
 
-        {/* Industries Section */}
-        <div className="mb-20 md:mb-24">
-          <div className="text-center mb-12 md:mb-16">
-            <h3 className="text-3xl sm:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-6 md:mb-8 leading-tight tracking-[-0.02em]">
-              Sectors We{" "}
-              <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                Focus On
-              </span>
-            </h3>
-            <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
-              Strongest track record in advisory, capital, finance, and service
-              businesses. We also work with construction and field teams where
-              the workflow fits.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
-            {industries.map((industry, index) => (
-              <IndustryCard
-                key={index}
-                {...industry}
-                delay={index * 0.1}
-                isInView={isInView}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Testimonials Section */}
-        <div>
-          <div className="text-center mb-12 md:mb-16">
-            <h3 className="text-3xl sm:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-6 md:mb-8 leading-tight tracking-[-0.02em]">
-              Client{" "}
-              <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                Experiences
-              </span>
-            </h3>
-            <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
-              Real feedback from completed projects with measurable outcomes.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            {/* Featured Testimonial (Jason) */}
-            <div className="h-full min-h-[400px]">
-              {testimonials[0] && (
-                <TestimonialCard
-                  testimonial={testimonials[0]}
-                  index={0}
-                  isFeatured={true}
-                />
-              )}
+        <motion.blockquote
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="max-w-3xl mx-auto rounded-2xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02] p-6 sm:p-8 md:p-10"
+        >
+          <Quote
+            className="w-8 h-8 text-blue-500/50 dark:text-blue-400/50 mb-4"
+            aria-hidden
+          />
+          <p className="text-base sm:text-lg text-gray-700 dark:text-gray-200 leading-relaxed font-light mb-6">
+            &ldquo;{jasonTestimonial.quote}&rdquo;
+          </p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+            {jasonTestimonial.projectResult}
+          </p>
+          <footer className="flex items-center gap-4">
+            <Image
+              src={jasonTestimonial.image}
+              alt={jasonTestimonial.author}
+              width={48}
+              height={48}
+              className="rounded-full object-cover"
+            />
+            <div>
+              <cite className="not-italic font-semibold text-gray-900 dark:text-white">
+                {jasonTestimonial.author}
+              </cite>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {jasonTestimonial.role}
+              </p>
             </div>
+          </footer>
+        </motion.blockquote>
 
-            {/* Rotating Testimonials */}
-            <div className="h-full min-h-[400px] mt-8 lg:mt-0 pb-16 lg:pb-0">
-              <TestimonialSlider items={testimonials.slice(1)} />
-            </div>
-          </div>
+        <div className="text-center mt-12">
+          <Link
+            href="/portfolio"
+            className="inline-flex items-center gap-2 text-sm font-medium text-blue-500 dark:text-blue-400 hover:gap-3 transition-all duration-300"
+          >
+            See full portfolio
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </section>

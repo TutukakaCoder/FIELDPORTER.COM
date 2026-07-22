@@ -216,12 +216,18 @@ const getTimelineBadgeStyle = (timelineStyle?: string) => {
       return "bg-purple-500/20 border-purple-500/30 text-purple-400";
     case "research":
       return "bg-emerald-500/20 border-emerald-500/30 text-emerald-400";
+    case "development":
+      return "bg-emerald-500/20 border-emerald-500/30 text-emerald-400";
+    case "automation":
+      return "bg-purple-500/20 border-purple-500/30 text-purple-400";
+    case "strategic":
+      return "bg-orange-500/20 border-orange-500/30 text-orange-400";
     case "portfolio":
       return "bg-orange-500/20 border-orange-500/30 text-orange-400";
     case "advisory":
       return "bg-blue-500/20 border-blue-500/30 text-blue-400";
     default:
-      return "bg-gray-500/20 border-gray-500/30 text-gray-400";
+      return "bg-blue-500/20 border-blue-500/30 text-blue-400";
   }
 };
 
@@ -257,7 +263,7 @@ function InteractiveServiceShowcase() {
   return (
     <section
       id="services-showcase"
-      className="relative section-rhythm-xl overflow-hidden"
+      className="relative section-rhythm-lg overflow-hidden"
     >
       {/* Add invisible anchor elements for each service */}
       {services.map((service) => (
@@ -265,10 +271,24 @@ function InteractiveServiceShowcase() {
       ))}
 
       <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:via-gray-950 dark:to-black" />
+      <div
+        className="absolute -top-[10%] left-[-5%] w-[50vw] max-w-[520px] h-[40vh] max-h-[420px] rounded-full opacity-[0.08] dark:opacity-[0.12] blur-[100px] pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(59, 130, 246, 0.4), transparent 70%)",
+        }}
+      />
+      <div
+        className="absolute bottom-[-5%] right-[-5%] w-[45vw] max-w-[480px] h-[35vh] max-h-[380px] rounded-full opacity-[0.06] dark:opacity-[0.1] blur-[100px] pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(16, 185, 129, 0.35), transparent 70%)",
+        }}
+      />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-20 md:mb-32 lg:mb-40">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-gray-900 dark:text-white mb-6 md:mb-8 lg:mb-12 leading-tight tracking-[-0.02em]">
+        <div className="text-center mb-12 md:mb-16">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-gray-900 dark:text-white mb-4 md:mb-6 leading-tight tracking-[-0.02em]">
             What We{" "}
             <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
               Build
@@ -280,7 +300,7 @@ function InteractiveServiceShowcase() {
           </p>
         </div>
 
-        <div className="flex justify-center gap-2 md:gap-3 lg:gap-6 mb-16 md:mb-20 lg:mb-32 flex-wrap px-4">
+        <div className="flex justify-center gap-2 md:gap-3 lg:gap-4 mb-10 md:mb-14 flex-wrap px-4">
           {services.map((service, index) => {
             const ServiceIcon = service.icon;
             return (
@@ -322,22 +342,22 @@ function InteractiveServiceShowcase() {
             transition={{ duration: 0.2 }}
             className="relative"
           >
-            <div className="grid lg:grid-cols-2 gap-8 md:gap-16 lg:gap-24 xl:gap-32 items-start lg:items-center">
-              <div className="space-y-8 md:space-y-12">
+            <div className="grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start">
+              <div className="space-y-6 md:space-y-8">
                 <div className="flex items-center gap-3 md:gap-4">
                   <div
-                    className={`w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-gray-900/5 dark:bg-white/5 border ${currentService.borderColor} flex items-center justify-center backdrop-blur-sm`}
+                    className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gray-900/5 dark:bg-white/5 border ${currentService.borderColor} flex items-center justify-center backdrop-blur-sm`}
                   >
-                    <span className="text-lg md:text-2xl font-bold text-gray-900 dark:text-white">
+                    <span className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
                       {currentService.phase}
                     </span>
                   </div>
                   {React.createElement(currentService.icon, {
-                    className: `w-6 h-6 md:w-8 md:h-8 ${currentService.iconColor}`,
+                    className: `w-6 h-6 md:w-7 md:h-7 ${currentService.iconColor}`,
                   })}
                 </div>
 
-                <div className="space-y-6 md:space-y-8">
+                <div className="space-y-5 md:space-y-6">
                   <h3 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-900 dark:text-white leading-tight">
                     {currentService.title}
                   </h3>
@@ -346,72 +366,74 @@ function InteractiveServiceShowcase() {
                     {currentService.description}
                   </p>
 
-                  <details className="group mt-6 md:mt-8">
-                    <summary className="flex items-center justify-between cursor-pointer text-gray-900 dark:text-white font-medium text-base md:text-lg hover:text-blue-400 transition-all duration-300 list-none touch-manipulation hover:pl-2">
-                      <span>How This Works</span>
-                      <ChevronDown className="w-5 h-5 md:w-6 md:h-6 transition-transform duration-300 group-open:rotate-180 group-hover:text-blue-400" />
-                    </summary>
-                    <div className="mt-4 md:mt-6 space-y-4 md:space-y-6">
-                      <p className="text-base md:text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
-                        {currentService.detailedExplanation}
-                      </p>
+                  <div className="space-y-3 md:space-y-4">
+                    <h4 className="text-gray-900 dark:text-white font-semibold text-base md:text-lg">
+                      Key Outcomes
+                    </h4>
+                    <ul className="space-y-2.5 md:space-y-3">
+                      {currentService.outcomes.map((outcome, index) => (
+                        <li
+                          key={index}
+                          className="flex items-start space-x-3 text-base md:text-lg text-gray-800 dark:text-gray-100"
+                        >
+                          <CheckCircle
+                            className={`w-5 h-5 ${currentService.iconColor} flex-shrink-0 mt-0.5`}
+                          />
+                          <span>{outcome}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-                      <div className="space-y-3 md:space-y-4">
-                        <h4 className="text-gray-900 dark:text-white font-semibold text-lg md:text-xl">
-                          Key Outcomes:
-                        </h4>
-                        <ul className="space-y-2 md:space-y-3">
-                          {currentService.outcomes.map((outcome, index) => (
-                            <li
-                              key={index}
-                              className="flex items-start space-x-3 md:space-x-4 text-base md:text-lg text-gray-800 dark:text-gray-100"
-                            >
-                              <CheckCircle
-                                className={`w-5 h-5 md:w-6 md:h-6 ${currentService.iconColor} flex-shrink-0 mt-0.5 md:mt-1`}
-                              />
-                              <span>{outcome}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
+                  <details className="group mt-2">
+                    <summary className="flex items-center justify-between cursor-pointer text-gray-900 dark:text-white font-medium text-base md:text-lg hover:text-blue-400 transition-all duration-300 list-none touch-manipulation">
+                      <span>How This Works</span>
+                      <ChevronDown className="w-5 h-5 transition-transform duration-300 group-open:rotate-180 group-hover:text-blue-400" />
+                    </summary>
+                    <p className="mt-4 text-base md:text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
+                      {currentService.detailedExplanation}
+                    </p>
                   </details>
                 </div>
               </div>
 
               <div className="relative order-first lg:order-last">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/5 rounded-3xl blur-xl opacity-60" />
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-emerald-500/10 rounded-3xl blur-xl opacity-60" />
 
                 <div
                   className={`
-                  relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border ${currentService.borderColor} 
-                  rounded-3xl p-8 md:p-12 lg:p-16 xl:p-20 transition-colors duration-200
-                  hover:bg-gray-900/[0.04] dark:hover:bg-white/[0.04] ${currentService.hoverBorderColor}
-                  shadow-[0_20px_40px_rgba(0,0,0,0.3)]
+                  relative bg-gray-900/[0.03] dark:bg-white/[0.03] backdrop-blur-xl border ${currentService.borderColor} 
+                  rounded-3xl p-8 md:p-10 lg:p-12 transition-colors duration-200
+                  hover:bg-gray-900/[0.05] dark:hover:bg-white/[0.05] ${currentService.hoverBorderColor}
+                  shadow-[0_20px_40px_rgba(0,0,0,0.25)]
                 `}
                 >
                   <div
-                    className={`inline-flex px-4 md:px-6 py-2 md:py-3 rounded-xl border backdrop-blur-md font-medium text-sm md:text-lg mb-6 md:mb-8 ${getTimelineBadgeStyle(currentService.timelineStyle)}`}
+                    className={`inline-flex px-4 py-2 rounded-xl border backdrop-blur-md font-medium text-sm md:text-base mb-6 ${getTimelineBadgeStyle(currentService.timelineStyle)}`}
                   >
                     {currentService.timeline}
                   </div>
 
                   <div
-                    className={`w-16 h-16 md:w-24 md:h-24 rounded-2xl bg-gray-900/5 dark:bg-white/5 border ${currentService.borderColor} flex items-center justify-center mb-6 md:mb-8 backdrop-blur-sm`}
+                    className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gray-900/5 dark:bg-white/5 border ${currentService.borderColor} flex items-center justify-center mb-6 backdrop-blur-sm`}
                   >
                     {React.createElement(currentService.icon, {
-                      className: `w-8 h-8 md:w-12 md:h-12 ${currentService.iconColor} transition-transform duration-500 group-hover/card:scale-110`,
+                      className: `w-8 h-8 md:w-9 md:h-9 ${currentService.iconColor}`,
                     })}
                   </div>
 
-                  <blockquote className="text-lg md:text-xl text-gray-600 dark:text-gray-300 italic leading-relaxed border-l-4 border-blue-500/30 pl-4 md:pl-6">
+                  <p className="text-base md:text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-6">
+                    {currentService.detailedExplanation}
+                  </p>
+
+                  <blockquote className="text-base md:text-lg text-gray-600 dark:text-gray-300 italic leading-relaxed border-l-4 border-blue-500/40 pl-4">
                     &ldquo;{currentService.proof}&rdquo;
                   </blockquote>
                 </div>
               </div>
             </div>
 
-            <div className="flex justify-center gap-4 md:gap-6 mt-16">
+            <div className="flex justify-center gap-4 md:gap-6 mt-10 md:mt-12">
               <button
                 type="button"
                 onClick={() =>

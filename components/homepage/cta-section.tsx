@@ -14,26 +14,17 @@ export function CTASection() {
     });
   };
 
-  const handlePortfolioCTA = () => {
-    trackCTA("service_interest", "View Work", {
-      location: "cta_section",
-      button_position: "secondary_cta",
-    });
-  };
-
   return (
     <section className="relative section-rhythm-lg overflow-hidden bg-transparent">
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* CTA Container */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative p-8 md:p-12 rounded-3xl backdrop-blur-md border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02]"
+          className="relative p-8 md:p-12 rounded-3xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02]"
         >
           <div className="relative z-10 space-y-8 md:space-y-10">
-            {/* Headline */}
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-light text-gray-900 dark:text-white leading-tight tracking-[-0.02em] break-words">
               Build the system your business has been missing.
             </h2>
@@ -43,8 +34,7 @@ export function CTASection() {
               or AI feature that would make the biggest difference first.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
+            <div className="flex justify-center">
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -67,30 +57,8 @@ export function CTASection() {
                   </Link>
                 </Button>
               </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full sm:w-auto"
-              >
-                <Button
-                  variant="secondary"
-                  size="lg"
-                  className="w-full sm:min-w-[200px] group"
-                  asChild
-                >
-                  <Link
-                    href="/portfolio"
-                    onClick={handlePortfolioCTA}
-                    className="inline-flex items-center justify-center gap-2"
-                  >
-                    <span>See Our Work</span>
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
-                </Button>
-              </motion.div>
             </div>
 
-            {/* Trust Note */}
             <p className="text-sm text-gray-500 dark:text-gray-400 max-w-lg mx-auto leading-relaxed">
               No sales pitch. Just a practical conversation about what should
               be built, what should not, and what it would take.

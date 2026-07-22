@@ -1,10 +1,8 @@
 import {
-  AIAuditSection,
   CTASection,
   HeroSection,
   PortfolioSection,
   ServicesSection,
-  TrustIndicatorBar,
 } from "@/components/homepage";
 import { PageWrapper } from "@/components/layout";
 import { HERO_HEADLINE } from "@/config/constants";
@@ -104,10 +102,8 @@ export default function Home() {
       <UnifiedAuroraBackground />
       <div className="relative z-10 space-y-0">
         <HeroSection />
-        <TrustIndicatorBar />
         <ServicesSection />
         <PortfolioSection />
-        <AIAuditSection />
         <CTASection />
       </div>
     </PageWrapper>

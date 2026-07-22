@@ -119,6 +119,12 @@ export const FIELDPORTER_KNOWLEDGE = {
         ],
         category: "Production System",
       },
+      gogoprop_portal: {
+        status: "In development / client UAT",
+        description:
+          "Phase 1 specialist property finance portal for staff, borrowers, and brokers — enquiry through DIP, full application, and identity checks",
+        category: "Full product build",
+      },
     },
     ai_automation: {
       voycap_news_feed: {

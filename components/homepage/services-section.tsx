@@ -28,12 +28,6 @@ const services = [
       "Dashboards, forms, uploads, approvals and activity tracking",
       "A focused alternative to spreadsheet, email and oversized SaaS workflows",
     ],
-    examples: [
-      "Client portals",
-      "Investor portals",
-      "Admin tools",
-      "Deal flow",
-    ],
     timeline: "8-10 weeks typical",
     gradientFrom: "from-emerald-500/20",
     gradientTo: "to-emerald-500/5",
@@ -56,7 +50,6 @@ const services = [
       "Management screens, reporting views, logs and decision dashboards",
       "A stronger data layer before automation or AI is added",
     ],
-    examples: ["Dashboards", "Reporting", "Data models", "Activity logs"],
     timeline: "Scoped per build",
     gradientFrom: "from-blue-500/20",
     gradientTo: "to-blue-500/5",
@@ -79,7 +72,6 @@ const services = [
       "Reduce manual chasing, re-keying and status updates",
       "Use n8n where it fits and custom code where ownership matters",
     ],
-    examples: ["Document intake", "Approvals", "API sync", "Notifications"],
     timeline: "2-6 weeks or part of build",
     gradientFrom: "from-purple-500/20",
     gradientTo: "to-purple-500/5",
@@ -102,7 +94,6 @@ const services = [
       "Document extraction, review, triage, summaries and recommendations",
       "Practical training so your team uses AI safely in daily work",
     ],
-    examples: ["AI chat", "SOP checks", "Document review", "Training"],
     timeline: "Built into scope",
     gradientFrom: "from-orange-500/20",
     gradientTo: "to-orange-500/5",
@@ -161,7 +152,7 @@ const ServiceCard = memo(
           rounded-2xl p-6 sm:p-8 lg:p-10 transition-all duration-300 ease-out
           hover:bg-gray-900/[0.03] dark:hover:bg-white/[0.03] hover:shadow-xl md:hover:shadow-2xl
           active:scale-[0.98] md:hover:-translate-y-1 transform
-          min-h-[360px] sm:min-h-[420px] lg:min-h-[450px] flex flex-col
+          min-h-[320px] sm:min-h-[360px] flex flex-col
           backdrop-blur-sm
         `}
         >
@@ -179,18 +170,16 @@ const ServiceCard = memo(
               </div>
 
               <div className="text-right">
-                <div className="text-xs sm:text-xs text-gray-600/40 dark:text-white/40 mb-1">
+                <div className="text-xs text-gray-600/40 dark:text-white/40 mb-1">
                   Timeline
                 </div>
-                <div
-                  className={`text-sm sm:text-sm font-medium ${service.accentColor}`}
-                >
+                <div className={`text-sm font-medium ${service.accentColor}`}>
                   {service.timeline}
                 </div>
               </div>
             </div>
 
-            <div className="flex-1 space-y-6">
+            <div className="flex-1 space-y-5">
               <div className="space-y-3">
                 <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white leading-tight tracking-[-0.01em]">
                   {service.title}
@@ -212,9 +201,6 @@ const ServiceCard = memo(
                       <div
                         className={`w-1.5 h-1.5 rounded-full ${service.iconColor}`}
                       />
-                      <div
-                        className={`absolute inset-0 ${service.iconColor} blur-sm opacity-60`}
-                      />
                     </div>
                     <span className="text-sm text-gray-600/70 dark:text-white/70 leading-relaxed group-hover:text-gray-900/90 dark:group-hover:text-white/90 transition-colors duration-300">
                       {benefit}
@@ -224,30 +210,15 @@ const ServiceCard = memo(
               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-gray-900/10 dark:border-white/10">
-              <div className="flex flex-wrap gap-2 mb-4">
-                {service.examples.map((example, idx) => (
-                  <span
-                    key={idx}
-                    className="px-2.5 py-1 rounded-full bg-gray-900/[0.05] dark:bg-white/[0.05] border border-gray-900/10 dark:border-white/10 text-xs text-gray-600/50 dark:text-white/50 hover:text-gray-900/70 dark:hover:text-white/70 hover:bg-gray-900/[0.08] dark:hover:bg-white/[0.08] transition-colors duration-200 backdrop-blur-sm"
-                  >
-                    {example}
-                  </span>
-                ))}
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span
-                  className={`text-sm font-medium ${service.accentColor} group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300`}
-                >
-                  Learn More
-                </span>
-                <div className="p-1.5 rounded-full bg-gray-900/5 dark:bg-white/5 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300">
-                  <ArrowRight
-                    className={`w-4 h-4 ${service.accentColor} group-hover:text-gray-900 dark:group-hover:text-white group-hover:translate-x-1 transition-all duration-300`}
-                  />
-                </div>
-              </div>
+            <div className="mt-8 pt-6 border-t border-gray-900/10 dark:border-white/10 flex items-center justify-between">
+              <span
+                className={`text-sm font-medium ${service.accentColor} group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300`}
+              >
+                Learn More
+              </span>
+              <ArrowRight
+                className={`w-4 h-4 ${service.accentColor} group-hover:text-gray-900 dark:group-hover:text-white group-hover:translate-x-1 transition-all duration-300`}
+              />
             </div>
           </div>
         </div>
@@ -294,11 +265,7 @@ export function ServicesSection() {
           ))}
         </div>
 
-        <div className="text-center mt-20 lg:mt-24">
-          <p className="text-gray-600 dark:text-white/60 text-lg mb-6">
-            Tell us where work gets stuck. We will map the simplest useful
-            system to build first.
-          </p>
+        <div className="text-center mt-16 lg:mt-20">
           <Button variant="secondary" size="lg" className="group" asChild>
             <Link href="/services" className="inline-flex items-center gap-3">
               Explore Services
