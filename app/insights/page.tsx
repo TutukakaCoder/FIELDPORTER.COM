@@ -10,18 +10,18 @@ import { Suspense } from "react";
 export const metadata: Metadata = {
   title: "Insights | FIELDPORTER",
   description:
-    "AI strategy, business automation, and implementation insights from FIELDPORTER. Practical frameworks and thought leadership for AI adoption.",
+    "Practical insights on AI production, agents, custom software, and automation from FIELDPORTER.",
   keywords: [
     "AI strategy insights",
     "business automation",
-    "AI implementation",
-    "strategic research",
+    "AI agents",
+    "custom software",
     "workflow automation",
   ],
   openGraph: {
     title: "Insights | FIELDPORTER",
     description:
-      "AI strategy and implementation insights from FIELDPORTER. Practical frameworks for AI adoption.",
+      "Practical insights on AI production, agents, custom software, and automation from FIELDPORTER.",
     type: "website",
     url: "https://fieldporter.com/insights",
     images: [

@@ -25,6 +25,8 @@ export function BlogGrid() {
       case "AI Strategy":
         return "bg-fieldporter-blue/20 text-fieldporter-blue border-fieldporter-blue/30";
       case "Business Automation":
+        return "bg-green-500/20 text-green-400 border-green-500/30";
+      case "Custom Software":
         return "bg-fieldporter-blue/20 text-fieldporter-blue border-fieldporter-blue/30";
       case "VC Insights":
         return "bg-green-500/20 text-green-400 border-green-500/30";

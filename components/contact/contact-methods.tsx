@@ -1,13 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Calendar, Clock, Mail } from "lucide-react";
+import { ArrowRight, Calendar, ChevronDown, Clock, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function ContactMethods() {
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Ensure immediate animation trigger
   useEffect(() => {
     setIsLoaded(true);
   }, []);
@@ -18,7 +17,7 @@ export function ContactMethods() {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.2,
+        delayChildren: 0.15,
       },
     },
   };
@@ -29,7 +28,7 @@ export function ContactMethods() {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.8,
+        duration: 0.6,
         ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
       },
     },
@@ -60,102 +59,138 @@ export function ContactMethods() {
   ];
 
   return (
-    <section className="relative section-rhythm-xl overflow-hidden">
+    <section className="relative py-10 md:section-rhythm-xl overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:to-gray-950" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isLoaded ? "visible" : "hidden"}
-          className="text-center mb-12 md:mb-16"
-        >
-          <motion.h2
-            variants={itemVariants}
-            className="text-3xl sm:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-6 leading-tight tracking-[-0.02em]"
-          >
-            What Happens{" "}
-            <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-              Next
-            </span>
-          </motion.h2>
-
-          <motion.p
-            variants={itemVariants}
-            className="text-lg lg:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed font-light"
-          >
-            Simple process - no lengthy sales cycles
-          </motion.p>
-        </motion.div>
-
-        {/* Process Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-12 md:mb-16">
-          {processSteps.map((step, index) => (
-            <motion.div
-              key={step.title}
-              variants={itemVariants}
-              initial="hidden"
-              animate={isLoaded ? "visible" : "hidden"}
-              whileHover={{ y: -6, scale: 1.01 }}
-              transition={{ delay: index * 0.1, duration: 0.3 }}
-              className="relative card-section card-section-hover rounded-3xl md:rounded-2xl group text-center hover:shadow-[0_20px_50px_rgba(59,130,246,0.1)] hover:border-blue-500/20"
+        {/* Mobile: one-liner + accordion */}
+        <div className="md:hidden space-y-3">
+          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+            Prefer email?{" "}
+            <a
+              href="mailto:freddy@fieldporter.com"
+              className="text-blue-600 dark:text-blue-400 font-medium underline-offset-2 hover:underline"
             >
-              {/* Step Number */}
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <div className="w-8 h-8 bg-white dark:bg-gray-900 border border-gray-900/20 dark:border-white/20 rounded-full flex items-center justify-center text-gray-900 dark:text-white text-sm font-semibold">
-                  {index + 1}
+              freddy@fieldporter.com
+            </a>
+          </p>
+
+          <details className="group rounded-xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02]">
+            <summary className="flex items-center justify-between gap-2 cursor-pointer list-none touch-manipulation min-h-[44px] px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+              <span>What happens next</span>
+              <ChevronDown className="w-4 h-4 shrink-0 transition-transform duration-200 group-open:rotate-180" />
+            </summary>
+            <div className="px-4 pb-4 space-y-3">
+              {processSteps.map((step, index) => (
+                <div key={step.title} className="flex items-start gap-3">
+                  <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-0.5 w-4">
+                    {index + 1}
+                  </span>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      {step.title}
+                    </p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                      {step.description} · {step.detail}
+                    </p>
+                  </div>
                 </div>
-              </div>
-
-              {/* Icon */}
-              <div className="w-12 h-12 rounded-2xl bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 flex items-center justify-center mb-4 backdrop-blur-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 mx-auto group-hover:shadow-[0_0_25px_rgba(59,130,246,0.3)]">
-                <step.icon className={`w-6 h-6 ${step.color}`} />
-              </div>
-
-              <div className="space-y-2">
-                <h3 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white leading-tight group-hover:text-blue-400 transition-colors duration-300">
-                  {step.title}
-                </h3>
-
-                <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                  {step.description}
-                </p>
-
-                <p className={`text-sm font-medium ${step.color}`}>
-                  {step.detail}
-                </p>
-              </div>
-            </motion.div>
-          ))}
+              ))}
+            </div>
+          </details>
         </div>
 
-        {/* Direct Contact CTA */}
-        <motion.div
-          variants={itemVariants}
-          initial="hidden"
-          animate={isLoaded ? "visible" : "hidden"}
-          className="text-center"
-        >
-          <div className="relative card-section max-w-3xl mx-auto">
-            <h3 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-2 leading-tight">
-              Prefer Direct Contact?
-            </h3>
-            <p className="text-base text-gray-700 dark:text-gray-300 mb-6 leading-relaxed max-w-xl mx-auto">
-              Skip the form and email directly
-            </p>
+        {/* Desktop: full process + email CTA */}
+        <div className="hidden md:block">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate={isLoaded ? "visible" : "hidden"}
+            className="text-center mb-12 md:mb-16"
+          >
+            <motion.h2
+              variants={itemVariants}
+              className="text-3xl sm:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-6 leading-tight tracking-[-0.02em]"
+            >
+              What Happens{" "}
+              <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                Next
+              </span>
+            </motion.h2>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-lg mx-auto">
-              <a
-                href="mailto:freddy@fieldporter.com"
-                className="group flex items-center gap-3 px-6 py-3 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 hover:border-blue-500/50 rounded-2xl text-blue-400 hover:text-blue-300 transition-all duration-300 font-medium"
+            <motion.p
+              variants={itemVariants}
+              className="text-lg lg:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed font-light"
+            >
+              Simple process - no lengthy sales cycles
+            </motion.p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-12 md:mb-16">
+            {processSteps.map((step, index) => (
+              <motion.div
+                key={step.title}
+                variants={itemVariants}
+                initial="hidden"
+                animate={isLoaded ? "visible" : "hidden"}
+                whileHover={{ y: -6, scale: 1.01 }}
+                transition={{ delay: index * 0.1, duration: 0.3 }}
+                className="relative card-section card-section-hover rounded-3xl md:rounded-2xl group text-center hover:shadow-[0_20px_50px_rgba(59,130,246,0.1)] hover:border-blue-500/20"
               >
-                <Mail className="w-5 h-5" />
-                freddy@fieldporter.com
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-              </a>
-            </div>
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                  <div className="w-8 h-8 bg-white dark:bg-gray-900 border border-gray-900/20 dark:border-white/20 rounded-full flex items-center justify-center text-gray-900 dark:text-white text-sm font-semibold">
+                    {index + 1}
+                  </div>
+                </div>
+
+                <div className="w-12 h-12 rounded-2xl bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 flex items-center justify-center mb-4 backdrop-blur-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 mx-auto group-hover:shadow-[0_0_25px_rgba(59,130,246,0.3)]">
+                  <step.icon className={`w-6 h-6 ${step.color}`} />
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white leading-tight group-hover:text-blue-400 transition-colors duration-300">
+                    {step.title}
+                  </h3>
+
+                  <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                    {step.description}
+                  </p>
+
+                  <p className={`text-sm font-medium ${step.color}`}>
+                    {step.detail}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </motion.div>
+
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            animate={isLoaded ? "visible" : "hidden"}
+            className="text-center"
+          >
+            <div className="relative card-section max-w-3xl mx-auto">
+              <h3 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-2 leading-tight">
+                Prefer Direct Contact?
+              </h3>
+              <p className="text-base text-gray-700 dark:text-gray-300 mb-6 leading-relaxed max-w-xl mx-auto">
+                Skip the form and email directly
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-lg mx-auto">
+                <a
+                  href="mailto:freddy@fieldporter.com"
+                  className="group flex items-center gap-3 px-6 py-3 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 hover:border-blue-500/50 rounded-2xl text-blue-400 hover:text-blue-300 transition-all duration-300 font-medium"
+                >
+                  <Mail className="w-5 h-5" />
+                  freddy@fieldporter.com
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

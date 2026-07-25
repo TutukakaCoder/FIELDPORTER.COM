@@ -150,15 +150,16 @@ THE REALITY CHECK:
 
 PROOF POINTS - Use when relevant:
 
-VENTURE ADVISORY PLATFORM:
-Challenge: Client data fragmented across emails, pitch decks, notes, scaling impossible
-Solution: Built proprietary end-to-end client intelligence platform with AI pitch deck extraction in 30 seconds and 10-factor algorithmic matching engine
-Results: Firm scaled to 70 plus clients without proportional staff increase, reduced founder onboarding by 85 percent from hours to minutes, automated investor research that previously took days
+VENTURE ADVISORY PLATFORM (VOLOCEAN):
+Challenge: Client, investor, and advisor work scattered across emails, decks, and notes
+Solution: Built a shared management platform so clients, investors, advisors, product managers, staff, and admins work from one place
+Results: Live about 9 months; shared platform used by clients, investors, advisors, and staff; 805 investors in the database
+Do not publish Volocean client counts, lead counts, partner counts, or submission totals — that is their business data, not ours to share.
 
 LEADERSHIP COACH PLATFORM:
 Challenge: Coach let down by failed developer, needed complete rebuild
 Solution: Rebuilt entire custom coaching platform from ground up
-Results: Live 8 plus months, automates core business, saves founder 15 plus hours weekly
+Results: Live 12 months, automates core business, saves founder about 15 hours weekly
 
 VC FIRM AI AUTOMATION:
 Challenge: Manually reviewing every inbound pitch

@@ -31,6 +31,7 @@ Persistent positioning guidance is now stored in `.cursor/rules/fieldporter-posi
 | 7 | Portfolio updates | [07-portfolio-updates.md](./07-portfolio-updates.md) | Medium |
 | 8 | Design, mobile, theme audit | [08-design-mobile-theme-overhaul.md](./08-design-mobile-theme-overhaul.md) | Medium |
 | 9 | Entrance animation | [09-entrance-animation.md](./09-entrance-animation.md) | Low |
+| 10 | Mobile UX overhaul (type, density, portfolio, contact) | [10-mobile-ux-overhaul-master-plan.md](./10-mobile-ux-overhaul-master-plan.md) | High |
 
 ---
 
@@ -58,4 +59,5 @@ These touch multiple docs - keep messaging aligned when doing any single task:
 3. AI chat fix (broken + must reflect new positioning)
 4. About, Contact, Portfolio, Insights (page-by-page)
 5. Design/mobile/theme (visual pass after copy is stable)
-6. Entrance animation (last - depends on brand direction)
+6. Mobile UX overhaul (Task 10 — phone density, portfolio nav, contact FAB)
+7. Entrance animation (last - depends on brand direction)

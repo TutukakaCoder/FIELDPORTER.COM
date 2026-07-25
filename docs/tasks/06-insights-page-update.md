@@ -76,7 +76,18 @@ Return: article list with titles, descriptions, suggested dates, and whether to 
 
 ## Acceptance criteria
 
-- [ ] Insights grid looks up to date
-- [ ] New content added (per user approval)
-- [ ] Article links work (internal pages or explicit external URLs)
-- [ ] `npm run build` passes
+- [x] Insights grid looks up to date
+- [x] New content added (per user approval)
+- [x] Article links work (internal pages or explicit external URLs)
+- [x] `npm run build` passes
+
+## 2026-07-25 refresh
+
+Replaced stale article set with four new pieces + dynamic `/insights/[slug]` routes:
+
+1. `from-ai-pilot-to-production`
+2. `build-vs-buy-ai-agents`
+3. `when-custom-software-wins`
+4. `automation-that-pays-back`
+
+Files: `config/insights-articles.ts`, `config/insights-resources.ts`, `components/insights/article-bodies.tsx`, `app/insights/[slug]/page.tsx`, `app/sitemap.ts`

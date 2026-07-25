@@ -28,6 +28,9 @@ declare global {
       NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID?: string;
       NEXT_PUBLIC_FIREBASE_APP_ID?: string;
       DEEPSEEK_API_KEY?: string;
+      FIREBASE_PRIVATE_KEY?: string;
+      FIREBASE_CLIENT_EMAIL?: string;
+      FIREBASE_PROJECT_ID?: string;
       FIREBASE_ADMIN_PRIVATE_KEY?: string;
       FIREBASE_ADMIN_CLIENT_EMAIL?: string;
       FIREBASE_ADMIN_PROJECT_ID?: string;

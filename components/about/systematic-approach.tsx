@@ -44,7 +44,7 @@ export function SystematicApproach() {
               Process
             </span>
           </h2>
-          <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Research-driven implementation with real-world validation
           </p>
         </motion.div>

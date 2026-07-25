@@ -175,41 +175,49 @@ const AnimatedCTA = memo(() => {
 
   return (
     <div
-      className={`flex ${isMobile ? "flex-col w-full px-4" : "flex-row"} items-center justify-center gap-4 sm:gap-6`}
+      className={`flex ${isMobile ? "flex-col w-full px-4" : "flex-row"} items-center justify-center gap-2 sm:gap-6`}
     >
       <motion.div
         whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -2 }}
         whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
-        className={isMobile ? "w-full relative group" : "relative group"}
+        className={isMobile ? "w-full max-w-xs mx-auto relative group" : "relative group"}
       >
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-blue-400 rounded-xl blur opacity-30 group-hover:opacity-70 transition duration-500" />
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-blue-400 rounded-xl blur opacity-20 sm:opacity-30 group-hover:opacity-70 transition duration-500" />
         <Button
           variant="invert"
           size="lg"
-          className={`relative text-base sm:text-lg px-8 sm:px-10 h-14 shadow-2xl ${isMobile ? "w-full" : ""}`}
+          className={`relative text-sm sm:text-lg px-6 sm:px-10 h-11 sm:h-14 shadow-xl sm:shadow-2xl ${isMobile ? "w-full" : ""}`}
           asChild
         >
           <Link href="/contact" className="inline-flex items-center gap-2">
             <span>Book a Call</span>
-            <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </Button>
       </motion.div>
 
-      <motion.div
-        whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -2 }}
-        whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
-        className={isMobile ? "w-full" : ""}
-      >
-        <Button
-          variant="outline"
-          size="lg"
-          className={`text-base sm:text-lg px-8 sm:px-10 h-14 bg-white/[0.02] hover:bg-white/[0.08] border-white/10 hover:border-white/20 backdrop-blur-md transition-all duration-300 ${isMobile ? "w-full" : ""}`}
-          asChild
+      {isMobile ? (
+        <Link
+          href="/portfolio"
+          className="text-sm font-medium text-white/70 hover:text-white underline-offset-4 hover:underline transition-colors py-1"
         >
-          <Link href="/portfolio">View Work</Link>
-        </Button>
-      </motion.div>
+          View Work
+        </Link>
+      ) : (
+        <motion.div
+          whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -2 }}
+          whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
+        >
+          <Button
+            variant="outline"
+            size="lg"
+            className="text-base sm:text-lg px-8 sm:px-10 h-14 bg-white/[0.02] hover:bg-white/[0.08] border-white/10 hover:border-white/20 backdrop-blur-md transition-all duration-300"
+            asChild
+          >
+            <Link href="/portfolio">View Work</Link>
+          </Button>
+        </motion.div>
+      )}
     </div>
   );
 });
@@ -242,7 +250,7 @@ export function HeroSection() {
   return (
     <section
       ref={ref}
-      className="relative min-h-screen flex items-center justify-center pt-20 pb-24 overflow-hidden bg-transparent"
+      className="relative min-h-screen flex items-center justify-center pt-16 pb-16 md:pt-20 md:pb-24 overflow-hidden bg-transparent"
     >
       <div className="fixed inset-0 z-0 pointer-events-none">
         <TieredBackground />
@@ -256,30 +264,30 @@ export function HeroSection() {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={containerVariants}
-          className="space-y-7 md:space-y-10"
+          className="space-y-5 md:space-y-10"
         >
-          <div className="space-y-6 relative">
+          <div className="space-y-4 md:space-y-6 relative">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-black/40 dark:bg-black/40 blur-[100px] rounded-full pointer-events-none -z-10" />
 
             <motion.h1
               variants={textReveal}
-              className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 leading-[1.1] pb-2 break-words max-w-4xl mx-auto"
+              className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 leading-[1.15] pb-1 md:pb-2 break-words max-w-4xl mx-auto"
             >
               {HERO_HEADLINE}
             </motion.h1>
 
             <motion.p
               variants={textReveal}
-              className="text-lg sm:text-xl lg:text-2xl text-gray-400 max-w-xl sm:max-w-2xl mx-auto font-light leading-relaxed"
+              className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-400 max-w-xl sm:max-w-2xl mx-auto font-light leading-relaxed"
             >
               {HERO_VALUE_PROP}
             </motion.p>
           </div>
 
-          <motion.div variants={textReveal} className="pt-6">
+          <motion.div variants={textReveal} className="pt-2 md:pt-6">
             <AnimatedCTA />
             {HERO_PROOF_LINE ? (
-              <p className="mt-8 text-sm sm:text-base font-medium text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+              <p className="mt-5 md:mt-8 text-sm sm:text-base font-medium text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
                 {HERO_PROOF_LINE}
               </p>
             ) : null}

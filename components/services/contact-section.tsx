@@ -21,7 +21,7 @@ export function ContactSection({
 }: ContactSectionProps) {
   const router = useRouter();
   return (
-    <section className="py-20 lg:py-28 relative">
+    <section className="section-rhythm-lg relative">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-bg-fieldporter-primary to-bg-fieldporter-secondary" />
 
@@ -33,7 +33,7 @@ export function ContactSection({
           viewport={{ once: true }}
           className="text-center"
         >
-          <GlassCard className="p-8 md:p-12 hover:shadow-[0_20px_50px_rgba(59,130,246,0.15)] hover:border-fieldporter-blue/40 transition-all duration-300 group">
+          <GlassCard className="p-5 md:p-12 hover:shadow-[0_20px_50px_rgba(59,130,246,0.15)] hover:border-fieldporter-blue/40 transition-all duration-300 group">
             <div className="space-y-8">
               {/* Icon */}
               <motion.div

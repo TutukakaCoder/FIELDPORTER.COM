@@ -135,17 +135,17 @@ export function AboutHero() {
 
             {/* Main heading */}
             <motion.div variants={itemVariants} className="space-y-4">
-              <h1 className="text-5xl md:text-7xl font-light text-white leading-tight">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-light text-white leading-tight">
                 FIELDPORTER
               </h1>
-              <div className="text-xl md:text-2xl text-gray-300 font-light">
+              <div className="text-base md:text-lg text-gray-300 font-light">
                 {BRAND.tagline}
               </div>
             </motion.div>
 
             {/* Subtitle */}
             <motion.div variants={itemVariants} className="max-w-2xl mx-auto">
-              <p className="text-lg md:text-xl text-gray-400 leading-relaxed">
+              <p className="text-base md:text-lg text-gray-400 leading-relaxed">
                 We build practical AI systems, automations, and internal tools
                 that remove manual work and speed up decisions. Every
                 recommendation comes from hands-on experience deploying AI for

@@ -4,6 +4,7 @@ import { useScrollState, useStableMobile, useReducedMotion } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronUp } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 interface BackToTopProps {
   className?: string;
@@ -12,7 +13,11 @@ interface BackToTopProps {
 
 export function BackToTop({ className, showAfter = 400 }: BackToTopProps) {
   const { scrollY } = useScrollState();
-  const isVisible = scrollY > showAfter;
+  const pathname = usePathname();
+  // Keep conversion paths clear of floating chrome over Submit / booking CTAs
+  const hideOnConversionPath =
+    pathname?.startsWith("/contact") || pathname?.startsWith("/insights");
+  const isVisible = !hideOnConversionPath && scrollY > showAfter;
   const isMobile = useStableMobile();
   const prefersReducedMotion = useReducedMotion();
 

@@ -7,12 +7,20 @@ import {
   ArrowRight,
   BarChart3,
   Building2,
+  ChevronDown,
   Sparkles,
   Workflow,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { memo, useCallback, useRef } from "react";
+import {
+  memo,
+  useCallback,
+  useId,
+  useRef,
+  useState,
+  type MouseEvent,
+} from "react";
 
 const services = [
   {
@@ -105,8 +113,10 @@ const services = [
   },
 ];
 
+type Service = (typeof services)[0];
+
 const ServiceCard = memo(
-  ({ service, index }: { service: (typeof services)[0]; index: number }) => {
+  ({ service, index }: { service: Service; index: number }) => {
     const router = useRouter();
     const handleServiceClick = useCallback(() => {
       trackServiceInterest(service.id, "learn_more", {
@@ -229,6 +239,128 @@ const ServiceCard = memo(
 
 ServiceCard.displayName = "ServiceCard";
 
+const ServiceAccordionItem = memo(
+  ({
+    service,
+    isOpen,
+    onToggle,
+  }: {
+    service: Service;
+    isOpen: boolean;
+    onToggle: () => void;
+  }) => {
+    const panelId = useId();
+    const buttonId = useId();
+    const router = useRouter();
+
+    const handleLearnMore = useCallback(
+      (e: MouseEvent) => {
+        e.stopPropagation();
+        trackServiceInterest(service.id, "learn_more", {
+          service_name: service.title,
+          location: "services_section_mobile",
+        });
+        router.push(`/services#${service.id}`);
+      },
+      [service.id, service.title, router],
+    );
+
+    return (
+      <div
+        className={`rounded-xl border ${service.borderColor} bg-gray-900/[0.02] dark:bg-white/[0.02] overflow-hidden`}
+      >
+        <button
+          type="button"
+          id={buttonId}
+          aria-expanded={isOpen}
+          aria-controls={panelId}
+          onClick={onToggle}
+          className="w-full text-left px-4 py-4 flex items-start gap-3 touch-manipulation"
+        >
+          <span
+            className={`text-xs font-medium ${service.accentColor} pt-0.5 shrink-0`}
+          >
+            {service.phase}
+          </span>
+          <span className="flex-1 min-w-0">
+            <span className="block text-base font-semibold text-gray-900 dark:text-white leading-snug">
+              {service.title}
+            </span>
+            <span className="block mt-1 text-sm text-gray-600 dark:text-white/70 font-light line-clamp-1">
+              {service.tagline}
+            </span>
+          </span>
+          <ChevronDown
+            className={`w-5 h-5 shrink-0 mt-0.5 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+            aria-hidden
+          />
+        </button>
+
+        <div
+          id={panelId}
+          role="region"
+          aria-labelledby={buttonId}
+          hidden={!isOpen}
+          className={isOpen ? "px-4 pb-4 border-t border-gray-900/10 dark:border-white/10" : undefined}
+        >
+          {isOpen ? (
+            <div className="pt-4 space-y-4">
+              <p className={`text-sm font-medium ${service.accentColor}`}>
+                Timeline: {service.timeline}
+              </p>
+              <ul className="space-y-2.5">
+                {service.benefits.map((benefit, idx) => (
+                  <li key={idx} className="flex items-start gap-2.5">
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full mt-2 shrink-0 ${service.iconColor}`}
+                    />
+                    <span className="text-sm text-gray-600 dark:text-white/70 leading-relaxed">
+                      {benefit}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <button
+                type="button"
+                onClick={handleLearnMore}
+                className={`inline-flex items-center gap-2 text-sm font-medium ${service.accentColor} pt-1`}
+              >
+                Learn More
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    );
+  },
+);
+
+ServiceAccordionItem.displayName = "ServiceAccordionItem";
+
+const ServicesMobileAccordion = memo(() => {
+  const [openId, setOpenId] = useState<string | null>(null);
+
+  return (
+    <div className="space-y-3 md:hidden">
+      {services.map((service) => (
+        <ServiceAccordionItem
+          key={service.id}
+          service={service}
+          isOpen={openId === service.id}
+          onToggle={() =>
+            setOpenId((current) =>
+              current === service.id ? null : service.id,
+            )
+          }
+        />
+      ))}
+    </div>
+  );
+});
+
+ServicesMobileAccordion.displayName = "ServicesMobileAccordion";
+
 export function ServicesSection() {
   const ref = useRef(null);
   useInView(ref, { once: true, margin: "-20%" });
@@ -240,11 +372,11 @@ export function ServicesSection() {
       className="relative section-rhythm-lg overflow-hidden bg-transparent"
     >
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 md:mb-16">
-          <p className="text-sm font-medium text-blue-500 dark:text-blue-400 uppercase tracking-wider mb-4">
+        <div className="text-center mb-8 md:mb-16">
+          <p className="text-sm font-medium text-blue-500 dark:text-blue-400 uppercase tracking-wider mb-3 md:mb-4">
             What We Build
           </p>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light text-gray-900 dark:text-white mb-6 md:mb-8 leading-tight tracking-[-0.02em] break-words">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl xl:text-6xl font-light text-gray-900 dark:text-white mb-4 md:mb-8 leading-tight tracking-[-0.02em] break-words">
             <span className="relative">
               <span className="font-semibold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
                 Software for workflows generic tools do not fit.
@@ -253,19 +385,21 @@ export function ServicesSection() {
             </span>
           </h2>
 
-          <p className="text-xl lg:text-2xl text-gray-700/70 dark:text-white/70 max-w-4xl mx-auto leading-relaxed font-light">
+          <p className="section-copy max-w-4xl mx-auto font-light lg:text-xl">
             We design and build the core systems your team, clients, and partners
             use to see the right information and get work done.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-12">
+        <ServicesMobileAccordion />
+
+        <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-12">
           {services.map((service, index) => (
             <ServiceCard key={service.id} service={service} index={index} />
           ))}
         </div>
 
-        <div className="text-center mt-16 lg:mt-20">
+        <div className="text-center mt-10 md:mt-16 lg:mt-20">
           <Button variant="secondary" size="lg" className="group" asChild>
             <Link href="/services" className="inline-flex items-center gap-3">
               Explore Services

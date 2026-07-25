@@ -42,13 +42,13 @@ export function TechnicalCapability() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-light text-gray-900 dark:text-white mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-6">
             AI Training &{" "}
             <span className="bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">
               Implementation
             </span>
           </h2>
-          <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Training is tied to the systems we deliver so your team gets
             practical, outcome-focused capability.
           </p>
@@ -66,7 +66,7 @@ export function TechnicalCapability() {
               className="relative group"
             >
               <div
-                className={`relative p-8 rounded-2xl backdrop-blur-md border ${capability.color.split(" ")[0]} bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-blue-500/10`}
+                className={`relative p-5 md:p-8 rounded-2xl backdrop-blur-md border ${capability.color.split(" ")[0]} bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-blue-500/10`}
               >
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent pointer-events-none" />
 

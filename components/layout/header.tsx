@@ -51,10 +51,13 @@ export function Header({ className }: HeaderProps) {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
         className={cn(
-          "fixed z-50 ease-out",
+          // pointer-events-none on shell so content under the floating strip stays clickable
+          "fixed z-50 ease-out pointer-events-none",
           // SCROLL FREEZE FIX: Disable transitions during scroll to prevent jank
           isScrolling ? "transition-none" : "transition-all duration-300",
-          isScrolled ? "top-3 left-4 right-4" : "top-6 left-6 right-6",
+          isScrolled
+            ? "top-3 left-3 right-3 md:left-4 md:right-4"
+            : "top-3 left-3 right-3 md:top-6 md:left-6 md:right-6",
           className,
         )}
         style={{
@@ -67,7 +70,7 @@ export function Header({ className }: HeaderProps) {
         <nav
           aria-label="Primary"
           className={cn(
-            "relative mx-auto max-w-7xl rounded-2xl backdrop-blur-md shadow-2xl",
+            "relative mx-auto max-w-7xl rounded-2xl backdrop-blur-md shadow-2xl pointer-events-auto",
             // SCROLL FREEZE FIX: Disable transitions during scroll
             isScrolling
               ? "transition-none"
@@ -194,7 +197,7 @@ export function Header({ className }: HeaderProps) {
               animate={{ opacity: 1, height: "auto", y: 0 }}
               exit={{ opacity: 0, height: 0, y: -10 }}
               transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="lg:hidden mt-3 mx-auto max-w-7xl rounded-2xl backdrop-blur-md bg-white/95 dark:bg-black/95 border border-gray-900/[0.12] dark:border-white/[0.12] shadow-2xl overflow-hidden"
+              className="lg:hidden mt-3 mx-auto max-w-7xl rounded-2xl backdrop-blur-md bg-white/95 dark:bg-black/95 border border-gray-900/[0.12] dark:border-white/[0.12] shadow-2xl overflow-hidden pointer-events-auto"
             >
               <div className="px-6 py-5 space-y-2">
                 {MAIN_NAVIGATION.map((item, index) => (

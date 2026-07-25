@@ -3,13 +3,13 @@
 import { ContactMethods } from "@/components/contact";
 import { PageWrapper } from "@/components/layout";
 import { AnimatePresence, motion } from "framer-motion";
-import { Calendar, MessageSquare } from "lucide-react";
+import { Calendar, ChevronDown, MessageSquare } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 
 // Premium loading component
 const LoadingSpinner = () => (
-  <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
+  <div className="min-h-[40vh] bg-white dark:bg-black flex items-center justify-center">
     <div className="text-center animate-fade-in">
       <div className="relative w-14 h-14 mx-auto mb-6">
         <div className="absolute inset-0 rounded-full border-2 border-blue-500/20"></div>
@@ -60,135 +60,117 @@ export function ContactPageClient() {
 
   return (
     <PageWrapper>
-      {/* Toggle Section */}
+      {/* Toggle Section — early action, minimal pre-copy */}
       <section
-        className="relative pt-40 pb-16 md:pt-48 md:pb-24 overflow-hidden"
+        className="relative pt-28 pb-6 md:pt-40 md:pb-12 overflow-hidden"
         aria-label="Contact options"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:via-gray-950 dark:to-black" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-8"
+            transition={{ duration: 0.4 }}
+            className="text-center"
           >
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight tracking-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-3 md:mb-4 leading-tight tracking-tight">
               Book a call or send a message
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto mb-10">
-              Tell us what you're working on. We reply within 24 hours and will
-              say clearly if we're a fit.
+            <p className="text-base md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl mx-auto mb-6 md:mb-8">
+              Tell us what you&apos;re working on. We reply within 24 hours and
+              will say clearly if we&apos;re a fit.
             </p>
 
-            {/* Toggle Buttons */}
-            <div className="inline-flex flex-col sm:flex-row bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl border border-gray-900/10 dark:border-white/10 rounded-2xl p-2 gap-2 sm:gap-0">
-              <button
-                onClick={() => setMode("book")}
-                className={`
-                  relative px-6 py-4 sm:py-3 rounded-xl font-medium transition-all duration-300
-                  flex items-center justify-center gap-2 w-full sm:w-auto
-                  ${
-                    mode === "book"
-                      ? "bg-blue-600 text-white shadow-lg shadow-blue-500/25"
-                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
-                  }
-                `}
-              >
-                <Calendar className="w-5 h-5" />
-                Book a Call
-              </button>
-              <button
-                onClick={() => setMode("message")}
-                className={`
-                  relative px-6 py-4 sm:py-3 rounded-xl font-medium transition-all duration-300
-                  flex items-center justify-center gap-2 w-full sm:w-auto
-                  ${
-                    mode === "message"
-                      ? "bg-blue-600 text-white shadow-lg shadow-blue-500/25"
-                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
-                  }
-                `}
-              >
-                <MessageSquare className="w-5 h-5" />
-                Send a Message
-              </button>
+            {/* Sticky segmented control on mobile */}
+            <div className="sticky top-24 z-30 -mx-4 px-4 py-1.5 mb-5 md:static md:mx-0 md:px-0 md:py-0 md:mb-0 md:z-auto bg-white dark:bg-black md:bg-transparent border-b border-gray-900/5 dark:border-white/5 md:border-0">
+              <div className="mx-auto flex max-w-[220px] w-full sm:w-auto sm:max-w-none flex-row bg-gray-900/[0.04] dark:bg-white/[0.06] border border-gray-900/10 dark:border-white/10 rounded-full p-0.5 gap-0.5">
+                <button
+                  type="button"
+                  onClick={() => setMode("book")}
+                  className={`
+                    relative flex-1 sm:flex-none px-3 py-1.5 sm:px-6 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300
+                    flex items-center justify-center gap-1.5 min-h-[40px] sm:min-h-[44px] touch-manipulation
+                    ${
+                      mode === "book"
+                        ? "bg-blue-600 text-white shadow-sm shadow-blue-500/20"
+                        : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
+                    }
+                  `}
+                >
+                  <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  Book
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMode("message")}
+                  className={`
+                    relative flex-1 sm:flex-none px-3 py-1.5 sm:px-6 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300
+                    flex items-center justify-center gap-1.5 min-h-[40px] sm:min-h-[44px] touch-manipulation
+                    ${
+                      mode === "message"
+                        ? "bg-blue-600 text-white shadow-sm shadow-blue-500/20"
+                        : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
+                    }
+                  `}
+                >
+                  <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  Message
+                </button>
+              </div>
             </div>
 
-            {/* Expectation-setting: who, what they get, what happens next */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.2 }}
-              className="mt-10 text-left max-w-2xl mx-auto px-2"
-            >
-              <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-                What to expect
-              </h2>
-              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                <li>
-                  <strong className="text-gray-900 dark:text-white">
-                    Who this is for:
-                  </strong>{" "}
-                  Leaders and operators looking to improve workflows with AI or
-                  automation, or to scope a concrete project.
-                </li>
-                <li>
-                  <strong className="text-gray-900 dark:text-white">
-                    What we’ll cover:
-                  </strong>{" "}
-                  Your goals, current setup, and whether a discrete project or
-                  ongoing support makes sense. No pitch-heavy sales process.
-                </li>
-                <li>
-                  <strong className="text-gray-900 dark:text-white">
-                    What happens next:
-                  </strong>{" "}
-                  We confirm the call, then send a brief follow-up with next
-                  steps or a proposal if it&apos;s a fit.
-                </li>
-              </ul>
-              <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-6 mb-3">
-                Best fit / not a fit
-              </h2>
-              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                <li>
-                  <strong className="text-gray-900 dark:text-white">
-                    Fit:
-                  </strong>{" "}
-                  Best when you have a defined problem (e.g. automation, AI
-                  integration, research or build) and budget for a focused
-                  engagement.
-                </li>
-                <li>
-                  <strong className="text-gray-900 dark:text-white">
-                    Scope:
-                  </strong>{" "}
-                  We work on discrete projects and retained support, not one-off
-                  ad-hoc tasks.
-                </li>
-                <li>
-                  <strong className="text-gray-900 dark:text-white">
-                    Timeline:
-                  </strong>{" "}
-                  Typical engagements start within 2–4 weeks of alignment; we’ll
-                  confirm feasibility on the call.
-                </li>
-                <li>
-                  <strong className="text-gray-900 dark:text-white">
-                    Right for you?
-                  </strong>{" "}
-                  If you need a quick fix or a large RFP response, we may point
-                  you elsewhere; we’ll say so clearly.
-                </li>
-              </ul>
-              <p className="mt-6 text-xs text-gray-500 dark:text-gray-400">
-                We treat all inquiries as confidential. We don’t share your
-                details or use them for marketing beyond responding to you. NDA
-                and data-handling can be discussed on the call if needed.
-              </p>
-            </motion.div>
+            {/* Collapsed pre-copy — accordion on all sizes */}
+            <details className="mt-4 md:mt-8 text-left max-w-2xl mx-auto group">
+              <summary className="flex items-center justify-between gap-3 cursor-pointer list-none touch-manipulation min-h-[44px] px-2 py-2 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+                <span>What to expect &amp; fit</span>
+                <ChevronDown className="w-4 h-4 shrink-0 transition-transform duration-200 group-open:rotate-180" />
+              </summary>
+              <div className="px-2 pb-2 pt-1 space-y-4 text-sm text-gray-600 dark:text-gray-300">
+                <ul className="space-y-2">
+                  <li>
+                    <strong className="text-gray-900 dark:text-white">
+                      Who:
+                    </strong>{" "}
+                    Leaders and operators improving workflows with AI or
+                    automation, or scoping a concrete project.
+                  </li>
+                  <li>
+                    <strong className="text-gray-900 dark:text-white">
+                      Call:
+                    </strong>{" "}
+                    Goals, current setup, and whether a project or ongoing
+                    support makes sense. No pitch-heavy sales.
+                  </li>
+                  <li>
+                    <strong className="text-gray-900 dark:text-white">
+                      Next:
+                    </strong>{" "}
+                    We confirm, then send a brief follow-up or proposal if
+                    it&apos;s a fit.
+                  </li>
+                </ul>
+                <ul className="space-y-2">
+                  <li>
+                    <strong className="text-gray-900 dark:text-white">
+                      Fit:
+                    </strong>{" "}
+                    Defined problem and budget for a focused engagement.
+                  </li>
+                  <li>
+                    <strong className="text-gray-900 dark:text-white">
+                      Not a fit:
+                    </strong>{" "}
+                    Quick one-off fixes or large RFP responses — we&apos;ll say
+                    so clearly.
+                  </li>
+                </ul>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Inquiries are confidential. NDA and data-handling can be
+                  discussed on the call if needed.
+                </p>
+              </div>
+            </details>
           </motion.div>
         </div>
       </section>

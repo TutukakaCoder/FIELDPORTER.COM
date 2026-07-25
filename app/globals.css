@@ -38,6 +38,11 @@
 }
 
 @layer base {
+  html {
+    /* Clear floating header when scrolling to anchors / form sections */
+    scroll-padding-top: 5.5rem;
+  }
+
   :root {
     /* FIELDPORTER Light Theme Variables for shadcn/ui */
     --background: 0 0% 100%;
@@ -316,11 +321,11 @@
     box-shadow: 0 16px 64px 0 rgba(0, 0, 0, 0.5);
   }
 
-  /* Typography Components */
+  /* Typography Components — mobile-first; phone never starts at 48px+ */
   .text-display {
     @apply font-bold leading-tight tracking-tight;
     color: theme("colors.fieldporter.white");
-    font-size: 48px;
+    font-size: 1.875rem; /* text-3xl */
     line-height: 1.2;
     letter-spacing: -0.01em;
   }
@@ -379,30 +384,30 @@
   /* Section spacing rhythm – use these instead of ad-hoc py-* on sections */
   .section-padding,
   .section-rhythm {
-    @apply py-16 lg:py-24;
+    @apply py-12 lg:py-24;
   }
   .section-rhythm-tight {
-    @apply py-12 lg:py-16;
+    @apply py-8 lg:py-16;
   }
   .section-rhythm-lg {
-    @apply py-20 lg:py-28;
+    @apply py-12 lg:py-28;
   }
   .section-rhythm-xl {
-    @apply py-24 lg:py-32;
+    @apply py-14 lg:py-32;
   }
   .section-spacing {
-    @apply py-16 lg:py-24;
+    @apply py-12 lg:py-24;
   }
   .section-spacing-lg {
-    @apply py-20 lg:py-28;
+    @apply py-12 lg:py-28;
   }
   .section-rhythm-2xl {
-    @apply py-24 lg:py-40;
+    @apply py-16 lg:py-40;
   }
 
   /* Section card – standard border, blur, hover across site */
   .card-section {
-    @apply rounded-2xl p-6 md:p-8 backdrop-blur-md transition-all duration-300;
+    @apply rounded-2xl p-4 md:p-6 backdrop-blur-md transition-all duration-300;
     @apply border border-gray-900/10 dark:border-white/10;
     @apply bg-gray-900/[0.02] dark:bg-white/[0.02];
   }
@@ -786,25 +791,25 @@
     @apply transition-all duration-300 hover:shadow-glass-lg hover:shadow-fieldporter-blue/20;
   }
 
-  /* Premium Typography */
+  /* Premium Typography — mobile-first; large sizes only from lg */
   .text-display-xs {
-    @apply text-3xl font-bold tracking-tight;
+    @apply text-2xl lg:text-3xl font-bold tracking-tight;
   }
 
   .text-display-sm {
-    @apply text-4xl font-bold tracking-tight;
+    @apply text-3xl lg:text-4xl font-bold tracking-tight;
   }
 
   .text-display-md {
-    @apply text-5xl font-bold tracking-tight;
+    @apply text-3xl lg:text-5xl font-bold tracking-tight;
   }
 
   .text-display-lg {
-    @apply text-6xl font-bold tracking-tight;
+    @apply text-3xl lg:text-6xl font-bold tracking-tight;
   }
 
   .text-display-xl {
-    @apply text-7xl font-bold tracking-tight;
+    @apply text-4xl lg:text-7xl font-bold tracking-tight;
   }
 
   .text-heading-xs {
@@ -1213,21 +1218,6 @@
 
   /* Enhanced Responsive Design */
   @media (max-width: 768px) {
-    .text-display-lg {
-      font-size: 2.5rem;
-      line-height: 1.2;
-    }
-
-    .text-display-md {
-      font-size: 2rem;
-      line-height: 1.2;
-    }
-
-    .text-display-sm {
-      font-size: 1.5rem;
-      line-height: 1.3;
-    }
-
     /* Mobile-specific button improvements */
     .btn-primary,
     .btn-secondary,

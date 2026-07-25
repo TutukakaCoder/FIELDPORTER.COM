@@ -22,14 +22,14 @@ export function CTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative p-8 md:p-12 rounded-3xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02]"
+          className="relative p-6 sm:p-8 md:p-12 rounded-3xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02]"
         >
-          <div className="relative z-10 space-y-8 md:space-y-10">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-light text-gray-900 dark:text-white leading-tight tracking-[-0.02em] break-words">
+          <div className="relative z-10 space-y-6 md:space-y-10">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-light text-gray-900 dark:text-white leading-tight tracking-[-0.02em] break-words">
               Build the system your business has been missing.
             </h2>
 
-            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed font-light">
+            <p className="section-copy max-w-2xl mx-auto font-light">
               Tell us where work gets stuck. We will map the portal, workflow,
               or AI feature that would make the biggest difference first.
             </p>

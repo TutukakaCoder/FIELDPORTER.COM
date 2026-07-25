@@ -1,7 +1,15 @@
+import { INSIGHTS_ARTICLES } from "@/config/insights-articles";
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://fieldporter.com";
+
+  const insightArticles = INSIGHTS_ARTICLES.map((article) => ({
+    url: `${baseUrl}/insights/${article.id}`,
+    lastModified: new Date(article.publishDate),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
 
   return [
     {
@@ -40,24 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.6,
     },
-    {
-      url: `${baseUrl}/insights/why-ai-consulting-fails`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/insights/real-cost-not-automating`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/insights/vc-portfolio-optimization`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
+    ...insightArticles,
     {
       url: `${baseUrl}/aios`,
       lastModified: new Date(),

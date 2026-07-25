@@ -55,6 +55,12 @@ const FIELD_CONFIGS = {
   },
 };
 
+const fieldClassName =
+  "w-full px-4 py-3 bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 rounded-xl text-base text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[44px] touch-manipulation";
+
+const labelClassName =
+  "block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1.5";
+
 export function SimpleContactForm() {
   const [formData, setFormData] = useState<EnhancedContactFormData>({
     name: "",
@@ -176,34 +182,11 @@ export function SimpleContactForm() {
     }
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
-      },
-    },
-  };
-
   if (isSubmitted) {
     return (
       <section
         id="contact-form"
-        className="relative section-rhythm-2xl overflow-hidden"
+        className="relative section-rhythm-lg md:section-rhythm-2xl overflow-hidden"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-gray-50 via-gray-100 to-white dark:from-black dark:via-gray-950 dark:to-black" />
 
@@ -214,7 +197,7 @@ export function SimpleContactForm() {
             transition={{ duration: 0.6 }}
             className="max-w-3xl mx-auto text-center"
           >
-            <div className="relative bg-white/[0.02] backdrop-blur-md border border-white/10 rounded-3xl p-8 md:p-12 hover:bg-white/[0.04] transition-all duration-300">
+            <div className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-md border border-gray-900/10 dark:border-white/10 rounded-3xl p-8 md:p-12">
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
@@ -228,8 +211,8 @@ export function SimpleContactForm() {
               </h2>
 
               <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-                We've received your message and are already thinking about how
-                we can help. Here's what happens next:
+                We&apos;ve received your message and are already thinking about
+                how we can help. Here&apos;s what happens next:
               </p>
 
               <div className="bg-gray-900/[0.02] dark:bg-white/[0.02] border border-gray-900/10 dark:border-white/10 rounded-2xl p-6 mb-8">
@@ -242,7 +225,7 @@ export function SimpleContactForm() {
                       Within 24 hours
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400 text-sm">
-                      We'll analyze your needs and identify specific
+                      We&apos;ll analyze your needs and identify specific
                       opportunities
                     </p>
                   </div>
@@ -255,7 +238,7 @@ export function SimpleContactForm() {
                       Personalized response
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400 text-sm">
-                      You'll receive tailored recommendations based on your
+                      You&apos;ll receive tailored recommendations based on your
                       situation
                     </p>
                   </div>
@@ -264,29 +247,29 @@ export function SimpleContactForm() {
                     <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mb-4">
                       <ArrowRight className="h-6 w-6 text-purple-400" />
                     </div>
-                    <h3 className="text-white font-semibold mb-2">
+                    <h3 className="text-gray-900 dark:text-white font-semibold mb-2">
                       Next steps
                     </h3>
-                    <p className="text-gray-400 text-sm">
-                      We'll suggest a focused call, resources, or automation
-                      roadmap
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">
+                      We&apos;ll suggest a focused call, resources, or
+                      automation roadmap
                     </p>
                   </div>
                 </div>
               </div>
 
-              <p className="text-blue-400 text-base">
+              <p className="text-blue-600 dark:text-blue-400 text-base">
                 <strong>In the meantime:</strong> Feel free to explore our{" "}
                 <a
                   href="/portfolio"
-                  className="underline hover:text-blue-300 transition-colors"
+                  className="underline hover:text-blue-500 dark:hover:text-blue-300 transition-colors"
                 >
                   case studies
                 </a>{" "}
                 or check out our{" "}
                 <a
                   href="/insights"
-                  className="underline hover:text-blue-300 transition-colors"
+                  className="underline hover:text-blue-500 dark:hover:text-blue-300 transition-colors"
                 >
                   latest insights
                 </a>{" "}
@@ -302,54 +285,26 @@ export function SimpleContactForm() {
   return (
     <section
       id="contact-form"
-      className="relative section-rhythm-2xl overflow-hidden"
+      className="relative pt-2 pb-12 md:section-rhythm-2xl overflow-hidden"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-gray-50 via-gray-100 to-white dark:from-black dark:via-gray-950 dark:to-black" />
 
-      {/* Subtle background elements */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
-      </div>
-
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="max-w-2xl mx-auto"
-        >
-          {/* Header */}
-          <motion.div
-            variants={itemVariants}
-            className="text-center mb-12 lg:mb-16"
-          >
-            <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight tracking-tight">
-              Contact Us
-            </h1>
-            <p className="text-lg md:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
-              Use the form below or chat with our AI assistant and share your
-              email or details - someone from our team will get back to you
-              shortly.
-            </p>
-          </motion.div>
-
-          {/* Contact Form */}
-          <motion.form
-            variants={itemVariants}
+        <div className="max-w-2xl mx-auto">
+          {/* Contact Form — no duplicate page H1 */}
+          <form
             onSubmit={handleSubmit}
-            className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-md border border-gray-900/10 dark:border-white/10 rounded-3xl p-6 md:p-12 hover:bg-gray-900/[0.04] dark:hover:bg-white/[0.04] transition-all duration-300"
+            className="relative bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-md border border-gray-900/10 dark:border-white/10 rounded-2xl md:rounded-3xl p-5 md:p-12"
           >
-            {/* Error Messages */}
             <AnimatePresence>
               {errors.length > 0 && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl"
+                  className="mb-4 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl"
                 >
-                  <ul className="text-red-400 text-sm space-y-1">
+                  <ul className="text-red-600 dark:text-red-400 text-sm space-y-1">
                     {errors.map((error, index) => (
                       <li key={index}>{error}</li>
                     ))}
@@ -358,88 +313,90 @@ export function SimpleContactForm() {
               )}
             </AnimatePresence>
 
-            <div className="space-y-8">
-              {/* Your Information Section */}
+            <div className="space-y-4 md:space-y-6">
+              {/* Your Information */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white mb-3 md:mb-4 flex items-center gap-2">
                   <User className="h-5 w-5 text-blue-400" />
                   Your Information
                 </h3>
 
-                <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+                <div className="grid md:grid-cols-2 gap-3 md:gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+                    <label htmlFor="contact-name" className={labelClassName}>
                       Your name <span className="text-red-400">*</span>
                     </label>
                     <input
+                      id="contact-name"
                       type="text"
                       value={formData.name}
                       onChange={(e) => updateFormData("name", e.target.value)}
-                      placeholder="Full name"
-                      className="w-full px-4 py-4 bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[48px] touch-manipulation"
+                      autoComplete="name"
+                      className={fieldClassName}
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+                    <label htmlFor="contact-email" className={labelClassName}>
                       Email address <span className="text-red-400">*</span>
                     </label>
                     <input
+                      id="contact-email"
                       type="email"
                       value={formData.email}
                       onChange={(e) => updateFormData("email", e.target.value)}
-                      placeholder="your@email.com"
-                      className="w-full px-4 py-4 bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[48px] touch-manipulation"
+                      autoComplete="email"
+                      className={fieldClassName}
                       required
                     />
                   </div>
                 </div>
 
-                <div className="mt-6">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                <div className="mt-3 md:mt-4">
+                  <label htmlFor="contact-org" className={labelClassName}>
                     Organization{" "}
                     <span className="text-gray-500">(optional)</span>
                   </label>
                   <input
+                    id="contact-org"
                     type="text"
                     value={formData.company}
                     onChange={(e) => updateFormData("company", e.target.value)}
-                    placeholder="Company or personal project"
-                    className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[48px] touch-manipulation"
+                    autoComplete="organization"
+                    className={fieldClassName}
                   />
                 </div>
               </div>
 
-              {/* Tell Us More Section */}
+              {/* Tell Us More */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white mb-3 md:mb-4 flex items-center gap-2">
                   <MessageSquare className="h-5 w-5 text-blue-400" />
                   Tell Us More
                 </h3>
 
-                {/* What brings you here dropdown */}
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+                <div className="mb-3 md:mb-4">
+                  <label htmlFor="contact-brings" className={labelClassName}>
                     What brings you here?{" "}
                     <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
                     <select
+                      id="contact-brings"
                       value={formData.whatBringsYouHere}
                       onChange={(e) => {
                         updateFormData("whatBringsYouHere", e.target.value);
-                        // Reset challenge description when switching options
                         updateFormData("challengeDescription", "");
                       }}
-                      className="w-full px-4 py-4 bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 appearance-none min-h-[48px] touch-manipulation text-sm md:text-base pr-10"
+                      className={`${fieldClassName} appearance-none pr-10`}
                       required
                     >
                       <option
                         value=""
                         className="bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-300"
                       >
-                        What describes you best...
+                        Select one...
                       </option>
                       {WHAT_BRINGS_YOU_OPTIONS.map((option) => (
                         <option
@@ -455,32 +412,38 @@ export function SimpleContactForm() {
                   </div>
                 </div>
 
-                {/* Dynamic field based on selection */}
                 <AnimatePresence mode="wait">
                   {currentFieldConfig && (
                     <motion.div
                       key={formData.whatBringsYouHere}
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ duration: 0.3 }}
+                      exit={{ opacity: 0, y: -12 }}
+                      transition={{ duration: 0.25 }}
                     >
-                      <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                      <label
+                        htmlFor="contact-challenge"
+                        className={`${labelClassName} flex items-center gap-2`}
+                      >
                         {getFieldIcon(formData.whatBringsYouHere)}
                         {currentFieldConfig.label}{" "}
                         <span className="text-red-400">*</span>
                       </label>
                       <textarea
+                        id="contact-challenge"
                         value={formData.challengeDescription}
                         onChange={(e) =>
-                          updateFormData("challengeDescription", e.target.value)
+                          updateFormData(
+                            "challengeDescription",
+                            e.target.value,
+                          )
                         }
                         placeholder={currentFieldConfig.placeholder}
                         rows={4}
-                        className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 resize-none min-h-[120px] touch-manipulation"
+                        className={`${fieldClassName} resize-none min-h-[120px]`}
                         required
                       />
-                      <p className="text-sm text-gray-400 mt-2">
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1.5">
                         {currentFieldConfig.helperText}
                       </p>
                     </motion.div>
@@ -488,14 +451,14 @@ export function SimpleContactForm() {
                 </AnimatePresence>
               </div>
 
-              {/* Additional Context (Expandable) */}
+              {/* Additional Context */}
               <div>
                 <button
                   type="button"
                   onClick={() =>
                     setShowAdditionalContext(!showAdditionalContext)
                   }
-                  className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors duration-200 mb-4"
+                  className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 mb-3 min-h-[44px] touch-manipulation"
                 >
                   <motion.div
                     animate={{ rotate: showAdditionalContext ? 180 : 0 }}
@@ -514,14 +477,18 @@ export function SimpleContactForm() {
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.3 }}
-                      className="space-y-6"
+                      className="space-y-3 md:space-y-4"
                     >
-                      <div className="grid md:grid-cols-3 gap-4 md:gap-6">
+                      <div className="grid md:grid-cols-3 gap-3 md:gap-4">
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">
+                          <label
+                            htmlFor="contact-timeline"
+                            className={labelClassName}
+                          >
                             Timeline
                           </label>
                           <input
+                            id="contact-timeline"
                             type="text"
                             value={formData.additionalContext.timeline}
                             onChange={(e) =>
@@ -530,16 +497,20 @@ export function SimpleContactForm() {
                                 e.target.value,
                               )
                             }
-                            placeholder="When are you looking to start?"
-                            className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[48px] touch-manipulation"
+                            placeholder="When to start?"
+                            className={fieldClassName}
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">
+                          <label
+                            htmlFor="contact-tools"
+                            className={labelClassName}
+                          >
                             Current tools
                           </label>
                           <input
+                            id="contact-tools"
                             type="text"
                             value={formData.additionalContext.currentTools}
                             onChange={(e) =>
@@ -548,16 +519,20 @@ export function SimpleContactForm() {
                                 e.target.value,
                               )
                             }
-                            placeholder="Any AI tools you are already using?"
-                            className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[48px] touch-manipulation"
+                            placeholder="Tools in use"
+                            className={fieldClassName}
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">
+                          <label
+                            htmlFor="contact-team"
+                            className={labelClassName}
+                          >
                             Team size
                           </label>
                           <input
+                            id="contact-team"
                             type="text"
                             value={formData.additionalContext.teamSize}
                             onChange={(e) =>
@@ -566,8 +541,8 @@ export function SimpleContactForm() {
                                 e.target.value,
                               )
                             }
-                            placeholder="Just you or a larger team?"
-                            className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 min-h-[48px] touch-manipulation"
+                            placeholder="Solo or team?"
+                            className={fieldClassName}
                           />
                         </div>
                       </div>
@@ -576,36 +551,31 @@ export function SimpleContactForm() {
                 </AnimatePresence>
               </div>
 
-              {/* Submit Button */}
-              <div className="pt-6">
-                <motion.div
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
+              {/* Submit */}
+              <div className="pt-2 md:pt-4">
+                <Button
+                  type="submit"
+                  disabled={!isFormValid || isSubmitting}
+                  variant="primary"
+                  size="enterprise"
+                  className="w-full group focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent min-h-[48px]"
                 >
-                  <Button
-                    type="submit"
-                    disabled={!isFormValid || isSubmitting}
-                    variant="primary"
-                    size="enterprise"
-                    className="w-full group focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Submitting...
-                      </>
-                    ) : (
-                      <>
-                        Start the Conversation
-                        <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" />
-                      </>
-                    )}
-                  </Button>
-                </motion.div>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      Start the Conversation
+                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" />
+                    </>
+                  )}
+                </Button>
               </div>
             </div>
-          </motion.form>
-        </motion.div>
+          </form>
+        </div>
       </div>
     </section>
   );

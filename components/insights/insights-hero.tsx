@@ -38,14 +38,14 @@ export function InsightsHero() {
             </div>
 
             <div className="space-y-4">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-fieldporter-white">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-fieldporter-white">
                 Better AI decisions,
                 <span className="text-fieldporter-blue">
                   {" "}
                   backed by evidence
                 </span>
               </h1>
-              <p className="max-w-2xl text-base sm:text-lg leading-relaxed text-fieldporter-gray">
+              <p className="max-w-2xl text-base md:text-lg leading-relaxed text-fieldporter-gray">
                 Insight pieces for growing companies and ambitious teams who
                 need signal over noise. We combine FIELDPORTER experience with
                 trusted external research and clear execution frameworks.

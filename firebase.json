@@ -13,7 +13,7 @@
       "maxInstances": 3,
       "concurrency": 80,
       "cpu": 1,
-      "memory": "256MiB",
+      "memory": "512MiB",
       "invoker": "public"
     },
     "headers": [

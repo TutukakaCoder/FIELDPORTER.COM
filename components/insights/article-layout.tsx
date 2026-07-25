@@ -37,10 +37,12 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
         return "bg-fieldporter-blue/20 text-fieldporter-blue border-fieldporter-blue/30";
       case "business automation":
         return "bg-green-500/20 text-green-500 border-green-500/30";
+      case "custom software":
+        return "bg-fieldporter-blue/20 text-fieldporter-blue border-fieldporter-blue/30";
       case "vc insights":
         return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
       case "implementation":
-        return "bg-fieldporter-blue/20 text-fieldporter-blue border-fieldporter-blue/30";
+        return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
       default:
         return "bg-fieldporter-blue/20 text-fieldporter-blue border-fieldporter-blue/30";
     }

@@ -14,36 +14,47 @@ export interface InsightArticleMeta {
 
 export const INSIGHTS_ARTICLES: InsightArticleMeta[] = [
   {
-    id: "why-ai-consulting-fails",
-    title: "Why Most AI Consulting Fails (And How to Avoid It)",
+    id: "from-ai-pilot-to-production",
+    title: "From AI Pilot to Production: Why Most Teams Stall",
     excerpt:
-      "Most AI work does not fail because of the model. It fails on problem selection, ownership, and operating change. Here is a practical framework to avoid that.",
+      "Nearly nine in ten companies use AI somewhere. Far fewer redesign workflows enough to move EBIT. Here is a practical path from demo to durable production value.",
     category: "AI Strategy",
     author: "FIELDPORTER Team",
-    publishDate: "2025-01-15",
+    publishDate: "2026-07-18",
+    readTime: "8 min read",
+    featured: true,
+  },
+  {
+    id: "build-vs-buy-ai-agents",
+    title: "Build vs Buy AI Agents in 2026: A Decision Framework",
+    excerpt:
+      "Packaged agent platforms are fast. Custom agents win on unit economics and control at scale. Use this framework before you commit budget.",
+    category: "Implementation",
+    author: "FIELDPORTER Team",
+    publishDate: "2026-07-02",
     readTime: "9 min read",
     featured: true,
   },
   {
-    id: "real-cost-not-automating",
-    title: "The Real Cost of Not Automating Your Business Processes",
+    id: "when-custom-software-wins",
+    title: "When Custom Software Beats Another SaaS Seat",
     excerpt:
-      "Manual work drains margin in ways most dashboards miss. We break down the true cost and show a simple method to prioritize automation by impact.",
+      "Generic tools are fine until your workflow is the product. We cover the signals that custom portals and internal tools pay for themselves.",
+    category: "Custom Software",
+    author: "FIELDPORTER Team",
+    publishDate: "2026-06-12",
+    readTime: "7 min read",
+    featured: false,
+  },
+  {
+    id: "automation-that-pays-back",
+    title: "Automation That Pays Back: Prioritize by Margin, Not Noise",
+    excerpt:
+      "Not every process deserves a bot. Score work by volume, error cost, and cycle time so automation funding follows real margin, not shiny demos.",
     category: "Business Automation",
     author: "FIELDPORTER Team",
-    publishDate: "2025-01-10",
-    readTime: "10 min read",
-    featured: true,
-  },
-  {
-    id: "vc-portfolio-optimization",
-    title: "VC Portfolio Optimization: Beyond Due Diligence",
-    excerpt:
-      "When markets tighten, portfolio outcomes depend on operating execution. This guide covers the metrics and operating model that create measurable value after investment.",
-    category: "VC Insights",
-    author: "FIELDPORTER Team",
-    publishDate: "2025-01-05",
-    readTime: "9 min read",
+    publishDate: "2026-05-20",
+    readTime: "8 min read",
     featured: false,
   },
 ];

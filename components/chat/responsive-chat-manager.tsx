@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Message } from "@/types/chat";
 import { motion } from "framer-motion";
 import { MessageSquare } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { DesktopChatSidebar } from "./desktop-chat-sidebar";
 import { MobileChatInterface } from "./mobile-chat-interface";
@@ -35,39 +36,39 @@ export function ResponsiveChatManager({
   className = "",
 }: ResponsiveChatManagerProps) {
   const isMobile = useStableMobile();
+  const pathname = usePathname();
+  const hideOnContact = pathname?.startsWith("/contact") ?? false;
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [hasAnimated, setHasAnimated] = useState(false);
 
-  // Hide button when chat is open on mobile
+  // Hide FAB on /contact (conversion path) and when chat is open on mobile
   useEffect(() => {
-    if (isMobile && isOpen) {
+    if (hideOnContact || (isMobile && isOpen)) {
       setIsButtonVisible(false);
     } else {
       setIsButtonVisible(true);
     }
-  }, [isMobile, isOpen]);
+  }, [hideOnContact, isMobile, isOpen]);
 
-  // Auto-animation for new users
+  // Auto-animation for new users (skip on contact — FAB hidden)
   useEffect(() => {
-    if (!hasAnimated && !isOpen) {
-      const timer = setTimeout(() => {
-        // Subtle pulse animation on first load
-        const button = document.querySelector("[data-chat-button]");
-        if (button) {
-          button.classList.add("animate-pulse");
-          setTimeout(() => {
-            button.classList.remove("animate-pulse");
-            setHasAnimated(true);
-          }, 2000);
-        }
-      }, 3000);
-
-      return () => clearTimeout(timer);
+    if (hideOnContact || hasAnimated || isOpen) {
+      return () => {};
     }
 
-    // Return empty cleanup function for other code paths
-    return () => {};
-  }, [hasAnimated, isOpen]);
+    const timer = setTimeout(() => {
+      const button = document.querySelector("[data-chat-button]");
+      if (button) {
+        button.classList.add("animate-pulse");
+        setTimeout(() => {
+          button.classList.remove("animate-pulse");
+          setHasAnimated(true);
+        }, 2000);
+      }
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [hasAnimated, hideOnContact, isOpen]);
 
   // Handle close function
   const handleClose = () => {
@@ -76,6 +77,11 @@ export function ResponsiveChatManager({
 
   // Chat interface based on device
   const ChatInterface = isMobile ? MobileChatInterface : DesktopChatSidebar;
+
+  // Coming-soon chat must not cover contact conversion CTAs
+  if (hideOnContact && !isOpen) {
+    return null;
+  }
 
   return (
     <div className={cn("fixed z-[60]", className)}>

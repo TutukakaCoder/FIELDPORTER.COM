@@ -30,10 +30,13 @@ const envSchema = z.object({
   NEXT_PUBLIC_FIREBASE_APP_ID: z.string().min(1, "Firebase app ID is required"),
   NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: z.string().optional(),
 
-  // Server-side Firebase (Admin SDK)
+  // Server-side Firebase (Admin SDK) — support both naming styles
   FIREBASE_PRIVATE_KEY: z.string().optional(),
   FIREBASE_CLIENT_EMAIL: z.string().email().optional(),
   FIREBASE_PROJECT_ID: z.string().optional(),
+  FIREBASE_ADMIN_PRIVATE_KEY: z.string().optional(),
+  FIREBASE_ADMIN_CLIENT_EMAIL: z.string().email().optional(),
+  FIREBASE_ADMIN_PROJECT_ID: z.string().optional(),
 
   // AI Integration
   GEMINI_API_KEY: z.string().min(1, "Gemini API key is required").optional(),
@@ -163,11 +166,16 @@ export const firebaseConfig = {
   measurementId: env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Server-side Firebase Admin configuration
+// Server-side Firebase Admin configuration (FIREBASE_* or FIREBASE_ADMIN_*)
 export const firebaseAdminConfig = {
-  privateKey: env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-  clientEmail: env.FIREBASE_CLIENT_EMAIL,
-  projectId: env.FIREBASE_PROJECT_ID || env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  privateKey: (
+    env.FIREBASE_PRIVATE_KEY || env.FIREBASE_ADMIN_PRIVATE_KEY
+  )?.replace(/\\n/g, "\n"),
+  clientEmail: env.FIREBASE_CLIENT_EMAIL || env.FIREBASE_ADMIN_CLIENT_EMAIL,
+  projectId:
+    env.FIREBASE_PROJECT_ID ||
+    env.FIREBASE_ADMIN_PROJECT_ID ||
+    env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
 };
 
 // AI configuration

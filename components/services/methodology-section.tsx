@@ -92,12 +92,12 @@ export function MethodologySection({
                 initial={{ opacity: 0, y: 16 }}
                 animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
                 transition={{ delay: index * 0.08, duration: 0.4 }}
-                className="methodology-card flex-shrink-0 w-[300px] lg:w-[340px] snap-start rounded-2xl border border-gray-900/10 dark:border-white/10 bg-white dark:bg-black p-8"
+                className="methodology-card flex-shrink-0 w-[300px] lg:w-[340px] snap-start rounded-2xl border border-gray-900/10 dark:border-white/10 bg-white dark:bg-black p-5 md:p-8"
               >
                 <div className="text-sm font-medium text-blue-500 mb-2">
                   Step {phase.phase}
                 </div>
-                <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-3">
+                <h3 className="text-lg md:text-xl font-medium text-gray-900 dark:text-white mb-3">
                   {phase.title}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed">

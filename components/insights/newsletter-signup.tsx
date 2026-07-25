@@ -211,7 +211,10 @@ export function NewsletterSignup() {
               </div>
 
               {/* Signup Form */}
-              <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+              <form
+                onSubmit={handleSubmit}
+                className="max-w-md mx-auto relative z-10"
+              >
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex-1">
                     <input
