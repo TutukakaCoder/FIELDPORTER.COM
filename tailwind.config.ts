@@ -71,10 +71,11 @@ const config: Config = {
         },
       },
 
-      // Inter Font Family Configuration
+      // Plus Jakarta Sans Font Family Configuration
       fontFamily: {
-        inter: ['Inter', 'system-ui', 'sans-serif'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        jakarta: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        inter: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'], // legacy alias
+        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
       },
 
       // Font Weight Mapping

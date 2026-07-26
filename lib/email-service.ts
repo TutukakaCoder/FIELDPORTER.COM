@@ -158,7 +158,7 @@ class EmailService {
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>Welcome to FIELDPORTER</title>
         </head>
-        <body style="margin: 0; padding: 0; background: #0a0a0a; font-family: Inter, Arial, sans-serif;">
+        <body style="margin: 0; padding: 0; background: #0a0a0a; font-family: "Plus Jakarta Sans", Arial, sans-serif;">
           <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden;">
             
             <!-- Premium FIELDPORTER Header -->
@@ -270,7 +270,7 @@ Privacy Policy: https://fieldporter.com/privacy-policy
 
   private generateEmailHtml(type: string, data: any): string {
     const baseStyles = `
-      font-family: Inter, Arial, sans-serif;
+      font-family: "Plus Jakarta Sans", Arial, sans-serif;
       max-width: 600px;
       margin: 0 auto;
       background: #ffffff;
@@ -429,7 +429,7 @@ Privacy Policy: https://fieldporter.com/privacy-policy
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>FIELDPORTER Notification</title>
         </head>
-        <body style="margin: 0; padding: 0; background: #f3f4f6; font-family: Inter, Arial, sans-serif;">
+        <body style="margin: 0; padding: 0; background: #f3f4f6; font-family: "Plus Jakarta Sans", Arial, sans-serif;">
           <div style="${baseStyles}">
             ${headerHtml}
             ${bodyHtml}

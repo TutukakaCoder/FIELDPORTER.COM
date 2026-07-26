@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Building2, Quote } from "lucide-react";
+import { ArrowRight, Quote } from "lucide-react";
 import { memo } from "react";
 
 type ProjectCardData = {
@@ -13,32 +13,32 @@ type ProjectCardData = {
   tagline: string;
   status: string;
   statusTone: "live" | "uat";
-  icon?: typeof Building2;
-  image?: string;
-  logoSrc?: string;
+  category: string;
+  image: string;
 };
 
 const projects: ProjectCardData[] = [
   {
     id: "voluntas-intelligence",
-    icon: Building2,
     title: "VOLOCEAN Client and Investment Management Platform",
     shortTitle: "VOLOCEAN Platform",
     tagline:
       "Shared management platform for clients, investors, advisors, and staff. 805 investors in the network. Live about 9 months.",
     status: "Live • 9 Months",
     statusTone: "live",
+    category: "Client and investment management",
+    image: "/portfolio/volocean/dashboard-hero.png",
   },
   {
     id: "gogoprop",
     title: "GoGoProp Portal",
     shortTitle: "GoGoProp Portal",
     tagline:
-      "Specialist lending portal — enquiry through identity checks. Purpose-built pipeline, deal tools, and client portal — currently in active client testing ahead of launch.",
+      "Specialist lending portal from enquiry through identity checks. Purpose-built pipeline, deal tools, and client portal, currently in active client testing ahead of launch.",
     status: "IN DEVELOPMENT • CLIENT UAT",
     statusTone: "uat",
+    category: "Property finance",
     image: "/portfolio/gogoprop/dashboard-hero.png",
-    logoSrc: "/portfolio/gogoprop/mark.svg",
   },
 ];
 
@@ -49,8 +49,7 @@ const jasonTestimonial = {
     "We wanted to create an AI platform to help run our advisory business, something that could manage clients, streamline admin and help automate our service delivery. Freddy took the time to really understand what we needed and delivered something right on the mark, fast, professional, and great to work with.",
   author: "Jason Holdsworth",
   role: "Founding Partner - VOLOCEAN",
-  projectResult:
-    "805 investors on the platform — live about 9 months.",
+  projectResult: "805 investors on the platform, live about 9 months.",
   image: "/images/jason-h-profile.jpg",
 };
 
@@ -61,8 +60,6 @@ const statusClass = {
 
 const ProjectCard = memo(
   ({ project, index }: { project: ProjectCardData; index: number }) => {
-    const Icon = project.icon;
-
     return (
       <motion.article
         initial={{ opacity: 0, y: 20 }}
@@ -74,39 +71,20 @@ const ProjectCard = memo(
           href="/portfolio"
           className="group block h-full overflow-hidden rounded-2xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02] transition-colors duration-300 hover:border-gray-900/20 dark:hover:border-white/20"
         >
-          {project.image ? (
-            <div className="relative aspect-[16/10] overflow-hidden bg-black/70 border-b border-gray-900/10 dark:border-white/10">
-              {project.logoSrc && (
-                <div className="absolute top-3 left-3 z-10 p-1.5 rounded-lg bg-black/55 backdrop-blur-sm border border-white/10">
-                  <Image
-                    src={project.logoSrc}
-                    alt=""
-                    width={24}
-                    height={24}
-                    className="w-6 h-6"
-                  />
-                </div>
-              )}
-              <Image
-                src={project.image}
-                alt={`${project.title} product interface`}
-                fill
-                className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-            </div>
-          ) : null}
+          <div className="relative aspect-[16/10] overflow-hidden bg-black/70 border-b border-gray-900/10 dark:border-white/10">
+            <Image
+              src={project.image}
+              alt={`${project.title} product interface`}
+              fill
+              className="object-contain object-top transition-transform duration-500 group-hover:scale-[1.01]"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
 
           <div className="p-4 sm:p-6 md:p-8">
-            {Icon ? (
-              <div className="mb-3 sm:mb-4 p-2.5 sm:p-3 w-fit rounded-xl bg-gray-900/10 dark:bg-white/10 border border-gray-900/20 dark:border-white/20">
-                <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500 dark:text-blue-400" />
-              </div>
-            ) : (
-              <div className="mb-3 sm:mb-4 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Property finance
-              </div>
-            )}
+            <div className="mb-3 sm:mb-4 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              {project.category}
+            </div>
 
             <span
               className={`inline-block text-xs font-medium border px-2.5 py-1 rounded-full mb-3 ${statusClass[project.statusTone]}`}

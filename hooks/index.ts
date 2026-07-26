@@ -1,5 +1,6 @@
 export * from "./use-device-capability";
 export * from "./use-performance-monitor";
+export * from "./use-portfolio-media-preloader";
 // ARCHIVED: export * from './use-resource-preloader'; - moved to archive/2025-01-cleanup/hooks/
 export * from "./use-scroll-state";
 export * from "./use-simple-preloader";

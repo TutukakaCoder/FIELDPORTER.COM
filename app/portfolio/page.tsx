@@ -1,7 +1,7 @@
 "use client";
 
 import { PageWrapper } from "@/components/layout";
-import { useHorizontalSwipe } from "@/hooks";
+import { useHorizontalSwipe, usePortfolioMediaPreloader } from "@/hooks";
 import {
   AnimatePresence,
   motion,
@@ -25,7 +25,7 @@ import {
   Zap,
 } from "lucide-react";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 // TypeScript interfaces
 interface ProjectMetric {
@@ -99,9 +99,9 @@ const portfolioSections: PortfolioSection[] = [
         shortStatus: "Live · 9 mo",
         category: "Client and Investment Management",
         outcomeLine:
-          "Shared client & investor workspace — live about 9 months",
+          "Shared client and investor workspace, live about 9 months",
         description:
-          "Live for about 9 months and still improving. A shared management platform where clients, investors, advisors, product managers, staff, and admins see the same picture and work from one place — instead of chasing updates across emails, decks, and notes.",
+          "Live for about 9 months and still improving. A shared management platform where clients, investors, advisors, product managers, staff, and admins see the same picture and work from one place, instead of chasing updates across emails, decks, and notes.",
         applyUrl: "https://voluntas.web.app/apply?ref=FIELDPORTER",
         capabilities: [
           "One workspace for clients, investors, advisors, staff, and admins",
@@ -127,6 +127,7 @@ const portfolioSections: PortfolioSection[] = [
         ],
         techStack:
           "React 18 • TypeScript • Firebase • Google Gemini AI • Multi-tenant Architecture",
+        heroImage: "/portfolio/volocean/dashboard-hero.png",
         videoUrl: "/videos/Voluntas-application-run-through.mp4",
         testimonial: {
           quote:
@@ -134,6 +135,33 @@ const portfolioSections: PortfolioSection[] = [
           author: "Jason Holdsworth, Founding Partner - VOLOCEAN",
           rating: 5,
         },
+      },
+      {
+        title: "GoGoProp Portal",
+        shortTitle: "GoGoProp Portal",
+        status: "IN DEVELOPMENT • CLIENT UAT",
+        shortStatus: "Client UAT",
+        statusStyle: "uat",
+        category: "Full product build · Property finance",
+        outcomeLine: "Lending portal in active client testing ahead of launch",
+        description:
+          "FIELDPORTER is building GoGoProp’s Phase 1 lending portal: a branded system for staff, borrowers, and brokers covering enquiry, decisions in principle, full application, and KYC. It replaces early CRM-based workflow with a purpose-built pipeline, deal tools, and client portal, currently in active client testing ahead of launch.",
+        capabilities: [
+          "Branded online enquiry and status tracking",
+          "One portal for borrowers and introducers/brokers",
+          "Staff deal pipeline and deal workspace",
+          "Property data checks and valuation support",
+          "Decision-in-principle (PDF) with staff control",
+          "Full application documents and identity-check journey",
+        ],
+        techStack:
+          "Next.js • React • TypeScript • Firebase • Transactional email • Property data and identity verification integrations",
+        heroImage: "/portfolio/gogoprop/dashboard-hero.png",
+        galleryImages: [
+          "/portfolio/gogoprop/pipeline-list.png",
+          "/portfolio/gogoprop/deal-workspace.png",
+          "/portfolio/gogoprop/borrower-dashboard.png",
+        ],
       },
       {
         title: "Self-Development Platform",
@@ -166,34 +194,6 @@ const portfolioSections: PortfolioSection[] = [
           author: "Steve, Leadership Development Coach",
           rating: 5,
         },
-      },
-      {
-        title: "GoGoProp Portal",
-        shortTitle: "GoGoProp Portal",
-        status: "IN DEVELOPMENT • CLIENT UAT",
-        shortStatus: "Client UAT",
-        statusStyle: "uat",
-        category: "Full product build · Property finance",
-        outcomeLine: "Lending portal in active client testing ahead of launch",
-        description:
-          "FIELDPORTER is building GoGoProp’s Phase 1 lending portal: a branded system for staff, borrowers, and brokers covering enquiry, decisions in principle, full application, and KYC. It replaces early CRM-based workflow with a purpose-built pipeline, deal tools, and client portal — currently in active client testing ahead of launch.",
-        capabilities: [
-          "Branded online enquiry and status tracking",
-          "One portal for borrowers and introducers/brokers",
-          "Staff deal pipeline and deal workspace",
-          "Property data checks and valuation support",
-          "Decision-in-principle (PDF) with staff control",
-          "Full application documents and identity-check journey",
-        ],
-        techStack:
-          "Next.js • React • TypeScript • Firebase • Transactional email • Property data and identity verification integrations",
-        heroImage: "/portfolio/gogoprop/dashboard-hero.png",
-        logoSrc: "/portfolio/gogoprop/mark.svg",
-        galleryImages: [
-          "/portfolio/gogoprop/pipeline-list.png",
-          "/portfolio/gogoprop/deal-workspace.png",
-          "/portfolio/gogoprop/borrower-dashboard.png",
-        ],
       },
     ],
   },
@@ -448,13 +448,57 @@ function PortfolioHero() {
   );
 }
 
+function PortfolioVideo({ src }: { src: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [preload, setPreload] = useState<"none" | "metadata">("none");
+
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setPreload("metadata");
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "300px" },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div className="relative w-full overflow-hidden bg-black/50 rounded-2xl">
+      <video
+        ref={videoRef}
+        controls
+        loop
+        playsInline
+        preload={preload}
+        className="w-full h-full block"
+        style={{
+          willChange: "auto",
+          backfaceVisibility: "hidden",
+          transform: "translateZ(0)",
+        }}
+      >
+        <source src={src} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  );
+}
+
 function ProjectMedia({
   project,
-  projectIndex,
+  imagePriority,
   compact,
 }: {
   project: Project;
-  projectIndex: number;
+  imagePriority?: boolean;
   compact?: boolean;
 }) {
   if (!project.testimonial && !project.videoUrl && !project.heroImage) {
@@ -465,133 +509,109 @@ function ProjectMedia({
     ? "relative border border-gray-900/10 dark:border-white/10 rounded-2xl overflow-hidden bg-gray-900/[0.02] dark:bg-white/[0.02]"
     : "relative border border-gray-900/10 dark:border-white/10 rounded-2xl md:rounded-3xl overflow-hidden bg-gray-900/[0.02] dark:bg-white/[0.02] backdrop-blur-xl transition-colors duration-200 hover:border-gray-900/20 dark:hover:border-white/20";
 
-  if (project.videoUrl) {
-    return (
-      <div className={frame}>
-        <div
-          className={`relative w-full overflow-hidden bg-black/50 ${compact ? "rounded-2xl" : "rounded-2xl md:rounded-3xl"}`}
-        >
-          <video
-            controls
-            loop
-            playsInline
-            preload="metadata"
-            className="w-full h-full block"
-            style={{
-              willChange: "auto",
-              backfaceVisibility: "hidden",
-              transform: "translateZ(0)",
-            }}
-          >
-            <source src={project.videoUrl} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        {project.testimonial && !compact && (
-          <div className="hidden lg:block p-6 md:p-8">
-            <div className="flex items-start gap-4">
-              <div className="text-blue-400 text-4xl leading-none">&quot;</div>
-              <div className="flex-1">
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4 italic text-base">
-                  {project.testimonial.quote}
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="flex gap-1">
-                    {[...Array(project.testimonial.rating)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="w-4 h-4 text-yellow-400 fill-current"
-                      />
-                    ))}
-                  </div>
-                  <span className="text-gray-900 dark:text-white font-medium">
-                    - {project.testimonial.author}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  if (project.heroImage) {
-    return (
-      <div className={`${frame} ${compact ? "p-0" : "p-0 md:p-4"}`}>
-        {project.logoSrc && (
-          <div className="absolute top-3 left-3 z-10 p-1.5 md:p-2 rounded-lg md:rounded-xl bg-black/55 backdrop-blur-sm border border-white/10">
-            <Image
-              src={project.logoSrc}
-              alt=""
-              width={28}
-              height={28}
-              className="w-6 h-6 md:w-7 md:h-7"
-            />
-          </div>
-        )}
-        <div
-          className={`relative w-full aspect-[16/10] overflow-hidden bg-black/60 border border-white/5 ${compact ? "rounded-2xl" : "rounded-2xl"}`}
-        >
-          <Image
-            src={project.heroImage}
-            alt={`${project.title} product interface`}
-            fill
-            className="object-cover object-top"
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            priority={projectIndex === 0}
-          />
-        </div>
-        {project.galleryImages && project.galleryImages.length > 0 && (
-          <div
-            className={`grid grid-cols-3 gap-1.5 md:gap-3 ${compact ? "mt-1.5 px-0" : "mt-2 md:mt-3"}`}
-          >
-            {project.galleryImages.map((src, idx) => (
-              <div
-                key={src}
-                className="relative aspect-[16/10] rounded-lg md:rounded-xl overflow-hidden bg-black/50 border border-white/5"
-              >
-                <Image
-                  src={src}
-                  alt={`${project.title} screen ${idx + 1}`}
-                  fill
-                  className="object-cover object-top"
-                  sizes="(max-width: 1024px) 33vw, 160px"
-                />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  }
+  const hasVisual = Boolean(project.heroImage || project.videoUrl);
 
   // Testimonial-only (desktop chrome; mobile collapses into details)
-  if (compact) return null;
+  if (!hasVisual) {
+    if (compact) return null;
 
-  return (
-    <div className={`${frame} p-6 md:p-12`}>
-      <div className="flex items-start gap-4">
-        <div className="text-blue-400 text-4xl leading-none">&quot;</div>
-        <div className="flex-1">
-          <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4 italic text-base md:text-lg">
-            {project.testimonial?.quote}
-          </p>
-          <div className="flex items-center gap-3">
-            <div className="flex gap-1">
-              {[...Array(project.testimonial?.rating || 0)].map((_, i) => (
-                <Star
-                  key={i}
-                  className="w-4 h-4 text-yellow-400 fill-current"
-                />
-              ))}
+    return (
+      <div className={`${frame} p-6 md:p-12`}>
+        <div className="flex items-start gap-4">
+          <div className="text-blue-400 text-4xl leading-none">&quot;</div>
+          <div className="flex-1">
+            <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4 italic text-base md:text-lg">
+              {project.testimonial?.quote}
+            </p>
+            <div className="flex items-center gap-3">
+              <div className="flex gap-1">
+                {[...Array(project.testimonial?.rating || 0)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className="w-4 h-4 text-yellow-400 fill-current"
+                  />
+                ))}
+              </div>
+              <span className="text-gray-900 dark:text-white font-medium">
+                - {project.testimonial?.author}
+              </span>
             </div>
-            <span className="text-gray-900 dark:text-white font-medium">
-              - {project.testimonial?.author}
-            </span>
           </div>
         </div>
       </div>
+    );
+  }
+
+  return (
+    <div
+      className={`${frame} ${project.heroImage ? (compact ? "p-0" : "p-0 md:p-4") : ""}`}
+    >
+      {project.heroImage && (
+        <>
+          <div className="relative w-full aspect-[16/10] overflow-hidden bg-black/70 border border-white/5 rounded-2xl">
+            <Image
+              src={project.heroImage}
+              alt={`${project.title} product interface`}
+              fill
+              className="object-contain object-top"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              priority={Boolean(imagePriority)}
+            />
+          </div>
+          {project.galleryImages && project.galleryImages.length > 0 && (
+            <div
+              className={`grid grid-cols-3 gap-1.5 md:gap-3 ${compact ? "mt-1.5 px-0" : "mt-2 md:mt-3"}`}
+            >
+              {project.galleryImages.map((src, idx) => (
+                <div
+                  key={src}
+                  className="relative aspect-[16/10] rounded-lg md:rounded-xl overflow-hidden bg-black/70 border border-white/5"
+                >
+                  <Image
+                    src={src}
+                    alt={`${project.title} screen ${idx + 1}`}
+                    fill
+                    className="object-contain object-top"
+                    sizes="(max-width: 1024px) 33vw, 160px"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {project.videoUrl && (
+        <div className={project.heroImage ? "mt-2 md:mt-3" : undefined}>
+          <PortfolioVideo src={project.videoUrl} />
+        </div>
+      )}
+
+      {project.testimonial && !compact && (
+        <div className="hidden lg:block p-6 md:p-8">
+          <div className="flex items-start gap-4">
+            <div className="text-blue-400 text-4xl leading-none">&quot;</div>
+            <div className="flex-1">
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4 italic text-base">
+                {project.testimonial.quote}
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="flex gap-1">
+                  {[...Array(project.testimonial.rating)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className="w-4 h-4 text-yellow-400 fill-current"
+                    />
+                  ))}
+                </div>
+                <span className="text-gray-900 dark:text-white font-medium">
+                  - {project.testimonial.author}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -770,6 +790,9 @@ function ProjectCard({
   const hasMedia = Boolean(
     project.testimonial || project.videoUrl || project.heroImage,
   );
+  const imagePriority =
+    Boolean(project.heroImage) &&
+    section.projects.findIndex((p) => Boolean(p.heroImage)) === projectIndex;
   const statusStyle = getTimelineBadgeStyle(
     project.statusStyle || section.timelineStyle,
   );
@@ -834,7 +857,7 @@ function ProjectCard({
               {(project.videoUrl || project.heroImage) && (
                 <ProjectMedia
                   project={project}
-                  projectIndex={projectIndex}
+                  imagePriority={imagePriority}
                   compact
                 />
               )}
@@ -872,7 +895,10 @@ function ProjectCard({
 
         {hasMedia && (
           <div className="relative">
-            <ProjectMedia project={project} projectIndex={projectIndex} />
+            <ProjectMedia
+              project={project}
+              imagePriority={imagePriority}
+            />
           </div>
         )}
       </div>
@@ -1098,6 +1124,8 @@ function PortfolioCTA() {
 }
 
 export default function PortfolioPage() {
+  usePortfolioMediaPreloader();
+
   return (
     <PageWrapper>
       <div className="relative z-10 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:via-gray-950 dark:to-black min-h-screen">

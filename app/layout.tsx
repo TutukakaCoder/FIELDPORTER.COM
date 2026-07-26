@@ -8,13 +8,14 @@ import {
 import { PageTransition } from "@/components/ui/page-transition";
 import { SEO_DEFAULTS } from "@/config/constants";
 import { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import type React from "react";
 import "./globals.css";
 
-const inter = Inter({
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const viewport: Viewport = {
@@ -172,7 +173,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.className} bg-white dark:bg-black transition-colors duration-300`}
+        className={`${plusJakartaSans.className} bg-white dark:bg-black transition-colors duration-300`}
       >
         <EntranceProvider>
           <ScrollRestoration />
