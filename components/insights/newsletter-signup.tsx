@@ -101,7 +101,7 @@ export function NewsletterSignup() {
                 </motion.div>
               </motion.div>
 
-              <h3 className="text-heading-xl font-semibold text-fieldporter-white mb-4">
+              <h3 className="text-heading-xl font-semibold text-gray-900 dark:text-white mb-4">
                 Welcome to Our Community!
               </h3>
 
@@ -178,7 +178,7 @@ export function NewsletterSignup() {
 
               {/* Header */}
               <div className="text-spacing">
-                <h3 className="text-heading-xl font-semibold text-fieldporter-white">
+                <h3 className="text-heading-xl font-semibold text-gray-900 dark:text-white">
                   Stay Ahead with AI Insights
                 </h3>
                 <p className="text-body-lg text-fieldporter-gray max-w-2xl mx-auto leading-relaxed">
@@ -197,13 +197,13 @@ export function NewsletterSignup() {
                     transition={{ duration: 0.4, delay: 0.2 + index * 0.1 }}
                     viewport={{ once: true }}
                     whileHover={{ x: 4, scale: 1.02 }}
-                    className="flex items-center space-x-3 text-left p-2 rounded-lg hover:bg-white/5 transition-colors duration-300 cursor-default"
+                    className="flex items-center space-x-3 text-left p-2 rounded-lg hover:bg-gray-900/5 dark:hover:bg-white/5 transition-colors duration-300 cursor-default"
                   >
                     <motion.div
                       className="w-2 h-2 rounded-full bg-fieldporter-blue flex-shrink-0"
                       whileHover={{ scale: 1.5 }}
                     />
-                    <span className="text-body-sm text-fieldporter-gray hover:text-white transition-colors duration-300">
+                    <span className="text-body-sm text-fieldporter-gray hover:text-gray-900 dark:hover:text-white transition-colors duration-300">
                       {benefit}
                     </span>
                   </motion.div>
@@ -225,7 +225,7 @@ export function NewsletterSignup() {
                       aria-label="Email address"
                       required
                       disabled={isSubmitting}
-                      className="w-full px-4 py-4 rounded-lg bg-white/10 border border-white/20 text-fieldporter-white placeholder-fieldporter-gray focus:outline-none focus:ring-2 focus:ring-fieldporter-blue focus:border-transparent focus:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all duration-300 disabled:opacity-50 min-h-[48px] touch-manipulation hover:border-white/30 hover:bg-white/[0.12]"
+                      className="w-full px-4 py-4 rounded-lg bg-gray-900/5 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 text-gray-900 dark:text-white placeholder-fieldporter-gray focus:outline-none focus:ring-2 focus:ring-fieldporter-blue focus:border-transparent focus:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all duration-300 disabled:opacity-50 min-h-[48px] touch-manipulation hover:border-gray-900/30 dark:hover:border-white/30 hover:bg-gray-900/[0.08] dark:hover:bg-white/[0.12]"
                     />
                     {error && (
                       <motion.p
@@ -272,7 +272,7 @@ export function NewsletterSignup() {
               </p>
 
               {/* Social Proof */}
-              <div className="pt-8 border-t border-white/10">
+              <div className="pt-8 border-t border-gray-900/10 dark:border-white/10">
                 <p className="text-body-sm text-fieldporter-gray mb-4">
                   Join 500+ executives and entrepreneurs
                 </p>

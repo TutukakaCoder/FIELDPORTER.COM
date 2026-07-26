@@ -18,7 +18,7 @@ export function ChatV2ComingSoonOverlay({
       transition={{ duration: 0.3, delay: 0.15 }}
       className={cn(
         "absolute inset-0 z-10 flex items-center justify-center p-6",
-        "bg-black/60 backdrop-blur-md",
+        "bg-white/80 dark:bg-black/60 backdrop-blur-md",
         className,
       )}
       aria-hidden="false"
@@ -26,7 +26,7 @@ export function ChatV2ComingSoonOverlay({
       aria-live="polite"
     >
       <div className="max-w-xs text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-black/30 backdrop-blur-xl">
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-gray-900/10 dark:border-white/10 bg-white/70 dark:bg-black/30 backdrop-blur-xl">
           <Bot className="h-7 w-7 text-fieldporter-blue" strokeWidth={1.5} />
         </div>
 
@@ -35,7 +35,7 @@ export function ChatV2ComingSoonOverlay({
           V2 Coming Soon
         </span>
 
-        <h3 className="mb-2 text-lg font-semibold text-fieldporter-white">
+        <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
           FIELDPORTER Agent V2
         </h3>
 

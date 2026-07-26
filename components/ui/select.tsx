@@ -22,7 +22,7 @@ const SelectTrigger = React.forwardRef<
     className={cn(
       "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
       // FIELDPORTER Premium Styling
-      "bg-bg-fieldporter-tertiary border-fieldporter-gray/30 text-fieldporter-white",
+      "bg-bg-fieldporter-tertiary border-fieldporter-gray/30 text-gray-900 dark:text-white",
       "focus:border-fieldporter-blue focus:ring-fieldporter-blue/20",
       "focus:shadow-[0_0_0_3px_rgba(59,130,246,0.1)]",
       "hover:border-fieldporter-gray/50 transition-all duration-200 ease-out",
@@ -143,8 +143,8 @@ const SelectItem = React.forwardRef<
     className={cn(
       "relative flex w-full cursor-default select-none items-center rounded-sm py-3 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       // FIELDPORTER Premium Styling
-      "text-fieldporter-white font-inter",
-      "focus:bg-fieldporter-blue/20 focus:text-fieldporter-white",
+      "text-gray-900 dark:text-white font-inter",
+      "focus:bg-fieldporter-blue/20 focus:text-gray-900 dark:focus:text-white",
       "hover:bg-fieldporter-gray/10 hover:translate-x-0.5 transition-all duration-150",
       "data-[highlighted]:bg-fieldporter-blue/10",
       // Mobile optimizations

@@ -38,7 +38,7 @@ export function InsightsHero() {
             </div>
 
             <div className="space-y-4">
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-fieldporter-white">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 dark:text-white">
                 Better AI decisions,
                 <span className="text-fieldporter-blue">
                   {" "}
@@ -77,8 +77,8 @@ export function InsightsHero() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6 backdrop-blur-md">
-            <div className="mb-5 flex items-center gap-2 text-fieldporter-white">
+          <div className="rounded-2xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.03] dark:bg-white/[0.03] p-5 sm:p-6 backdrop-blur-md">
+            <div className="mb-5 flex items-center gap-2 text-gray-900 dark:text-white">
               <BookOpen className="h-4 w-4 text-fieldporter-blue" />
               <h2 className="text-base font-semibold">
                 What this page is built for
@@ -96,7 +96,7 @@ export function InsightsHero() {
               ))}
             </ul>
 
-            <div className="mt-6 border-t border-white/10 pt-5">
+            <div className="mt-6 border-t border-gray-900/10 dark:border-white/10 pt-5">
               <p className="mb-3 text-xs uppercase tracking-wide text-fieldporter-gray">
                 Core topics
               </p>

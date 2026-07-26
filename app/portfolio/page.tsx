@@ -418,22 +418,22 @@ function PortfolioHero() {
           className="space-y-6 md:space-y-8"
         >
           <div className="flex justify-center">
-            <div className="p-3 md:p-4 rounded-2xl backdrop-blur-xl border border-white/10 bg-white/[0.02]">
-              <Code2 className="w-8 h-8 md:w-12 md:h-12 text-blue-400" />
+            <div className="p-3 md:p-4 rounded-2xl backdrop-blur-xl border border-gray-900/10 bg-gray-900/[0.02] dark:border-white/10 dark:bg-white/[0.02]">
+              <Code2 className="w-8 h-8 md:w-12 md:h-12 text-blue-500 dark:text-blue-400" />
             </div>
           </div>
 
           <div className="space-y-3 md:space-y-4">
-            <h1 className="text-3xl md:text-5xl lg:text-7xl font-light text-white leading-tight">
+            <h1 className="text-3xl md:text-5xl lg:text-7xl font-light text-gray-900 dark:text-white leading-tight">
               Portfolio
             </h1>
-            <div className="text-base md:text-xl lg:text-2xl text-gray-300 font-light">
+            <div className="text-base md:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 font-light">
               Real client work and internal ventures
             </div>
           </div>
 
           <div className="max-w-2xl mx-auto hidden sm:block">
-            <p className="text-base md:text-lg lg:text-xl text-gray-400 leading-relaxed">
+            <p className="text-base md:text-lg lg:text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
               Client work and in-house builds: AI systems, workflow automation,
               and strategic research with clear outcomes.
             </p>

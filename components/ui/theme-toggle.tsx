@@ -49,7 +49,7 @@ export function ThemeToggle() {
   return (
     <motion.button
       onClick={toggleTheme}
-      className="relative w-10 h-10 rounded-full bg-white/10 dark:bg-black/10 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-lg flex items-center justify-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fieldporter-blue focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+      className="relative w-10 h-10 rounded-full bg-gray-900/5 dark:bg-black/10 backdrop-blur-xl border border-gray-900/15 dark:border-white/10 shadow-lg flex items-center justify-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fieldporter-blue focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
       whileHover={{ scale: 1.08, boxShadow: "0 10px 40px rgba(0,0,0,0.2)" }}
       whileTap={{ scale: 0.95 }}

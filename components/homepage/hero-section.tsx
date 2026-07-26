@@ -26,7 +26,7 @@ const Hero3DBackground = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black" />
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-gray-50 to-white dark:from-gray-950 dark:via-gray-900 dark:to-black" />
     ),
   },
 );
@@ -39,7 +39,7 @@ const Hero3DBackgroundSimplified = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black" />
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-gray-50 to-white dark:from-gray-950 dark:via-gray-900 dark:to-black" />
     ),
   },
 );
@@ -199,7 +199,7 @@ const AnimatedCTA = memo(() => {
       {isMobile ? (
         <Link
           href="/portfolio"
-          className="text-sm font-medium text-white/70 hover:text-white underline-offset-4 hover:underline transition-colors py-1"
+          className="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-white/70 dark:hover:text-white underline-offset-4 hover:underline transition-colors py-1"
         >
           View Work
         </Link>
@@ -211,7 +211,7 @@ const AnimatedCTA = memo(() => {
           <Button
             variant="outline"
             size="lg"
-            className="text-base sm:text-lg px-8 sm:px-10 h-14 bg-white/[0.02] hover:bg-white/[0.08] border-white/10 hover:border-white/20 backdrop-blur-md transition-all duration-300"
+            className="text-base sm:text-lg px-8 sm:px-10 h-14 bg-gray-900/[0.02] hover:bg-gray-900/[0.06] dark:bg-white/[0.02] dark:hover:bg-white/[0.08] border-gray-900/15 hover:border-gray-900/30 dark:border-white/10 dark:hover:border-white/20 backdrop-blur-md transition-all duration-300"
             asChild
           >
             <Link href="/portfolio">View Work</Link>
@@ -267,18 +267,18 @@ export function HeroSection() {
           className="space-y-5 md:space-y-10"
         >
           <div className="space-y-4 md:space-y-6 relative">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-black/40 dark:bg-black/40 blur-[100px] rounded-full pointer-events-none -z-10" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] hidden dark:block bg-black/40 blur-[100px] rounded-full pointer-events-none -z-10" />
 
             <motion.h1
               variants={textReveal}
-              className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 leading-[1.15] pb-1 md:pb-2 break-words max-w-4xl mx-auto"
+              className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-gray-900 to-gray-700 dark:from-white dark:to-white/70 leading-[1.15] pb-1 md:pb-2 break-words max-w-4xl mx-auto"
             >
               {HERO_HEADLINE}
             </motion.h1>
 
             <motion.p
               variants={textReveal}
-              className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-400 max-w-xl sm:max-w-2xl mx-auto font-light leading-relaxed"
+              className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 dark:text-gray-400 max-w-xl sm:max-w-2xl mx-auto font-light leading-relaxed"
             >
               {HERO_VALUE_PROP}
             </motion.p>

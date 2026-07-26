@@ -57,11 +57,11 @@ const config: Config = {
         warning: '#F59E0B',
         error: '#EF4444',
         info: '#06B6D4',
-        // Background Variations (renamed to avoid conflict)
+        // Background Variations — theme-aware via CSS vars in globals.css
         'bg-fieldporter': {
-          primary: '#000000',
-          secondary: '#0a0a0f',
-          tertiary: '#1a1a1f',
+          primary: 'hsl(var(--bg-fieldporter-primary))',
+          secondary: 'hsl(var(--bg-fieldporter-secondary))',
+          tertiary: 'hsl(var(--bg-fieldporter-tertiary))',
         },
         // Glass Effect Colors
         glass: {

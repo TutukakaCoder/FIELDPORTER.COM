@@ -29,7 +29,7 @@ function PremiumAuroraBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden">
       {/* Sophisticated gradient base */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black" />
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-gray-50 to-white dark:from-gray-950 dark:via-gray-900 dark:to-black" />
 
       {/* Enhanced grain texture overlay */}
       <div
@@ -205,27 +205,27 @@ export function ServiceHero({
             {/* Icon */}
             <motion.div variants={itemVariants} className="flex justify-center">
               <motion.div
-                className="p-4 rounded-2xl backdrop-blur-md border border-white/10 bg-white/[0.02] transition-all duration-300 hover:border-blue-400/40 hover:bg-white/[0.04] hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]"
+                className="p-4 rounded-2xl backdrop-blur-md border border-gray-900/10 bg-gray-900/[0.02] dark:border-white/10 dark:bg-white/[0.02] transition-all duration-300 hover:border-blue-400/40 hover:bg-gray-900/[0.04] dark:hover:bg-white/[0.04] hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Briefcase className="w-12 h-12 text-blue-400 transition-transform duration-300 group-hover:rotate-3" />
+                <Briefcase className="w-12 h-12 text-blue-500 dark:text-blue-400 transition-transform duration-300 group-hover:rotate-3" />
               </motion.div>
             </motion.div>
 
             {/* Main heading */}
             <motion.div variants={itemVariants} className="space-y-4">
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-light text-white leading-tight">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-light text-gray-900 dark:text-white leading-tight">
                 Services
               </h1>
-              <div className="text-base md:text-lg text-gray-300 font-light">
+              <div className="text-base md:text-lg text-gray-600 dark:text-gray-300 font-light">
                 {subtitle}
               </div>
             </motion.div>
 
             {/* Description */}
             <motion.div variants={itemVariants} className="max-w-2xl mx-auto">
-              <p className="text-base md:text-lg text-gray-400 leading-relaxed">
+              <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
                 {description}
               </p>
             </motion.div>

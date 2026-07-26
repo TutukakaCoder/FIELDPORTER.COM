@@ -116,7 +116,7 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
                 </div>
 
                 {/* Title */}
-                <h1 className="text-display-sm md:text-display-md font-bold text-fieldporter-white leading-tight">
+                <h1 className="text-display-sm md:text-display-md font-bold text-gray-900 dark:text-white leading-tight">
                   {article.title}
                 </h1>
 
@@ -126,7 +126,7 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
                 </p>
 
                 {/* Meta Info */}
-                <div className="flex items-center justify-between flex-wrap gap-4 pt-6 border-t border-white/10">
+                <div className="flex items-center justify-between flex-wrap gap-4 pt-6 border-t border-gray-900/10 dark:border-white/10">
                   <div className="flex items-center space-x-6 text-body-sm text-fieldporter-gray">
                     <div className="flex items-center space-x-2">
                       <User className="w-4 h-4" />
@@ -189,7 +189,7 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <GlassCard className="p-8 md:p-12 hover:border-white/15 transition-all duration-300">
+            <GlassCard className="p-8 md:p-12 hover:border-gray-900/15 dark:hover:border-white/15 transition-all duration-300">
               <div className="article-content">{children}</div>
             </GlassCard>
           </motion.div>
@@ -203,7 +203,7 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
             whileHover={{ y: -4 }}
           >
             <GlassCard className="p-8 text-center hover:border-fieldporter-blue/30 transition-all duration-300 hover:shadow-xl hover:shadow-fieldporter-blue/15">
-              <h3 className="text-heading-lg font-semibold text-fieldporter-white mb-4">
+              <h3 className="text-heading-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Explore More Insights
               </h3>
               <p className="text-body-md text-fieldporter-gray mb-6">

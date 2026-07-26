@@ -156,7 +156,7 @@ export function DesktopChatSidebar({
       <motion.div
         className="flex items-center justify-between p-4 border-b border-fieldporter-gray/20 bg-bg-fieldporter-secondary/80 backdrop-blur-sm relative"
         animate={{
-          background: isMinimized ? "rgba(0, 0, 0, 0.9)" : "rgba(0, 0, 0, 0.5)",
+          opacity: isMinimized ? 1 : 1,
         }}
         transition={{ duration: 0.3 }}
       >
@@ -165,7 +165,7 @@ export function DesktopChatSidebar({
             <Bot className="w-4 h-4 text-fieldporter-blue" />
           </div>
           <div>
-            <h3 className="text-base font-semibold text-fieldporter-white">
+            <h3 className="text-base font-semibold text-gray-900 dark:text-white">
               FIELDPORTER Agent
             </h3>
             <p className="text-xs text-fieldporter-gray">
@@ -262,7 +262,7 @@ export function DesktopChatSidebar({
                   <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-fieldporter-blue/20 flex items-center justify-center">
                     <Bot className="w-8 h-8 text-fieldporter-blue" />
                   </div>
-                  <h3 className="text-lg font-semibold text-fieldporter-white mb-2">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                     FIELDPORTER
                   </h3>
                   <p className="text-fieldporter-gray text-sm leading-relaxed mb-4">
@@ -294,7 +294,7 @@ export function DesktopChatSidebar({
                           }
                           className="px-2 py-1 text-xs bg-fieldporter-gray/10 hover:bg-fieldporter-gray/20 
                                    border border-fieldporter-gray/20 rounded-full transition-all duration-200
-                                   text-fieldporter-white/80 hover:text-fieldporter-white"
+                                   text-gray-800 dark:text-white/80 hover:text-gray-900 dark:hover:text-white"
                         >
                           {suggestion}
                         </motion.button>
@@ -334,8 +334,8 @@ export function DesktopChatSidebar({
                       className={cn(
                         "text-[13px] leading-[1.6] whitespace-pre-wrap",
                         message.role === "user"
-                          ? "rounded-2xl rounded-br-md px-3 py-2 bg-fieldporter-blue text-fieldporter-white"
-                          : "text-fieldporter-white/90 py-0.5",
+                          ? "rounded-2xl rounded-br-md px-3 py-2 bg-fieldporter-blue text-white"
+                          : "text-gray-900/90 dark:text-white/90 py-0.5",
                       )}
                     >
                       {formatMessage(message.content)}
@@ -367,7 +367,7 @@ export function DesktopChatSidebar({
                     <Bot className="w-3.5 h-3.5 text-fieldporter-blue" />
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="bg-black border border-white/20 rounded-2xl rounded-bl-md p-2 shadow-lg">
+                    <div className="bg-white dark:bg-black border border-gray-900/15 dark:border-white/20 rounded-2xl rounded-bl-md p-2 shadow-lg">
                       <div className="relative w-[54px] h-[54px] flex items-center justify-center">
                         <motion.img
                           src="/videos/loading-brain.gif"
@@ -408,7 +408,7 @@ export function DesktopChatSidebar({
                     placeholder="Message FIELDPORTER Agent..."
                     className={cn(
                       "w-full resize-none bg-fieldporter-gray/10 border border-fieldporter-gray/20 rounded-2xl px-3 py-2",
-                      "text-fieldporter-white placeholder:text-fieldporter-gray/70",
+                      "text-gray-900 dark:text-white placeholder:text-fieldporter-gray/70",
                       "focus:outline-none focus:ring-2 focus:ring-fieldporter-blue/50 focus:border-fieldporter-blue/50",
                       "focus:shadow-[0_0_15px_rgba(59,130,246,0.2)]",
                       "text-sm leading-relaxed",

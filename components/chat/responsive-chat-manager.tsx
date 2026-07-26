@@ -96,8 +96,8 @@ export function ResponsiveChatManager({
               : "bottom-6 right-6 w-16 h-16",
 
             // Premium glassmorphism background
-            "bg-black/20 backdrop-blur-xl border border-white/10",
-            "hover:bg-black/30 hover:border-white/20",
+            "bg-white/90 dark:bg-black/20 backdrop-blur-xl border border-gray-900/15 dark:border-white/10",
+            "hover:bg-white dark:hover:bg-black/30 hover:border-gray-900/25 dark:hover:border-white/20",
 
             // Subtle glow effect
             "shadow-[0_0_20px_rgba(59,130,246,0.15)]",
@@ -113,7 +113,7 @@ export function ResponsiveChatManager({
             "touch-manipulation select-none",
 
             // Focus state
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fieldporter-blue focus-visible:ring-offset-2 focus-visible:ring-offset-black",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fieldporter-blue focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black",
           )}
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.95 }}
@@ -126,7 +126,10 @@ export function ResponsiveChatManager({
             transition={{ duration: 0.5 }}
           >
             <MessageSquare
-              className={cn(isMobile ? "w-6 h-6" : "w-7 h-7", "text-white/90")}
+              className={cn(
+                isMobile ? "w-6 h-6" : "w-7 h-7",
+                "text-gray-900/90 dark:text-white/90",
+              )}
               strokeWidth={1.5}
             />
           </motion.div>

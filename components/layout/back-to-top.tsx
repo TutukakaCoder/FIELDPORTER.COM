@@ -57,8 +57,8 @@ export function BackToTop({ className, showAfter = 400 }: BackToTopProps) {
               : "bottom-6 left-6 w-16 h-16",
 
             // Matching glassmorphism design
-            "bg-black/20 backdrop-blur-xl border border-white/10",
-            "hover:bg-black/30 hover:border-white/20",
+            "bg-white/90 dark:bg-black/20 backdrop-blur-xl border border-gray-900/15 dark:border-white/10",
+            "hover:bg-white dark:hover:bg-black/30 hover:border-gray-900/25 dark:hover:border-white/20",
 
             // Subtle glow effect
             "shadow-[0_0_20px_rgba(59,130,246,0.15)]",
@@ -79,7 +79,10 @@ export function BackToTop({ className, showAfter = 400 }: BackToTopProps) {
           aria-label="Back to top"
         >
           <ChevronUp
-            className={cn(isMobile ? "w-6 h-6" : "w-7 h-7", "text-white/90")}
+            className={cn(
+              isMobile ? "w-6 h-6" : "w-7 h-7",
+              "text-gray-900/90 dark:text-white/90",
+            )}
             strokeWidth={1.5}
           />
         </motion.button>

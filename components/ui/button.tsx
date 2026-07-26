@@ -18,7 +18,7 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
-          "border border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white hover:border-white/40",
+          "border border-gray-900/20 bg-transparent text-gray-900 hover:bg-gray-900/5 hover:text-gray-900 hover:border-gray-900/40 dark:border-white/20 dark:text-white dark:hover:bg-white/10 dark:hover:text-white dark:hover:border-white/40",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
@@ -27,15 +27,15 @@ const buttonVariants = cva(
         primary:
           "bg-fieldporter-blue text-fieldporter-white font-medium hover:bg-fieldporter-blue/90 active:bg-fieldporter-blue/80 hover:shadow-lg transition-all duration-200 ease-out focus:ring-fieldporter-blue touch-manipulation min-h-[44px]",
         "fieldporter-secondary":
-          "bg-transparent border border-fieldporter-gray text-fieldporter-white font-medium hover:bg-fieldporter-gray/20 active:bg-fieldporter-gray/30 hover:border-fieldporter-white transition-all duration-200 ease-out focus:ring-fieldporter-white touch-manipulation min-h-[44px]",
+          "bg-transparent border border-gray-900/30 text-gray-900 font-medium hover:bg-gray-900/5 active:bg-gray-900/10 hover:border-gray-900 dark:border-fieldporter-gray dark:text-fieldporter-white dark:hover:bg-fieldporter-gray/20 dark:active:bg-fieldporter-gray/30 dark:hover:border-fieldporter-white transition-all duration-200 ease-out focus:ring-fieldporter-blue dark:focus:ring-fieldporter-white touch-manipulation min-h-[44px]",
         "fieldporter-ghost":
-          "bg-transparent text-fieldporter-white font-medium hover:bg-white/10 active:bg-white/20 backdrop-blur-sm transition-all duration-200 ease-out focus:ring-fieldporter-white touch-manipulation min-h-[44px]",
+          "bg-transparent text-gray-900 font-medium hover:bg-gray-900/5 active:bg-gray-900/10 dark:text-fieldporter-white dark:hover:bg-white/10 dark:active:bg-white/20 backdrop-blur-sm transition-all duration-200 ease-out focus:ring-fieldporter-blue dark:focus:ring-fieldporter-white touch-manipulation min-h-[44px]",
         "fieldporter-glass":
-          "backdrop-blur-md bg-white/10 border border-white/20 text-fieldporter-white font-medium hover:bg-white/20 active:bg-white/30 hover:shadow-glass transition-all duration-200 ease-out focus:ring-fieldporter-blue touch-manipulation min-h-[44px]",
+          "backdrop-blur-md bg-gray-900/5 border border-gray-900/15 text-gray-900 font-medium hover:bg-gray-900/10 active:bg-gray-900/15 dark:bg-white/10 dark:border-white/20 dark:text-fieldporter-white dark:hover:bg-white/20 dark:active:bg-white/30 hover:shadow-glass transition-all duration-200 ease-out focus:ring-fieldporter-blue touch-manipulation min-h-[44px]",
         "fieldporter-blue":
           "bg-fieldporter-blue text-fieldporter-white font-medium hover:bg-fieldporter-blue/90 active:bg-fieldporter-blue/80 hover:shadow-lg transition-all duration-200 ease-out focus:ring-fieldporter-blue touch-manipulation min-h-[44px]",
         invert:
-          "bg-white text-black font-medium hover:bg-gray-100 rounded-xl transition-all duration-200 ease-out focus:ring-white touch-manipulation min-h-[44px] shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)]",
+          "bg-gray-900 text-white font-medium hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-100 rounded-xl transition-all duration-200 ease-out focus:ring-gray-900 dark:focus:ring-white touch-manipulation min-h-[44px] shadow-lg dark:shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-xl dark:hover:shadow-[0_0_25px_rgba(255,255,255,0.2)]",
       },
       size: {
         default: "h-10 px-4 py-2 min-h-[44px]",

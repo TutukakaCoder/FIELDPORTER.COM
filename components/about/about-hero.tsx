@@ -17,7 +17,7 @@ function PremiumAuroraBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden">
       {/* Sophisticated gradient base */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black" />
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-gray-50 to-white dark:from-gray-950 dark:via-gray-900 dark:to-black" />
 
       {/* Enhanced grain texture overlay */}
       <div
@@ -128,24 +128,24 @@ export function AboutHero() {
           >
             {/* Icon */}
             <motion.div variants={itemVariants} className="flex justify-center">
-              <div className="p-4 rounded-2xl backdrop-blur-md border border-white/10 bg-white/[0.02]">
-                <Layers className="w-12 h-12 text-blue-400" />
+              <div className="p-4 rounded-2xl backdrop-blur-md border border-gray-900/10 bg-gray-900/[0.02] dark:border-white/10 dark:bg-white/[0.02]">
+                <Layers className="w-12 h-12 text-blue-500 dark:text-blue-400" />
               </div>
             </motion.div>
 
             {/* Main heading */}
             <motion.div variants={itemVariants} className="space-y-4">
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-light text-white leading-tight">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-light text-gray-900 dark:text-white leading-tight">
                 FIELDPORTER
               </h1>
-              <div className="text-base md:text-lg text-gray-300 font-light">
+              <div className="text-base md:text-lg text-gray-600 dark:text-gray-300 font-light">
                 {BRAND.tagline}
               </div>
             </motion.div>
 
             {/* Subtitle */}
             <motion.div variants={itemVariants} className="max-w-2xl mx-auto">
-              <p className="text-base md:text-lg text-gray-400 leading-relaxed">
+              <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
                 We build practical AI systems, automations, and internal tools
                 that remove manual work and speed up decisions. Every
                 recommendation comes from hands-on experience deploying AI for

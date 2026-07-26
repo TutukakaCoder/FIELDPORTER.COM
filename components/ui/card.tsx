@@ -86,7 +86,7 @@ const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HT
       className={cn(
         'text-2xl font-semibold leading-none tracking-tight',
         // FIELDPORTER Typography
-        'text-fieldporter-white font-inter',
+        'text-gray-900 dark:text-white font-inter',
         className
       )}
       {...props}
@@ -140,7 +140,7 @@ const GlassCard = React.forwardRef<HTMLDivElement, CardProps>(
             'rounded-xl backdrop-blur-md bg-white/10 border border-white/20',
             'shadow-glass hover:shadow-glass-lg transition-all duration-300 ease-out',
             'hover:bg-white/15 hover:border-white/30',
-            'text-fieldporter-white',
+            'text-gray-900 dark:text-white',
             className
           )}
           variants={premiumGlassElevation}
@@ -178,7 +178,7 @@ const GlassCard = React.forwardRef<HTMLDivElement, CardProps>(
           'rounded-xl backdrop-blur-md bg-white/10 border border-white/20',
           'shadow-glass hover:shadow-glass-lg transition-all duration-300 ease-out',
           'hover:bg-white/15 hover:border-white/30',
-          'text-fieldporter-white',
+          'text-gray-900 dark:text-white',
           className
         )}
         {...props}
@@ -203,7 +203,7 @@ const EnterpriseCard = React.forwardRef<HTMLDivElement, CardProps>(
             'rounded-xl bg-bg-fieldporter-secondary border border-fieldporter-gray/20',
             'shadow-enterprise hover:shadow-glass-lg transition-all duration-300 ease-out',
             'hover:border-fieldporter-blue/40 hover:bg-bg-fieldporter-secondary/90',
-            'text-fieldporter-white p-4 md:p-8',
+            'text-gray-900 dark:text-white p-4 md:p-8',
             className
           )}
           variants={premiumCardEntry}
@@ -237,7 +237,7 @@ const EnterpriseCard = React.forwardRef<HTMLDivElement, CardProps>(
           'rounded-xl bg-bg-fieldporter-secondary border border-fieldporter-gray/20',
           'shadow-enterprise hover:shadow-glass-lg transition-all duration-300 ease-out',
           'hover:border-fieldporter-blue/40 hover:bg-bg-fieldporter-secondary/90',
-          'text-fieldporter-white p-4 md:p-8',
+          'text-gray-900 dark:text-white p-4 md:p-8',
           className
         )}
         {...props}

@@ -85,8 +85,8 @@ const GlassInput = React.forwardRef<HTMLInputElement, InputProps>(
           type={type}
           className={cn(
             'flex h-11 w-full rounded-lg backdrop-blur-md bg-white/10 border border-white/20',
-            'px-4 py-3 text-fieldporter-white font-inter',
-            'placeholder:text-white/60',
+            'px-4 py-3 text-gray-900 dark:text-white font-inter',
+            'placeholder:text-gray-500 dark:placeholder:text-white/60',
             'focus:outline-none focus:ring-2 focus:ring-fieldporter-blue/50 focus:border-fieldporter-blue/50',
             'hover:bg-white/15 hover:border-white/30 transition-all duration-200 ease-out',
             'disabled:cursor-not-allowed disabled:opacity-50',
@@ -130,8 +130,8 @@ const GlassInput = React.forwardRef<HTMLInputElement, InputProps>(
         type={type}
         className={cn(
           'flex h-11 w-full rounded-lg backdrop-blur-md bg-white/10 border border-white/20',
-          'px-4 py-3 text-fieldporter-white font-inter',
-          'placeholder:text-white/60',
+          'px-4 py-3 text-gray-900 dark:text-white font-inter',
+          'placeholder:text-gray-500 dark:placeholder:text-white/60',
           'focus:outline-none focus:ring-2 focus:ring-fieldporter-blue/50 focus:border-fieldporter-blue/50',
           'hover:bg-white/15 hover:border-white/30 transition-all duration-200 ease-out',
           'disabled:cursor-not-allowed disabled:opacity-50',
@@ -159,7 +159,7 @@ const EnterpriseInput = React.forwardRef<HTMLInputElement, InputProps>(
           type={type}
           className={cn(
             'flex h-11 sm:h-12 w-full rounded-lg bg-bg-fieldporter-secondary border border-fieldporter-gray/20',
-            'px-3 sm:px-4 py-3 text-fieldporter-white font-inter',
+            'px-3 sm:px-4 py-3 text-gray-900 dark:text-white font-inter',
             'placeholder:text-fieldporter-gray/70',
             'focus:outline-none focus:ring-2 focus:ring-fieldporter-blue focus:border-fieldporter-blue',
             'hover:border-fieldporter-gray/40 transition-all duration-200 ease-out',
@@ -205,7 +205,7 @@ const EnterpriseInput = React.forwardRef<HTMLInputElement, InputProps>(
         type={type}
         className={cn(
           'flex h-11 sm:h-12 w-full rounded-lg bg-bg-fieldporter-secondary border border-fieldporter-gray/20',
-          'px-3 sm:px-4 py-3 text-fieldporter-white font-inter',
+          'px-3 sm:px-4 py-3 text-gray-900 dark:text-white font-inter',
           'placeholder:text-fieldporter-gray/70',
           'focus:outline-none focus:ring-2 focus:ring-fieldporter-blue focus:border-fieldporter-blue',
           'hover:border-fieldporter-gray/40 transition-all duration-200 ease-out',

@@ -49,7 +49,7 @@ export function BlogGrid() {
           viewport={{ once: true }}
           className="mb-12 space-y-4 text-center sm:mb-14"
         >
-          <h2 className="text-display-sm md:text-display-md font-bold text-fieldporter-white">
+          <h2 className="text-display-sm md:text-display-md font-bold text-gray-900 dark:text-white">
             Latest
             <span className="text-fieldporter-blue"> Insights</span>
           </h2>
@@ -61,7 +61,7 @@ export function BlogGrid() {
 
         {featuredArticles.length > 0 && (
           <div className="mb-12 sm:mb-16">
-            <h3 className="mb-6 text-heading-lg font-semibold text-fieldporter-white sm:mb-8">
+            <h3 className="mb-6 text-heading-lg font-semibold text-gray-900 dark:text-white sm:mb-8">
               Featured Articles
             </h3>
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -90,21 +90,21 @@ export function BlogGrid() {
                         </div>
 
                         <div className="space-y-3">
-                          <h3 className="text-heading-lg font-semibold text-fieldporter-white group-hover:text-fieldporter-blue transition-colors duration-300">
+                          <h3 className="text-heading-lg font-semibold text-gray-900 dark:text-white group-hover:text-fieldporter-blue transition-colors duration-300">
                             {article.title}
                           </h3>
-                          <p className="text-body-md text-fieldporter-gray leading-relaxed group-hover:text-white/80 transition-colors duration-300">
+                          <p className="text-body-md text-fieldporter-gray leading-relaxed group-hover:text-gray-800 dark:group-hover:text-white/80 transition-colors duration-300">
                             {article.excerpt}
                           </p>
                         </div>
 
                         <div className="flex items-center justify-between text-body-sm text-fieldporter-gray">
                           <div className="flex items-center space-x-4">
-                            <div className="flex items-center space-x-1 group-hover:text-white/70 transition-colors duration-300">
+                            <div className="flex items-center space-x-1 group-hover:text-gray-700 dark:group-hover:text-white/70 transition-colors duration-300">
                               <User className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
                               <span>{article.author}</span>
                             </div>
-                            <div className="flex items-center space-x-1 group-hover:text-white/70 transition-colors duration-300">
+                            <div className="flex items-center space-x-1 group-hover:text-gray-700 dark:group-hover:text-white/70 transition-colors duration-300">
                               <Calendar className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
                               <span>
                                 {new Date(
@@ -113,7 +113,7 @@ export function BlogGrid() {
                               </span>
                             </div>
                           </div>
-                          <div className="flex items-center space-x-1 group-hover:text-white/70 transition-colors duration-300">
+                          <div className="flex items-center space-x-1 group-hover:text-gray-700 dark:group-hover:text-white/70 transition-colors duration-300">
                             <Clock className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
                             <span>{article.readTime}</span>
                           </div>
@@ -135,7 +135,7 @@ export function BlogGrid() {
         )}
 
         <div className="space-y-6 sm:space-y-8">
-          <h3 className="text-heading-lg font-semibold text-fieldporter-white">
+          <h3 className="text-heading-lg font-semibold text-gray-900 dark:text-white">
             All Articles
           </h3>
 
@@ -160,22 +160,22 @@ export function BlogGrid() {
                       </span>
 
                       <div className="space-y-3">
-                        <h4 className="text-heading-md font-semibold text-fieldporter-white group-hover:text-fieldporter-blue transition-colors duration-300">
+                        <h4 className="text-heading-md font-semibold text-gray-900 dark:text-white group-hover:text-fieldporter-blue transition-colors duration-300">
                           {article.title}
                         </h4>
-                        <p className="text-body-sm text-fieldporter-gray leading-relaxed line-clamp-3 group-hover:text-white/70 transition-colors duration-300">
+                        <p className="text-body-sm text-fieldporter-gray leading-relaxed line-clamp-3 group-hover:text-gray-700 dark:group-hover:text-white/70 transition-colors duration-300">
                           {article.excerpt}
                         </p>
                       </div>
 
-                      <div className="flex items-center justify-between text-body-xs text-fieldporter-gray pt-2 border-t border-white/10 group-hover:border-white/20 transition-colors duration-300">
-                        <div className="flex items-center space-x-1 group-hover:text-white/60 transition-colors duration-300">
+                      <div className="flex items-center justify-between text-body-xs text-fieldporter-gray pt-2 border-t border-gray-900/10 dark:border-white/10 group-hover:border-gray-900/20 dark:group-hover:border-white/20 transition-colors duration-300">
+                        <div className="flex items-center space-x-1 group-hover:text-gray-600 dark:group-hover:text-white/60 transition-colors duration-300">
                           <Calendar className="w-3 h-3 group-hover:scale-110 transition-transform duration-300" />
                           <span>
                             {new Date(article.publishDate).toLocaleDateString()}
                           </span>
                         </div>
-                        <div className="flex items-center space-x-1 group-hover:text-white/60 transition-colors duration-300">
+                        <div className="flex items-center space-x-1 group-hover:text-gray-600 dark:group-hover:text-white/60 transition-colors duration-300">
                           <Clock className="w-3 h-3 group-hover:scale-110 transition-transform duration-300" />
                           <span>{article.readTime}</span>
                         </div>
@@ -189,14 +189,14 @@ export function BlogGrid() {
         </div>
 
         <div id="recommended-reading" className="pt-14 sm:pt-16">
-          <h3 className="mb-6 text-heading-lg font-semibold text-fieldporter-white sm:mb-8">
+          <h3 className="mb-6 text-heading-lg font-semibold text-gray-900 dark:text-white sm:mb-8">
             Recommended Reading from the Internet
           </h3>
 
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
             {groupedResources.map((group) => (
               <GlassCard key={group.category} className="p-6">
-                <h4 className="mb-4 text-base font-semibold text-fieldporter-white">
+                <h4 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">
                   {group.category}
                 </h4>
                 <div className="space-y-4">
@@ -206,9 +206,9 @@ export function BlogGrid() {
                       href={resource.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group block rounded-lg border border-white/10 bg-white/[0.02] p-4 transition-colors hover:border-fieldporter-blue/30"
+                      className="group block rounded-lg border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02] p-4 transition-colors hover:border-fieldporter-blue/30"
                     >
-                      <p className="text-sm font-medium text-fieldporter-white group-hover:text-fieldporter-blue">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-fieldporter-blue">
                         {resource.title}
                       </p>
                       <p className="mt-1 text-xs text-fieldporter-blue">
@@ -233,10 +233,10 @@ export function BlogGrid() {
           className="pt-14 text-center sm:pt-16"
         >
           <motion.div
-            className="mx-auto max-w-2xl rounded-xl border border-white/10 p-8 glass-dark transition-all duration-300 hover:border-fieldporter-blue/30 hover:shadow-lg hover:shadow-fieldporter-blue/10"
+            className="mx-auto max-w-2xl rounded-xl border border-gray-900/10 dark:border-white/10 p-8 glass-dark transition-all duration-300 hover:border-fieldporter-blue/30 hover:shadow-lg hover:shadow-fieldporter-blue/10"
             whileHover={{ y: -2 }}
           >
-            <h3 className="text-heading-lg font-semibold text-fieldporter-white mb-4">
+            <h3 className="text-heading-lg font-semibold text-gray-900 dark:text-white mb-4">
               Get New Articles in Your Inbox
             </h3>
             <p className="text-body-md text-fieldporter-gray mb-6">

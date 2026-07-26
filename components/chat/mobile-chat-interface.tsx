@@ -183,8 +183,8 @@ export function MobileChatInterface({
           onClick={handleMinimizeToggle}
           className={cn(
             "w-16 h-16 rounded-2xl",
-            "bg-black/20 backdrop-blur-xl border border-white/10",
-            "hover:bg-black/30 hover:border-white/20",
+            "bg-white/90 dark:bg-black/20 backdrop-blur-xl border border-gray-900/15 dark:border-white/10",
+            "hover:bg-white dark:hover:bg-black/30 hover:border-gray-900/25 dark:hover:border-white/20",
             "shadow-[0_0_30px_rgba(59,130,246,0.25)]",
             "flex items-center justify-center relative",
             "touch-manipulation select-none",
@@ -193,7 +193,10 @@ export function MobileChatInterface({
           whileTap={{ scale: 0.95 }}
           aria-label="Restore chat window"
         >
-          <MessageSquare className="w-7 h-7 text-white/90" strokeWidth={1.5} />
+          <MessageSquare
+            className="w-7 h-7 text-gray-900/90 dark:text-white/90"
+            strokeWidth={1.5}
+          />
           {unreadCount > 0 && (
             <motion.div
               initial={{ scale: 0 }}
@@ -240,14 +243,14 @@ export function MobileChatInterface({
             className="p-2 -ml-2 rounded-full hover:bg-fieldporter-gray/20 transition-colors focus:outline-none focus:ring-2 focus:ring-fieldporter-blue/50"
             aria-label="Close chat"
           >
-            <ArrowLeft className="w-5 h-5 text-fieldporter-white" />
+            <ArrowLeft className="w-5 h-5 text-gray-900 dark:text-white" />
           </button>
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-fieldporter-blue/20 flex items-center justify-center">
               <Bot className="w-4 h-4 text-fieldporter-blue" />
             </div>
             <div>
-              <h3 className="text-base font-semibold text-fieldporter-white">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white">
                 FIELDPORTER Agent
               </h3>
               <p className="text-xs text-fieldporter-gray">
@@ -301,7 +304,7 @@ export function MobileChatInterface({
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-fieldporter-blue/20 flex items-center justify-center">
               <Bot className="w-8 h-8 text-fieldporter-blue" />
             </div>
-            <h3 className="text-lg font-semibold text-fieldporter-white mb-2">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               FIELDPORTER
             </h3>
             <p className="text-fieldporter-gray text-sm leading-relaxed mb-6">
@@ -335,7 +338,7 @@ export function MobileChatInterface({
                     }
                     className="px-3 py-1.5 text-xs bg-fieldporter-gray/10 hover:bg-fieldporter-gray/20 
                              border border-fieldporter-gray/20 rounded-full transition-all duration-200
-                             text-fieldporter-white/80 hover:text-fieldporter-white"
+                             text-gray-800 dark:text-white/80 hover:text-gray-900 dark:hover:text-white"
                   >
                     {suggestion}
                   </motion.button>
@@ -375,8 +378,8 @@ export function MobileChatInterface({
                 className={cn(
                   "text-[13px] leading-[1.6] whitespace-pre-wrap",
                   message.role === "user"
-                    ? "rounded-2xl rounded-br-md px-4 py-2.5 bg-fieldporter-blue text-fieldporter-white"
-                    : "text-fieldporter-white/90 py-1",
+                    ? "rounded-2xl rounded-br-md px-4 py-2.5 bg-fieldporter-blue text-white"
+                    : "text-gray-900/90 dark:text-white/90 py-1",
                 )}
               >
                 {formatMessage(message.content)}
@@ -406,7 +409,7 @@ export function MobileChatInterface({
               <Bot className="w-4 h-4 text-fieldporter-blue" />
             </div>
             <div className="flex items-center gap-3">
-              <div className="bg-black border border-white/20 rounded-2xl rounded-bl-md p-2 shadow-lg">
+              <div className="bg-white dark:bg-black border border-gray-900/15 dark:border-white/20 rounded-2xl rounded-bl-md p-2 shadow-lg">
                 <div className="relative w-[50px] h-[50px] flex items-center justify-center">
                   <motion.img
                     src="/videos/loading-brain.gif"
@@ -447,7 +450,7 @@ export function MobileChatInterface({
               placeholder="Message FIELDPORTER Agent..."
               className={cn(
                 "w-full resize-none bg-fieldporter-gray/10 border border-fieldporter-gray/20 rounded-2xl px-4 py-3",
-                "text-fieldporter-white placeholder:text-fieldporter-gray/70",
+                "text-gray-900 dark:text-white placeholder:text-fieldporter-gray/70",
                 "focus:outline-none focus:ring-2 focus:ring-fieldporter-blue/50 focus:border-fieldporter-blue/50",
                 "focus:shadow-[0_0_15px_rgba(59,130,246,0.2)]",
                 "text-sm leading-relaxed",
