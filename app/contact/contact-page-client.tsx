@@ -84,7 +84,7 @@ export function ContactPageClient() {
 
             {/* Sticky segmented control on mobile */}
             <div className="sticky top-24 z-30 -mx-4 px-4 py-1.5 mb-5 md:static md:mx-0 md:px-0 md:py-0 md:mb-0 md:z-auto bg-white dark:bg-black md:bg-transparent border-b border-gray-900/5 dark:border-white/5 md:border-0">
-              <div className="mx-auto flex max-w-[220px] w-full sm:w-auto sm:max-w-none flex-row bg-gray-900/[0.04] dark:bg-white/[0.06] border border-gray-900/10 dark:border-white/10 rounded-full p-0.5 gap-0.5">
+              <div className="mx-auto flex max-w-[220px] w-full sm:w-fit sm:max-w-none flex-row bg-gray-900/[0.04] dark:bg-white/[0.06] border border-gray-900/10 dark:border-white/10 rounded-full p-0.5 gap-0.5">
                 <button
                   type="button"
                   onClick={() => setMode("book")}
