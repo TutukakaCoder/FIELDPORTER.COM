@@ -110,7 +110,7 @@ export function VideoEntrance({
         if (playPromise !== undefined) {
           await playPromise;
 
-          if (process.env.NODE_ENV === "development") {
+          if (process.env["NODE_ENV"] === "development") {
             console.log(
               "FIELDPORTER: Video playing successfully (muted) - Routes preloading",
             );
@@ -118,7 +118,7 @@ export function VideoEntrance({
         }
       } catch (error) {
         hasStartedPlay.current = false;
-        if (process.env.NODE_ENV === "development") {
+        if (process.env["NODE_ENV"] === "development") {
           console.error("FIELDPORTER: Video play error:", error);
         }
         setTimeout(() => completeEntrance(), 1000);
@@ -138,7 +138,7 @@ export function VideoEntrance({
     };
 
     const handleError = (error: Event) => {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env["NODE_ENV"] === "development") {
         console.error("FIELDPORTER: Video error:", error);
       }
       setTimeout(() => completeEntrance(), 1000);
@@ -271,11 +271,12 @@ export function VideoEntrance({
             />
             <span>FIELDPORTER</span>
           </div>
-          {process.env.NODE_ENV === "development" && stats.totalRoutes > 0 && (
-            <div className="mt-1 text-white/20 text-xs">
-              Preloading: {stats.loadedRoutes}/{stats.totalRoutes} routes
-            </div>
-          )}
+          {process.env["NODE_ENV"] === "development" &&
+            stats.totalRoutes > 0 && (
+              <div className="mt-1 text-white/20 text-xs">
+                Preloading: {stats.loadedRoutes}/{stats.totalRoutes} routes
+              </div>
+            )}
         </div>
       </motion.div>
     </AnimatePresence>

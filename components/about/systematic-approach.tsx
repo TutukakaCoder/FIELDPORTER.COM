@@ -49,7 +49,7 @@ export function SystematicApproach() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 items-stretch gap-6 md:gap-8 lg:gap-12">
           {systematicApproach.map((step, index) => (
             <motion.div
               key={step.number}
@@ -58,14 +58,14 @@ export function SystematicApproach() {
               transition={{ duration: 0.6, delay: index * 0.2 }}
               viewport={{ once: true }}
               whileHover={{ y: -8, scale: 1.02 }}
-              className="relative group"
+              className="relative group h-full"
             >
               <div
-                className={`relative p-6 md:p-8 rounded-2xl backdrop-blur-md border ${step.color.split(" ")[0]} bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-500`}
+                className={`relative h-full flex flex-col p-6 md:p-8 rounded-2xl backdrop-blur-md border ${step.color.split(" ")[0]} bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-500`}
               >
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent pointer-events-none" />
 
-                <div className="relative z-10 space-y-4 md:space-y-6">
+                <div className="relative z-10 flex flex-col flex-1 min-h-0 space-y-4 md:space-y-6">
                   <div className="flex items-center justify-between">
                     <span
                       className={`text-4xl md:text-5xl font-light ${step.color.split(" ")[1]} opacity-50`}

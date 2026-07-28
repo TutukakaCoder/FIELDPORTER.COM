@@ -300,42 +300,42 @@ function InteractiveServiceShowcase() {
           </p>
         </div>
 
-        <div className="mb-10 md:mb-14 -mx-4 px-4 md:mx-0 md:px-4 overflow-x-auto scrollbar-hide">
-          <div className="flex justify-start md:justify-center gap-2 md:gap-3 lg:gap-4 w-max md:w-auto md:flex-wrap min-w-full md:min-w-0">
-            {services.map((service, index) => {
-              const ServiceIcon = service.icon;
-              const shortLabels: Record<string, string> = {
-                "custom-portals": "Portals & Tools",
-                "databases-dashboards": "Data & Reporting",
-                "workflow-automation": "Automation",
-                "ai-capability": "AI & Training",
-              };
-              return (
-                <button
-                  key={service.id}
-                  onClick={() => setActiveService(index)}
-                  className={`
-                    shrink-0 min-h-[44px] px-3 md:px-4 lg:px-8 py-2 md:py-3 lg:py-4 rounded-xl md:rounded-2xl transition-colors duration-200 backdrop-blur-xl border font-medium text-xs md:text-sm lg:text-lg touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black
-                    ${
-                      activeService === index
-                        ? "bg-blue-500/20 border-blue-500/40 text-gray-900 dark:text-white shadow-[0_0_30px_rgba(59,130,246,0.3)]"
-                        : "bg-gray-900/[0.01] dark:bg-white/[0.01] border-gray-900/10 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-900/[0.02] dark:hover:bg-white/[0.02]"
-                    }
-                  `}
-                >
-                  <span className="flex items-center gap-2 lg:gap-3">
-                    <ServiceIcon
-                      className={`w-4 h-4 lg:w-5 lg:h-5 transition-colors duration-300 ${activeService === index ? service.iconColor : "text-gray-500"}`}
-                    />
-                    <span className="hidden lg:inline">{service.title}</span>
-                    <span className="lg:hidden">
-                      {shortLabels[service.id] ?? service.title}
-                    </span>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3 lg:gap-4 mb-10 md:mb-14 px-0 md:px-4 max-w-5xl mx-auto items-stretch">
+          {services.map((service, index) => {
+            const ServiceIcon = service.icon;
+            const shortLabels: Record<string, string> = {
+              "custom-portals": "Portals & Tools",
+              "databases-dashboards": "Data & Reporting",
+              "workflow-automation": "Automation",
+              "ai-capability": "AI & Training",
+            };
+            return (
+              <button
+                key={service.id}
+                onClick={() => setActiveService(index)}
+                className={`
+                  w-full h-full min-h-[44px] flex items-center justify-center text-center px-3 md:px-4 lg:px-4 py-2 md:py-3 lg:py-4 rounded-xl md:rounded-2xl transition-colors duration-200 backdrop-blur-xl border font-medium text-xs md:text-sm lg:text-base lg:leading-snug touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black
+                  ${
+                    activeService === index
+                      ? "bg-blue-500/20 border-blue-500/40 text-gray-900 dark:text-white shadow-[0_0_30px_rgba(59,130,246,0.3)]"
+                      : "bg-gray-900/[0.01] dark:bg-white/[0.01] border-gray-900/10 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-900/[0.02] dark:hover:bg-white/[0.02]"
+                  }
+                `}
+              >
+                <span className="flex items-center justify-center gap-2 lg:gap-2 w-full">
+                  <ServiceIcon
+                    className={`w-4 h-4 lg:w-5 lg:h-5 transition-colors duration-300 ${activeService === index ? service.iconColor : "text-gray-500"}`}
+                  />
+                  <span className="hidden lg:inline line-clamp-2">
+                    {service.title}
                   </span>
-                </button>
-              );
-            })}
-          </div>
+                  <span className="lg:hidden line-clamp-2">
+                    {shortLabels[service.id] ?? service.title}
+                  </span>
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         <AnimatePresence mode="wait">

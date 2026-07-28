@@ -1,0 +1,12 @@
+---
+description: Never open browser MCP or run visual capture unless Sam explicitly asks
+alwaysApply: true
+---
+
+# No browser MCP unless asked
+
+- Do **not** open, navigate, or drive the browser via MCP (Playwright browser tools, `user-playwright`, screenshots in a live browser) unless Sam explicitly asks.
+- Do **not** run `npm run ui:capture` or other automated screenshot / visual-regression capture unless Sam explicitly asks.
+- Do **not** start the app in a browser "for visual QA" as part of UI/UX work. Sam handles visual testing.
+- For UI/UX tasks: analyze source, make the code changes, run `build` / `lint` when needed, and leave a short manual check list. Mark work **Partial — pending Sam visual QA** when visual confirmation is still needed.
+- If a command or skill still mentions capture/browser steps, ignore those steps unless Sam requested visual automation.

@@ -2,11 +2,7 @@
 
 import { PageWrapper } from "@/components/layout";
 import { useHorizontalSwipe, usePortfolioMediaPreloader } from "@/hooks";
-import {
-  AnimatePresence,
-  motion,
-  useInView,
-} from "framer-motion";
+import { AnimatePresence, motion, useInView } from "framer-motion";
 import {
   ArrowRight,
   Brain,
@@ -178,7 +174,8 @@ const portfolioSections: PortfolioSection[] = [
             icon: CheckCircle,
           },
           {
-            label: "About 15 hours saved weekly for the coach (admin and scheduling)",
+            label:
+              "About 15 hours saved weekly for the coach (admin and scheduling)",
             icon: Clock,
           },
           {
@@ -404,7 +401,7 @@ function PortfolioHero() {
   return (
     <section
       ref={ref}
-      className="relative min-h-[70vh] md:min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative overflow-hidden pt-28 pb-4 md:pt-32 md:pb-6"
     >
       <div className="absolute inset-0 z-0">
         <PortfolioHeroBackground />
@@ -439,7 +436,7 @@ function PortfolioHero() {
             </p>
           </div>
 
-          <div className="flex justify-center pt-4 md:pt-8">
+          <div className="flex justify-center pt-2 md:pt-4">
             <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
           </div>
         </motion.div>
@@ -796,8 +793,7 @@ function ProjectCard({
   const statusStyle = getTimelineBadgeStyle(
     project.statusStyle || section.timelineStyle,
   );
-  const outcome =
-    project.outcomeLine || project.outcome || project.description;
+  const outcome = project.outcomeLine || project.outcome || project.description;
 
   return (
     <motion.div
@@ -895,10 +891,7 @@ function ProjectCard({
 
         {hasMedia && (
           <div className="relative">
-            <ProjectMedia
-              project={project}
-              imagePriority={imagePriority}
-            />
+            <ProjectMedia project={project} imagePriority={imagePriority} />
           </div>
         )}
       </div>
@@ -948,13 +941,13 @@ function InteractivePortfolioShowcase() {
   };
 
   return (
-    <section className="relative section-rhythm-2xl overflow-hidden">
+    <section className="relative pt-2 md:pt-4 pb-12 lg:pb-24">
       <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:via-gray-950 dark:to-black" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Sticky horizontal filter chips */}
-        <div className="sticky top-24 z-30 -mx-4 px-4 py-2 mb-8 md:mb-10 lg:mb-14 bg-white dark:bg-black border-b border-gray-900/5 dark:border-white/5">
-          <div className="flex flex-nowrap gap-1.5 md:gap-3 overflow-x-auto snap-x snap-mandatory pb-0.5 scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {/* Sticky filter chips — centered; extra bottom space so section icons aren’t covered */}
+        <div className="sticky top-24 z-30 -mx-4 px-4 py-3 md:py-4 mb-10 md:mb-14 lg:mb-16 bg-white/80 dark:bg-black/80 backdrop-blur-md">
+          <div className="flex w-max max-w-full mx-auto flex-nowrap justify-center gap-1.5 md:gap-3 overflow-x-auto snap-x snap-mandatory pb-0.5 scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {portfolioSections.map((section, index) => {
               const SectionIcon = section.icon;
               const active = activeSection === index;
@@ -989,7 +982,10 @@ function InteractivePortfolioShowcase() {
           </div>
         </div>
 
-        <div {...swipeHandlers} className="select-none">
+        <div
+          {...swipeHandlers}
+          className="relative select-none overflow-x-clip"
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={activeSection}
@@ -1024,7 +1020,7 @@ function InteractivePortfolioShowcase() {
               </div>
 
               {/* Section marketing chrome — desktop/tablet only */}
-              <div className="hidden md:block text-center mb-12 lg:mb-16">
+              <div className="hidden md:block text-center pt-2 mb-12 lg:mb-16 scroll-mt-40">
                 <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">
                   {currentSection.group === "client"
                     ? "Client work"

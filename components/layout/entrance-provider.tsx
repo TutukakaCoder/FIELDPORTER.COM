@@ -51,7 +51,7 @@ export function EntranceProvider({ children }: EntranceProviderProps) {
     );
     const hasSeenInSession = seenInSession === "true";
 
-    if (process.env.NODE_ENV === "development") {
+    if (process.env["NODE_ENV"] === "development") {
       console.log(
         "FIELDPORTER: Session check -",
         hasSeenInSession ? "SEEN" : "NOT SEEN",
@@ -68,7 +68,7 @@ export function EntranceProvider({ children }: EntranceProviderProps) {
   }, [isIsolatedPage]);
 
   const completeEntrance = () => {
-    if (process.env.NODE_ENV === "development") {
+    if (process.env["NODE_ENV"] === "development") {
       console.log("FIELDPORTER: Entrance completed, revealing main content");
     }
     // Always land on dark mode after intro

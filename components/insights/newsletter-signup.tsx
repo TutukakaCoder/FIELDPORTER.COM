@@ -67,7 +67,10 @@ export function NewsletterSignup() {
 
   if (isSubscribed) {
     return (
-      <section id="newsletter-signup" className="section-spacing-lg relative">
+      <section
+        id="newsletter-signup"
+        className="relative pt-6 pb-16 sm:pt-8 sm:pb-20 lg:pt-10 lg:pb-24"
+      >
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-b from-bg-fieldporter-primary to-bg-fieldporter-secondary" />
 
@@ -154,7 +157,10 @@ export function NewsletterSignup() {
   }
 
   return (
-    <section id="newsletter-signup" className="section-spacing-lg relative">
+    <section
+      id="newsletter-signup"
+      className="relative pt-6 pb-16 sm:pt-8 sm:pb-20 lg:pt-10 lg:pb-24"
+    >
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-bg-fieldporter-primary to-bg-fieldporter-secondary" />
 
@@ -165,8 +171,8 @@ export function NewsletterSignup() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <GlassCard className="card-spacing-lg">
-            <div className="text-center component-spacing">
+          <GlassCard className="p-8 md:p-12">
+            <div className="text-center space-y-6 md:space-y-8">
               {/* Icon */}
               <motion.div
                 className="w-16 h-16 rounded-2xl bg-fieldporter-blue/20 border border-fieldporter-blue/30 p-4 mx-auto"
@@ -177,7 +183,7 @@ export function NewsletterSignup() {
               </motion.div>
 
               {/* Header */}
-              <div className="text-spacing">
+              <div className="space-y-3">
                 <h3 className="text-heading-xl font-semibold text-gray-900 dark:text-white">
                   Stay Ahead with AI Insights
                 </h3>
@@ -276,7 +282,7 @@ export function NewsletterSignup() {
                 <p className="text-body-sm text-fieldporter-gray mb-4">
                   Join 500+ executives and entrepreneurs
                 </p>
-                <div className="flex items-center justify-center space-x-8 text-body-xs text-fieldporter-gray">
+                <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-body-xs text-fieldporter-gray">
                   <span>✓ No spam, ever</span>
                   <span>✓ Weekly insights</span>
                   <span>✓ Unsubscribe anytime</span>

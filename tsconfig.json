@@ -62,6 +62,7 @@
     "build",
     "coverage",
     "archive",
+    "FIELDPORTER.COM",
     "**/*.test.ts",
     "**/*.test.tsx",
     "**/*.spec.ts",

@@ -280,8 +280,11 @@ export function trackPageView(
   page: string,
   properties?: Record<string, unknown>,
 ): void {
-  if (typeof window !== "undefined" && window.gtag) {
-    window.gtag("config", process.env.NEXT_PUBLIC_GA_ID!, {
+  if (typeof window === "undefined") return;
+  const gtag = (window as Window & { gtag?: (...args: unknown[]) => void })
+    .gtag;
+  if (gtag) {
+    gtag("config", process.env["NEXT_PUBLIC_GA_ID"]!, {
       page_title: page,
       page_location: window.location.href,
       custom_map: properties,
@@ -296,8 +299,11 @@ export function trackEvent(
   eventName: string,
   properties?: Record<string, string | number | boolean>,
 ): void {
-  if (typeof window !== "undefined" && window.gtag) {
-    window.gtag("event", eventName, properties);
+  if (typeof window === "undefined") return;
+  const gtag = (window as Window & { gtag?: (...args: unknown[]) => void })
+    .gtag;
+  if (gtag) {
+    gtag("event", eventName, properties);
   }
 }
 

@@ -10,7 +10,7 @@ const nextConfig = {
   // cold starts) returns 500/503 under concurrent /_next/image load.
   images: {
     unoptimized: true,
-    formats: ['image/webp', 'image/avif'],
+    formats: ["image/webp", "image/avif"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
@@ -19,23 +19,23 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
           {
-            key: 'X-Frame-Options',
-            value: 'DENY',
+            key: "X-Frame-Options",
+            value: "DENY",
           },
           {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
+            key: "X-Content-Type-Options",
+            value: "nosniff",
           },
           {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
           },
           {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on',
+            key: "X-DNS-Prefetch-Control",
+            value: "on",
           },
         ],
       },
@@ -46,18 +46,18 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/services/ai-strategy',
-        destination: '/services#strategic-research',
+        source: "/services/ai-strategy",
+        destination: "/services#strategic-research",
         permanent: true,
       },
       {
-        source: '/services/automation',
-        destination: '/services#workflow-optimization',
+        source: "/services/automation",
+        destination: "/services#workflow-optimization",
         permanent: true,
       },
       {
-        source: '/services/vc-consulting',
-        destination: '/services#strategic-research',
+        source: "/services/vc-consulting",
+        destination: "/services#strategic-research",
         permanent: true,
       },
     ];
@@ -72,14 +72,31 @@ const nextConfig = {
 
   // Bundle analyzer (only when needed)
   webpack: (config, { dev, isServer }) => {
-    if (!dev && !isServer && process.env.ANALYZE === 'true') {
-      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+    // Nested duplicate tree + hosting stub exhaust macOS file watchers (EMFILE),
+    // which leaves the app-paths manifest with only /_not-found and a white/404 UI.
+    if (dev) {
+      config.watchOptions = {
+        ...config.watchOptions,
+        ignored: [
+          "**/node_modules/**",
+          "**/.git/**",
+          "**/.next/**",
+          "**/FIELDPORTER.COM/**",
+          "**/hosting/**",
+          "**/Documentation/**",
+          "**/archive/**",
+          "**/.cursor/**",
+        ],
+      };
+    }
+    if (!dev && !isServer && process.env.ANALYZE === "true") {
+      const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
       config.plugins.push(
         new BundleAnalyzerPlugin({
-          analyzerMode: 'static',
+          analyzerMode: "static",
           openAnalyzer: false,
-          reportFilename: '../bundle-analyzer-report.html',
-        })
+          reportFilename: "../bundle-analyzer-report.html",
+        }),
       );
     }
     return config;

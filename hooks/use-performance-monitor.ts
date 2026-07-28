@@ -139,7 +139,7 @@ export function usePerformanceMonitor() {
 
       // Only continue monitoring if needed (reduces scroll overhead)
       const shouldContinueMonitoring =
-        process.env.NODE_ENV === "development" ||
+        process.env["NODE_ENV"] === "development" ||
         frameTimesRef.current.some((time) => time > 25); // Poor performance detected
 
       if (shouldContinueMonitoring) {

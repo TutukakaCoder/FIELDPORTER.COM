@@ -54,7 +54,7 @@ export function TechnicalCapability() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 items-stretch gap-8 lg:gap-12">
           {aiCapabilities.map((capability, index) => (
             <motion.div
               key={capability.title}
@@ -63,14 +63,14 @@ export function TechnicalCapability() {
               transition={{ duration: 0.6, delay: index * 0.2 }}
               viewport={{ once: true }}
               whileHover={{ y: -8, scale: 1.02 }}
-              className="relative group"
+              className="relative group h-full"
             >
               <div
-                className={`relative p-5 md:p-8 rounded-2xl backdrop-blur-md border ${capability.color.split(" ")[0]} bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-blue-500/10`}
+                className={`relative h-full flex flex-col p-5 md:p-8 rounded-2xl backdrop-blur-md border ${capability.color.split(" ")[0]} bg-gray-900/[0.02] dark:bg-white/[0.02] transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-blue-500/10`}
               >
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent pointer-events-none" />
 
-                <div className="relative z-10 space-y-6">
+                <div className="relative z-10 flex flex-col flex-1 min-h-0">
                   <div className="flex items-center justify-between">
                     <div
                       className={`p-4 rounded-xl bg-current/10 border border-current/20 ${capability.color.split(" ")[1]} group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 group-hover:shadow-lg`}
@@ -79,18 +79,19 @@ export function TechnicalCapability() {
                     </div>
                   </div>
 
-                  <div>
+                  <div className="mt-6">
                     <h3 className="text-2xl font-medium text-gray-900 dark:text-white mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                       {capability.title}
                     </h3>
-                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                       {capability.description}
                     </p>
-                    <div
-                      className={`text-sm ${capability.color.split(" ")[1]} font-medium`}
-                    >
-                      {capability.focus}
-                    </div>
+                  </div>
+
+                  <div
+                    className={`mt-auto pt-6 text-sm ${capability.color.split(" ")[1]} font-medium`}
+                  >
+                    {capability.focus}
                   </div>
                 </div>
               </div>
