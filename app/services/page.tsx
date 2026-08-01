@@ -479,7 +479,7 @@ export default function ServicesPage() {
 
       <section className="relative section-rhythm-xl overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-black" />
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <MethodologySection {...methodologyData} />
         </div>
       </section>

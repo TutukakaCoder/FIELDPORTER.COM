@@ -1,11 +1,38 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Building2 } from "lucide-react";
+import { Building2, Check, Globe, UserCheck, Wallet } from "lucide-react";
+
+const trackRecord = [
+  {
+    icon: Globe,
+    title: "Delivered across three markets",
+    detail:
+      "Production platforms for advisory firms, venture capital firms, and property lenders in New Zealand, Hong Kong, and Australia.",
+  },
+  {
+    icon: Wallet,
+    title: "Lower seat license spend",
+    detail:
+      "Clients have replaced off-the-shelf platforms like HubSpot with custom software, saving tens of thousands per month.",
+  },
+  {
+    icon: UserCheck,
+    title: "Founder-run delivery",
+    detail: "Freddy runs discovery, design, and handover directly.",
+  },
+] as const;
+
+const model = [
+  "Strategy and architecture led in house.",
+  "Execution scaled through our developer and AI agent network.",
+  "Handover and training included in every engagement.",
+  "Larger projects can draw on 100+ developers, specialist security testing partners, and domain advisors.",
+] as const;
 
 const leadership = [
-  { name: "Freddy Hopkins", initials: "FH" },
-  { name: "Sam Allais", initials: "SA" },
+  { name: "Freddy Hopkins", initials: "FH", role: "Co-founder" },
+  { name: "Sam Allais", initials: "SA", role: "Co-founder" },
 ] as const;
 
 export function CompanyFoundation() {
@@ -30,30 +57,40 @@ export function CompanyFoundation() {
                 Behind The Results
               </span>
             </h2>
-            <div className="space-y-4 text-gray-700 dark:text-gray-300 text-base md:text-lg leading-relaxed">
-              <p>
-                FIELDPORTER is led by{" "}
-                <span className="text-gray-900 dark:text-white font-medium">
-                  Freddy Hopkins
-                </span>{" "}
-                and{" "}
-                <span className="text-gray-900 dark:text-white font-medium">
-                  Sam Allais
-                </span>
-                . We operate as a hybrid: we lead strategy and architecture;
-                execution is scaled with developers and AI agents where needed.
-                We build, deploy, and train your team to take over. You get
-                delivery speed without losing a single point of contact.
-              </p>
-              <p>
-                Freddy has delivered production platforms for advisory firms,
-                venture capital firms, and property lenders across New Zealand,
-                Hong Kong, and Australia. Clients have saved tens of thousands
-                per month on seat licenses by replacing off-the-shelf platforms
-                like HubSpot with custom software built for how they work. He
-                runs discovery, design, and handover directly.
-              </p>
-            </div>
+            <p className="text-gray-700 dark:text-gray-300 text-base md:text-lg leading-relaxed">
+              FIELDPORTER is led by{" "}
+              <span className="text-gray-900 dark:text-white font-medium">
+                Freddy Hopkins
+              </span>{" "}
+              and{" "}
+              <span className="text-gray-900 dark:text-white font-medium">
+                Sam Allais
+              </span>
+              . We lead strategy and architecture, then scale execution with
+              developers and AI agents where needed. You get delivery speed
+              without losing a single point of contact.
+            </p>
+
+            <ul className="space-y-4">
+              {trackRecord.map((item) => (
+                <li key={item.title} className="flex items-start gap-4">
+                  <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-blue-500/20 bg-blue-500/10">
+                    <item.icon
+                      className="h-5 w-5 text-blue-400"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-base font-medium text-gray-900 dark:text-white">
+                      {item.title}
+                    </p>
+                    <p className="mt-1 text-sm md:text-base leading-relaxed text-gray-600 dark:text-gray-400">
+                      {item.detail}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </motion.div>
 
           <motion.div
@@ -73,19 +110,17 @@ export function CompanyFoundation() {
                   The FIELDPORTER Model
                 </h3>
               </div>
-              <div className="space-y-3 text-gray-700 dark:text-gray-300 text-sm md:text-base leading-relaxed">
-                <p>
-                  Strategy and architecture are led in-house; execution is
-                  scaled via our developer and AI agent network. Every
-                  engagement includes handover and training so your team can run
-                  and extend what we build.
-                </p>
-                <p>
-                  Core delivery stays in house. Larger projects can draw on
-                  100+ developers, specialist security testing partners, and
-                  advisors across different domains when the work needs it.
-                </p>
-              </div>
+              <ul className="space-y-3 text-gray-700 dark:text-gray-300 text-sm md:text-base leading-relaxed">
+                {model.map((point) => (
+                  <li key={point} className="flex items-start gap-3">
+                    <Check
+                      className="mt-1 h-4 w-4 shrink-0 text-blue-400"
+                      aria-hidden="true"
+                    />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-900/[0.02] dark:from-white/[0.02] to-transparent pointer-events-none" />
             </div>
           </motion.div>
@@ -120,6 +155,9 @@ export function CompanyFoundation() {
                 <div>
                   <p className="text-lg font-medium text-gray-900 dark:text-white">
                     {person.name}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {person.role}
                   </p>
                 </div>
               </motion.div>

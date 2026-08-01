@@ -15,10 +15,16 @@
 
 # next.js
 /.next/
+/.next-verify/
 /out/
 
 # production
 /build
+
+# Stale nested duplicate of this repo and the hosting stub. Both sit inside the
+# project root, so they flood git status and exhaust the dev file watchers.
+/FIELDPORTER.COM/
+/hosting/
 
 # misc
 .DS_Store

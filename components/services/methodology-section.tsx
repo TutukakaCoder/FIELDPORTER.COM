@@ -41,39 +41,28 @@ export function MethodologySection({
         </p>
       </motion.div>
 
-      <ol className="max-w-2xl mx-auto list-none p-0 m-0">
-        {phases.map((phase, index) => {
-          const isLast = index === phases.length - 1;
-          return (
-            <motion.li
-              key={phase.phase}
-              initial={{ opacity: 0, y: 16 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-              transition={{ delay: index * 0.08, duration: 0.4 }}
-              className={`flex gap-4 md:gap-6 ${isLast ? "pb-0" : "pb-8"}`}
-            >
-              <div className="flex flex-col items-center w-8 shrink-0">
-                <span className="text-sm font-medium tabular-nums text-blue-600 dark:text-blue-400 leading-none pt-1">
-                  {phase.phase}
-                </span>
-                {!isLast && (
-                  <div
-                    className="w-px flex-1 mt-3 bg-gray-900/10 dark:bg-white/10"
-                    aria-hidden="true"
-                  />
-                )}
-              </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="text-lg md:text-xl font-medium text-gray-900 dark:text-white mb-2">
-                  {phase.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                  {phase.description}
-                </p>
-              </div>
-            </motion.li>
-          );
-        })}
+      <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5 list-none p-0 m-0 items-stretch">
+        {phases.map((phase, index) => (
+          <motion.li
+            key={phase.phase}
+            initial={{ opacity: 0, y: 16 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+            transition={{ delay: index * 0.08, duration: 0.4 }}
+            className="h-full"
+          >
+            <div className="h-full flex flex-col rounded-2xl p-5 md:p-6 backdrop-blur-xl bg-gray-900/[0.03] dark:bg-white/[0.03] border border-gray-900/10 dark:border-white/10 transition-colors duration-200 hover:bg-gray-900/[0.05] dark:hover:bg-white/[0.05] hover:border-blue-500/25">
+              <span className="inline-flex items-center justify-center w-9 h-9 mb-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-sm font-semibold tabular-nums text-blue-600 dark:text-blue-400">
+                {phase.phase}
+              </span>
+              <h3 className="text-base md:text-lg font-medium text-gray-900 dark:text-white mb-2 leading-snug">
+                {phase.title}
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                {phase.description}
+              </p>
+            </div>
+          </motion.li>
+        ))}
       </ol>
     </div>
   );

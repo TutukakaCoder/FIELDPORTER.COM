@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:verify": "NEXT_DIST_DIR=.next-verify next build",
     "build:clean": "node scripts/clean-build.js",
     "build:firebase": "npm run build && npx firebase deploy --only hosting",
     "deploy:firebase": "npm run build:firebase",

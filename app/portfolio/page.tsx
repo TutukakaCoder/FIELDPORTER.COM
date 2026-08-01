@@ -374,6 +374,49 @@ const getTimelineBadgeStyle = (timelineStyle?: string) => {
   }
 };
 
+// Selector chip colors. Light mode needs darker text than the status badges,
+// since the chip is an interactive control and must stay legible on white.
+const getProjectChipStyle = (timelineStyle?: string) => {
+  switch (timelineStyle) {
+    case "live":
+      return {
+        selected:
+          "bg-green-500/10 dark:bg-green-500/20 border-green-500/40 text-green-700 dark:text-green-400",
+        dot: "bg-green-500",
+      };
+    case "uat":
+      return {
+        selected:
+          "bg-amber-500/10 dark:bg-amber-500/20 border-amber-500/40 text-amber-700 dark:text-amber-400",
+        dot: "bg-amber-500",
+      };
+    case "delivered":
+      return {
+        selected:
+          "bg-blue-500/10 dark:bg-blue-500/20 border-blue-500/40 text-blue-700 dark:text-blue-400",
+        dot: "bg-blue-500",
+      };
+    case "research":
+      return {
+        selected:
+          "bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/40 text-emerald-700 dark:text-emerald-400",
+        dot: "bg-emerald-500",
+      };
+    case "development":
+      return {
+        selected:
+          "bg-yellow-500/10 dark:bg-yellow-500/20 border-yellow-500/40 text-yellow-700 dark:text-yellow-400",
+        dot: "bg-yellow-500",
+      };
+    default:
+      return {
+        selected:
+          "bg-gray-500/10 dark:bg-gray-500/20 border-gray-500/40 text-gray-700 dark:text-gray-400",
+        dot: "bg-gray-500",
+      };
+  }
+};
+
 function displayTitle(project: Project, mobile: boolean) {
   if (mobile && project.shortTitle) return project.shortTitle;
   return project.title;
@@ -903,6 +946,7 @@ function InteractivePortfolioShowcase() {
   const [activeSection, setActiveSection] = useState(0);
   const [direction, setDirection] = useState(0);
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
+  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
 
   const safeIndex = Math.max(
     0,
@@ -913,6 +957,7 @@ function InteractivePortfolioShowcase() {
   // Collapse accordion when switching category
   useEffect(() => {
     setExpandedKey(null);
+    setActiveProjectIndex(0);
   }, [safeIndex]);
 
   const goToPrevious = () => {
@@ -1047,18 +1092,58 @@ function InteractivePortfolioShowcase() {
                 </h2>
               </div>
 
-              <div className="space-y-3 md:space-y-10 lg:space-y-14">
+              {/* Project selector — desktop picks one project instead of stacking all */}
+              {currentSection.projects.length > 1 && (
+                <div className="hidden lg:flex flex-wrap justify-center gap-2 mb-10">
+                  {currentSection.projects.map((project, projectIndex) => {
+                    const active = projectIndex === activeProjectIndex;
+                    const chip = getProjectChipStyle(
+                      project.statusStyle || currentSection.timelineStyle,
+                    );
+                    return (
+                      <button
+                        key={`${currentSection.id}-tab-${projectIndex}`}
+                        type="button"
+                        onClick={() => setActiveProjectIndex(projectIndex)}
+                        aria-pressed={active}
+                        className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 ${
+                          active
+                            ? chip.selected
+                            : "bg-transparent border-gray-900/10 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:border-gray-900/25 dark:hover:border-white/25"
+                        }`}
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${chip.dot} ${
+                            active ? "" : "opacity-60"
+                          }`}
+                        />
+                        {displayTitle(project, true)}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
+              <div className="space-y-3 md:space-y-10 lg:space-y-0">
                 {currentSection.projects.map((project, projectIndex) => (
-                  <ProjectCard
+                  <div
                     key={`${currentSection.id}-${projectIndex}`}
-                    project={project}
-                    section={currentSection}
-                    projectIndex={projectIndex}
-                    isExpanded={
-                      expandedKey === `${currentSection.id}-${projectIndex}`
+                    className={
+                      projectIndex === activeProjectIndex
+                        ? undefined
+                        : "lg:hidden"
                     }
-                    onToggle={() => toggleProject(projectIndex)}
-                  />
+                  >
+                    <ProjectCard
+                      project={project}
+                      section={currentSection}
+                      projectIndex={projectIndex}
+                      isExpanded={
+                        expandedKey === `${currentSection.id}-${projectIndex}`
+                      }
+                      onToggle={() => toggleProject(projectIndex)}
+                    />
+                  </div>
                 ))}
               </div>
             </motion.div>

@@ -1,5 +1,12 @@
+const path = require("path");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // A verification build shares .next with a running dev server and deletes the
+  // chunks it is serving, leaving a blank page until dev restarts. Set
+  // NEXT_DIST_DIR (see build:verify) to build into a throwaway directory.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
+
   // TypeScript and React strict mode for development quality
   typescript: {
     ignoreBuildErrors: false,
@@ -74,18 +81,25 @@ const nextConfig = {
   webpack: (config, { dev, isServer }) => {
     // Nested duplicate tree + hosting stub exhaust macOS file watchers (EMFILE),
     // which leaves the app-paths manifest with only /_not-found and a white/404 UI.
+    // These must be anchored to the project root: the root is itself named
+    // FIELDPORTER.COM, so a bare "**/FIELDPORTER.COM/**" glob matches every
+    // source file in the repo and silently disables HMR.
     if (dev) {
+      const ignoredDirs = [
+        "FIELDPORTER.COM",
+        "hosting",
+        "Documentation",
+        "archive",
+        ".cursor",
+        ".next-verify",
+      ];
       config.watchOptions = {
         ...config.watchOptions,
         ignored: [
           "**/node_modules/**",
           "**/.git/**",
           "**/.next/**",
-          "**/FIELDPORTER.COM/**",
-          "**/hosting/**",
-          "**/Documentation/**",
-          "**/archive/**",
-          "**/.cursor/**",
+          ...ignoredDirs.map((dir) => `${path.join(__dirname, dir)}/**`),
         ],
       };
     }
