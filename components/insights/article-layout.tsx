@@ -3,6 +3,7 @@
 import { PageWrapper } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/card";
+import { formatPublishDate } from "@/config/insights-articles";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -134,9 +135,7 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
                     </div>
                     <div className="flex items-center space-x-2">
                       <Calendar className="w-4 h-4" />
-                      <span>
-                        {new Date(article.publishDate).toLocaleDateString()}
-                      </span>
+                      <span>{formatPublishDate(article.publishDate)}</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Clock className="w-4 h-4" />

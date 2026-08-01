@@ -67,3 +67,13 @@ export function getInsightArticle(id: string): InsightArticleMeta | undefined {
 export function toPublishedTime(publishDate: string): string {
   return `${publishDate}T00:00:00.000Z`;
 }
+
+/** Locale-stable display date so server and client render identically. */
+export function formatPublishDate(publishDate: string): string {
+  return new Date(`${publishDate}T00:00:00.000Z`).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}

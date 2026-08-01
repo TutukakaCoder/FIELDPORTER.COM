@@ -1,7 +1,15 @@
 "use client";
 
 import { PageWrapper } from "@/components/layout";
-import { ArrowRight, Phone, Search, ShieldCheck } from "lucide-react";
+import {
+  ArrowRight,
+  CalendarClock,
+  FileText,
+  Handshake,
+  Phone,
+  Search,
+  ShieldCheck,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { AIOS_APP_URL } from "@/config/constants";
@@ -41,6 +49,40 @@ const iconPulse = {
     },
   },
 };
+
+const heroFacts = [
+  {
+    icon: FileText,
+    label: "Deliverable",
+    value: "Written Assessment Report plus two consultation calls.",
+    cardBg: "bg-blue-50/70 dark:bg-blue-900/15",
+    cardBorder: "border-blue-100 dark:border-blue-800/30",
+    iconBg: "bg-blue-100 dark:bg-blue-900/30",
+    iconColor: "text-blue-600 dark:text-blue-400",
+    labelColor: "text-blue-700 dark:text-blue-300",
+  },
+  {
+    icon: CalendarClock,
+    label: "Timeline",
+    value: "Typically 1–2 weeks from data submission to first call.",
+    cardBg: "bg-purple-50/70 dark:bg-purple-900/15",
+    cardBorder: "border-purple-100 dark:border-purple-800/30",
+    iconBg: "bg-purple-100 dark:bg-purple-900/30",
+    iconColor: "text-purple-600 dark:text-purple-400",
+    labelColor: "text-purple-700 dark:text-purple-300",
+  },
+  {
+    icon: Handshake,
+    label: "Commitment",
+    value:
+      "Paid assessment; booking confirms your slot. No obligation to proceed with implementation after the report.",
+    cardBg: "bg-emerald-50/70 dark:bg-emerald-900/15",
+    cardBorder: "border-emerald-100 dark:border-emerald-800/30",
+    iconBg: "bg-emerald-100 dark:bg-emerald-900/30",
+    iconColor: "text-emerald-600 dark:text-emerald-400",
+    labelColor: "text-emerald-700 dark:text-emerald-300",
+  },
+];
 
 const steps = [
   {
@@ -88,17 +130,13 @@ export default function AIOSPage() {
             Find the Right AI for <br className="hidden md:block" /> Your
             Business
           </h1>
-          <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+          <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl mx-auto">
             Stop guessing where to invest. Get a scored roadmap for your
             automation strategy and move forward with certainty.
           </p>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
-            Deliverable: written Assessment Report plus two consultation calls.
+          <p className="mt-4 mb-10 text-sm md:text-base text-gray-500 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">
             The report includes a readiness score, priority areas, and a short
-            roadmap—so you see the shape of the output before you book.
-            Typically 1–2 weeks from data submission to first call. Paid
-            assessment; booking confirms your slot. No obligation to proceed
-            with implementation after the report.
+            roadmap, so you see the shape of the output before you book.
           </p>
           <div className="flex justify-center">
             <motion.div
@@ -129,36 +167,38 @@ export default function AIOSPage() {
             </Link>
             .
           </p>
-        </motion.div>
 
-        {/* The Problem Section */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={fadeInUp}
-          transition={{ duration: 0.6 }}
-          whileHover={{ scale: 1.01, y: -4 }}
-          className="mb-16 md:mb-24 bg-gray-50 dark:bg-gray-900/30 rounded-3xl p-5 md:p-12 border border-gray-200 dark:border-gray-800 hover:border-blue-200 dark:hover:border-blue-800/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500"
-        >
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">
-              Unsure where to start?
-            </h2>
-            <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 mb-4">
-              Most business leaders know AI matters, but few know exactly which
-              investments will pay off. How do you separate genuine high-ROI
-              opportunities from the hype?
-            </p>
-            <p className="text-base md:text-lg text-gray-600 dark:text-gray-300">
-              You don't need more tools. You need clarity on what is right for
-              your specific operations.
-            </p>
-          </div>
+          <dl className="mt-10 pt-8 border-t border-gray-900/10 dark:border-white/10 grid gap-4 sm:grid-cols-3 text-left">
+            {heroFacts.map((fact) => {
+              const FactIcon = fact.icon;
+              return (
+                <div
+                  key={fact.label}
+                  className={`rounded-2xl border p-5 ${fact.cardBg} ${fact.cardBorder}`}
+                >
+                  <dt className="flex items-center gap-2.5 mb-3">
+                    <span
+                      className={`w-8 h-8 shrink-0 rounded-lg flex items-center justify-center ${fact.iconBg} ${fact.iconColor}`}
+                    >
+                      <FactIcon className="w-4 h-4" />
+                    </span>
+                    <span
+                      className={`text-xs font-semibold uppercase tracking-wider ${fact.labelColor}`}
+                    >
+                      {fact.label}
+                    </span>
+                  </dt>
+                  <dd className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                    {fact.value}
+                  </dd>
+                </div>
+              );
+            })}
+          </dl>
         </motion.div>
 
         {/* The Framework / Process Section */}
-        <div className="mb-24">
+        <div className="mb-16 md:mb-24">
           <motion.h2
             initial="hidden"
             whileInView="visible"
@@ -204,6 +244,34 @@ export default function AIOSPage() {
           </motion.div>
         </div>
 
+        {/* The Problem Section */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          transition={{ duration: 0.6 }}
+          whileHover={{ scale: 1.01, y: -4 }}
+          className="mb-16 md:mb-24 bg-gray-50 dark:bg-gray-900/30 rounded-3xl p-5 md:p-12 border border-gray-200 dark:border-gray-800 hover:border-blue-200 dark:hover:border-blue-800/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500"
+        >
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-8">
+              Unsure where to start?
+            </h2>
+            <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+              Most business leaders know AI matters, but few know exactly which
+              investments will pay off.
+            </p>
+            <p className="mt-4 text-base md:text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
+              How do you separate genuine high-ROI opportunities from the hype?
+            </p>
+            <p className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 text-lg md:text-xl font-medium text-gray-900 dark:text-white leading-relaxed">
+              You don&apos;t need more tools. You need clarity on what is right
+              for your specific operations.
+            </p>
+          </div>
+        </motion.div>
+
         {/* Example output / What you get */}
         <motion.div
           initial="hidden"
@@ -211,7 +279,7 @@ export default function AIOSPage() {
           viewport={{ once: true, margin: "-100px" }}
           variants={fadeInUp}
           transition={{ duration: 0.6 }}
-          className="max-w-4xl mx-auto mb-24"
+          className="max-w-4xl mx-auto mb-16 md:mb-24"
         >
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center">
             What You Get
@@ -248,20 +316,19 @@ export default function AIOSPage() {
           </div>
         </motion.div>
 
-        {/* Non-Sales Pitch Section */}
+        {/* Final CTA with independence note */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={fadeInUp}
           transition={{ duration: 0.6 }}
-          whileHover={{ scale: 1.02, y: -4 }}
-          className="max-w-4xl mx-auto mb-16 md:mb-24 p-5 md:p-12 bg-blue-50 dark:bg-blue-900/10 rounded-3xl border border-blue-100 dark:border-blue-800/30 text-center hover:border-blue-300 dark:hover:border-blue-600/50 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-500"
+          className="max-w-4xl mx-auto p-5 md:p-12 bg-blue-50 dark:bg-blue-900/10 rounded-3xl border border-blue-100 dark:border-blue-800/30 text-center"
         >
-          <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-5">
             An Independent Assessment
           </h3>
-          <div className="space-y-4 text-base md:text-lg text-gray-600 dark:text-gray-300">
+          <div className="space-y-4 text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             <p>
               Our goal is to give you an honest evaluation of what AI can do for
               you.
@@ -272,31 +339,24 @@ export default function AIOSPage() {
               strategic roadmap and no obligation.
             </p>
           </div>
-        </motion.div>
 
-        {/* Final CTA */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={fadeInUp}
-          className="text-center"
-        >
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
-            Ready to get clarity?
-          </h2>
-          <motion.div
-            whileHover={{ scale: 1.03, y: -3 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <Link
-              href="/contact"
-              className="group inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900 active:scale-[0.97] active:shadow-md"
+          <div className="mt-10 pt-10 border-t border-blue-100 dark:border-blue-800/30">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-8">
+              Ready to get clarity?
+            </h2>
+            <motion.div
+              whileHover={{ scale: 1.03, y: -3 }}
+              whileTap={{ scale: 0.97 }}
             >
-              Book Your Assessment
-              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
-            </Link>
-          </motion.div>
+              <Link
+                href="/contact"
+                className="group inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900 active:scale-[0.97] active:shadow-md"
+              >
+                Book Your Assessment
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
+              </Link>
+            </motion.div>
+          </div>
         </motion.div>
       </div>
     </PageWrapper>

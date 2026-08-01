@@ -3,12 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle, Loader2, Mail } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { ArrowRight, CheckCircle, Loader2 } from "lucide-react";
 import { useState } from "react";
 
 export function NewsletterSignup() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -40,7 +38,6 @@ export function NewsletterSignup() {
         setIsSubscribed(true);
         setEmail("");
 
-        // Track conversion for analytics
         if (typeof window !== "undefined" && (window as any).gtag) {
           (window as any).gtag("event", "newsletter_signup", {
             source: "insights",
@@ -58,171 +55,47 @@ export function NewsletterSignup() {
     }
   };
 
-  const benefits = [
-    "Weekly AI strategy insights",
-    "Early access to new articles",
-    "Exclusive implementation frameworks",
-    "Industry trend analysis",
-  ];
-
-  if (isSubscribed) {
-    return (
-      <section
-        id="newsletter-signup"
-        className="relative pt-6 pb-16 sm:pt-8 sm:pb-20 lg:pt-10 lg:pb-24"
-      >
-        {/* Background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-bg-fieldporter-primary to-bg-fieldporter-secondary" />
-
-        <div className="relative z-10 content-container-sm">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
-          >
-            <GlassCard className="p-8 md:p-12 text-center hover:border-green-500/30 transition-all duration-300">
-              <motion.div
-                className="w-16 h-16 rounded-2xl bg-green-500/20 flex items-center justify-center mx-auto mb-6 border border-green-500/30"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 200,
-                  damping: 15,
-                  delay: 0.2,
-                }}
-              >
-                <motion.div
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                >
-                  <CheckCircle className="w-8 h-8 text-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.4)]" />
-                </motion.div>
-              </motion.div>
-
-              <h3 className="text-heading-xl font-semibold text-gray-900 dark:text-white mb-4">
-                Welcome to Our Community!
-              </h3>
-
-              <p className="text-body-lg text-fieldporter-gray mb-8">
-                You&apos;re now subscribed to receive our latest AI strategy
-                insights and exclusive content.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Button
-                    variant="primary"
-                    size="enterprise"
-                    className="group focus-visible:ring-2 focus-visible:ring-fieldporter-blue"
-                    onClick={() => {
-                      // Scroll back to articles
-                      document
-                        .getElementById("latest-insights")
-                        ?.scrollIntoView({ behavior: "smooth" });
-                    }}
-                  >
-                    Explore Articles
-                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />
-                  </Button>
-                </motion.div>
-
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Button
-                    variant="fieldporter-secondary"
-                    size="enterprise"
-                    className="group focus-visible:ring-2 focus-visible:ring-white/50"
-                    onClick={() => router.push("/contact")}
-                  >
-                    Get Consultation
-                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />
-                  </Button>
-                </motion.div>
-              </div>
-            </GlassCard>
-          </motion.div>
-        </div>
-      </section>
-    );
-  }
-
   return (
     <section
       id="newsletter-signup"
       className="relative pt-6 pb-16 sm:pt-8 sm:pb-20 lg:pt-10 lg:pb-24"
     >
-      {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-bg-fieldporter-primary to-bg-fieldporter-secondary" />
 
-      <div className="relative z-10 content-container-sm">
+      <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <GlassCard className="p-8 md:p-12">
-            <div className="text-center space-y-6 md:space-y-8">
-              {/* Icon */}
-              <motion.div
-                className="w-16 h-16 rounded-2xl bg-fieldporter-blue/20 border border-fieldporter-blue/30 p-4 mx-auto"
-                whileHover={{ scale: 1.1, rotate: [0, -5, 5, 0] }}
-                transition={{ duration: 0.6 }}
-              >
-                <Mail className="w-8 h-8 text-fieldporter-blue drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]" />
-              </motion.div>
-
-              {/* Header */}
-              <div className="space-y-3">
-                <h3 className="text-heading-xl font-semibold text-gray-900 dark:text-white">
-                  Stay Ahead with AI Insights
-                </h3>
-                <p className="text-body-lg text-fieldporter-gray max-w-2xl mx-auto leading-relaxed">
-                  Get exclusive insights from operators who build AI companies.
-                  No fluff, just practical strategies you can implement.
-                </p>
+          <GlassCard className="p-7 sm:p-9">
+            {isSubscribed ? (
+              <div className="flex items-center gap-4">
+                <CheckCircle className="h-6 w-6 flex-shrink-0 text-green-500 dark:text-green-400" />
+                <div>
+                  <h2 className="text-heading-md font-semibold text-gray-900 dark:text-white">
+                    You are subscribed
+                  </h2>
+                  <p className="mt-1 text-body-sm text-fieldporter-gray">
+                    New articles will land in your inbox as we publish them.
+                  </p>
+                </div>
               </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-10">
+                <div className="space-y-2">
+                  <h2 className="text-heading-lg font-semibold text-gray-900 dark:text-white">
+                    Get new articles in your inbox
+                  </h2>
+                  <p className="max-w-xl text-body-md leading-relaxed text-fieldporter-gray">
+                    Practical notes from the AI systems and custom software we
+                    build. No fluff, and you can unsubscribe at any time.
+                  </p>
+                </div>
 
-              {/* Benefits */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                {benefits.map((benefit, index) => (
-                  <motion.div
-                    key={benefit}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.4, delay: 0.2 + index * 0.1 }}
-                    viewport={{ once: true }}
-                    whileHover={{ x: 4, scale: 1.02 }}
-                    className="flex items-center space-x-3 text-left p-2 rounded-lg hover:bg-gray-900/5 dark:hover:bg-white/5 transition-colors duration-300 cursor-default"
-                  >
-                    <motion.div
-                      className="w-2 h-2 rounded-full bg-fieldporter-blue flex-shrink-0"
-                      whileHover={{ scale: 1.5 }}
-                    />
-                    <span className="text-body-sm text-fieldporter-gray hover:text-gray-900 dark:hover:text-white transition-colors duration-300">
-                      {benefit}
-                    </span>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Signup Form */}
-              <form
-                onSubmit={handleSubmit}
-                className="max-w-md mx-auto relative z-10"
-              >
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="flex-1">
+                <form onSubmit={handleSubmit} className="w-full lg:w-auto">
+                  <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
                     <input
                       type="email"
                       value={email}
@@ -231,64 +104,41 @@ export function NewsletterSignup() {
                       aria-label="Email address"
                       required
                       disabled={isSubmitting}
-                      className="w-full px-4 py-4 rounded-lg bg-gray-900/5 dark:bg-white/10 border border-gray-900/20 dark:border-white/20 text-gray-900 dark:text-white placeholder-fieldporter-gray focus:outline-none focus:ring-2 focus:ring-fieldporter-blue focus:border-transparent focus:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all duration-300 disabled:opacity-50 min-h-[48px] touch-manipulation hover:border-gray-900/30 dark:hover:border-white/30 hover:bg-gray-900/[0.08] dark:hover:bg-white/[0.12]"
+                      className="min-h-[48px] w-full rounded-lg border border-gray-900/20 bg-gray-900/5 px-4 py-3 text-gray-900 placeholder-fieldporter-gray transition-colors duration-300 hover:border-gray-900/30 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-fieldporter-blue disabled:opacity-50 dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:border-white/30 sm:w-72"
                     />
-                    {error && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-red-400 text-sm mt-2 text-left"
-                      >
-                        {error}
-                      </motion.p>
-                    )}
-                  </div>
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
                     <Button
                       type="submit"
                       variant="primary"
                       size="enterprise"
                       disabled={isSubmitting || !email.trim()}
-                      className="group whitespace-nowrap focus-visible:ring-2 focus-visible:ring-fieldporter-blue focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                      className="group whitespace-nowrap focus-visible:ring-2 focus-visible:ring-fieldporter-blue"
                     >
                       {isSubmitting ? (
                         <>
                           <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                          Subscribing...
+                          Subscribing
                         </>
                       ) : (
                         <>
-                          Get Insights
-                          <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />
+                          Subscribe
+                          <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
                         </>
                       )}
                     </Button>
-                  </motion.div>
-                </div>
-              </form>
+                  </div>
 
-              {/* Privacy Note */}
-              <p className="text-body-xs text-fieldporter-gray max-w-lg mx-auto">
-                We respect your privacy. Unsubscribe at any time. By
-                subscribing, you agree to receive insights about AI strategy and
-                business automation.
-              </p>
-
-              {/* Social Proof */}
-              <div className="pt-8 border-t border-gray-900/10 dark:border-white/10">
-                <p className="text-body-sm text-fieldporter-gray mb-4">
-                  Join 500+ executives and entrepreneurs
-                </p>
-                <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-body-xs text-fieldporter-gray">
-                  <span>✓ No spam, ever</span>
-                  <span>✓ Weekly insights</span>
-                  <span>✓ Unsubscribe anytime</span>
-                </div>
+                  {error && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-2 text-sm text-red-500 dark:text-red-400"
+                    >
+                      {error}
+                    </motion.p>
+                  )}
+                </form>
               </div>
-            </div>
+            )}
           </GlassCard>
         </motion.div>
       </div>
