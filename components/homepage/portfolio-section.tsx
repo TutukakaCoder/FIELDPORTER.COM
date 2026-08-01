@@ -1,10 +1,25 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  type MotionStyle,
+} from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Quote } from "lucide-react";
-import { memo } from "react";
+import {
+  memo,
+  useCallback,
+  useRef,
+  useState,
+  type CSSProperties,
+  type MouseEvent,
+} from "react";
+
+const PREMIUM_EASE = [0.22, 1, 0.36, 1] as const;
 
 type ProjectCardData = {
   id: string;
@@ -58,30 +73,82 @@ const statusClass = {
   uat: "text-amber-700 dark:text-amber-400 border-amber-500/25 bg-amber-500/10",
 } as const;
 
+function useSpotlight() {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [active, setActive] = useState(false);
+
+  const onMouseMove = useCallback((e: MouseEvent<HTMLAnchorElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    setPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  }, []);
+
+  const onMouseEnter = useCallback(() => setActive(true), []);
+  const onMouseLeave = useCallback(() => setActive(false), []);
+
+  const style = {
+    "--spotlight-x": `${pos.x}px`,
+    "--spotlight-y": `${pos.y}px`,
+    "--spotlight-opacity": active ? "1" : "0",
+  } as CSSProperties;
+
+  return { ref, style, onMouseMove, onMouseEnter, onMouseLeave };
+}
+
 const ProjectCard = memo(
-  ({ project, index }: { project: ProjectCardData; index: number }) => {
+  ({
+    project,
+    index,
+    reducedMotion,
+  }: {
+    project: ProjectCardData;
+    index: number;
+    reducedMotion: boolean;
+  }) => {
+    const spotlight = useSpotlight();
+
     return (
       <motion.article
-        initial={{ opacity: 0, y: 20 }}
+        initial={reducedMotion ? false : { opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-10%" }}
-        transition={{ delay: index * 0.1, duration: 0.5 }}
+        transition={{
+          delay: reducedMotion ? 0 : index * 0.1,
+          duration: reducedMotion ? 0 : 0.6,
+          ease: PREMIUM_EASE,
+        }}
       >
         <Link
+          ref={spotlight.ref}
           href="/portfolio"
-          className="group block h-full overflow-hidden rounded-2xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02] transition-colors duration-300 hover:border-gray-900/20 dark:hover:border-white/20"
+          style={spotlight.style}
+          onMouseMove={spotlight.onMouseMove}
+          onMouseEnter={spotlight.onMouseEnter}
+          onMouseLeave={spotlight.onMouseLeave}
+          className="group relative block h-full overflow-hidden rounded-2xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02] transition-colors duration-300 hover:border-blue-400/30 dark:hover:border-blue-400/30"
         >
-          <div className="relative aspect-[16/10] overflow-hidden bg-black/70 border-b border-gray-900/10 dark:border-white/10">
+          <div
+            className="pointer-events-none absolute inset-0 z-10 opacity-[var(--spotlight-opacity)] transition-opacity duration-300"
+            style={{
+              background:
+                "radial-gradient(450px circle at var(--spotlight-x) var(--spotlight-y), rgba(59,130,246,0.1), transparent 40%)",
+            }}
+            aria-hidden
+          />
+
+          <div className="relative aspect-[16/9] overflow-hidden bg-gray-900/40 border-b border-gray-900/10 dark:border-white/10">
             <Image
               src={project.image}
               alt={`${project.title} product interface`}
               fill
-              className="object-contain object-top transition-transform duration-500 group-hover:scale-[1.01]"
+              className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.01]"
               sizes="(max-width: 768px) 100vw, 50vw"
             />
           </div>
 
-          <div className="p-4 sm:p-6 md:p-8">
+          <div className="relative z-20 p-4 sm:p-6 md:p-8">
             <div className="mb-3 sm:mb-4 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
               {project.category}
             </div>
@@ -114,32 +181,66 @@ const ProjectCard = memo(
 ProjectCard.displayName = "ProjectCard";
 
 export function PortfolioSection() {
+  const prefersReducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "start start"],
+  });
+  const headingY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    prefersReducedMotion ? [0, 0] : [28, 0],
+  );
+  const headingOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.6],
+    prefersReducedMotion ? [1, 1] : [0.4, 1],
+  );
+
   return (
     <section
+      ref={sectionRef}
       id="portfolio"
       className="relative section-rhythm-lg overflow-hidden bg-transparent"
     >
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8 md:mb-16">
+        <motion.div
+          style={
+            {
+              y: headingY,
+              opacity: headingOpacity,
+            } as MotionStyle
+          }
+          className="text-center mb-8 md:mb-16"
+        >
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-4 md:mb-6 leading-tight tracking-[-0.02em] break-words">
             Live client work
           </h2>
           <p className="section-copy max-w-3xl mx-auto font-light">
             Production platforms and active client builds we continue to improve.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-10 md:mb-20">
           {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
+            <ProjectCard
+              key={project.id}
+              project={project}
+              index={index}
+              reducedMotion={!!prefersReducedMotion}
+            />
           ))}
         </div>
 
         <motion.blockquote
-          initial={{ opacity: 0, y: 20 }}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{
+            duration: prefersReducedMotion ? 0 : 0.6,
+            ease: PREMIUM_EASE,
+          }}
           className="max-w-3xl mx-auto rounded-2xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02] p-4 sm:p-6 md:p-10"
         >
           <Quote

@@ -588,12 +588,12 @@ function ProjectMedia({
     >
       {project.heroImage && (
         <>
-          <div className="relative w-full aspect-[16/10] overflow-hidden bg-black/70 border border-white/5 rounded-2xl">
+          <div className="relative w-full aspect-[16/9] overflow-hidden bg-gray-900/40 border border-white/5 rounded-2xl">
             <Image
               src={project.heroImage}
               alt={`${project.title} product interface`}
               fill
-              className="object-contain object-top"
+              className="object-cover object-top"
               sizes="(max-width: 1024px) 100vw, 50vw"
               priority={Boolean(imagePriority)}
             />
@@ -605,13 +605,13 @@ function ProjectMedia({
               {project.galleryImages.map((src, idx) => (
                 <div
                   key={src}
-                  className="relative aspect-[16/10] rounded-lg md:rounded-xl overflow-hidden bg-black/70 border border-white/5"
+                  className="relative aspect-[16/9] rounded-lg md:rounded-xl overflow-hidden bg-gray-900/40 border border-white/5"
                 >
                   <Image
                     src={src}
                     alt={`${project.title} screen ${idx + 1}`}
                     fill
-                    className="object-contain object-top"
+                    className="object-cover object-top"
                     sizes="(max-width: 1024px) 33vw, 160px"
                   />
                 </div>
