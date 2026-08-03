@@ -60,8 +60,6 @@ export function ContactMethods() {
 
   return (
     <section className="relative py-10 md:section-rhythm-xl overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:to-gray-950" />
-
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Mobile: one-liner + accordion */}
         <div className="md:hidden space-y-3">

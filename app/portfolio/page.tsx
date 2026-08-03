@@ -1,6 +1,6 @@
 "use client";
 
-import { PageWrapper } from "@/components/layout";
+import { HeroAuroraBackground, PageWrapper } from "@/components/layout";
 import { useHorizontalSwipe, usePortfolioMediaPreloader } from "@/hooks";
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import {
@@ -427,28 +427,13 @@ function displayStatus(project: Project, mobile: boolean) {
   return project.status;
 }
 
-// Simple hero background - static gradient blobs, no animation
-function PortfolioHeroBackground() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-500/10 to-transparent rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-gradient-to-t from-emerald-500/8 to-transparent rounded-full blur-3xl" />
-    </div>
-  );
-}
-
 function PortfolioHero() {
   const ref = React.useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section
-      ref={ref}
-      className="relative overflow-hidden pt-28 pb-4 md:pt-32 md:pb-6"
-    >
-      <div className="absolute inset-0 z-0">
-        <PortfolioHeroBackground />
-      </div>
+    <section ref={ref} className="hero-shell">
+      <HeroAuroraBackground />
 
       <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
@@ -458,8 +443,8 @@ function PortfolioHero() {
           className="space-y-6 md:space-y-8"
         >
           <div className="flex justify-center">
-            <div className="p-3 md:p-4 rounded-2xl backdrop-blur-xl border border-gray-900/10 bg-gray-900/[0.02] dark:border-white/10 dark:bg-white/[0.02]">
-              <Code2 className="w-8 h-8 md:w-12 md:h-12 text-blue-500 dark:text-blue-400" />
+            <div className="p-4 rounded-2xl backdrop-blur-md border border-gray-900/10 bg-gray-900/[0.02] dark:border-white/10 dark:bg-white/[0.02]">
+              <Code2 className="w-12 h-12 text-blue-500 dark:text-blue-400" />
             </div>
           </div>
 
@@ -479,7 +464,7 @@ function PortfolioHero() {
             </p>
           </div>
 
-          <div className="flex justify-center pt-2 md:pt-4">
+          <div className="flex justify-center pt-8">
             <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
           </div>
         </motion.div>
@@ -986,13 +971,15 @@ function InteractivePortfolioShowcase() {
   };
 
   return (
-    <section className="relative pt-2 md:pt-4 pb-12 lg:pb-24">
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:via-gray-950 dark:to-black" />
-
+    <section className="relative section-rhythm">
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Sticky filter chips — centered; extra bottom space so section icons aren’t covered */}
-        <div className="sticky top-24 z-30 -mx-4 px-4 py-3 md:py-4 mb-10 md:mb-14 lg:mb-16 bg-white/80 dark:bg-black/80 backdrop-blur-md">
-          <div className="flex w-max max-w-full mx-auto flex-nowrap justify-center gap-1.5 md:gap-3 overflow-x-auto snap-x snap-mandatory pb-0.5 scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 text-center mb-3 md:mb-4">
+          Browse by type
+        </p>
+
+        {/* Sticky filter chips — centered; sits directly above the section heading at rest */}
+        <div className="sticky top-24 z-30 -mx-4 px-4 py-3 md:py-4 mb-6 md:mb-8 border-b border-gray-900/10 dark:border-white/10 bg-white/80 dark:bg-black/80 backdrop-blur-md">
+          <div className="flex w-max max-w-full mx-auto flex-nowrap justify-center gap-1 md:gap-1.5 p-1 md:p-1.5 rounded-full md:rounded-[1.375rem] border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02] overflow-x-auto snap-x snap-mandatory scroll-p-1 md:scroll-p-1.5 scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {portfolioSections.map((section, index) => {
               const SectionIcon = section.icon;
               const active = activeSection === index;
@@ -1009,8 +996,8 @@ function InteractivePortfolioShowcase() {
                     snap-start flex-shrink-0 px-3 md:px-6 py-2 md:py-3.5 rounded-full md:rounded-2xl transition-all duration-300 border font-medium text-xs md:text-base touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 min-h-[40px] md:min-h-[44px]
                     ${
                       active
-                        ? `bg-gray-900/[0.06] dark:bg-white/[0.08] ${section.borderColor.replace("/15", "/40")} text-gray-900 dark:text-white`
-                        : "bg-transparent border-gray-900/10 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        ? `bg-white shadow-sm dark:bg-white/[0.08] dark:shadow-none ${section.borderColor.replace("/15", "/40")} text-gray-900 dark:text-white`
+                        : "bg-transparent border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                     }
                   `}
                 >
@@ -1065,21 +1052,7 @@ function InteractivePortfolioShowcase() {
               </div>
 
               {/* Section marketing chrome — desktop/tablet only */}
-              <div className="hidden md:block text-center pt-2 mb-12 lg:mb-16 scroll-mt-40">
-                <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">
-                  {currentSection.group === "client"
-                    ? "Client work"
-                    : "In-house ventures"}
-                </p>
-                <div className="flex items-center justify-center gap-4 mb-6">
-                  <div
-                    className={`w-16 h-16 rounded-2xl bg-gray-900/5 dark:bg-white/5 border ${currentSection.borderColor} flex items-center justify-center backdrop-blur-sm`}
-                  >
-                    {React.createElement(currentSection.icon, {
-                      className: `w-8 h-8 ${currentSection.iconColor}`,
-                    })}
-                  </div>
-                </div>
+              <div className="hidden md:block text-center pt-2 mb-8 scroll-mt-40">
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-4 leading-tight tracking-[-0.02em]">
                   {currentSection.id === "client-platforms" &&
                     "Production Systems with Real Impact"}
@@ -1160,12 +1133,12 @@ function PortfolioCTA() {
 
   return (
     <section ref={ref} className="relative section-rhythm-xl">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.8 }}
-          className="space-y-6 md:space-y-8"
+          className="p-5 md:p-12 bg-blue-50 dark:bg-blue-900/10 rounded-3xl border border-blue-100 dark:border-blue-800/30 text-center space-y-6 md:space-y-8"
         >
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white leading-tight tracking-[-0.02em]">
             From Concept to Revenue
@@ -1178,7 +1151,7 @@ function PortfolioCTA() {
             Book a call to scope your project. We reply within 24 hours and will
             say clearly if we&apos;re a fit.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 pt-6 md:pt-12">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 pt-6 md:pt-8">
             <motion.a
               href="/contact"
               className="group inline-flex items-center justify-center gap-2 md:gap-4 w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white px-5 py-2.5 md:px-10 md:py-5 rounded-xl md:rounded-2xl font-semibold text-sm md:text-lg transition-all duration-500 hover:shadow-2xl hover:shadow-blue-600/30 backdrop-blur-xl border border-blue-500/20 min-h-[44px]"
@@ -1209,7 +1182,7 @@ export default function PortfolioPage() {
 
   return (
     <PageWrapper>
-      <div className="relative z-10 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:via-gray-950 dark:to-black min-h-screen">
+      <div className="relative z-10 min-h-screen">
         <PortfolioHero />
         <InteractivePortfolioShowcase />
         <PortfolioCTA />

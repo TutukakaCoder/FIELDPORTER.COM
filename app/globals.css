@@ -427,6 +427,15 @@
     @apply py-16 lg:py-40;
   }
 
+  /* Page hero shell – every top-level page hero uses this so section height and
+     the gap below the floating nav are identical across pages. Content is
+     top-aligned rather than centered: centering makes the offset depend on how
+     tall each page's copy is, which is what made the gaps differ. */
+  .hero-shell {
+    @apply relative min-h-screen flex items-start justify-center overflow-hidden;
+    @apply pt-32 md:pt-44 lg:pt-48 pb-16 md:pb-20;
+  }
+
   /* Section card – standard border, blur, hover across site */
   .card-section {
     @apply rounded-2xl p-4 md:p-6 backdrop-blur-md transition-all duration-300;

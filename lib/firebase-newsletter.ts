@@ -172,7 +172,7 @@ export class FirebaseNewsletterService {
       } catch (error) {
         lastError = error as Error;
 
-        if (process.env.NODE_ENV === "development") {
+        if (process.env["NODE_ENV"] === "development") {
           console.error(`${operationName} attempt ${attempt} failed:`, error);
         }
 
@@ -228,8 +228,8 @@ export class FirebaseNewsletterService {
       }, "subscribeToNewsletter");
 
       // Track analytics if available
-      if (typeof window !== "undefined" && window.gtag) {
-        window.gtag("event", "newsletter_signup", {
+      if (typeof window !== "undefined" && (window as any).gtag) {
+        (window as any).gtag("event", "newsletter_signup", {
           source: formData.source,
           email_domain: emailDomain,
           lead_score: subscription.lead_score,
@@ -244,7 +244,7 @@ export class FirebaseNewsletterService {
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error occurred";
 
-      if (process.env.NODE_ENV === "development") {
+      if (process.env["NODE_ENV"] === "development") {
         console.error("Newsletter subscription error:", error);
       }
 

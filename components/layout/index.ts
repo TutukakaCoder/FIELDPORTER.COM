@@ -5,6 +5,7 @@ export { ConditionalLayout } from "./conditional-layout";
 export { EntranceProvider, useEntrance } from "./entrance-provider";
 export { Footer } from "./footer";
 export { Header } from "./header";
+export { HeroAuroraBackground } from "./hero-aurora-background";
 export {
   CardLoadingSkeleton,
   NavigationLoadingSkeleton,

@@ -1,9 +1,9 @@
 "use client";
 
 import { ContactMethods } from "@/components/contact";
-import { PageWrapper } from "@/components/layout";
+import { HeroAuroraBackground, PageWrapper } from "@/components/layout";
 import { AnimatePresence, motion } from "framer-motion";
-import { Calendar, ChevronDown, MessageSquare } from "lucide-react";
+import { Calendar, ChevronDown, Mail, MessageSquare } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 
@@ -60,31 +60,40 @@ export function ContactPageClient() {
 
   return (
     <PageWrapper>
-      {/* Toggle Section — early action, minimal pre-copy */}
-      <section
-        className="relative pt-28 pb-6 md:pt-40 md:pb-12 overflow-hidden"
-        aria-label="Contact options"
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-white dark:from-black dark:via-gray-950 dark:to-black" />
+      {/* Hero — matches About / Services / Portfolio / Insights pattern, with
+          the Book/Message control kept above the fold as the hero action */}
+      <section className="hero-shell" aria-label="Contact options">
+        <HeroAuroraBackground />
 
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="text-center"
+            className="text-center space-y-6 md:space-y-8"
           >
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-3 md:mb-4 leading-tight tracking-tight">
-              Book a call or send a message
-            </h1>
-            <p className="text-base md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl mx-auto mb-6 md:mb-8">
+            <div className="flex justify-center">
+              <div className="p-4 rounded-2xl backdrop-blur-md border border-gray-900/10 bg-gray-900/[0.02] dark:border-white/10 dark:bg-white/[0.02]">
+                <Mail className="w-12 h-12 text-blue-500 dark:text-blue-400" />
+              </div>
+            </div>
+
+            <div className="space-y-3 md:space-y-4">
+              <h1 className="text-3xl md:text-5xl lg:text-7xl font-light text-gray-900 dark:text-white leading-tight">
+                Contact
+              </h1>
+              <div className="text-base md:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 font-light">
+                Book a call or send a message
+              </div>
+            </div>
+
+            <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">
               Tell us what you&apos;re working on. We reply within 24 hours and
               will say clearly if we&apos;re a fit.
             </p>
 
-            {/* Sticky segmented control on mobile */}
-            <div className="sticky top-24 z-30 -mx-4 px-4 py-1.5 mb-5 md:static md:mx-0 md:px-0 md:py-0 md:mb-0 md:z-auto bg-white dark:bg-black md:bg-transparent border-b border-gray-900/5 dark:border-white/5 md:border-0">
-              <div className="mx-auto flex max-w-[220px] w-full sm:w-fit sm:max-w-none flex-row bg-gray-900/[0.04] dark:bg-white/[0.06] border border-gray-900/10 dark:border-white/10 rounded-full p-0.5 gap-0.5">
+            <div className="flex justify-center">
+              <div className="flex max-w-[220px] w-full sm:w-fit sm:max-w-none flex-row bg-gray-900/[0.04] dark:bg-white/[0.06] border border-gray-900/10 dark:border-white/10 rounded-full p-0.5 gap-0.5">
                 <button
                   type="button"
                   onClick={() => setMode("book")}
@@ -121,7 +130,7 @@ export function ContactPageClient() {
             </div>
 
             {/* Collapsed pre-copy — accordion on all sizes */}
-            <details className="mt-4 md:mt-8 text-left max-w-2xl mx-auto group">
+            <details className="text-left max-w-2xl mx-auto group">
               <summary className="flex items-center justify-between gap-3 cursor-pointer list-none touch-manipulation min-h-[44px] px-2 py-2 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
                 <span>What to expect &amp; fit</span>
                 <ChevronDown className="w-4 h-4 shrink-0 transition-transform duration-200 group-open:rotate-180" />
@@ -171,6 +180,10 @@ export function ContactPageClient() {
                 </p>
               </div>
             </details>
+
+            <div className="flex justify-center pt-8">
+              <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
+            </div>
           </motion.div>
         </div>
       </section>

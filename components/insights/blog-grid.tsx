@@ -57,27 +57,8 @@ export function BlogGrid() {
   }));
 
   return (
-    <section id="latest-insights" className="relative py-16 sm:py-20 lg:py-24">
-      <div className="absolute inset-0 bg-gradient-to-b from-bg-fieldporter-secondary to-bg-fieldporter-primary" />
-
+    <section id="latest-insights" className="relative section-rhythm">
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          viewport={{ once: true }}
-          className="mb-10 space-y-3"
-        >
-          <h2 className="text-display-sm md:text-display-md font-bold text-gray-900 dark:text-white">
-            Latest
-            <span className="text-fieldporter-blue"> Insights</span>
-          </h2>
-          <p className="text-body-lg text-fieldporter-gray max-w-2xl leading-relaxed">
-            Practical FIELDPORTER articles plus curated external reads worth
-            your time.
-          </p>
-        </motion.div>
-
         {leadArticle && (
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -86,6 +67,15 @@ export function BlogGrid() {
             viewport={{ once: true }}
             className="mb-8"
           >
+            <div className="mb-6">
+              <h2 className="text-heading-lg font-semibold text-gray-900 dark:text-white">
+                Latest article
+              </h2>
+              <p className="mt-2 text-body-sm text-fieldporter-gray">
+                Our most recent writing on building and running custom software.
+              </p>
+            </div>
+
             <Link href={`/insights/${leadArticle.id}`} className="block">
               <GlassCard className="group p-7 sm:p-8 transition-colors duration-300 hover:border-fieldporter-blue/30">
                 <div className="flex flex-wrap items-center gap-3">
@@ -116,9 +106,9 @@ export function BlogGrid() {
 
         {restArticles.length > 0 && (
           <div>
-            <h3 className="mb-4 text-body-sm font-semibold uppercase tracking-wide text-fieldporter-gray">
+            <h2 className="mb-4 text-body-sm font-semibold uppercase tracking-wide text-fieldporter-gray">
               More articles
-            </h3>
+            </h2>
 
             <GlassCard className="divide-y divide-gray-900/10 dark:divide-white/10 p-0">
               {restArticles.map((article) => (
@@ -129,9 +119,9 @@ export function BlogGrid() {
                 >
                   <div className="min-w-0 space-y-2">
                     <CategoryTag category={article.category} />
-                    <h4 className="text-heading-md font-semibold text-gray-900 dark:text-white transition-colors duration-300 group-hover:text-fieldporter-blue">
+                    <h3 className="text-heading-md font-semibold text-gray-900 dark:text-white transition-colors duration-300 group-hover:text-fieldporter-blue">
                       {article.title}
-                    </h4>
+                    </h3>
                     <p className="line-clamp-2 text-body-sm leading-relaxed text-fieldporter-gray">
                       {article.excerpt}
                     </p>
@@ -148,9 +138,9 @@ export function BlogGrid() {
         )}
 
         <div id="recommended-reading" className="pt-14 sm:pt-16">
-          <h3 className="text-heading-lg font-semibold text-gray-900 dark:text-white">
+          <h2 className="text-heading-lg font-semibold text-gray-900 dark:text-white">
             Recommended reading
-          </h3>
+          </h2>
           <p className="mt-2 text-body-sm text-fieldporter-gray">
             External research we return to when advising on AI and automation
             decisions.
@@ -159,9 +149,9 @@ export function BlogGrid() {
           <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-3">
             {groupedResources.map((group) => (
               <div key={group.category}>
-                <h4 className="mb-3 text-body-xs font-semibold uppercase tracking-wide text-fieldporter-gray">
+                <h3 className="mb-3 text-body-xs font-semibold uppercase tracking-wide text-fieldporter-gray">
                   {group.category}
-                </h4>
+                </h3>
                 <ul className="space-y-2">
                   {group.items.map((resource) => (
                     <li key={resource.href}>

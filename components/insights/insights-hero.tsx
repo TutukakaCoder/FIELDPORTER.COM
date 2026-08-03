@@ -1,124 +1,45 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { HeroAuroraBackground } from "@/components/layout/hero-aurora-background";
 import { motion } from "framer-motion";
-import { ArrowRight, BookOpen, ExternalLink, Sparkles } from "lucide-react";
-import Link from "next/link";
-
-const trustSignals = [
-  "Curated, practical writing for growing companies",
-  "Source-backed insights from top research firms",
-  "Clear actions, not generic AI hype",
-];
-
-const quickTopics = [
-  "AI strategy",
-  "automation ROI",
-  "portfolio operations",
-  "implementation playbooks",
-];
+import { BookOpen } from "lucide-react";
 
 export function InsightsHero() {
   return (
-    <section className="relative overflow-hidden pt-28 pb-16 sm:pb-20 lg:pt-36 lg:pb-24">
-      <div className="absolute inset-0 bg-gradient-to-b from-bg-fieldporter-primary via-bg-fieldporter-primary to-bg-fieldporter-secondary" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(59,130,246,0.15),transparent_35%)]" />
+    <section className="hero-shell">
+      <HeroAuroraBackground />
 
-      <div className="content-container relative z-10">
+      <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45 }}
-          className="grid grid-cols-1 gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10 items-start"
+          transition={{ duration: 0.8 }}
+          className="space-y-6 md:space-y-8"
         >
-          <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 rounded-full border border-fieldporter-blue/30 bg-fieldporter-blue/10 px-3 py-1.5 text-xs font-medium text-fieldporter-blue">
-              <Sparkles className="h-3.5 w-3.5" />
-              Strategic Insights
-            </div>
-
-            <div className="space-y-4">
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 dark:text-white">
-                Better AI decisions,
-                <span className="text-fieldporter-blue">
-                  {" "}
-                  backed by evidence
-                </span>
-              </h1>
-              <p className="max-w-2xl text-base md:text-lg leading-relaxed text-fieldporter-gray">
-                Insight pieces for growing companies and ambitious teams who
-                need signal over noise. We combine FIELDPORTER experience with
-                trusted external research and clear execution frameworks.
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <Button
-                variant="primary"
-                size="lg"
-                className="sm:min-w-[210px]"
-                onClick={() => {
-                  document
-                    .getElementById("latest-insights")
-                    ?.scrollIntoView({ behavior: "smooth" });
-                }}
-              >
-                Explore articles
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="sm:min-w-[210px]"
-                asChild
-              >
-                <Link href="/contact">Book strategy call</Link>
-              </Button>
+          <div className="flex justify-center">
+            <div className="p-4 rounded-2xl backdrop-blur-md border border-gray-900/10 bg-gray-900/[0.02] dark:border-white/10 dark:bg-white/[0.02]">
+              <BookOpen className="w-12 h-12 text-blue-500 dark:text-blue-400" />
             </div>
           </div>
 
-          <div className="rounded-2xl border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.03] dark:bg-white/[0.03] p-5 sm:p-6 backdrop-blur-md">
-            <div className="mb-5 flex items-center gap-2 text-gray-900 dark:text-white">
-              <BookOpen className="h-4 w-4 text-fieldporter-blue" />
-              <h2 className="text-base font-semibold">
-                What this page is built for
-              </h2>
+          <div className="space-y-3 md:space-y-4">
+            <h1 className="text-3xl md:text-5xl lg:text-7xl font-light text-gray-900 dark:text-white leading-tight">
+              Insights
+            </h1>
+            <div className="text-base md:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 font-light">
+              Better AI decisions, backed by evidence
             </div>
+          </div>
 
-            <ul className="space-y-3">
-              {trustSignals.map((item) => (
-                <li
-                  key={item}
-                  className="text-sm leading-relaxed text-fieldporter-gray"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
+          <div className="max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+              Practical writing on AI in production software, automation, and
+              operations.
+            </p>
+          </div>
 
-            <div className="mt-6 border-t border-gray-900/10 dark:border-white/10 pt-5">
-              <p className="mb-3 text-xs uppercase tracking-wide text-fieldporter-gray">
-                Core topics
-              </p>
-              <div className="flex flex-wrap gap-2.5">
-                {quickTopics.map((topic) => (
-                  <span
-                    key={topic}
-                    className="rounded-full border border-fieldporter-blue/35 bg-fieldporter-blue/10 px-3 py-1 text-xs font-medium text-fieldporter-blue"
-                  >
-                    {topic}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <Link
-              href="#recommended-reading"
-              className="mt-6 inline-flex items-center text-sm font-medium text-fieldporter-blue hover:text-blue-300 transition-colors"
-            >
-              See external recommended reading
-              <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
-            </Link>
+          <div className="flex justify-center pt-8">
+            <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
           </div>
         </motion.div>
       </div>

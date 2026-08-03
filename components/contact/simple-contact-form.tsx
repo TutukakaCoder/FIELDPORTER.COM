@@ -188,8 +188,6 @@ export function SimpleContactForm() {
         id="contact-form"
         className="relative section-rhythm-lg md:section-rhythm-2xl overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-50 via-gray-100 to-white dark:from-black dark:via-gray-950 dark:to-black" />
-
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -285,10 +283,8 @@ export function SimpleContactForm() {
   return (
     <section
       id="contact-form"
-      className="relative pt-2 pb-12 md:section-rhythm-2xl overflow-hidden"
+      className="relative section-rhythm md:section-rhythm-2xl overflow-hidden"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-50 via-gray-100 to-white dark:from-black dark:via-gray-950 dark:to-black" />
-
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
           {/* Contact Form — no duplicate page H1 */}
@@ -433,10 +429,7 @@ export function SimpleContactForm() {
                         id="contact-challenge"
                         value={formData.challengeDescription}
                         onChange={(e) =>
-                          updateFormData(
-                            "challengeDescription",
-                            e.target.value,
-                          )
+                          updateFormData("challengeDescription", e.target.value)
                         }
                         placeholder={currentFieldConfig.placeholder}
                         rows={4}

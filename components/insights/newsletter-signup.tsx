@@ -58,10 +58,8 @@ export function NewsletterSignup() {
   return (
     <section
       id="newsletter-signup"
-      className="relative pt-6 pb-16 sm:pt-8 sm:pb-20 lg:pt-10 lg:pb-24"
+      className="relative pt-0 pb-16 sm:pb-20 lg:pb-24"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-bg-fieldporter-primary to-bg-fieldporter-secondary" />
-
       <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 24 }}

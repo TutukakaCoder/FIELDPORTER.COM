@@ -75,6 +75,27 @@ description: >-
 - **Fix:** Replace with real Tailwind (`p-8 md:p-12`, `space-y-6 md:space-y-8`, `space-y-3`). Do not invent parallel `*-spacing` utilities; reuse existing patterns. Also tighten stacked section top padding when adjacent to BlogGrid (known-bug #7).
 - **Status:** Fixed 2026-07-28 on Insights newsletter · Partial — pending Sam visual QA · [`2026-07-28-insights-newsletter-spacing`](../../../Documentation/reviews/ux/2026-07-28-insights-newsletter-spacing/)
 
+### 11. Stacked page backgrounds cause visible banding at section seams
+
+- **Symptom:** Hard horizontal shading cut-off where the hero ends and the next section starts; radial glows clipped flat by `overflow-hidden`
+- **Location:** `app/portfolio/page.tsx` (page shell + showcase both painted `from-white via-gray-50 to-white`), `app/aios/page.tsx` and `components/insights/*` (hero ended on `bg-fieldporter-secondary`, next section restarted on `primary`)
+- **Fix:** One background owner per page. Hero renders `HeroAuroraBackground` (`components/layout/hero-aurora-background.tsx`); every section below is transparent over `PageWrapper`'s `bg-white dark:bg-black`. This is the About page pattern.
+- **Status:** Fixed 2026-08-03 on Portfolio, Insights, AI Readiness, Contact (form, booking widget, and contact methods sections also de-gradiented) · Confirmed by Sam visual QA 2026-08-03
+
+### 12. Short heroes let the next section peek above the fold
+
+- **Symptom:** Header block does not stand alone on load; the following section is already partly visible
+- **Location:** Heroes using `pt-28 pb-4 md:pt-32 md:pb-6` instead of a viewport-height shell
+- **Fix:** Use the `.hero-shell` utility (`app/globals.css`) plus `pt-8` before the divider. All six page heroes share it.
+- **Status:** Fixed 2026-08-03 · Confirmed by Sam visual QA 2026-08-03
+
+### 13. Vertically centered heroes give every page a different nav-to-icon gap
+
+- **Symptom:** Gap between the floating nav and the hero icon differs per page (Portfolio noticeably larger than Contact)
+- **Cause:** `flex items-center` centers the content stack, so the top offset is `(100vh - contentHeight) / 2`. Pages with more hero copy sit higher, pages with less sit lower, and the offset also drifts with viewport height.
+- **Fix:** `.hero-shell` top-aligns content (`items-start`) with a fixed `pt-32 md:pt-44 lg:pt-48`, so the offset is identical on every page and every viewport. Tune the gap in that one class, never per page.
+- **Status:** Fixed 2026-08-03 · Confirmed by Sam visual QA 2026-08-03
+
 ```markdown
 ### N. [Short title]
 

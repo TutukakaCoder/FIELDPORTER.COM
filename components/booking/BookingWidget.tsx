@@ -106,8 +106,6 @@ export function BookingWidget({
       id="booking-widget"
       className="relative section-rhythm-tight overflow-hidden"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-50 via-gray-100 to-white dark:from-black dark:via-gray-950 dark:to-black" />
-
       <div className="relative z-10 w-full max-w-6xl mx-auto px-0 sm:px-6 lg:px-8">
         <motion.div
           variants={containerVariants}
@@ -192,10 +190,7 @@ export function BookingWidget({
             )}
 
             <CalErrorBoundary>
-              <div
-                className="w-full h-full"
-                style={{ minHeight }}
-              >
+              <div className="w-full h-full" style={{ minHeight }}>
                 <Cal
                   key={calLayout}
                   calLink={calLink}

@@ -1,5 +1,6 @@
 "use client";
 
+import { HeroAuroraBackground } from "@/components/layout/hero-aurora-background";
 import { Button } from "@/components/ui/button";
 import {
   motion,
@@ -22,115 +23,6 @@ interface ServiceHeroProps {
   }>;
   ctaText: string;
   ctaHref: string;
-}
-
-// Premium aurora background matching about page with performance optimization
-function PremiumAuroraBackground() {
-  return (
-    <div className="absolute inset-0 overflow-hidden">
-      {/* Sophisticated gradient base */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-gray-50 to-white dark:from-gray-950 dark:via-gray-900 dark:to-black" />
-
-      {/* Enhanced grain texture overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.015]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-        }}
-      />
-
-      {/* Subtle aurora effects with hardware acceleration */}
-      <div className="absolute inset-0">
-        <motion.div
-          className="absolute -top-1/2 -left-1/2 w-[600px] h-[600px] rounded-full opacity-20 blur-[100px]"
-          style={{
-            background:
-              "linear-gradient(45deg, rgba(16, 185, 129, 0.3), rgba(59, 130, 246, 0.2))",
-            willChange: "transform",
-            backfaceVisibility: "hidden",
-            transform: "translateZ(0)",
-          }}
-          animate={{
-            x: [0, 150, -100, 0],
-            y: [0, -100, 80, 0],
-            scale: [1, 1.1, 0.9, 1],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear",
-            type: "tween",
-          }}
-        />
-
-        <motion.div
-          className="absolute -top-1/3 -right-1/3 w-[500px] h-[500px] rounded-full opacity-15 blur-[80px]"
-          style={{
-            background:
-              "linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(249, 115, 22, 0.2))",
-            willChange: "transform",
-            backfaceVisibility: "hidden",
-            transform: "translateZ(0)",
-          }}
-          animate={{
-            x: [0, -120, 100, 0],
-            y: [0, 80, -60, 0],
-            scale: [1, 0.9, 1.1, 1],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear",
-            delay: 5,
-            type: "tween",
-          }}
-        />
-      </div>
-    </div>
-  );
-}
-
-// Floating geometric elements with performance optimization
-function FloatingElements() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      <motion.div
-        className="absolute top-20 right-20 w-2 h-2 bg-blue-400/30 rounded-full"
-        style={{
-          willChange: "transform",
-          backfaceVisibility: "hidden",
-        }}
-        animate={{
-          y: [-10, 10, -10],
-          opacity: [0.3, 0.7, 0.3],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut",
-          type: "tween",
-        }}
-      />
-      <motion.div
-        className="absolute bottom-32 left-16 w-1 h-1 bg-white/40 rounded-full"
-        style={{
-          willChange: "transform",
-          backfaceVisibility: "hidden",
-        }}
-        animate={{
-          y: [10, -10, 10],
-          opacity: [0.2, 0.6, 0.2],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 2,
-          type: "tween",
-        }}
-      />
-    </div>
-  );
 }
 
 export function ServiceHero({
@@ -187,12 +79,8 @@ export function ServiceHero({
   };
 
   return (
-    <section
-      ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
-    >
-      <PremiumAuroraBackground />
-      <FloatingElements />
+    <section ref={containerRef} className="hero-shell">
+      <HeroAuroraBackground />
 
       <motion.div style={{ y, opacity }} className="relative z-10 w-full">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

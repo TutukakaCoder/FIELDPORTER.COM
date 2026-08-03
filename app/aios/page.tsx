@@ -1,11 +1,10 @@
 "use client";
 
-import { PageWrapper } from "@/components/layout";
+import { HeroAuroraBackground, PageWrapper } from "@/components/layout";
+import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
-  CalendarClock,
-  FileText,
-  Handshake,
+  ClipboardCheck,
   Phone,
   Search,
   ShieldCheck,
@@ -50,40 +49,6 @@ const iconPulse = {
   },
 };
 
-const heroFacts = [
-  {
-    icon: FileText,
-    label: "Deliverable",
-    value: "Written Assessment Report plus two consultation calls.",
-    cardBg: "bg-blue-50/70 dark:bg-blue-900/15",
-    cardBorder: "border-blue-100 dark:border-blue-800/30",
-    iconBg: "bg-blue-100 dark:bg-blue-900/30",
-    iconColor: "text-blue-600 dark:text-blue-400",
-    labelColor: "text-blue-700 dark:text-blue-300",
-  },
-  {
-    icon: CalendarClock,
-    label: "Timeline",
-    value: "Typically 1–2 weeks from data submission to first call.",
-    cardBg: "bg-purple-50/70 dark:bg-purple-900/15",
-    cardBorder: "border-purple-100 dark:border-purple-800/30",
-    iconBg: "bg-purple-100 dark:bg-purple-900/30",
-    iconColor: "text-purple-600 dark:text-purple-400",
-    labelColor: "text-purple-700 dark:text-purple-300",
-  },
-  {
-    icon: Handshake,
-    label: "Commitment",
-    value:
-      "Paid assessment; booking confirms your slot. No obligation to proceed with implementation after the report.",
-    cardBg: "bg-emerald-50/70 dark:bg-emerald-900/15",
-    cardBorder: "border-emerald-100 dark:border-emerald-800/30",
-    iconBg: "bg-emerald-100 dark:bg-emerald-900/30",
-    iconColor: "text-emerald-600 dark:text-emerald-400",
-    labelColor: "text-emerald-700 dark:text-emerald-300",
-  },
-];
-
 const steps = [
   {
     icon: ShieldCheck,
@@ -116,88 +81,86 @@ export default function AIOSPage() {
     AIOS_APP_URL ?? "https://fieldporter-aios.web.app/";
 
   return (
-    <PageWrapper className="pt-28 md:pt-44 pb-12 md:pb-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Hero Section */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-          transition={{ duration: 0.6 }}
-          className="max-w-4xl mx-auto text-center mb-16 md:mb-24 p-5 md:p-12 rounded-3xl backdrop-blur-md border border-gray-900/10 dark:border-white/10 bg-gray-900/[0.02] dark:bg-white/[0.02]"
-        >
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
-            Find the Right AI for <br className="hidden md:block" /> Your
-            Business
-          </h1>
-          <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl mx-auto">
-            Stop guessing where to invest. Get a scored roadmap for your
-            automation strategy and move forward with certainty.
-          </p>
-          <p className="mt-4 mb-10 text-sm md:text-base text-gray-500 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">
-            The report includes a readiness score, priority areas, and a short
-            roadmap, so you see the shape of the output before you book.
-          </p>
-          <div className="flex justify-center">
-            <motion.div
-              whileHover={{ scale: 1.03, y: -3 }}
-              whileTap={{ scale: 0.97 }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-            >
-              <Link
-                href="/contact"
-                className="group inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900 active:scale-[0.97] active:shadow-md"
+    <PageWrapper className="pt-0 pb-12 md:pb-20">
+      {/* Hero — matches About / Services / Portfolio / Insights pattern */}
+      <section className="hero-shell">
+        <HeroAuroraBackground />
+
+        <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="space-y-6 md:space-y-8"
+          >
+            <div className="flex justify-center">
+              <div className="p-4 rounded-2xl backdrop-blur-md border border-gray-900/10 bg-gray-900/[0.02] dark:border-white/10 dark:bg-white/[0.02]">
+                <ClipboardCheck className="w-12 h-12 text-blue-500 dark:text-blue-400" />
+              </div>
+            </div>
+
+            <div className="space-y-3 md:space-y-4">
+              <h1 className="text-3xl md:text-5xl lg:text-7xl font-light text-gray-900 dark:text-white leading-tight">
+                AI Readiness
+              </h1>
+              <div className="text-base md:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 font-light">
+                Find the right AI for your business
+              </div>
+            </div>
+
+            <div className="max-w-2xl mx-auto">
+              <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+                Stop guessing where to invest. Get a scored roadmap for your
+                automation strategy and move forward with certainty.
+              </p>
+            </div>
+
+            <div className="pt-2 md:pt-4">
+              <motion.div
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
               >
-                Book Your Assessment
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
-              </Link>
-            </motion.div>
-          </div>
-          <p className="mt-5 text-sm text-gray-500 dark:text-gray-400">
-            Staffing &amp; Recruitment only:{" "}
-            <Link
-              href={staffingRecruitmentLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline underline-offset-4"
-            >
-              Use the AI Readiness quick assessment
-            </Link>
-            .
-          </p>
-
-          <dl className="mt-10 pt-8 border-t border-gray-900/10 dark:border-white/10 grid gap-4 sm:grid-cols-3 text-left">
-            {heroFacts.map((fact) => {
-              const FactIcon = fact.icon;
-              return (
-                <div
-                  key={fact.label}
-                  className={`rounded-2xl border p-5 ${fact.cardBg} ${fact.cardBorder}`}
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="min-w-[240px] group"
+                  asChild
                 >
-                  <dt className="flex items-center gap-2.5 mb-3">
-                    <span
-                      className={`w-8 h-8 shrink-0 rounded-lg flex items-center justify-center ${fact.iconBg} ${fact.iconColor}`}
-                    >
-                      <FactIcon className="w-4 h-4" />
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center justify-center gap-3"
+                  >
+                    <span className="text-base lg:text-lg">
+                      Book Your Assessment
                     </span>
-                    <span
-                      className={`text-xs font-semibold uppercase tracking-wider ${fact.labelColor}`}
-                    >
-                      {fact.label}
-                    </span>
-                  </dt>
-                  <dd className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-                    {fact.value}
-                  </dd>
-                </div>
-              );
-            })}
-          </dl>
-        </motion.div>
+                    <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </Button>
+              </motion.div>
+              <p className="mt-5 text-sm text-gray-500 dark:text-gray-400">
+                Staffing &amp; Recruitment only:{" "}
+                <Link
+                  href={staffingRecruitmentLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline underline-offset-4"
+                >
+                  Use the AI Readiness quick assessment
+                </Link>
+                .
+              </p>
+            </div>
 
-        {/* The Framework / Process Section */}
+            <div className="flex justify-center pt-8">
+              <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-20">
+        {/* How It Works */}
         <div className="mb-16 md:mb-24">
           <motion.h2
             initial="hidden"
@@ -205,7 +168,7 @@ export default function AIOSPage() {
             viewport={{ once: true, margin: "-100px" }}
             variants={fadeInUp}
             transition={{ duration: 0.6 }}
-            className="text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-white mb-16"
+            className="text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-white mb-12 md:mb-16"
           >
             How It Works
           </motion.h2>
@@ -224,7 +187,7 @@ export default function AIOSPage() {
                   key={index}
                   variants={fadeInUp}
                   whileHover={{ y: -8, scale: 1.02 }}
-                  className="relative p-5 md:p-8 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 hover:border-blue-300/50 dark:hover:border-blue-700/50 transition-all duration-500 group focus-within:ring-2 focus-within:ring-blue-500/50 focus-within:ring-offset-2 focus-within:ring-offset-white dark:focus-within:ring-offset-gray-900"
+                  className="relative h-full p-5 md:p-8 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 hover:border-blue-300/50 dark:hover:border-blue-700/50 transition-all duration-500 group focus-within:ring-2 focus-within:ring-blue-500/50 focus-within:ring-offset-2 focus-within:ring-offset-white dark:focus-within:ring-offset-gray-900"
                 >
                   <motion.div
                     variants={iconPulse}
@@ -244,34 +207,6 @@ export default function AIOSPage() {
           </motion.div>
         </div>
 
-        {/* The Problem Section */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={fadeInUp}
-          transition={{ duration: 0.6 }}
-          whileHover={{ scale: 1.01, y: -4 }}
-          className="mb-16 md:mb-24 bg-gray-50 dark:bg-gray-900/30 rounded-3xl p-5 md:p-12 border border-gray-200 dark:border-gray-800 hover:border-blue-200 dark:hover:border-blue-800/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500"
-        >
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-8">
-              Unsure where to start?
-            </h2>
-            <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-              Most business leaders know AI matters, but few know exactly which
-              investments will pay off.
-            </p>
-            <p className="mt-4 text-base md:text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
-              How do you separate genuine high-ROI opportunities from the hype?
-            </p>
-            <p className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 text-lg md:text-xl font-medium text-gray-900 dark:text-white leading-relaxed">
-              You don&apos;t need more tools. You need clarity on what is right
-              for your specific operations.
-            </p>
-          </div>
-        </motion.div>
-
         {/* Example output / What you get */}
         <motion.div
           initial="hidden"
@@ -285,8 +220,8 @@ export default function AIOSPage() {
             What You Get
           </h3>
           <p className="text-center text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-            The Assessment Report is a written document (PDF). Example
-            structure:
+            The Assessment Report is a written document (PDF). Typically 1–2
+            weeks from data submission to first call. Example structure:
           </p>
           <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 p-6 md:p-8 font-mono text-sm text-gray-700 dark:text-gray-300">
             <div className="space-y-2">
@@ -330,13 +265,12 @@ export default function AIOSPage() {
           </h3>
           <div className="space-y-4 text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             <p>
-              Our goal is to give you an honest evaluation of what AI can do for
-              you.
+              You don&apos;t need more tools. You need clarity on which AI
+              investments will pay off for your operations.
             </p>
             <p>
-              We only work with select clients on implementation. Whether we
-              work together further or not, you walk away with a valuable
-              strategic roadmap and no obligation.
+              We give you an honest evaluation and a strategic roadmap, with no
+              obligation to proceed.
             </p>
           </div>
 
