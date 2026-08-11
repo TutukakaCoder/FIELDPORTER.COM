@@ -1,5 +1,7 @@
 "use client";
 
+import { forceDarkMode } from "@/lib/theme";
+import { usePathname } from "next/navigation";
 import {
   createContext,
   ReactNode,
@@ -7,8 +9,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { usePathname } from "next/navigation";
-import { forceDarkMode } from "@/lib/theme";
 import { VideoEntrance } from "./video-entrance";
 
 interface EntranceContextType {
@@ -35,12 +35,9 @@ export function EntranceProvider({ children }: EntranceProviderProps) {
   const [showEntrance, setShowEntrance] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Pages that should skip the FIELDPORTER entrance animation entirely
   const isIsolatedPage = pathname?.startsWith("/think-global-voluntas");
 
-  // Check session storage on mount
   useEffect(() => {
-    // Skip entrance for isolated partner pages
     if (isIsolatedPage) {
       setIsInitialized(true);
       return;
@@ -59,7 +56,6 @@ export function EntranceProvider({ children }: EntranceProviderProps) {
     }
 
     if (!hasSeenInSession) {
-      // Page behind entrance loads in dark so reveal is consistent
       forceDarkMode();
       setShowEntrance(true);
     }
@@ -71,36 +67,12 @@ export function EntranceProvider({ children }: EntranceProviderProps) {
     if (process.env["NODE_ENV"] === "development") {
       console.log("FIELDPORTER: Entrance completed, revealing main content");
     }
-    // Always land on dark mode after intro
     forceDarkMode();
     sessionStorage.setItem("fieldporter-video-seen-session", "true");
     setShowEntrance(false);
   };
 
-  // Don't render anything until we've checked session storage
-  if (!isInitialized) {
-    // For isolated pages, show a neutral loading state
-    if (isIsolatedPage) {
-      return (
-        <div className="fixed inset-0 bg-[#fafafa] z-[9999]">
-          <div className="flex items-center justify-center h-full">
-            <div className="w-8 h-8 border-2 border-slate-300 border-t-slate-600 rounded-full animate-spin" />
-          </div>
-        </div>
-      );
-    }
-    return (
-      <div className="fixed inset-0 bg-black z-[9999]">
-        <div className="flex items-center justify-center h-full">
-          <div className="text-white/40 text-xs font-light tracking-widest">
-            FIELDPORTER
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // For isolated pages, render children directly without entrance effects
+  // Partner flyer: no entrance overlay; always render children (crawler-safe).
   if (isIsolatedPage) {
     return (
       <EntranceContext.Provider
@@ -111,18 +83,31 @@ export function EntranceProvider({ children }: EntranceProviderProps) {
     );
   }
 
+  const hideContent = !isInitialized || showEntrance;
+
+  // Always SSR children so metadata/JSON-LD/body content reach crawlers.
+  // Overlay covers the UI until session entrance completes.
   return (
     <EntranceContext.Provider value={{ showEntrance, completeEntrance }}>
-      {showEntrance && <VideoEntrance onComplete={completeEntrance} />}
+      {!isInitialized ? (
+        <div className="fixed inset-0 bg-black z-[9999]">
+          <div className="flex items-center justify-center h-full">
+            <div className="text-white/40 text-xs font-light tracking-widest">
+              FIELDPORTER
+            </div>
+          </div>
+        </div>
+      ) : null}
 
-      {/* NUCLEAR FIX: No wrapper div at all - just render children directly */}
-      {/* Previous wrapper with minHeight/overflow styles was creating scroll context issues */}
+      {isInitialized && showEntrance ? (
+        <VideoEntrance onComplete={completeEntrance} />
+      ) : null}
+
       <div
         className={
-          showEntrance ? "opacity-0 pointer-events-none" : "opacity-100"
+          hideContent ? "opacity-0 pointer-events-none" : "opacity-100"
         }
         style={{
-          // Minimal styling - no scroll-affecting properties
           transition: "opacity 0.5s ease-in-out",
         }}
       >

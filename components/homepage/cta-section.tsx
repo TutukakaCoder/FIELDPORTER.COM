@@ -63,6 +63,31 @@ export function CTASection() {
               No sales pitch. Just a practical conversation about what should
               be built, what should not, and what it would take.
             </p>
+
+            <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xl mx-auto leading-relaxed">
+              Or explore{" "}
+              <Link
+                href="/aios"
+                className="text-blue-600 dark:text-blue-400 underline underline-offset-4 hover:text-blue-700 dark:hover:text-blue-300"
+              >
+                AI Readiness
+              </Link>
+              ,{" "}
+              <Link
+                href="/insights"
+                className="text-blue-600 dark:text-blue-400 underline underline-offset-4 hover:text-blue-700 dark:hover:text-blue-300"
+              >
+                Insights
+              </Link>
+              , and{" "}
+              <Link
+                href="/about"
+                className="text-blue-600 dark:text-blue-400 underline underline-offset-4 hover:text-blue-700 dark:hover:text-blue-300"
+              >
+                About
+              </Link>
+              .
+            </p>
           </div>
         </motion.div>
       </div>

@@ -63,6 +63,35 @@ export function getInsightArticle(id: string): InsightArticleMeta | undefined {
   return INSIGHTS_ARTICLES.find((a) => a.id === id);
 }
 
+/** Peer articles for internal linking (excludes current). */
+export function getRelatedInsights(
+  currentId: string,
+  limit = 2,
+): InsightArticleMeta[] {
+  return INSIGHTS_ARTICLES.filter((a) => a.id !== currentId).slice(0, limit);
+}
+
+/** One context-matched commercial CTA per article category. */
+export function getInsightContextCta(category: string): {
+  href: string;
+  label: string;
+} {
+  switch (category.toLowerCase()) {
+    case "ai strategy":
+    case "implementation":
+      return { href: "/aios", label: "Explore AI Readiness" };
+    case "custom software":
+      return { href: "/services", label: "See custom software services" };
+    case "business automation":
+      return {
+        href: "/services#workflow-automation",
+        label: "See workflow automation",
+      };
+    default:
+      return { href: "/services", label: "See our services" };
+  }
+}
+
 /** For openGraph publishedTime. */
 export function toPublishedTime(publishDate: string): string {
   return `${publishDate}T00:00:00.000Z`;

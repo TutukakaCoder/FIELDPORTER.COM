@@ -119,7 +119,7 @@ const KNOWLEDGE_BASE_ITEMS = [
   {
     category: "contact",
     content:
-      "To get started with FIELDPORTER, Frederick personally reviews each prospect to ensure alignment. Share your email and phone for a direct consultation within 24 hours. We work with serious businesses ready to implement AI solutions.",
+      "To get started with FIELDPORTER, Frederick personally reviews each prospect to ensure alignment. Share your email and phone for a direct consultation; we aim to reply within 1–2 business days. We work with serious businesses ready to implement AI solutions.",
     keywords: [
       "contact",
       "get in touch",

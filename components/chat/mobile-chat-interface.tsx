@@ -413,7 +413,8 @@ export function MobileChatInterface({
                 <div className="relative w-[50px] h-[50px] flex items-center justify-center">
                   <motion.img
                     src="/videos/loading-brain.gif"
-                    alt="AI thinking"
+                    alt=""
+                    aria-hidden="true"
                     className="w-full h-full object-contain"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}

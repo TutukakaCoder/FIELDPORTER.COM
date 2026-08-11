@@ -32,6 +32,9 @@ Persistent positioning guidance is now stored in `.cursor/rules/fieldporter-posi
 | 8 | Design, mobile, theme audit | [08-design-mobile-theme-overhaul.md](./08-design-mobile-theme-overhaul.md) | Medium |
 | 9 | Entrance animation | [09-entrance-animation.md](./09-entrance-animation.md) | Low |
 | 10 | Mobile UX overhaul (type, density, portfolio, contact) | [10-mobile-ux-overhaul-master-plan.md](./10-mobile-ux-overhaul-master-plan.md) | High |
+| 12 | 20-point website launch readiness programme | [12-website-launch-readiness-master-plan.md](./12-website-launch-readiness-master-plan.md) | Critical |
+
+Task 12 uses a persistent [progress log](./12-WEBSITE-IMPROVEMENT-LOG.md) and a [reusable fork-chat prompt](./12-REUSABLE-FORK-CHAT-PROMPT.md). Paste the same prompt into each new Cursor chat; the log selects the next task.
 
 ---
 

@@ -30,6 +30,8 @@ type ProjectCardData = {
   statusTone: "live" | "uat";
   category: string;
   image: string;
+  /** Empty when the linked card already names the product. */
+  imageAlt: string;
 };
 
 const projects: ProjectCardData[] = [
@@ -43,6 +45,7 @@ const projects: ProjectCardData[] = [
     statusTone: "live",
     category: "Client and investment management",
     image: "/portfolio/volocean/dashboard-hero.png",
+    imageAlt: "",
   },
   {
     id: "gogoprop",
@@ -54,6 +57,7 @@ const projects: ProjectCardData[] = [
     statusTone: "uat",
     category: "Property finance",
     image: "/portfolio/gogoprop/dashboard-hero.png",
+    imageAlt: "",
   },
 ];
 
@@ -141,7 +145,7 @@ const ProjectCard = memo(
           <div className="relative aspect-[16/9] overflow-hidden bg-gray-900/40 border-b border-gray-900/10 dark:border-white/10">
             <Image
               src={project.image}
-              alt={`${project.title} product interface`}
+              alt={project.imageAlt}
               fill
               className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.01]"
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -261,7 +265,7 @@ export function PortfolioSection() {
           <footer className="flex items-center gap-3 sm:gap-4">
             <Image
               src={jasonTestimonial.image}
-              alt={jasonTestimonial.author}
+              alt=""
               width={40}
               height={40}
               className="rounded-full object-cover w-10 h-10 sm:w-12 sm:h-12"

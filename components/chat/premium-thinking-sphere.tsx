@@ -28,7 +28,8 @@ export function PremiumThinkingSphere({
       >
         <motion.img
           src="/videos/loading-brain.gif"
-          alt="AI thinking"
+          alt=""
+          aria-hidden="true"
           className={`w-full h-full object-contain transition-opacity duration-300 ${
             isLoaded ? "opacity-100" : "opacity-0"
           }`}

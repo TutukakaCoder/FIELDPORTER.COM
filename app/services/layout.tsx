@@ -1,35 +1,29 @@
+import { ServicesFaqJsonLd } from "@/components/services/services-faq-json-ld";
+import { pageSocial } from "@/lib/social-metadata";
 import { Metadata } from "next";
 
+const servicesTitle = "FIELDPORTER | Custom Software and Automation";
+const servicesDescription =
+  "Custom portals, databases, dashboards, integrations, and AI inside real workflows. Assessments in 2–5 days; focused portals typically 8–10 weeks.";
+
 export const metadata: Metadata = {
-  title: "AI Integration & Automation Services",
-  description:
-    "Practical AI systems, automations, and internal tools for growing companies. Assessment in 2–5 days; first useful system in 1–3 weeks.",
+  title: "Custom Software and Automation",
+  description: servicesDescription,
   keywords: [
     "FIELDPORTER services",
-    "AI integration services",
-    "automation consulting",
-    "strategic research",
-    "rapid development",
-    "workflow optimization",
-    "AI training",
-    "business AI solutions",
+    "custom software development",
+    "client portals",
+    "workflow automation",
+    "system integrations",
+    "internal tools",
+    "AI-enabled workflows",
   ],
-  openGraph: {
-    title: "FIELDPORTER | AI Integration & Automation Services",
-    description:
-      "Practical AI systems, automations, and internal tools for growing companies. Assessment in 2–5 days; first useful system in 1–3 weeks.",
-    type: "website",
-    url: "https://fieldporter.com/services",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "FIELDPORTER | AI Integration & Automation Services",
-    description:
-      "Practical AI systems, automations, and internal tools for growing companies. Assessment in 2–5 days; first useful system in 1–3 weeks.",
-  },
-  alternates: {
-    canonical: "https://fieldporter.com/services",
-  },
+  ...pageSocial({
+    title: servicesTitle,
+    description: servicesDescription,
+    path: "/services",
+    alt: servicesTitle,
+  }),
 };
 
 export default function ServicesLayout({
@@ -37,5 +31,10 @@ export default function ServicesLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <>
+      <ServicesFaqJsonLd />
+      {children}
+    </>
+  );
 }

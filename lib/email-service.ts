@@ -1,3 +1,4 @@
+import { ENQUIRY_RESPONSE } from "@/config/constants";
 import { Resend } from "resend";
 import { emailConfig } from "./env";
 
@@ -180,7 +181,7 @@ class EmailService {
               <div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 12px; padding: 24px; margin-bottom: 32px; border-left: 4px solid #0969da;">
                 <h3 style="margin: 0 0 16px 0; color: #1e293b; font-size: 20px;">What's Next?</h3>
                 <ul style="margin: 0; padding-left: 20px; color: #475569; font-size: 16px; line-height: 1.6;">
-                  <li style="margin-bottom: 8px;">We'll review your message and get back to you within 1-2 business days</li>
+                  <li style="margin-bottom: 8px;">${ENQUIRY_RESPONSE.emailNextStep}</li>
                   <li style="margin-bottom: 8px;">If we're a good fit, we'll schedule a call to discuss your project</li>
                   <li>Our AI assistant is available on the website 24/7 for quick questions</li>
                 </ul>
@@ -246,7 +247,7 @@ Welcome to FIELDPORTER, ${data.displayName}!
 Thank you for joining FIELDPORTER. We're excited to have you as part of our premium client community.
 
 What's Next?
-- We'll review your message and get back to you within 1-2 business days
+- ${ENQUIRY_RESPONSE.emailNextStep}
 - If we're a good fit, we'll schedule a call to discuss your project
 - Our AI assistant is available on the website 24/7 for quick questions
 

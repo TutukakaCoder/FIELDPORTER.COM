@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowRight, Package, Settings } from "lucide-react";
+import { ArrowRight, MessageSquare, Package, Settings } from "lucide-react";
 import Link from "next/link";
 
 export function AboutCTA() {
@@ -28,11 +28,18 @@ export function AboutCTA() {
               </h2>
               <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed max-w-2xl mx-auto">
                 We combine strategic research, rapid AI development, and
-                workflow automation. Book a call to discuss your project.
+                workflow automation.{" "}
+                <Link
+                  href="/contact"
+                  className="text-blue-600 dark:text-blue-400 underline underline-offset-4 hover:text-blue-700 dark:hover:text-blue-300"
+                >
+                  Book a call
+                </Link>{" "}
+                to discuss your project.
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-4">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-4 flex-wrap">
               <motion.div
                 whileHover={{ y: -2, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -40,6 +47,27 @@ export function AboutCTA() {
               >
                 <Button
                   variant="primary"
+                  size="lg"
+                  className="min-w-[200px] group"
+                  asChild
+                >
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center justify-center gap-3"
+                  >
+                    <MessageSquare className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
+                    <span>Book a Call</span>
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Link>
+                </Button>
+              </motion.div>
+              <motion.div
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Button
+                  variant="secondary"
                   size="lg"
                   className="min-w-[200px] group"
                   asChild

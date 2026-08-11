@@ -18,6 +18,7 @@ interface FooterProps {
 
 const services = FOOTER_LINKS.services;
 const company = FOOTER_LINKS.company;
+const resources = FOOTER_LINKS.resources;
 
 export function Footer({ className }: FooterProps) {
   const currentYear = new Date().getFullYear();
@@ -72,24 +73,24 @@ export function Footer({ className }: FooterProps) {
       )}
       role="contentinfo"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-5">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5 items-start">
           {/* LEFT SECTION - Brand Identity */}
-          <div className="lg:col-span-3 space-y-4">
+          <div className="lg:col-span-3 space-y-2">
             <Link
               href="/"
-              className="inline-flex items-center text-xl font-bold text-gray-900 dark:text-white hover:text-blue-500 transition-colors"
+              className="inline-flex items-center text-lg font-bold text-gray-900 dark:text-white hover:text-blue-500 transition-colors"
             >
               {BRAND.name}
             </Link>
-            <p className="text-sm text-gray-500 dark:text-gray-400 font-light max-w-xs">
+            <p className="text-sm text-gray-500 dark:text-gray-400 font-light max-w-xs leading-snug">
               {BRAND.tagline}.
               <br />
               Auckland • Worldwide
             </p>
 
             {/* Social Links - Minimal */}
-            <div className="flex pt-2">
+            <div className="flex pt-1">
               <a
                 href={SOCIAL_LINKS.founderLinkedIn}
                 target="_blank"
@@ -103,32 +104,32 @@ export function Footer({ className }: FooterProps) {
           </div>
 
           {/* CENTER SECTION - Navigation Grid */}
-          <div className="lg:col-span-6 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4">
+          <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-3">
             {/* Primary Product - AIOS */}
-            <div className="space-y-3">
+            <div className="space-y-2">
               <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
                 Product
               </h3>
               <Link
                 href="/aios"
-                className="group inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-lg transition-all duration-200 hover:translate-x-1"
+                className="group inline-flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-bold text-base transition-all duration-200 hover:translate-x-1 min-h-[36px]"
               >
-                <Sparkles className="w-5 h-5 group-hover:text-yellow-400 transition-colors duration-200" />
+                <Sparkles className="w-4 h-4 group-hover:text-yellow-400 transition-colors duration-200" />
                 AI Readiness
               </Link>
             </div>
 
             {/* Services - Static list (simpler on mobile, consistent with Company) */}
-            <div className="space-y-3">
+            <div className="space-y-2">
               <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
                 Services
               </h3>
-              <ul className="space-y-2">
+              <ul className="space-y-0.5">
                 {services.map((service) => (
                   <li key={service.href}>
                     <Link
                       href={service.href}
-                      className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors block py-2 min-h-[44px] flex items-center touch-manipulation"
+                      className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors block py-1 min-h-[36px] lg:min-h-0 flex items-center touch-manipulation"
                     >
                       {service.label}
                     </Link>
@@ -138,16 +139,35 @@ export function Footer({ className }: FooterProps) {
             </div>
 
             {/* Company Links */}
-            <div className="space-y-3">
+            <div className="space-y-2">
               <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
                 Company
               </h3>
-              <ul className="space-y-2">
+              <ul className="space-y-0.5">
                 {company.map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors block py-2 min-h-[44px] flex items-center touch-manipulation"
+                      className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors block py-1 min-h-[36px] lg:min-h-0 flex items-center touch-manipulation"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Resources — Insights (no Portfolio duplicate) */}
+            <div className="space-y-2">
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+                Resources
+              </h3>
+              <ul className="space-y-0.5">
+                {resources.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors block py-1 min-h-[36px] lg:min-h-0 flex items-center touch-manipulation"
                     >
                       {item.label}
                     </Link>
@@ -158,16 +178,16 @@ export function Footer({ className }: FooterProps) {
           </div>
 
           {/* RIGHT SECTION - CTA */}
-          <div className="lg:col-span-3 flex flex-col gap-4 lg:items-end">
+          <div className="lg:col-span-3 flex flex-col gap-2 lg:items-end">
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center w-full lg:w-auto min-h-[44px] px-6 py-3 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-black font-semibold text-sm hover:opacity-90 active:scale-[0.98] transition-all duration-200 shadow-lg shadow-gray-200/50 dark:shadow-none touch-manipulation"
+              className="inline-flex items-center justify-center w-full lg:w-auto min-h-[40px] px-5 py-2 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-black font-semibold text-sm hover:opacity-90 active:scale-[0.98] transition-all duration-200 shadow-lg shadow-gray-200/50 dark:shadow-none touch-manipulation"
             >
               Start Project
             </Link>
             <a
               href={`mailto:${BRAND.email}`}
-              className="inline-flex items-center gap-2 min-h-[44px] text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors touch-manipulation"
+              className="inline-flex items-center gap-2 min-h-[36px] text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors touch-manipulation"
             >
               <Mail className="w-4 h-4" />
               {BRAND.email}
@@ -176,8 +196,8 @@ export function Footer({ className }: FooterProps) {
         </div>
 
         {/* Copyright Bar */}
-        <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 flex flex-col items-center justify-center gap-3 text-center px-4 md:px-12">
-          <div className="flex flex-col gap-1 items-center">
+        <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800 flex flex-col items-center justify-center gap-1.5 text-center px-4 md:px-12">
+          <div className="flex flex-col gap-0.5 items-center">
             <div className="text-xs text-gray-400">
               © {currentYear} {BRAND.name}
             </div>
@@ -187,16 +207,16 @@ export function Footer({ className }: FooterProps) {
               &middot; GST {LEGAL_ENTITY.gst}
             </div>
           </div>
-          <div className="flex items-center justify-center gap-6 text-xs pt-1 pb-4">
+          <div className="flex items-center justify-center gap-6 text-xs pb-1">
             <Link
               href="/privacy-policy"
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors touch-manipulation py-2"
+              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors touch-manipulation py-1"
             >
               Privacy
             </Link>
             <Link
               href="/terms-of-service"
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors touch-manipulation py-2"
+              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors touch-manipulation py-1"
             >
               Terms
             </Link>

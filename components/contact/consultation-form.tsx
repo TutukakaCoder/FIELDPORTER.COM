@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { ANALYTICS_EVENTS } from '@/config/constants';
+import { ANALYTICS_EVENTS, ENQUIRY_RESPONSE } from '@/config/constants';
 import { firebaseEnhancedFormsService } from '@/lib/firebase-enhanced-forms';
 import { ArrowLeft, ArrowRight, Calendar, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
@@ -190,9 +190,8 @@ export function ConsultationForm() {
                   Consultation Request Received
                 </h2>
                 <p className='text-fieldporter-gray mb-6'>
-                  Thank you for your interest in FIELDPORTER&apos;s strategic AI consulting. Our
-                  team will review your submission and contact you within 24 hours to schedule your
-                  consultation.
+                  Thank you for your interest in FIELDPORTER&apos;s strategic AI consulting.{' '}
+                  {ENQUIRY_RESPONSE.aimPhrase} We will follow up to schedule your consultation.
                 </p>
                 <p className='text-fieldporter-blue font-semibold'>
                   Check your email for confirmation and next steps.

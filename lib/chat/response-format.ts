@@ -1,3 +1,5 @@
+import { ENQUIRY_RESPONSE } from "@/config/constants";
+
 export const decodeHtmlEntities = (text: string): string => {
   const textarea = document.createElement("textarea");
   textarea.innerHTML = text;
@@ -106,8 +108,7 @@ Our services include strategic research ($500-$3,000), rapid development ($3,000
     processedContent.includes("@") &&
     !processedContent.includes("Frederick")
   ) {
-    processedContent +=
-      " I'll make sure Frederick reaches out within 24 hours to discuss your specific needs.";
+    processedContent += ` ${ENQUIRY_RESPONSE.chatFollowUp}`;
   }
 
   return processedContent

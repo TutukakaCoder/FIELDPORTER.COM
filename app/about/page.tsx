@@ -7,39 +7,29 @@ import {
   TechStack,
 } from "@/components/about";
 import { PageWrapper } from "@/components/layout";
-import { COMPANY_MODEL } from "@/config/constants";
+import { pageSocial } from "@/lib/social-metadata";
 import { Metadata } from "next";
 
+const aboutTitle = "FIELDPORTER | About";
+const aboutDescription =
+  "FIELDPORTER builds custom software with AI where it helps. How we scope, build, deploy, and hand working systems to your team.";
+
 export const metadata: Metadata = {
-  title: "About FIELDPORTER",
-  description:
-    COMPANY_MODEL.short +
-    " We combine systematic research with hands-on build. Learn how we work.",
+  title: "About",
+  description: aboutDescription,
   keywords: [
     "FIELDPORTER about",
-    "AI consulting and implementation",
-    "automation consulting",
-    "strategic research",
-    "hybrid consulting",
+    "custom software company",
+    "automation and AI capability",
+    "Auckland software studio",
+    "how FIELDPORTER works",
   ],
-  openGraph: {
-    title: "FIELDPORTER | About",
-    description:
-      COMPANY_MODEL.short +
-      " We combine systematic research with hands-on build.",
-    type: "website",
-    url: "https://fieldporter.com/about",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "FIELDPORTER | About",
-    description:
-      COMPANY_MODEL.short +
-      " We combine systematic research with hands-on build.",
-  },
-  alternates: {
-    canonical: "https://fieldporter.com/about",
-  },
+  ...pageSocial({
+    title: aboutTitle,
+    description: aboutDescription,
+    path: "/about",
+    alt: aboutTitle,
+  }),
 };
 
 export default function AboutPage() {

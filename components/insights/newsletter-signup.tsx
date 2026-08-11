@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle, Loader2 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 export function NewsletterSignup() {
@@ -136,6 +137,19 @@ export function NewsletterSignup() {
                       {error}
                     </motion.p>
                   )}
+
+                  <p className="mt-3 max-w-md text-sm leading-relaxed text-fieldporter-gray lg:ml-auto lg:text-right">
+                    We store your email in Firebase to send insights and notify
+                    our team via Resend. Unsubscribe anytime by contacting us.
+                    See our{" "}
+                    <Link
+                      href="/privacy-policy"
+                      className="text-fieldporter-blue underline underline-offset-2 hover:text-blue-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fieldporter-blue/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-sm"
+                    >
+                      Privacy Policy
+                    </Link>
+                    .
+                  </p>
                 </form>
               </div>
             )}

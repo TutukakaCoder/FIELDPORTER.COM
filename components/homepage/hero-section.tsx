@@ -143,17 +143,13 @@ const PremiumAuroraBackground = memo(() => {
 
 PremiumAuroraBackground.displayName = "PremiumAuroraBackground";
 
-const LightHeroBackground = memo(() => (
-  <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-gray-50 to-white dark:from-gray-950 dark:via-gray-900 dark:to-black" />
-));
-
-LightHeroBackground.displayName = "LightHeroBackground";
-
 const TieredBackground = memo(() => {
-  const { experience, isMobile, isTablet } = useDeviceCapability();
+  const { experience } = useDeviceCapability();
+  const prefersReducedMotion = useReducedMotion();
 
-  if (isMobile || isTablet) {
-    return <LightHeroBackground />;
+  // Respect OS reduced-motion: skip WebGL particles
+  if (prefersReducedMotion) {
+    return <PremiumAuroraBackground />;
   }
 
   switch (experience) {
@@ -257,7 +253,8 @@ export function HeroSection() {
         <BackgroundPattern />
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-40 z-[1] bg-gradient-to-t from-gray-50 via-gray-50/80 to-transparent dark:from-gray-950 dark:via-gray-950/80 dark:to-transparent pointer-events-none" />
+      {/* Soft fade into next section — no hard band/line */}
+      <div className="absolute bottom-0 left-0 right-0 h-24 z-[1] bg-gradient-to-t from-white/40 via-transparent to-transparent dark:from-black/40 dark:via-transparent pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pointer-events-auto">
         <motion.div

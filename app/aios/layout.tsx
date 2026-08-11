@@ -1,17 +1,20 @@
+import { pageSocial } from "@/lib/social-metadata";
 import { Metadata } from "next";
 
+const aiosTitle = "FIELDPORTER | AI Readiness Assessment";
+const aiosDescription =
+  "Scored automation roadmap: written Assessment Report plus consultation calls. Know what to automate first before you commit to a build.";
+
 export const metadata: Metadata = {
-  title: "AI Readiness Assessment | FIELDPORTER",
-  description:
-    "Scored roadmap for your automation strategy. Know what to build first. Written report plus consultation in 2–5 days.",
+  title: "AI Readiness Assessment",
+  description: aiosDescription,
   keywords: ["AI Readiness", "AI Assessment", "Automation Roadmap", "AI Audit"],
-  openGraph: {
-    title: "AI Readiness Assessment | FIELDPORTER",
-    description:
-      "Scored roadmap for your automation strategy. Know what to build first. Written report plus consultation in 2–5 days.",
-    type: "website",
-    url: "https://fieldporter.com/aios",
-  },
+  ...pageSocial({
+    title: aiosTitle,
+    description: aiosDescription,
+    path: "/aios",
+    alt: aiosTitle,
+  }),
 };
 
 export default function AIOSLayout({

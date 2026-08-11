@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { ENQUIRY_RESPONSE } from "@/config/constants";
 import { ContactFormData } from "@/lib/firebase-forms";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -15,6 +16,7 @@ import {
   Target,
   User,
 } from "lucide-react";
+import Link from "next/link";
 import React, { useState } from "react";
 
 // Enhanced form data interface
@@ -222,7 +224,7 @@ export function SimpleContactForm() {
                       <Clock className="h-6 w-6 text-blue-400" />
                     </div>
                     <h3 className="text-gray-900 dark:text-white font-semibold mb-2">
-                      Within 24 hours
+                      {ENQUIRY_RESPONSE.shortLabel}
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400 text-sm">
                       We&apos;ll analyze your needs and identify specific
@@ -552,7 +554,19 @@ export function SimpleContactForm() {
               </div>
 
               {/* Submit */}
-              <div className="pt-2 md:pt-4">
+              <div className="pt-2 md:pt-4 space-y-3">
+                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                  By submitting, you agree we may use your details to reply and
+                  assess fit. We store submissions in Firebase and send email via
+                  Resend. See our{" "}
+                  <Link
+                    href="/privacy-policy"
+                    className="text-blue-600 dark:text-blue-400 underline underline-offset-2 hover:text-blue-500 dark:hover:text-blue-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-sm"
+                  >
+                    Privacy Policy
+                  </Link>
+                  .
+                </p>
                 <Button
                   type="submit"
                   disabled={!isFormValid || isSubmitting}

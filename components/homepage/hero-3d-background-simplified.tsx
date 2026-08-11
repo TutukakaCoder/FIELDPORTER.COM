@@ -1,6 +1,6 @@
 "use client";
 
-import { useIsScrolling } from "@/hooks";
+import { useIsScrolling, useStableMobile } from "@/hooks";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
@@ -77,7 +77,13 @@ const fragmentShader = `
 `;
 
 // Simplified particle system
-function SimplifiedParticleSystem({ isScrolling }: { isScrolling: boolean }) {
+function SimplifiedParticleSystem({
+  isScrolling,
+  isMobile,
+}: {
+  isScrolling: boolean;
+  isMobile: boolean;
+}) {
   const meshRef = useRef<THREE.Points>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const { camera } = useThree();
@@ -87,8 +93,8 @@ function SimplifiedParticleSystem({ isScrolling }: { isScrolling: boolean }) {
   const currentMouse = useRef({ x: 0, y: 0 });
   const frameCount = useRef(0);
 
-  // Reduced particle count for performance
-  const particleCount = 800;
+  // Mobile gets fewer particles to avoid the old crash/thermal path
+  const particleCount = isMobile ? 400 : 800;
 
   // Simplified color palette
   const colorPalette = useMemo(
@@ -146,7 +152,7 @@ function SimplifiedParticleSystem({ isScrolling }: { isScrolling: boolean }) {
     });
 
     return { geometry: geom, material: mat };
-  }, [colorPalette]);
+  }, [colorPalette, particleCount]);
 
   // Enhanced mouse event handlers with better scaling
   useEffect(() => {
@@ -313,6 +319,8 @@ export function Hero3DBackgroundSimplified() {
   const [isLoaded, setIsLoaded] = useState(false);
   // SCROLL FREEZE FIX: Use centralized scroll state (reduces listener count)
   const isScrolling = useIsScrolling();
+  const isMobile = useStableMobile();
+  const maxDpr = isMobile ? 1 : 1.5;
 
   // Handle loading state
   useEffect(() => {
@@ -345,7 +353,7 @@ export function Hero3DBackgroundSimplified() {
             near: 0.1,
             far: 100,
           }}
-          dpr={Math.min(window.devicePixelRatio, 1.5)} // Lower DPR for performance
+          dpr={Math.min(typeof window !== "undefined" ? window.devicePixelRatio : 1, maxDpr)}
           gl={{
             antialias: false,
             alpha: true,
@@ -368,11 +376,14 @@ export function Hero3DBackgroundSimplified() {
           }}
           onCreated={({ gl }) => {
             gl.setClearColor(0x000000, 0);
-            gl.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+            gl.setPixelRatio(Math.min(window.devicePixelRatio, maxDpr));
           }}
         >
           <SimplifiedCameraControls isScrolling={isScrolling} />
-          <SimplifiedParticleSystem isScrolling={isScrolling} />
+          <SimplifiedParticleSystem
+            isScrolling={isScrolling}
+            isMobile={isMobile}
+          />
         </Canvas>
       </div>
 

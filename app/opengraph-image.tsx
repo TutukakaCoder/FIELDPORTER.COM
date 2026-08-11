@@ -3,6 +3,7 @@ import { ImageResponse } from "next/og";
 export const runtime = "edge";
 export const contentType = "image/png";
 export const size = { width: 1200, height: 630 };
+export const alt = "FIELDPORTER — custom software for growing companies";
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -30,10 +31,9 @@ export default function OpengraphImage() {
             fontSize: 22,
             color: "#9ca3af",
             marginBottom: 24,
-            width: "fit-content",
           }}
         >
-          AI Integration & Automation
+          Custom Software Development
         </div>
         <div style={{ fontSize: 76, fontWeight: 800, letterSpacing: -1 }}>
           FIELDPORTER
@@ -44,9 +44,10 @@ export default function OpengraphImage() {
             fontSize: 36,
             fontWeight: 600,
             color: "#d1d5db",
+            maxWidth: 980,
           }}
         >
-          Practical AI for Growing Companies
+          Portals, tools, and practical AI inside real systems
         </div>
         <div
           style={{

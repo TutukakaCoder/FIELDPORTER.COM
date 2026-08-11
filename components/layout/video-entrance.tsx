@@ -188,6 +188,9 @@ export function VideoEntrance({
         exit={{ opacity: 0 }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
         className="fixed inset-0 z-[9999] bg-black flex items-center justify-center touch-manipulation select-none"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site intro"
       >
         <div className="relative w-[88vw] max-w-md max-h-[32vh] sm:w-full sm:max-w-sm sm:max-h-[22vh] md:max-w-md md:max-h-[24vh] lg:max-w-lg lg:max-h-[26vh] px-4 flex items-center justify-center">
           <div className="relative w-full h-full flex items-center justify-center">
@@ -202,6 +205,7 @@ export function VideoEntrance({
               controls={false}
               disablePictureInPicture
               disableRemotePlayback
+              aria-hidden="true"
             />
 
             {/* Premium Edge Blending */}
@@ -254,9 +258,14 @@ export function VideoEntrance({
               exit={{ opacity: 0, y: 10 }}
               className="absolute bottom-8 right-4 sm:bottom-6 sm:right-6 text-center pb-[env(safe-area-inset-bottom)]"
             >
-              <div className="px-4 py-2 sm:px-3 sm:py-1.5 bg-gray-800/20 backdrop-blur-sm border border-gray-600/20 rounded-full text-gray-400 text-xs font-light tracking-wider transition-all duration-300">
+              <button
+                type="button"
+                onClick={handleSkip}
+                className="px-4 py-2 sm:px-3 sm:py-1.5 bg-gray-800/20 backdrop-blur-sm border border-gray-600/20 rounded-full text-gray-400 text-xs font-light tracking-wider transition-all duration-300 hover:text-gray-200 hover:border-gray-500/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"
+                aria-label="Skip intro"
+              >
                 Tap to skip
-              </div>
+              </button>
             </motion.div>
           )}
         </AnimatePresence>

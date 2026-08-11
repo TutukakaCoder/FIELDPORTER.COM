@@ -1,5 +1,6 @@
 "use client";
 
+import { ENQUIRY_RESPONSE } from "@/config/constants";
 import { motion } from "framer-motion";
 import { CheckCircle, Lightbulb, Target, Zap } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -186,7 +187,7 @@ export function WorkingStyleSection() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
               {[
-                { label: "Response Time", value: "< 24 hours" },
+                { label: "Response Time", value: ENQUIRY_RESPONSE.shortLabel },
                 { label: "Research Delivery", value: "3-5 days" },
                 { label: "Prototype Delivery", value: "1-2 weeks" },
               ].map((stat, index) => (

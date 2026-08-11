@@ -1,10 +1,12 @@
 import { ArticleLayout } from "@/components/insights";
 import { ARTICLE_BODIES } from "@/components/insights/article-bodies";
+import { InsightArticleJsonLd } from "@/components/insights/insight-article-json-ld";
 import {
   getInsightArticle,
   INSIGHTS_ARTICLES,
   toPublishedTime,
 } from "@/config/insights-articles";
+import { pageSocial } from "@/lib/social-metadata";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -16,6 +18,9 @@ export function generateStaticParams() {
   return INSIGHTS_ARTICLES.map((article) => ({ slug: article.id }));
 }
 
+/** Unknown insight slugs must 404 (not soft-render 200 + not-found UI). */
+export const dynamicParams = false;
+
 export async function generateMetadata({
   params,
 }: InsightArticlePageProps): Promise<Metadata> {
@@ -23,13 +28,21 @@ export async function generateMetadata({
   const article = getInsightArticle(slug);
 
   if (!article) {
-    return { title: "Article Not Found | FIELDPORTER" };
+    return {
+      title: "Page not found",
+      robots: {
+        index: false,
+        follow: false,
+        googleBot: {
+          index: false,
+          follow: false,
+        },
+      },
+    };
   }
 
-  const url = `https://fieldporter.com/insights/${article.id}`;
-
   return {
-    title: `${article.title} | FIELDPORTER Insights`,
+    title: article.title,
     description: article.excerpt,
     keywords: [
       article.category,
@@ -38,30 +51,16 @@ export async function generateMetadata({
       "business automation",
       "custom software",
     ],
-    openGraph: {
+    ...pageSocial({
       title: article.title,
       description: article.excerpt,
+      path: `/insights/${article.id}`,
       type: "article",
-      url,
+      alt: article.title,
       publishedTime: toPublishedTime(article.publishDate),
       authors: [article.author],
-      images: [
-        {
-          url: "/opengraph-image",
-          width: 1200,
-          height: 630,
-          alt: article.title,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: article.title,
-      description: article.excerpt,
-      images: ["/opengraph-image"],
-    },
+    }),
     robots: { index: true, follow: true },
-    alternates: { canonical: url },
   };
 }
 
@@ -77,18 +76,22 @@ export default async function InsightArticlePage({
   }
 
   return (
-    <ArticleLayout
-      article={{
-        title: article.title,
-        excerpt: article.excerpt,
-        category: article.category,
-        author: article.author,
-        publishDate: article.publishDate,
-        readTime: article.readTime,
-        featured: article.featured,
-      }}
-    >
-      {body}
-    </ArticleLayout>
+    <>
+      <InsightArticleJsonLd article={article} />
+      <ArticleLayout
+        article={{
+          id: article.id,
+          title: article.title,
+          excerpt: article.excerpt,
+          category: article.category,
+          author: article.author,
+          publishDate: article.publishDate,
+          readTime: article.readTime,
+          featured: article.featured,
+        }}
+      >
+        {body}
+      </ArticleLayout>
+    </>
   );
 }

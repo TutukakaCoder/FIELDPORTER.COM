@@ -35,10 +35,6 @@
           {
             "key": "Referrer-Policy",
             "value": "strict-origin-when-cross-origin"
-          },
-          {
-            "key": "X-Robots-Tag",
-            "value": "all"
           }
         ]
       },
@@ -64,7 +60,7 @@
           },
           {
             "key": "Cache-Control",
-            "value": "public, max-age=86400"
+            "value": "public, max-age=300"
           }
         ]
       },

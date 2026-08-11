@@ -1,16 +1,20 @@
-import { ConditionalFieldporterExtras } from "@/components/layout/conditional-fieldporter-extras";
 import {
   BackToTop,
   ConditionalLayout,
   EntranceProvider,
   ScrollRestoration,
 } from "@/components/layout";
+import { FieldporterStructuredData } from "@/components/layout/fieldporter-structured-data";
 import { PageTransition } from "@/components/ui/page-transition";
-import { SEO_DEFAULTS } from "@/config/constants";
+import { SEO_DEFAULTS, SITE_ORIGIN } from "@/config/constants";
+import { SOCIAL_IMAGE, absoluteUrl, socialImages } from "@/lib/social-metadata";
 import { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import type React from "react";
 import "./globals.css";
+
+const googleSiteVerification =
+  process.env["GOOGLE_SITE_VERIFICATION"]?.trim();
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -28,7 +32,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://fieldporter.com"),
+  metadataBase: new URL(SITE_ORIGIN),
   title: {
     template: "FIELDPORTER | %s",
     default: SEO_DEFAULTS.title,
@@ -52,6 +56,9 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  ...(googleSiteVerification
+    ? { verification: { google: googleSiteVerification } }
+    : {}),
   icons: {
     icon: [
       // Default fallback (for browsers that don't support media queries)
@@ -131,25 +138,17 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://fieldporter.com",
+    url: absoluteUrl("/"),
     title: SEO_DEFAULTS.title,
     description: SEO_DEFAULTS.description,
     siteName: "FIELDPORTER",
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: "FIELDPORTER - Custom Software Development",
-      },
-    ],
+    images: socialImages(SOCIAL_IMAGE.defaultAlt),
   },
   twitter: {
     card: "summary_large_image",
     title: SEO_DEFAULTS.title,
     description: SEO_DEFAULTS.description,
-    creator: "@fieldporter",
-    images: ["/opengraph-image"],
+    images: [SOCIAL_IMAGE.path],
   },
 };
 
@@ -175,6 +174,8 @@ export default function RootLayout({
       <body
         className={`${plusJakartaSans.className} bg-white dark:bg-black transition-colors duration-300`}
       >
+        {/* Outside EntranceProvider so crawlers always receive Organization/WebSite JSON-LD. */}
+        <FieldporterStructuredData />
         <EntranceProvider>
           <ScrollRestoration />
           <ConditionalLayout>
@@ -183,7 +184,6 @@ export default function RootLayout({
             </PageTransition>
           </ConditionalLayout>
           <BackToTop />
-          <ConditionalFieldporterExtras />
         </EntranceProvider>
       </body>
     </html>

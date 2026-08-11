@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
 
+const partnershipTitle = "ANZ Market Expansion for Cyberport Portfolio";
+const partnershipDescription =
+  "Think Global × Voluntas Group partnership to support Cyberport HK startups expanding into ANZ.";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://fieldporter.com"),
-  title: "ANZ Market Expansion for Cyberport Portfolio",
-  description:
-    "Think Global × Voluntas Group partnership to support Cyberport HK startups expanding into ANZ.",
+  title: {
+    absolute: partnershipTitle,
+  },
+  description: partnershipDescription,
   robots: { index: false, follow: false },
   icons: {
     icon: [
@@ -18,16 +23,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Think Global × Voluntas",
-    title: "ANZ Market Expansion for Cyberport Portfolio",
-    description:
-      "Think Global × Voluntas Group partnership to support Cyberport HK startups expanding into ANZ.",
+    title: partnershipTitle,
+    description: partnershipDescription,
     images: [],
   },
   twitter: {
     card: "summary",
-    title: "ANZ Market Expansion for Cyberport Portfolio",
-    description:
-      "Think Global × Voluntas Group partnership to support Cyberport HK startups expanding into ANZ.",
+    title: partnershipTitle,
+    description: partnershipDescription,
   },
 };
 

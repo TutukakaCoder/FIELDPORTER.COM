@@ -82,10 +82,10 @@ const sections = [
     icon: Shield,
     content: [
       "Mutual Confidentiality: Both FIELDPORTER and clients agree to maintain strict confidentiality regarding all proprietary information, business strategies, and competitive intelligence.",
-      "Data Security: We implement enterprise-grade security measures including encryption, access controls, and secure data handling procedures for all client information.",
-      "AI Chat Privacy: Conversations with our AI chat system are used solely for service improvement and business intelligence, with strict privacy protections in place.",
-      "Business Intelligence: Aggregated, anonymized insights may be used for industry research and service development, with no client-specific information disclosed.",
-      "Data Retention: Client data is retained according to our privacy policy and automatically deleted according to agreed retention schedules.",
+      "Data Security: We use HTTPS, limited access controls, and secure handling practices for client and enquiry information as described in our Privacy Policy.",
+      "Website And Communications: Personal information submitted through our website, booking tools, or email is handled according to our Privacy Policy. An on-site AI chat widget is not currently active.",
+      "Business Intelligence: Aggregated, anonymized insights may be used for service improvement, with no client-identifying information disclosed without permission.",
+      "Data Retention: Client and enquiry data is retained according to our Privacy Policy. Deletion and correction requests are handled manually; we do not claim an automated purge system.",
     ],
   },
   {
@@ -339,7 +339,7 @@ export default function TermsOfServicePage() {
                   </h4>
                   <p className="text-fieldporter-gray text-sm leading-relaxed">
                     By engaging FIELDPORTER&apos;s services, requesting
-                    consultations, or using our website and AI chat features,
+                    consultations, or using our website,
                     you acknowledge that you have read, understood, and agree to
                     be bound by these Terms of Service and our Privacy Policy.
                   </p>

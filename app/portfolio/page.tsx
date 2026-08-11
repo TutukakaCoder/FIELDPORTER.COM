@@ -1,6 +1,8 @@
 "use client";
 
 import { PageWrapper } from "@/components/layout";
+import { Button } from "@/components/ui/button";
+import { ENQUIRY_RESPONSE } from "@/config/constants";
 import { useHorizontalSwipe, usePortfolioMediaPreloader } from "@/hooks";
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import {
@@ -21,6 +23,7 @@ import {
   Zap,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 
 // TypeScript interfaces
@@ -54,10 +57,13 @@ interface Project {
   scope?: string;
   capabilities?: string[];
   videoUrl?: string;
+  videoLabel?: string;
   ctaUrl?: string;
   applyUrl?: string;
   heroImage?: string;
+  heroImageAlt?: string;
   galleryImages?: string[];
+  galleryImageAlts?: string[];
   logoSrc?: string;
   statusStyle?: "live" | "uat" | "delivered" | "research" | "development";
 }
@@ -124,7 +130,10 @@ const portfolioSections: PortfolioSection[] = [
         techStack:
           "React 18 • TypeScript • Firebase • Google Gemini AI • Multi-tenant Architecture",
         heroImage: "/portfolio/volocean/dashboard-hero.png",
+        heroImageAlt:
+          "VOLOCEAN shared client and investor workspace dashboard",
         videoUrl: "/videos/Voluntas-application-run-through.mp4",
+        videoLabel: "VOLOCEAN platform product demo",
         testimonial: {
           quote:
             "We wanted to create an AI platform to help run our advisory business, something that could manage clients, streamline admin and help automate our service delivery. Freddy took the time to really understand what we needed and delivered something right on the mark, fast, professional, and great to work with.",
@@ -153,10 +162,16 @@ const portfolioSections: PortfolioSection[] = [
         techStack:
           "Next.js • React • TypeScript • Firebase • Transactional email • Property data and identity verification integrations",
         heroImage: "/portfolio/gogoprop/dashboard-hero.png",
+        heroImageAlt: "GoGoProp lending portal dashboard",
         galleryImages: [
           "/portfolio/gogoprop/pipeline-list.png",
           "/portfolio/gogoprop/deal-workspace.png",
           "/portfolio/gogoprop/borrower-dashboard.png",
+        ],
+        galleryImageAlts: [
+          "GoGoProp staff deal pipeline list",
+          "GoGoProp deal workspace",
+          "GoGoProp borrower dashboard",
         ],
       },
       {
@@ -479,6 +494,26 @@ function PortfolioHero() {
             </p>
           </div>
 
+          <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6 pt-2">
+            <Button
+              variant="invert"
+              size="lg"
+              className="w-full md:w-auto max-w-xs min-h-[44px] text-sm md:text-base px-6 md:px-10"
+              asChild
+            >
+              <Link href="/contact" className="inline-flex items-center gap-2">
+                <span>Book a Call</span>
+                <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+              </Link>
+            </Button>
+            <Link
+              href="/services"
+              className="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-white/70 dark:hover:text-white underline-offset-4 hover:underline transition-colors min-h-[44px] inline-flex items-center py-2"
+            >
+              Learn Our Approach
+            </Link>
+          </div>
+
           <div className="flex justify-center pt-2 md:pt-4">
             <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
           </div>
@@ -488,7 +523,7 @@ function PortfolioHero() {
   );
 }
 
-function PortfolioVideo({ src }: { src: string }) {
+function PortfolioVideo({ src, label }: { src: string; label: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [preload, setPreload] = useState<"none" | "metadata">("none");
 
@@ -518,6 +553,7 @@ function PortfolioVideo({ src }: { src: string }) {
         loop
         playsInline
         preload={preload}
+        aria-label={label}
         className="w-full h-full block"
         style={{
           willChange: "auto",
@@ -591,7 +627,10 @@ function ProjectMedia({
           <div className="relative w-full aspect-[16/9] overflow-hidden bg-gray-900/40 border border-white/5 rounded-2xl">
             <Image
               src={project.heroImage}
-              alt={`${project.title} product interface`}
+              alt={
+                project.heroImageAlt ??
+                `${project.shortTitle || project.title} dashboard`
+              }
               fill
               className="object-cover object-top"
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -609,7 +648,10 @@ function ProjectMedia({
                 >
                   <Image
                     src={src}
-                    alt={`${project.title} screen ${idx + 1}`}
+                    alt={
+                      project.galleryImageAlts?.[idx] ??
+                      `${project.shortTitle || project.title} screenshot ${idx + 1}`
+                    }
                     fill
                     className="object-cover object-top"
                     sizes="(max-width: 1024px) 33vw, 160px"
@@ -623,7 +665,13 @@ function ProjectMedia({
 
       {project.videoUrl && (
         <div className={project.heroImage ? "mt-2 md:mt-3" : undefined}>
-          <PortfolioVideo src={project.videoUrl} />
+          <PortfolioVideo
+            src={project.videoUrl}
+            label={
+              project.videoLabel ??
+              `${project.shortTitle || project.title} product demo`
+            }
+          />
         </div>
       )}
 
@@ -1175,8 +1223,8 @@ function PortfolioCTA() {
             or a prototype fast? We work from real projects—no fluff.
           </p>
           <p className="text-sm md:text-base text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
-            Book a call to scope your project. We reply within 24 hours and will
-            say clearly if we&apos;re a fit.
+            Book a call to scope your project. {ENQUIRY_RESPONSE.aimPhrase} We
+            will say clearly if we&apos;re a fit.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 pt-6 md:pt-12">
             <motion.a

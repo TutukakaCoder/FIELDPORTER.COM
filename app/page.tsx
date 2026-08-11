@@ -6,6 +6,7 @@ import {
 } from "@/components/homepage";
 import { PageWrapper } from "@/components/layout";
 import { HERO_HEADLINE } from "@/config/constants";
+import { pageSocial } from "@/lib/social-metadata";
 import { Metadata } from "next";
 
 // Full-viewport background - simplified so content stands out
@@ -34,12 +35,15 @@ function UnifiedAuroraBackground() {
   );
 }
 
+const homeTitle = `FIELDPORTER - ${HERO_HEADLINE}`;
+const homeDescription =
+  "Custom portals, internal tools, dashboards, and AI-enabled workflows built around how your business runs. We scope, build, deploy, and train.";
+
 export const metadata: Metadata = {
   title: {
-    absolute: `FIELDPORTER - ${HERO_HEADLINE}`,
+    absolute: homeTitle,
   },
-  description:
-    "FIELDPORTER builds custom software, portals, dashboards, automations, and AI-enabled workflows for growing companies.",
+  description: homeDescription,
   keywords: [
     "custom software development",
     "client portals",
@@ -50,30 +54,12 @@ export const metadata: Metadata = {
     "custom dashboards",
     "database applications",
   ],
-  openGraph: {
-    title: `FIELDPORTER - ${HERO_HEADLINE}`,
-    description:
-      "FIELDPORTER builds custom software, portals, dashboards, automations, and AI-enabled workflows for growing companies.",
-    type: "website",
-    url: "https://fieldporter.com",
-    siteName: "FIELDPORTER",
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: `FIELDPORTER - ${HERO_HEADLINE}`,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `FIELDPORTER - ${HERO_HEADLINE}`,
-    description:
-      "FIELDPORTER builds custom software, portals, dashboards, automations, and AI-enabled workflows for growing companies.",
-    images: ["/opengraph-image"],
-    creator: "@fieldporter",
-  },
+  ...pageSocial({
+    title: homeTitle,
+    description: homeDescription,
+    path: "/",
+    alt: homeTitle,
+  }),
   robots: {
     index: true,
     follow: true,
@@ -87,12 +73,6 @@ export const metadata: Metadata = {
       "max-image-preview": "standard",
       "max-snippet": -1,
     },
-  },
-  alternates: {
-    canonical: "https://fieldporter.com",
-  },
-  verification: {
-    google: "fieldporter-website-verification-pending", // Update when deploying to production
   },
 };
 

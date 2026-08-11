@@ -32,7 +32,17 @@ export const HERO_VALUE_PROP =
   "We build portals, dashboards, automations, and AI features that replace spreadsheets, manual handoffs, and bloated software.";
 
 /** One proof line under hero CTA: real outcomes so first screen feels credible. */
-export const HERO_PROOF_LINE = "";
+export const HERO_PROOF_LINE =
+  "VOLOCEAN client platform live about 9 months.";
+
+/**
+ * AIOS primary CTA when AIOS_APP_URL is null — Contact booking, not an in-app start.
+ * Keep label honest so it matches /contact.
+ */
+export const AIOS_ASSESSMENT_CTA = {
+  label: "Book an Assessment Call",
+  href: "/contact",
+} as const;
 
 /** What FIELDPORTER is: one line so the whole site reflects the same model. Hybrid = consulting + implementation; we advise and build. */
 export const COMPANY_MODEL = {
@@ -51,6 +61,15 @@ export const BRAND = {
   domain: "fieldporter.com",
   email: "freddy@fieldporter.com",
 } as const;
+
+/** Canonical public origin for sitemap, robots, and metadataBase. Never use preview hosts. */
+export const SITE_ORIGIN = "https://fieldporter.com" as const;
+
+/** Hosts that may be crawled/indexed. All other hosts get Disallow: / and noindex. */
+export const CANONICAL_HOSTS = [
+  "fieldporter.com",
+  "www.fieldporter.com",
+] as const;
 
 export const LEGAL_ENTITY = {
   name: "FIELDPORTER LIMITED",
@@ -208,10 +227,8 @@ export const FOOTER_LINKS = {
     { label: "Portfolio", href: "/portfolio" },
     { label: "Contact", href: "/contact" },
   ],
-  resources: [
-    { label: "Insights", href: "/insights" },
-    { label: "Portfolio", href: "/portfolio" },
-  ],
+  /** Distinct from Company — do not duplicate Portfolio here. */
+  resources: [{ label: "Insights", href: "/insights" }],
   legal: [
     { label: "Privacy Policy", href: "/privacy-policy" },
     { label: "Terms of Service", href: "/terms-of-service" },
@@ -276,8 +293,9 @@ export const LEAD_SCORING = {
 
 export const SEO_DEFAULTS = {
   title: "FIELDPORTER - Custom Software Development",
+  /** Sitewide fallback only — each public route must set its own description. */
   description:
-    "FIELDPORTER builds custom portals, internal tools, dashboards, workflow systems, and AI-enabled software for growing companies.",
+    "Auckland-based custom software studio. Portals, internal tools, dashboards, integrations, and practical AI inside real systems.",
   keywords: [
     "custom software development",
     "client portals",
@@ -288,13 +306,13 @@ export const SEO_DEFAULTS = {
     "custom dashboards",
     "database applications",
   ],
-  ogImage: "/og-image.jpg",
+  /** Dynamic PNG from app/opengraph-image.tsx — never point at missing static JPG. */
+  ogImage: "/opengraph-image",
 } as const;
 
-/** Company and founder social URLs. Update here to keep links current sitewide. */
+/** Company and founder social URLs. Update here to keep links current sitewide. No X/Twitter account (B009). */
 export const SOCIAL_LINKS = {
   linkedin: "https://www.linkedin.com/company/fieldporter",
-  twitter: "https://twitter.com/fieldporter",
   github: "https://github.com/fieldporter",
   /** Founder profile used in footer. */
   founderLinkedIn: "https://www.linkedin.com/in/freddyjhopkins/",
@@ -331,12 +349,36 @@ export const ERROR_MESSAGES = {
 } as const;
 
 // ============================================================================
+// ENQUIRY RESPONSE PROMISE (T08)
+// Single source of truth for public enquiry reply timing.
+// Privacy-request timing stays separate on the privacy policy (5 business days).
+// ============================================================================
+
+export const ENQUIRY_RESPONSE = {
+  /** Canonical public promise — use on site, email, chat, and metadata */
+  aimPhrase: "We aim to reply within 1–2 business days.",
+  /** Short UI label (methods strip, success step titles) */
+  shortLabel: "1–2 business days",
+  /** Welcome-email "What's Next" bullet (HTML + text) */
+  emailNextStep:
+    "We'll review your message and aim to reply within 1–2 business days",
+  /** Chat follow-up when a prospect shares an email */
+  chatFollowUp:
+    "I'll make sure Frederick aims to reply within 1–2 business days to discuss your specific needs.",
+} as const;
+
+/** Privacy requests only — do not reuse for enquiries */
+export const PRIVACY_REQUEST_RESPONSE = {
+  aimPhrase: "We aim to respond within 5 business days.",
+} as const;
+
+// ============================================================================
 // SUCCESS MESSAGES
 // ============================================================================
 
 export const SUCCESS_MESSAGES = {
-  consultationRequest: "Thank you! We'll be in touch within 24 hours.",
-  contactForm: "Message sent successfully. We'll respond soon.",
+  consultationRequest: `Thank you! ${ENQUIRY_RESPONSE.aimPhrase}`,
+  contactForm: `Message sent successfully. ${ENQUIRY_RESPONSE.aimPhrase}`,
   newsletterSignup: "Successfully subscribed to our newsletter.",
   downloadStarted: "Your download has started.",
 } as const;

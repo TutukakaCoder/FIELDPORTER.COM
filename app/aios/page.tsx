@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { AIOS_APP_URL } from "@/config/constants";
+import { AIOS_APP_URL, AIOS_ASSESSMENT_CTA } from "@/config/constants";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -147,10 +147,10 @@ export default function AIOSPage() {
               transition={{ delay: 0.4, duration: 0.5 }}
             >
               <Link
-                href="/contact"
-                className="group inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900 active:scale-[0.97] active:shadow-md"
+                href={AIOS_ASSESSMENT_CTA.href}
+                className="group inline-flex items-center justify-center min-h-[44px] px-8 py-4 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900 active:scale-[0.97] active:shadow-md"
               >
-                Book Your Assessment
+                {AIOS_ASSESSMENT_CTA.label}
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
               </Link>
             </motion.div>
@@ -344,18 +344,26 @@ export default function AIOSPage() {
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-8">
               Ready to get clarity?
             </h2>
-            <motion.div
-              whileHover={{ scale: 1.03, y: -3 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <Link
-                href="/contact"
-                className="group inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900 active:scale-[0.97] active:shadow-md"
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <motion.div
+                whileHover={{ scale: 1.03, y: -3 }}
+                whileTap={{ scale: 0.97 }}
               >
-                Book Your Assessment
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
+                <Link
+                  href={AIOS_ASSESSMENT_CTA.href}
+                  className="group inline-flex items-center justify-center min-h-[44px] px-8 py-4 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900 active:scale-[0.97] active:shadow-md touch-manipulation"
+                >
+                  {AIOS_ASSESSMENT_CTA.label}
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
+                </Link>
+              </motion.div>
+              <Link
+                href="/services"
+                className="inline-flex items-center justify-center min-h-[44px] px-6 py-3 text-base font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline underline-offset-4 touch-manipulation"
+              >
+                See our services
               </Link>
-            </motion.div>
+            </div>
           </div>
         </motion.div>
       </div>

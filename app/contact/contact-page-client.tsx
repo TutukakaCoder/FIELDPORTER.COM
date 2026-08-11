@@ -2,6 +2,7 @@
 
 import { ContactMethods } from "@/components/contact";
 import { PageWrapper } from "@/components/layout";
+import { ENQUIRY_RESPONSE } from "@/config/constants";
 import { AnimatePresence, motion } from "framer-motion";
 import { Calendar, ChevronDown, MessageSquare } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -78,13 +79,13 @@ export function ContactPageClient() {
               Book a call or send a message
             </h1>
             <p className="text-base md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl mx-auto mb-6 md:mb-8">
-              Tell us what you&apos;re working on. We reply within 24 hours and
-              will say clearly if we&apos;re a fit.
+              Tell us what you&apos;re working on. {ENQUIRY_RESPONSE.aimPhrase}{" "}
+              We will say clearly if we&apos;re a fit.
             </p>
 
-            {/* Sticky segmented control on mobile */}
-            <div className="sticky top-24 z-30 -mx-4 px-4 py-1.5 mb-5 md:static md:mx-0 md:px-0 md:py-0 md:mb-0 md:z-auto bg-white dark:bg-black md:bg-transparent border-b border-gray-900/5 dark:border-white/5 md:border-0">
-              <div className="mx-auto flex max-w-[220px] w-full sm:w-fit sm:max-w-none flex-row bg-gray-900/[0.04] dark:bg-white/[0.06] border border-gray-900/10 dark:border-white/10 rounded-full p-0.5 gap-0.5">
+            {/* Sticky segmented control — pill only, no full-width black bar */}
+            <div className="sticky top-24 z-30 mb-5 md:static md:mb-0 md:z-auto flex justify-center py-1.5 md:py-0 bg-transparent">
+              <div className="flex max-w-[220px] w-full sm:w-fit sm:max-w-none flex-row bg-gray-900/[0.04] dark:bg-white/[0.06] border border-gray-900/10 dark:border-white/10 rounded-full p-0.5 gap-0.5 backdrop-blur-md">
                 <button
                   type="button"
                   onClick={() => setMode("book")}

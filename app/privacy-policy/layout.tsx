@@ -1,31 +1,31 @@
+import { absoluteUrl } from "@/lib/social-metadata";
 import { Metadata } from "next";
 
+const privacyDescription =
+  "How FIELDPORTER collects and uses information on fieldporter.com: contact forms, booking, newsletter signup, and first-party analytics.";
+
 export const metadata: Metadata = {
-  title: "Privacy Policy | FIELDPORTER",
-  description:
-    "FIELDPORTER's comprehensive privacy policy covering AI consulting services, data collection, and enterprise client data protection standards.",
+  title: "Privacy Policy",
+  description: privacyDescription,
   keywords: [
     "FIELDPORTER privacy policy",
     "data protection",
-    "AI consulting privacy",
-    "enterprise data security",
-    "GDPR compliance",
+    "website privacy",
+    "New Zealand privacy",
   ],
   openGraph: {
-    title: "Privacy Policy | FIELDPORTER",
-    description:
-      "Learn how FIELDPORTER protects your data and privacy in our AI consulting services.",
+    title: "FIELDPORTER | Privacy Policy",
+    description: privacyDescription,
     type: "website",
-    url: "https://fieldporter.com/privacy-policy",
+    url: absoluteUrl("/privacy-policy"),
   },
   twitter: {
     card: "summary",
-    title: "Privacy Policy | FIELDPORTER",
-    description:
-      "Learn how FIELDPORTER protects your data and privacy in our AI consulting services.",
+    title: "FIELDPORTER | Privacy Policy",
+    description: privacyDescription,
   },
   alternates: {
-    canonical: "https://fieldporter.com/privacy-policy",
+    canonical: absoluteUrl("/privacy-policy"),
   },
 };
 

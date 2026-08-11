@@ -1,32 +1,26 @@
+import { pageSocial } from "@/lib/social-metadata";
 import { Metadata } from "next";
 
+const portfolioTitle = "FIELDPORTER | Portfolio";
+const portfolioDescription =
+  "Client portals, internal tools, and automation systems shipped by FIELDPORTER. Real platforms and workflows for growing companies.";
+
 export const metadata: Metadata = {
-  title: "Portfolio & Case Studies",
-  description:
-    "Real results from FIELDPORTER's AI automation projects and client work. See live systems, workflows, and outcomes for growing companies.",
+  title: "Portfolio",
+  description: portfolioDescription,
   keywords: [
     "FIELDPORTER portfolio",
-    "AI automation projects",
-    "client case studies",
-    "strategic research",
-    "AI integration results",
-    "automation consulting portfolio",
-    "business AI solutions",
-    "project case studies",
+    "client portals",
+    "custom software projects",
+    "workflow automation",
+    "internal tools",
   ],
-  openGraph: {
-    title: "FIELDPORTER | Portfolio & Case Studies",
-    description:
-      "Real results from FIELDPORTER's AI automation projects and client work. See live systems, workflows, and outcomes for growing companies.",
-    type: "website",
-    url: "https://fieldporter.com/portfolio",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "FIELDPORTER | Portfolio & Case Studies",
-    description:
-      "Real results from FIELDPORTER's AI automation projects and client work. See live systems, workflows, and outcomes for growing companies.",
-  },
+  ...pageSocial({
+    title: portfolioTitle,
+    description: portfolioDescription,
+    path: "/portfolio",
+    alt: portfolioTitle,
+  }),
   robots: {
     index: true,
     follow: true,

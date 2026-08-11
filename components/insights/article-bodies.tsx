@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
 
 /** Full article bodies keyed by insight id. Keep copy practical and current. */
 export const ARTICLE_BODIES: Record<string, ReactNode> = {
@@ -88,14 +89,17 @@ export const ARTICLE_BODIES: Record<string, ReactNode> = {
       <h2>What FIELDPORTER does differently</h2>
       <p>
         We treat AI as a layer on real software and operations: portals,
-        databases, integrations, and automation. The model is never the product
-        by itself. The product is a reliable workflow your team can run every
-        day.
+        databases, integrations, and{" "}
+        <Link href="/services#workflow-automation">workflow automation</Link>.
+        The model is never the product by itself. The product is a reliable
+        workflow your team can run every day.
       </p>
       <p>
         If you have pilots that never left staging, start with one process, one
-        owner, and one KPI. That is usually enough to tell whether AI will
-        create margin or just another subscription line.
+        owner, and one KPI — or begin with an{" "}
+        <Link href="/aios">AI Readiness assessment</Link>. That is usually
+        enough to tell whether AI will create margin or just another
+        subscription line.
       </p>
     </>
   ),
@@ -192,9 +196,10 @@ export const ARTICLE_BODIES: Record<string, ReactNode> = {
       <h2>How we help</h2>
       <p>
         FIELDPORTER scopes the workflow first, then recommends buy, build, or
-        hybrid. When custom is right, we ship the agent inside the portal,
-        database, and automation layer your team already needs — not as a
-        disconnected demo.
+        hybrid. When custom is right, we ship the agent inside the{" "}
+        <Link href="/services">portal, database, and automation layer</Link>{" "}
+        your team already needs — not as a disconnected demo. Unsure where to
+        start? Use an <Link href="/aios">AI Readiness assessment</Link>.
       </p>
     </>
   ),
@@ -258,7 +263,10 @@ export const ARTICLE_BODIES: Record<string, ReactNode> = {
       </ul>
       <p>
         Typical useful timelines land around 8–12 weeks when scope is honest:
-        one primary workflow, clear roles, and a short integration list.
+        one primary workflow, clear roles, and a short integration list. See
+        how we scope{" "}
+        <Link href="/services#custom-portals">custom portals</Link> and related
+        builds.
       </p>
 
       <h2>Total cost, not sticker price</h2>
@@ -278,10 +286,16 @@ export const ARTICLE_BODIES: Record<string, ReactNode> = {
 
       <h2>FIELDPORTER&apos;s bias</h2>
       <p>
-        We build custom portals, databases, dashboards, integrations, and
-        AI-enabled tools around how your business actually runs. The goal is not
-        software for its own sake. The goal is one secure place where the right
-        people see the right information and can act.
+        We build{" "}
+        <Link href="/services">
+          custom portals, databases, dashboards, integrations, and AI-enabled
+          tools
+        </Link>{" "}
+        around how your business actually runs. The goal is not software for its
+        own sake. The goal is one secure place where the right people see the
+        right information and can act.{" "}
+        <Link href="/contact">Talk to us</Link> if that sounds like your next
+        step.
       </p>
     </>
   ),
@@ -377,9 +391,14 @@ export const ARTICLE_BODIES: Record<string, ReactNode> = {
         <li>Review results, then queue the next process.</li>
       </ol>
       <p>
-        FIELDPORTER helps teams do this with automation consulting and custom
-        software so the workflow, data, and AI layer stay coherent. Start where
-        margin leaks. Ignore the shiny side quests.
+        FIELDPORTER helps teams do this with{" "}
+        <Link href="/services#workflow-automation">
+          automation consulting and custom software
+        </Link>{" "}
+        so the workflow, data, and AI layer stay coherent. Start where margin
+        leaks. Ignore the shiny side quests.{" "}
+        <Link href="/contact">Book a call</Link> when you want a ranked shortlist
+        instead of another demo.
       </p>
     </>
   ),

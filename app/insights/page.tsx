@@ -4,13 +4,17 @@ import {
   NewsletterSignup,
 } from "@/components/insights";
 import { PageWrapper } from "@/components/layout";
+import { pageSocial } from "@/lib/social-metadata";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
+const insightsTitle = "FIELDPORTER | Insights";
+const insightsDescription =
+  "Notes from FIELDPORTER on custom software, workflow automation, and practical AI inside real systems—from pilot to production.";
+
 export const metadata: Metadata = {
-  title: "Insights | FIELDPORTER",
-  description:
-    "Practical insights on AI production, agents, custom software, and automation from FIELDPORTER.",
+  title: "Insights",
+  description: insightsDescription,
   keywords: [
     "AI strategy insights",
     "business automation",
@@ -18,23 +22,13 @@ export const metadata: Metadata = {
     "custom software",
     "workflow automation",
   ],
-  openGraph: {
-    title: "Insights | FIELDPORTER",
-    description:
-      "Practical insights on AI production, agents, custom software, and automation from FIELDPORTER.",
-    type: "website",
-    url: "https://fieldporter.com/insights",
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: "FIELDPORTER Insights",
-      },
-    ],
-  },
+  ...pageSocial({
+    title: insightsTitle,
+    description: insightsDescription,
+    path: "/insights",
+    alt: "FIELDPORTER Insights",
+  }),
   robots: { index: true, follow: true },
-  alternates: { canonical: "https://fieldporter.com/insights" },
 };
 
 export default function InsightsPage() {

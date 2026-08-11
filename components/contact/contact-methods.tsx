@@ -1,5 +1,6 @@
 "use client";
 
+import { ENQUIRY_RESPONSE } from "@/config/constants";
 import { motion } from "framer-motion";
 import { ArrowRight, Calendar, ChevronDown, Clock, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -45,7 +46,7 @@ export function ContactMethods() {
     {
       icon: Clock,
       title: "Get Response",
-      description: "Within 24 hours",
+      description: ENQUIRY_RESPONSE.shortLabel,
       detail: "Project assessment",
       color: "text-emerald-400",
     },

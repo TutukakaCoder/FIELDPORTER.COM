@@ -2,9 +2,11 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "ANZ Market Expansion for Cyberport Portfolio",
+  title: {
+    absolute: "ANZ Market Expansion for Cyberport Portfolio",
+  },
   description:
-    "Partnership overview between Think Global and Voluntas Group supporting Cyberport HK startups expanding into ANZ.",
+    "Think Global × Voluntas Group partnership to support Cyberport HK startups expanding into ANZ.",
   robots: { index: false },
   icons: {
     icon: [{ url: "/partnership-assets/voluntas-logo.svg", type: "image/svg+xml" }],
@@ -67,7 +69,7 @@ export default function Page() {
         <div className="logo-container">
           <Image
             src="/partnership-assets/voluntas-logo.svg"
-            alt="Voluntas Group Logo"
+            alt="Voluntas Group"
             width={800}
             height={200}
             className="branding-logo object-contain"
@@ -75,7 +77,7 @@ export default function Page() {
           />
           <Image
             src="/partnership-assets/think-global-logo.svg"
-            alt="Think Global Logo"
+            alt="Think Global"
             width={800}
             height={200}
             className="branding-logo think-global-logo object-contain"
@@ -136,7 +138,7 @@ export default function Page() {
               <div className="relative shrink-0 headshot overflow-hidden">
                 <Image
                   src="/partnership-assets/david-thomas.jpg"
-                  alt="David Thomas"
+                  alt=""
                   fill
                   sizes="(max-width: 640px) 120px, 180px"
                   className="object-cover"
@@ -166,7 +168,7 @@ export default function Page() {
               <div className="relative shrink-0 headshot overflow-hidden">
                 <Image
                   src="/partnership-assets/charlie-streeter.jpg"
-                  alt="Charlie Streeter"
+                  alt=""
                   fill
                   sizes="(max-width: 640px) 120px, 180px"
                   className="object-cover"
@@ -404,7 +406,7 @@ export default function Page() {
               <div className="flex items-center justify-center mb-8">
                 <Image
                   src="/partnership-assets/voluntas-logo.png"
-                  alt="Voluntas Group Logo"
+                  alt=""
                   width={400}
                   height={120}
                   className="h-20 w-auto object-contain opacity-90"

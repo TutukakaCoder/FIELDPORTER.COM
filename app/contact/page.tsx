@@ -1,46 +1,27 @@
+import { ENQUIRY_RESPONSE } from "@/config/constants";
+import { pageSocial } from "@/lib/social-metadata";
 import { ContactPageClient } from "./contact-page-client";
 import { Metadata } from "next";
 
+const contactTitle = "FIELDPORTER | Contact";
+const contactDescription = `Tell us about the workflow you need built. Message us or book a discovery call. ${ENQUIRY_RESPONSE.aimPhrase}`;
+
 export const metadata: Metadata = {
-  title: "Contact Us | FIELDPORTER",
-  description:
-    "Get in touch with our team. Send a message or book a discovery call - we'll get back to you shortly.",
+  title: "Contact",
+  description: contactDescription,
   keywords: [
     "contact FIELDPORTER",
-    "AI consulting contact",
-    "automation consultation",
-    "AI project discussion",
-    "business automation contact",
-    "AI implementation help",
-    "contact form",
+    "custom software enquiry",
     "book discovery call",
+    "workflow automation contact",
+    "contact form",
   ],
-  openGraph: {
-    title: "Contact Us | FIELDPORTER",
-    description:
-      "Get in touch with our team. Send a message or book a discovery call - we'll get back to you shortly.",
-    type: "website",
-    url: "https://fieldporter.com/contact",
-    siteName: "FIELDPORTER",
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: "Contact FIELDPORTER - AI Implementation & Automation",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Contact Us | FIELDPORTER",
-    description:
-      "Get in touch with our team. Send a message or book a discovery call - we'll get back to you shortly.",
-    images: ["/opengraph-image"],
-  },
-  alternates: {
-    canonical: "https://fieldporter.com/contact",
-  },
+  ...pageSocial({
+    title: contactTitle,
+    description: contactDescription,
+    path: "/contact",
+    alt: "Contact FIELDPORTER — custom software enquiry",
+  }),
 };
 
 export default function ContactPage() {

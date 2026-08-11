@@ -43,6 +43,11 @@ export function Header({ className }: HeaderProps) {
     return pathname.startsWith(href);
   };
 
+  // T09: persistent mobile CTA lives in the header bar (not a bottom sticky bar).
+  // Hide on /contact (page already converts) and while the menu dialog is open.
+  const showMobileHeaderCta =
+    !pathname?.startsWith("/contact") && !isMobileMenuOpen;
+
   return (
     <>
       {/* Floating Navigation Container - Cursor Style */}
@@ -83,20 +88,20 @@ export function Header({ className }: HeaderProps) {
           {/* Premium gradient overlay */}
           <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-gray-900/[0.02] via-gray-900/[0.05] to-gray-900/[0.02] dark:from-white/[0.02] dark:via-white/[0.05] dark:to-white/[0.02] pointer-events-none" />
 
-          {/* Navigation Content */}
-          <div className="relative flex items-center justify-between px-2 py-3">
-            {/* FIELDPORTER Logo - Larger and more to the left */}
+          {/* Navigation Content — logo left, links centered, actions right */}
+          <div className="relative flex items-center gap-2 px-2 py-3 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-4">
+            {/* Logo: can shrink; never paint over the CTA cluster */}
             <Link
               href="/"
-              className="flex items-center text-2xl font-bold text-gray-900 dark:text-white tracking-wide hover:text-blue-400 transition-all duration-300 hover:scale-105 pl-4"
+              className="min-w-0 flex-1 overflow-hidden pl-3 text-lg font-bold tracking-tight text-gray-900 dark:text-white hover:text-blue-400 transition-colors duration-300 sm:pl-4 sm:text-xl lg:text-2xl lg:tracking-wide lg:flex-none lg:overflow-visible lg:justify-self-start"
             >
-              {BRAND.name}
+              <span className="block truncate">{BRAND.name}</span>
             </Link>
 
-            {/* Desktop Navigation - Better spacing and lowered position */}
+            {/* Desktop Navigation — centered in the bar */}
             <nav
               aria-label="Desktop"
-              className="hidden lg:flex items-center space-x-10 px-4"
+              className="hidden lg:flex items-center justify-center gap-8 xl:gap-10 px-2"
             >
               {MAIN_NAVIGATION.map((item) => (
                 <div key={item.label} className="relative flex items-center">
@@ -134,8 +139,8 @@ export function Header({ className }: HeaderProps) {
               ))}
             </nav>
 
-            {/* Theme Toggle and CTA */}
-            <div className="hidden lg:flex items-center gap-4 pr-4">
+            {/* Theme Toggle and CTA — pinned to the right */}
+            <div className="hidden lg:flex items-center justify-end gap-4 pr-4 lg:justify-self-end">
               <ThemeToggle />
               <Button
                 variant="primary"
@@ -153,36 +158,56 @@ export function Header({ className }: HeaderProps) {
               </Button>
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden flex items-center justify-center min-w-[44px] min-h-[44px] w-11 h-11 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 mr-2 touch-manipulation"
-              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-            >
-              <AnimatePresence mode="wait">
-                {isMobileMenuOpen ? (
-                  <motion.div
-                    key="close"
-                    initial={{ opacity: 0, rotate: -90 }}
-                    animate={{ opacity: 1, rotate: 0 }}
-                    exit={{ opacity: 0, rotate: 90 }}
-                    transition={{ duration: 0.15 }}
+            {/* Mobile: compact Book CTA + menu — short label so logo never collides */}
+            <div className="lg:hidden flex items-center gap-1.5 pr-1 shrink-0">
+              {showMobileHeaderCta && (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  className="rounded-xl h-11 min-h-[44px] px-3.5 touch-manipulation"
+                  asChild
+                >
+                  <OptimizedLink
+                    href="/contact"
+                    className="inline-flex items-center justify-center"
+                    aria-label="Book a Call"
                   >
-                    <X className="w-5 h-5" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="menu"
-                    initial={{ opacity: 0, rotate: 90 }}
-                    animate={{ opacity: 1, rotate: 0 }}
-                    exit={{ opacity: 0, rotate: -90 }}
-                    transition={{ duration: 0.15 }}
-                  >
-                    <Menu className="w-5 h-5" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </button>
+                    <span className="text-sm font-medium">Book</span>
+                  </OptimizedLink>
+                </Button>
+              )}
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="flex items-center justify-center min-w-[44px] min-h-[44px] w-11 h-11 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 touch-manipulation"
+                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-nav-menu"
+              >
+                <AnimatePresence mode="wait">
+                  {isMobileMenuOpen ? (
+                    <motion.div
+                      key="close"
+                      initial={{ opacity: 0, rotate: -90 }}
+                      animate={{ opacity: 1, rotate: 0 }}
+                      exit={{ opacity: 0, rotate: 90 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <X className="w-5 h-5" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="menu"
+                      initial={{ opacity: 0, rotate: 90 }}
+                      animate={{ opacity: 1, rotate: 0 }}
+                      exit={{ opacity: 0, rotate: -90 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <Menu className="w-5 h-5" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </button>
+            </div>
           </div>
         </nav>
 
@@ -190,6 +215,7 @@ export function Header({ className }: HeaderProps) {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
+              id="mobile-nav-menu"
               role="dialog"
               aria-modal="true"
               aria-label="Mobile Menu"

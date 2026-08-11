@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { ENQUIRY_RESPONSE } from "@/config/constants";
 import { firebaseEnhancedFormsService } from "@/lib/firebase-enhanced-forms";
 import { firebaseNewsletterService } from "@/lib/firebase-newsletter";
 import { motion } from "framer-motion";
@@ -493,7 +494,7 @@ export function SecondaryConversions() {
                       Message Sent!
                     </p>
                     <p className="text-fieldporter-gray text-sm">
-                      We&apos;ll respond to your inquiry within 24 hours.
+                      {ENQUIRY_RESPONSE.aimPhrase}
                     </p>
                   </div>
                 ) : (

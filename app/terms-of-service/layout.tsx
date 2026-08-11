@@ -1,31 +1,31 @@
+import { absoluteUrl } from "@/lib/social-metadata";
 import { Metadata } from "next";
 
+const termsDescription =
+  "Terms governing FIELDPORTER custom software builds, automation work, and related professional services on fieldporter.com.";
+
 export const metadata: Metadata = {
-  title: "Terms of Service | FIELDPORTER",
-  description:
-    "FIELDPORTER's comprehensive terms of service for AI consulting, business automation, and strategic advisory services.",
+  title: "Terms of Service",
+  description: termsDescription,
   keywords: [
     "FIELDPORTER terms of service",
-    "AI consulting terms",
+    "custom software terms",
     "service agreement",
-    "consulting contract",
     "professional services terms",
   ],
   openGraph: {
-    title: "Terms of Service | FIELDPORTER",
-    description:
-      "Professional terms of service for FIELDPORTER's AI consulting and business automation services.",
+    title: "FIELDPORTER | Terms of Service",
+    description: termsDescription,
     type: "website",
-    url: "https://fieldporter.com/terms-of-service",
+    url: absoluteUrl("/terms-of-service"),
   },
   twitter: {
     card: "summary",
-    title: "Terms of Service | FIELDPORTER",
-    description:
-      "Professional terms of service for FIELDPORTER's AI consulting and business automation services.",
+    title: "FIELDPORTER | Terms of Service",
+    description: termsDescription,
   },
   alternates: {
-    canonical: "https://fieldporter.com/terms-of-service",
+    canonical: absoluteUrl("/terms-of-service"),
   },
 };
 

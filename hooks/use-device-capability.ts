@@ -107,8 +107,6 @@ export function useDeviceCapability() {
       // Viewport-based detection (aligned with Tailwind md / useStableMobile)
       const viewport = window.innerWidth;
       const isSmallScreen = viewport < BREAKPOINTS.mobile;
-      const isMediumScreen = viewport >= BREAKPOINTS.mobile && viewport < 1200;
-      const isLargeScreen = viewport >= 1200;
 
       // Capability calculation
       let capability: DeviceCapability = "medium";
@@ -119,27 +117,27 @@ export function useDeviceCapability() {
         capability = "low";
         experience = "css-only";
       } else if (
-        isSmallScreen ||
         (isMobile && cpuCores < 4) ||
         memoryEstimate < 2 ||
         gpuTier === "low"
       ) {
-        // Low-end devices
+        // Truly low-end: flat/CSS fallback only
         capability = "low";
         experience = "css-only";
-      } else if (isMobile || isTablet) {
-        // Mobile/tablet: no 3D to save battery and cost; hero uses light background only
+      } else if (isMobile || isTablet || isSmallScreen) {
+        // Capable phones/tablets get the lighter particle starfield
         capability = "medium";
-        experience = "css-only";
+        experience = "simplified";
       } else {
         // Desktop with WebGL = full experience with interactive particles
         capability = "high";
         experience = "full";
       }
 
-      // Battery-based adjustments (only desktop can be "full"; mobile/tablet already css-only)
+      // Battery-based adjustments: drop a tier when critically low
       if (batteryLevel !== undefined && batteryLevel < 0.2 && !isCharging) {
         if (experience === "full") experience = "simplified";
+        else if (experience === "simplified") experience = "css-only";
       }
 
       setMetrics({

@@ -1,8 +1,9 @@
+import { SITE_ORIGIN } from "@/config/constants";
 import { INSIGHTS_ARTICLES } from "@/config/insights-articles";
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://fieldporter.com";
+  const baseUrl = SITE_ORIGIN;
 
   const insightArticles = INSIGHTS_ARTICLES.map((article) => ({
     url: `${baseUrl}/insights/${article.id}`,

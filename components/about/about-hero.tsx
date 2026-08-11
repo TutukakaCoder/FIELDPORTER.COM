@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { BRAND } from "@/config/constants";
 import {
   motion,
@@ -9,7 +10,8 @@ import {
   useTransform,
   Variants,
 } from "framer-motion";
-import { Layers } from "lucide-react";
+import { ArrowRight, Layers } from "lucide-react";
+import Link from "next/link";
 import { useRef } from "react";
 
 // Premium aurora background matching homepage
@@ -113,7 +115,7 @@ export function AboutHero() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-16"
     >
       <PremiumAuroraBackground />
       <FloatingElements />
@@ -124,7 +126,7 @@ export function AboutHero() {
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className="space-y-8"
+            className="space-y-6 md:space-y-8"
           >
             {/* Icon */}
             <motion.div variants={itemVariants} className="flex justify-center">
@@ -153,10 +155,34 @@ export function AboutHero() {
               </p>
             </motion.div>
 
+            {/* Above-fold conversion CTA */}
+            <motion.div
+              variants={itemVariants}
+              className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6 pt-2"
+            >
+              <Button
+                variant="invert"
+                size="lg"
+                className="w-full md:w-auto max-w-xs min-h-[44px] text-sm md:text-base px-6 md:px-10"
+                asChild
+              >
+                <Link href="/contact" className="inline-flex items-center gap-2">
+                  <span>Book a Call</span>
+                  <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+                </Link>
+              </Button>
+              <Link
+                href="/portfolio"
+                className="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-white/70 dark:hover:text-white underline-offset-4 hover:underline transition-colors min-h-[44px] inline-flex items-center py-2"
+              >
+                View Our Work
+              </Link>
+            </motion.div>
+
             {/* Premium divider */}
             <motion.div
               variants={itemVariants}
-              className="flex justify-center pt-8"
+              className="flex justify-center pt-4 md:pt-8"
             >
               <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
             </motion.div>

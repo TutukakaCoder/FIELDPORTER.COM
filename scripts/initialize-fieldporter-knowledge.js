@@ -342,7 +342,7 @@ const FIELDPORTER_KNOWLEDGE_BASE = [
     category: "contact",
     title: "Next Steps",
     content:
-      "Best way forward: Share your email and biggest challenge. Frederick reviews every inquiry personally and responds within 24 hours. We will discuss your situation, see if we are a good fit, and propose next steps. No generic sales calls - just honest discussion about whether and how we can help.",
+      "Best way forward: Share your email and biggest challenge. Frederick reviews every inquiry personally and aims to reply within 1–2 business days. We will discuss your situation, see if we are a good fit, and propose next steps. No generic sales calls - just honest discussion about whether and how we can help.",
     keywords: [
       "contact",
       "reach out",

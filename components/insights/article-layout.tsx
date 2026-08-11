@@ -1,12 +1,16 @@
 "use client";
 
 import { PageWrapper } from "@/components/layout";
+import { InsightBreadcrumb } from "@/components/insights/insight-breadcrumb";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/card";
-import { formatPublishDate } from "@/config/insights-articles";
+import {
+  formatPublishDate,
+  getInsightContextCta,
+  getRelatedInsights,
+} from "@/config/insights-articles";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
   Calendar,
   Clock,
   Linkedin,
@@ -17,6 +21,7 @@ import Link from "next/link";
 import { ReactNode } from "react";
 
 interface Article {
+  id: string;
   title: string;
   excerpt: string;
   category: string;
@@ -32,6 +37,8 @@ interface ArticleLayoutProps {
 }
 
 export function ArticleLayout({ article, children }: ArticleLayoutProps) {
+  const related = getRelatedInsights(article.id, 2);
+  const contextCta = getInsightContextCta(article.category);
   const getCategoryStyle = (category: string) => {
     switch (category.toLowerCase()) {
       case "ai strategy":
@@ -73,25 +80,13 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
         <div className="absolute inset-0 bg-gradient-to-b from-bg-fieldporter-primary to-bg-fieldporter-secondary" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
-          {/* Back Navigation */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-8"
-            whileHover={{ x: -4 }}
-          >
-            <Button
-              variant="fieldporter-ghost"
-              className="group hover:text-fieldporter-blue transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-fieldporter-blue"
-              asChild
-            >
-              <Link href="/insights">
-                <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-2 transition-transform duration-300" />
-                Back to Insights
-              </Link>
-            </Button>
-          </motion.div>
+          <InsightBreadcrumb
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Insights", href: "/insights" },
+              { label: article.title },
+            ]}
+          />
 
           {/* Article Header */}
           <motion.div
@@ -193,7 +188,39 @@ export function ArticleLayout({ article, children }: ArticleLayoutProps) {
             </GlassCard>
           </motion.div>
 
-          {/* Related Articles CTA */}
+          {/* Related articles — plain title list, not another card grid */}
+          {related.length > 0 && (
+            <nav
+              aria-label="Related insights"
+              className="mt-12 pt-8 border-t border-gray-900/10 dark:border-white/10"
+            >
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-4">
+                Related insights
+              </h2>
+              <ul className="space-y-3">
+                {related.map((peer) => (
+                  <li key={peer.id}>
+                    <Link
+                      href={`/insights/${peer.id}`}
+                      className="text-base text-gray-900 dark:text-white hover:text-fieldporter-blue dark:hover:text-fieldporter-blue underline-offset-4 hover:underline transition-colors inline-flex min-h-[44px] items-center touch-manipulation"
+                    >
+                      {peer.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-5 text-sm text-fieldporter-gray">
+                <Link
+                  href={contextCta.href}
+                  className="text-fieldporter-blue hover:underline underline-offset-4 touch-manipulation"
+                >
+                  {contextCta.label}
+                </Link>
+              </p>
+            </nav>
+          )}
+
+          {/* Conversion CTA */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

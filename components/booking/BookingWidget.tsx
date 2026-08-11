@@ -4,6 +4,7 @@ import Cal, { getCalApi } from "@calcom/embed-react";
 import { useStableMobile } from "@/hooks";
 import { motion } from "framer-motion";
 import { Calendar, ChevronDown, Clock, Video } from "lucide-react";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 // Simple Error Boundary for Cal.com embed
@@ -213,6 +214,18 @@ export function BookingWidget({
               </div>
             </CalErrorBoundary>
           </div>
+
+          <p className="mt-4 px-4 text-center text-sm leading-relaxed text-gray-500 dark:text-gray-400 max-w-3xl mx-auto">
+            Booking is powered by Cal.com. Your booking details are processed by
+            Cal.com and may also be stored by FIELDPORTER for follow-up. See our{" "}
+            <Link
+              href="/privacy-policy"
+              className="text-blue-600 dark:text-blue-400 underline underline-offset-2 hover:text-blue-500 dark:hover:text-blue-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-sm"
+            >
+              Privacy Policy
+            </Link>
+            .
+          </p>
         </motion.div>
       </div>
     </section>
